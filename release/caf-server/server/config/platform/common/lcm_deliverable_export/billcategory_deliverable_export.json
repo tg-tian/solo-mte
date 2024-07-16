@@ -1,0 +1,40 @@
+﻿{
+  "deliverableExtend": [
+    {
+      "deliverableType": {
+        "code": "BILL_CATEGORY",
+        "name": "业务种类",
+        "name_zh-CHT": "業務種類",
+        "name_en": "BillCategory",
+        "category": "CONFIG_DATA",
+        "applicable": ["DEV","RUNTIME"],
+        "enabled": true,
+        "suCode": "Bcc",
+        "orderForDev": 30,
+        "orderForRuntime": 30
+      },
+      "displayByExportRuleList": [{
+        "exportRuleId": "b99f2668-c18f-ca17-71bc-b4e15a724c64",
+        "dboCode": "bfbfconfigdefine",
+        "columnNameEntity": {
+          "boId": "",
+          "billCategoryId": "id",
+          "id": "id",
+          "name": "configtitle_chs",
+          "name_zh-CHT": "configtitle_cht",
+          "name_en": "configtitle_en",
+          "desc": "",
+          "lastChangedBy": "lastchangedby",
+          "lastChangedOn": "lastchangedon"
+        },
+        "exportRuleCode": "BillCategory"
+      }],
+      "collectByExportRuleList": [{
+        "exportRuleId": "b99f2668-c18f-ca17-71bc-b4e15a724c64",
+        "dboCode": "bfbfconfigdefine",
+        "columnName": "id",
+        "exportRuleCode": "BillCategory"
+      }]
+    }
+  ]
+}

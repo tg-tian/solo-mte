@@ -1,0 +1,12 @@
+{
+	"TableNameConfiguration": [
+		{
+			"RuleCode": "FIYear",
+			"Name": "io.iec.edp.caf.databaseobject.tablenameruleextend.DboTableNameExtendManager"
+		},
+		{
+			"RuleCode": "YYMM",
+			"Name": "io.iec.edp.caf.databaseobject.tablenameruleextend.DboTableNameExtendManager"
+		}
+	]
+}

@@ -1,0 +1,230 @@
+﻿{
+	"ExtractConfigration": [
+	    {
+	        "TypeCode": "MDPKG",
+	        "Enable":true,
+	        "Extract": {
+	            "Name": "com.inspur.edp.lcm.metadata.extend.action.ExtractActionImpl",
+	            "Assembly": "lcm-metadata-extend.jar"
+	        }
+	    },
+		{
+    	    "TypeCode": "RS",
+            "Enable":true,
+            "Extract": {
+                "Name": "com.inspur.edp.i18n.resource.devtime.core.extract.ResourceExtractAction",
+                "Assembly": "i18n-resource-devtime-core.jar"
+            }
+		},
+		{
+    	    "TypeCode": "DBO",
+            "Enable":true,
+            "Extract": {
+                "Name": "com.inspur.edp.lcm.databaseobject.manager.DatabaseObjectTransferManager",
+                "Assembly": "lcm-database-object-manager.jar"
+            }
+		},
+		{
+    	    "TypeCode": "WEB",
+            "Enable":true,
+            "Extract": {
+                "Name": "com.inspur.edp.web.frontendproject.FrontendProjectExtractor",
+                "Assembly": "web-jitengine-frontendproject.jar"
+            }
+		}
+    ],
+    "MetadataCompilerConfigration": [
+    	{
+        	"TypeCode": "MDPKG",
+        	"Enable":true,
+        	"MetadataCompiler": {
+        	    "Name": "com.inspur.edp.lcm.metadata.extend.action.MetadataCompileActionImpl",
+           	 	"Assembly": ""
+        	}
+    	},
+        {
+    	    "TypeCode": "Resources",
+            "Enable":true,
+            "MetadataCompiler": {
+                "Name": "com.inspur.edp.i18n.resource.devtime.core.ResMetadataCompileAction",
+                "Assembly": "i18n-resource-devtime-core.jar"
+            }
+		},
+        {
+    	    "TypeCode": "LinguisticResource",
+            "Enable":true,
+            "MetadataCompiler": {
+                "Name": "com.inspur.edp.i18n.resource.devtime.core.LResMetadataCompileAction",
+                "Assembly": "i18n-resource-devtime-core.jar"
+            }
+    	},
+    	{
+        	"TypeCode": "WEB",
+        	"Enable":true,
+        	"MetadataCompiler": {
+        	    "Name": "com.inspur.edp.web.frontendproject.FrontendProjectCompiler",
+				"Assembly": "web-jitengine-frontendproject.jar"
+        	}
+    	}
+    ],
+	"JitCompilerConfigration": [
+		{
+			"TypeCode": "CommonExtend",
+			"Enable": true,
+			"BeforeCompiler": null,
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.jittojava.action.AfterGenerator",
+				"Assembly": "com.inspur.edp.jittojava.action.jar"
+			}
+		},
+		{
+			"TypeCode": "GSPBusinessEntity",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.bef.dtgenerator.BEJitAction",
+				"Assembly": "com.inspur.edp.bef.dtgenerator.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.bef.bemanager.aftergenerate.BeAfterGenerateAction",
+				"Assembly": "com.inspur.edp.bef.bemanager.jar"
+			}
+		},
+		{
+			"TypeCode": "GSPViewModel",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.bff.designtime.generator.metadatacompile.VoJitAction",
+				"Assembly": "com.inspur.edp.bff.dtgenerator.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.bef.bemanager.aftergenerate.BeAfterGenerateAction",
+				"Assembly": "com.inspur.edp.bef.bemanager.jar"
+			}
+		},
+		{
+			"TypeCode": "UnifiedDataType",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.udt.generator.UdtJitAction",
+				"Assembly": "com.inspur.edp.udt.dtgenerator.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.bef.bemanager.aftergenerate.BeAfterGenerateAction",
+				"Assembly": "com.inspur.edp.bef.bemanager.jar"
+			}
+		},
+		{
+			"TypeCode": "ExternalApi",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.sgf.dt.compile.EapiCompile",
+				"Assembly": "cdp-sgf-dt-compile.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.sgf.dt.compile.AfterGenerator",
+				"Assembly": "cdp-sgf-dt-compile.jar"
+			}
+		},
+		{
+			"TypeCode": "InternalApi",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.internalservice.compile.IapiCompile",
+				"Assembly": "cdp-iapi-compile.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.internalservice.compile.AfterGenerator",
+				"Assembly": "cdp-iapi-compile.jar"
+			}
+		},
+		{
+			"TypeCode": "QueryObject",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.qdp.qo.dtgenerator.QOJitAction",
+				"Assembly": "qdp-qo-dtgenerator.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.qdp.qo.dtgenerator.mavendependency.MavenDepOperate",
+				"Assembly": "qdp-qo-dtgenerator.jar"
+			}
+		},
+		{
+			"TypeCode": "DataTransferObject",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.dto.compile.DtoCompile",
+				"Assembly": "cdp-dto-compile.jar"
+			},
+			"AfterCompiler": null
+		},
+		{
+			"TypeCode": "CommonDataType",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.cdt.compile.CdtCompiler",
+				"Assembly": "cdp-cdt-compile.jar"
+			},
+			"AfterCompiler": null
+		},
+		{
+			"TypeCode": "MappingRule",
+			"Enable": true,
+			"BeforeCompiler": {
+				"Name": "com.inspur.edp.svc.mapping.jitaction.MappingJitAction",
+				"Assembly": "com.inspur.edp.svc.mapping.dtgenerator.jar"
+			},
+			"AfterCompiler": {
+				"Name": "com.inspur.edp.svc.mapping.jitaction.MappingAfterGeneratorAction",
+				"Assembly": "com.inspur.edp.svc.mapping.dtgenerator.jar"
+			}
+		}
+	],
+	"JitRuntimeConfigration": {
+		"Enable": true,
+		"Action": {
+			"Name": "com.inspur.edp.bef.bemanager.RunTimeAction",
+			"Assembly": "cominspur.edp.bef.bemanager.jar"
+		}
+	},
+	"MavenProjectName": "code",
+	"ProjectConfiguration": [
+		{
+			"CommonConfigData": {
+				"TypeCode": "backend",
+				"TypeName": "后端工程",
+				"GroupID": "backend",
+				"GroupName": "后端工程",
+				"Description": "后端工程主要包含BE、UDT、VO等元数据"
+			},
+			"CreateConfigData": {
+			},
+			"IncludeDevObjTypes": "be,cmp,api,dip,frm,res,impexp,bpmn,help,uc,coderule,query"
+		},
+		{
+			"CommonConfigData": {
+				"TypeCode": "frontend",
+				"TypeName": "前端工程",
+				"GroupID": "frontend",
+				"GroupName": "前端工程",
+				"Description": "前端工程主要包含Form、Help等元数据"
+			},
+			"CreateConfigData": {
+				
+			},
+			"IncludeDevObjTypes": "be,cmp,api,dip,frm,res,impexp,bpmn,help,uc,coderule"
+		},
+		{
+			"CommonConfigData": {
+				"TypeCode": "integration",
+				"TypeName": "集成工程",
+				"GroupID": "integration",
+				"GroupName": "集成工程",
+				"Description": "集成工程主要包含VO、数据交换组件、构件等元数据"
+			},
+			"CreateConfigData": {
+			},
+			"IncludeDevObjTypes": "be,cmp,dip,res"
+		}
+	]
+}

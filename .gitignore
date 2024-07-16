@@ -16,4 +16,6 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-
+.DS_Store
+release/caf-server/temp
+release/caf-server/logs

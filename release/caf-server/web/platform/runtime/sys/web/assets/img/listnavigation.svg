@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="50px" viewBox="0 0 64 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>列表视图</title>
+    <desc>Created with Sketch.</desc>
+    <g id="系统设置" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Farris系统设置页面选择横向导航时" transform="translate(-757.000000, -255.000000)">
+            <g id="列表视图" transform="translate(757.000000, 255.000000)">
+                <rect id="矩形" fill="#F6F7F9" x="0" y="0" width="64" height="50" rx="4"></rect>
+                <rect id="矩形备份-32" fill="#BEC4D4" x="6" y="14" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-57" fill="#BEC4D4" x="6" y="30" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-60" fill="#BEC4D4" x="20" y="30" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-63" fill="#BEC4D4" x="34" y="30" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-50" fill="#BEC4D4" x="20" y="14" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-53" fill="#BEC4D4" x="34" y="14" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-56" fill="#BEC4D4" x="48" y="14" width="8" height="2" rx="1"></rect>
+                <rect id="矩形备份-35" fill="#BEC4D4" opacity="0.355166481" x="6" y="19" width="10" height="2"></rect>
+                <rect id="矩形备份-58" fill="#BEC4D4" opacity="0.355166481" x="6" y="35" width="10" height="2"></rect>
+                <rect id="矩形备份-61" fill="#BEC4D4" opacity="0.355166481" x="20" y="35" width="10" height="2"></rect>
+                <rect id="矩形备份-64" fill="#BEC4D4" opacity="0.355166481" x="34" y="35" width="10" height="2"></rect>
+                <rect id="矩形备份-51" fill="#BEC4D4" opacity="0.355166481" x="20" y="19" width="10" height="2"></rect>
+                <rect id="矩形备份-54" fill="#BEC4D4" opacity="0.355166481" x="34" y="19" width="10" height="2"></rect>
+                <rect id="矩形备份-67" fill="#BEC4D4" opacity="0.355166481" x="48" y="19" width="10" height="2"></rect>
+                <rect id="矩形备份-36" fill="#BEC4D4" opacity="0.355166481" x="6" y="23" width="10" height="2"></rect>
+                <rect id="矩形备份-59" fill="#BEC4D4" opacity="0.355166481" x="6" y="39" width="10" height="2"></rect>
+                <rect id="矩形备份-62" fill="#BEC4D4" opacity="0.355166481" x="20" y="39" width="10" height="2"></rect>
+                <rect id="矩形备份-65" fill="#BEC4D4" opacity="0.355166481" x="34" y="39" width="10" height="2"></rect>
+                <rect id="矩形备份-52" fill="#BEC4D4" opacity="0.355166481" x="20" y="23" width="10" height="2"></rect>
+                <rect id="矩形备份-55" fill="#BEC4D4" opacity="0.355166481" x="34" y="23" width="10" height="2"></rect>
+                <rect id="矩形备份-68" fill="#BEC4D4" opacity="0.355166481" x="48" y="23" width="10" height="2"></rect>
+                <rect id="矩形" fill="#B1B8CA" x="6" y="5" width="10" height="4" rx="2"></rect>
+                <rect id="矩形备份-21" fill="#BEC4D4" opacity="0.355166481" x="19" y="5" width="10" height="4" rx="2"></rect>
+                <rect id="矩形备份-22" fill="#BEC4D4" opacity="0.355166481" x="45" y="5" width="10" height="4" rx="2"></rect>
+                <rect id="矩形备份-24" fill="#BEC4D4" opacity="0.355166481" x="32" y="5" width="10" height="4" rx="2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

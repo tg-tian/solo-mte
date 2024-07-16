@@ -1,0 +1,8 @@
+{
+    "ServiceUnitInfo" :
+    {
+        "ApplicationName" : "DeviceComponent",
+        "ServiceUnitName" : "Device",
+        "Type" : "Biz"
+    }
+}

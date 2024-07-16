@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 8</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="18" height="18" rx="4"></rect>
+        <filter x="-16.7%" y="-16.7%" width="133.3%" height="133.3%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.16505377   0 0 0 0 0.172084798   0 0 0 0 0.182631341  0 0 0 0.296028191 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="系统设置交互规约" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Farris系统设置选中交互样式" transform="translate(-519.000000, -553.000000)">
+            <g id="编组-7备份-6" transform="translate(519.000000, 553.000000)">
+                <g id="编组-8" transform="translate(2.000000, 2.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="蒙版">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill-opacity="0.6" fill="#1A3560" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="搜索icon" mask="url(#mask-2)" fill="#FFFFFF" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="0.4">
+                        <g transform="translate(4.000000, 3.000000)" id="形状结合">
+                            <path d="M4.5,1.78818027e-09 C6.98528137,1.78818027e-09 9,2.01471863 9,4.5 C9,5.57734714 8.62140524,6.56626874 7.99000147,7.34097904 L11.3822376,10.7315903 C11.5774998,10.9268524 11.5774998,11.2434349 11.3822376,11.4386971 L11.3513589,11.4695758 C11.1560968,11.6648379 10.8395143,11.6648379 10.6442521,11.4695758 L7.24225351,8.06820173 C6.48305357,8.65253562 5.53210411,9 4.5,9 C2.01471863,9 0,6.98528138 0,4.5 C0,2.01471863 2.01471863,1.78818027e-09 4.5,1.78818027e-09 Z M4.5,1 C2.56700338,1 1,2.56700338 1,4.5 C1,6.43299663 2.56700338,8 4.5,8 C6.43299662,8 8,6.43299663 8,4.5 C8,2.56700338 6.43299662,1 4.5,1 Z"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

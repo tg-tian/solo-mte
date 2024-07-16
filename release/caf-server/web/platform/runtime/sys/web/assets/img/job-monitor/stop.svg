@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>停止</title>
+    <defs>
+        <linearGradient x1="1.64910531%" y1="1.64910531%" x2="98.6614792%" y2="98.6614792%" id="linearGradient-1">
+            <stop stop-color="#7C80E1" offset="0%"></stop>
+            <stop stop-color="#8A9EFE" offset="100%"></stop>
+        </linearGradient>
+        <path d="M8,0 C3.58125,0 0,3.58125 0,8 C0,12.41875 3.58125,16 8,16 C12.41875,16 16,12.41875 16,8 C16,3.58125 12.41875,0 8,0 Z" id="path-2"></path>
+        <path d="M11.25,11.1875 C11.25,11.221875 11.221875,11.25 11.1875,11.25 L4.8125,11.25 C4.778125,11.25 4.75,11.221875 4.75,11.1875 L4.75,4.8125 C4.75,4.778125 4.778125,4.75 4.8125,4.75 L11.1875,4.75 C11.221875,4.75 11.25,4.778125 11.25,4.8125 L11.25,11.1875 Z" id="path-3"></path>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="停止" fill-rule="nonzero">
+            <g id="路径">
+                <use fill="#FFFFFF" xlink:href="#path-2"></use>
+                <use fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+            </g>
+            <g id="路径" fill="#FFFFFF">
+                <use xlink:href="#path-3"></use>
+                <use xlink:href="#path-3"></use>
+            </g>
+        </g>
+    </g>
+</svg>

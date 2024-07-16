@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+日志级别从低到高分为:
+    TRACE < DEBUG < INFO < WARN < ERROR < FATAL
+例如：如果设置为WARN，则低于WARN的信息都不会输出
+-->
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <jmxConfigurator />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <contextName>logback</contextName>
+
+    <!--定义输出端：控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 直接使用 JsonLayout 无法自定义 Pattern , MDC 将以子对象形式输出 -->
+        <!--
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>false</prettyPrint>
+            </jsonFormatter>
+            <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSSX</timestampFormat>
+            <appendLineSeparator>true</appendLineSeparator>
+        </layout>
+        -->
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <if condition='System.getenv("KUBERNETES_PORT") != null &amp;&amp; System.getenv("KUBERNETES_PORT").length() > 0'>
+                <then>
+                    <if condition='System.getenv("CAF_LOGGING_JSON") == null || System.getenv("CAF_LOGGING_JSON").equals("true")'>
+                        <then>
+                            <!-- 容器环境输出为 JSON 格式 -->
+                            <!-- 通过自定义日志模式也可以实现 JSON 输出效果 -->
+                            <Pattern>{ "timestamp": "%date{"yyyy-MM-dd'T'HH:mm:ss.SSSXXX", UTC}", "level": "%level", "application": "${springAppName:-}", "trace": "%X{trace_id:-}", "span": "%X{span_id:-}", "trace_flags": "%X{trace_flags:-}", "pid": "${PID:-}", "thread": "%thread", "class": "%logger", "message": "%message", "username": "%X{username:-}", "full_name": "%X{full_name:-}", "email": "%X{email:-}", "mobile": "%X{mobile:-}" }\n</Pattern>
+                        </then>
+                        <else>
+                            <!-- 虚拟机环境输出为控制台美化格式 -->
+                            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8} +08:00 ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</Pattern>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <!-- 虚拟机环境输出为控制台美化格式 -->
+                    <Pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8} +08:00){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</Pattern>
+                </else>
+            </if>
+        </encoder>
+    </appender>
+
+    <!--定义输出端：滚动文件-->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${caf.base}/logs/server.log</file>
+
+        <!--
+        日志文件输出格式
+        %d——日志输出时间
+        %p——日志级别
+        %t——日志的线程名
+        %msg——日志消息
+        %n——平台的换行符
+        -->
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <charset>UTF-8</charset>
+            <layout class="io.iec.edp.caf.logging.logback.mdc.CafMDCPatternLayout">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8} +08:00 ${LOG_LEVEL_PATTERN:-%5p} ${hostname} ${PID:- } [%t] [%X{tid}] [%X{msu}] %c{1.} %msg%n</pattern>
+            </layout>
+        </encoder>
+
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--以日期切分  %d{yyyy-MM-dd_HH-mm}-->
+            <fileNamePattern>${caf.base}/logs/server-%d{yyyy-MM-dd,GMT+8}.%i.log.gz</fileNamePattern>
+            <!-- 日志总占用存储空间不超过 10GB 的前提下，单个日志文件最大：10MB, 最多保留：30天  -->
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE" />
+        <queueSize>100000</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>true</neverBlock>
+    </appender>
+    <appender name="ASYNC_ROLLING_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="ROLLING_FILE" />
+        <queueSize>100000</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>true</neverBlock>
+    </appender>
+
+
+    <!--
+    root配置必须在appender之后
+    root节点是对所有appender的管理,添加哪个appender就会打印哪个appender的日志
+    如果appender的日志级别比root的低,会按照root设定的日志级别进行打印日志
+    -->
+    <root level="INFO">
+        <if condition='System.getenv("KUBERNETES_PORT") != null || System.getenv("CAF_LOGGING_JSON") != null'>
+            <then>
+                <!-- 容器环境只输出到 Console -->
+                <appender-ref ref="ASYNC_CONSOLE" />
+            </then>
+            <else>
+                <!-- 虚拟机环境输出到 Console 同时输出到 滚动文件-->
+                <appender-ref ref="ASYNC_CONSOLE" />
+                <appender-ref ref="ASYNC_ROLLING_FILE" />
+            </else>
+        </if>
+    </root>
+
+</configuration>

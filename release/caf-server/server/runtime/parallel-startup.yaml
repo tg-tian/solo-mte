@@ -1,0 +1,12 @@
+parallel:
+  base:
+    paths:
+    - platform/common
+    - platform/runtime/common
+    - platform/runtime/sys
+  module:
+    principle: keyApp
+    includes:
+    - apps
+    - platform/runtime
+    - platform/dev
