@@ -1,0 +1,7 @@
+{
+  "strategy": "latest",
+  "strategy_values": [
+    "latest",
+    "nearest"
+  ]
+}

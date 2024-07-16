@@ -1,0 +1,337 @@
+{
+	"menu": {
+		"basic": [{
+				"label": "文件",
+				"submenu": [{
+					"label": "新建",
+					"submenu": [{
+							"label": "工程",
+							"command": "newProject",
+							"apply": "all"
+						},
+						{
+							"label": "元数据",
+							"command": "newMetadata",
+							"apply": "all"
+						},
+						{
+							"label": "数据库对象",
+							"command": "newDbo",
+							"apply": "all"
+						},
+						{
+							"label": "目录",
+							"command": "newFolder",
+							"apply": "all"
+						}
+					]
+				}]
+			},
+			{
+				"label": "工程",
+				"submenu": [{
+						"label": "元数据包管理",
+						"command": "metadataPackageManagerForJava",
+						"apply": "all"
+					},
+					{
+						"label": "导入工程",
+						"command": "newProjectImport",
+						"apply": "all"
+					},
+					{
+						"label": "删除工程",
+						"command": "deleteProject",
+						"apply": "all"
+					},
+					{
+						"label": "拉取依赖的包",
+						"command": "restore",
+						"apply": "all"
+					}
+				]
+			},
+			{
+				"label": "生成",
+				"submenu": [{
+						"label": "生成代码",
+						"command": "generateJavaCode",
+						"apply": "generation"
+					},
+					{
+						"label": "编译打包",
+						"command": "javaProjectCompile",
+						"apply": "generation"
+					},
+					{
+						"label": "提取",
+						"command": "projectExtract",
+						"apply": "all"
+					},
+					{
+						"label": "部署",
+						"command": "projectDeploy",
+						"apply": "all"
+					},
+					{
+						"label": "推送至仓库(Maven)",
+						"command": "mavenPackagePush",
+						"apply": "all"
+					}
+				]
+			},
+			{
+				"label": "生成(前端)",
+				"submenu": [{
+						"label": "生成代码",
+						"command": "generateFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "编译代码",
+						"command": "compileFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "生成代码并编译",
+						"command": "generateAndCompileFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "部署",
+						"command": "deployFrontendProduct",
+						"apply": "all"
+					}
+				]
+			},
+			{
+				"label": "调试",
+				"submenu": [{
+					"label": "环境管理",
+					"command": "debuggerServerMgr",
+					"apply": "all"
+				}]
+			},
+			{
+				"label": "选项",
+				"submenu": [{
+					"label": "设置",
+					"command": "devEnvSetting",
+					"apply": "all"
+				}]
+			}
+		],
+		"extend": [{
+				"label": "文件",
+				"submenu": [{
+					"label": "新建",
+					"submenu": [{
+							"label": "工程",
+							"command": "newProject",
+							"apply": "all"
+						},
+						{
+							"label": "元数据",
+							"command": "newMetadata",
+							"apply": "all"
+						},
+						{
+							"label": "数据库对象",
+							"command": "newDbo",
+							"apply": "all"
+						},
+						{
+							"label": "目录",
+							"command": "newFolder",
+							"apply": "all"
+						}
+					]
+				}]
+			},
+			{
+				"label": "工程",
+				"submenu": [{
+						"label": "元数据包管理",
+						"command": "metadataPackageManagerForJava",
+						"apply": "all"
+					},
+					{
+						"label": "导入工程",
+						"command": "newProjectImport",
+						"apply": "all"
+					},
+					{
+						"label": "删除工程",
+						"command": "deleteProject",
+						"apply": "all"
+					},
+					{
+						"label": "拉取依赖的包",
+						"command": "restore",
+						"apply": "all"
+					},
+					{
+						"label": "转解析型",
+						"command": "toInterpretation",
+						"apply": "generation"
+					}
+				]
+			},
+			{
+				"label": "生成",
+				"submenu": [{
+						"label": "生成代码",
+						"command": "generateJavaCode",
+						"apply": "generation"
+					},
+					{
+						"label": "编译打包",
+						"command": "javaProjectCompile",
+						"apply": "generation"
+					},
+					{
+						"label": "提取",
+						"command": "projectExtract",
+						"apply": "all"
+					},
+					{
+						"label": "部署",
+						"command": "projectDeploy",
+						"apply": "all"
+					},
+					{
+						"label": "部署(分)",
+						"submenu": [
+							{
+								"label": "部署元数据包",
+								"command": "projectDeployMdpkg",
+								"apply": "all"
+							},
+							{
+								"label": "部署web",
+								"command": "projectDeployWeb",
+								"apply": "interpretation"
+							},
+							{
+								"label": "部署构件",
+								"command": "projectDeployJar",
+								"apply": "interpretation"
+							}
+						],
+						"apply": "all"
+					},
+					{
+						"label": "推送至仓库(Maven)",
+						"command": "mavenPackagePush",
+						"apply": "all"
+					},
+					{
+						"label": "生成代码（批量）",
+						"command": "batchGenerateJavaCode",
+						"apply": "generation"
+					},
+					{
+						"label": "编译打包（批量）",
+						"command": "batchJavaProjectCompile",
+						"apply": "generation"
+					},
+					{
+						"label": "提取（批量）",
+						"command": "projectExtract",
+						"apply": "all"
+					}
+				]
+			},
+			{
+				"label": "生成(后端)",
+				"submenu": [
+					{
+						"label": "代码生成",
+						"command": "generateJavaCode",
+						"apply": "generation"
+					},
+					{
+						"label": "代码编译(合)",
+						"command": "javaProjectCompileNoWeb",
+						"apply": "generation"
+					},
+					{
+						"label": "代码编译(分)",
+						"submenu": [
+							{
+								"label": "api模块编译",
+								"command": "javaProjectCompileApi",
+								"apply": "generation"
+							},
+							{
+								"label": "comp模块编译",
+								"command": "javaProjectCompileComp",
+								"apply": "all"
+							},
+							{
+								"label": "core模块编译",
+								"command": "javaProjectCompileCore",
+								"apply": "generation"
+							},
+							{
+								"label": "resource模块编译",
+								"command": "javaProjectCompileResource",
+								"apply": "generation"
+							},
+							{
+								"label": "元数据打包",
+								"command": "javaProjectCompileMdpkg",
+								"apply": "all"
+							}
+						]
+					},
+					{
+						"label": "代码生成编译(批量）",
+						"command": "batchGenerateAndCompile",
+						"apply": "generation"
+					}
+				]
+			},
+			{
+				"label": "生成(前端)",
+				"submenu": [{
+						"label": "生成代码",
+						"command": "generateFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "编译代码",
+						"command": "compileFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "生成代码并编译",
+						"command": "generateAndCompileFrontendCode",
+						"apply": "all"
+					},
+					{
+						"label": "部署",
+						"command": "deployFrontendProduct",
+						"apply": "all"
+					}
+				]
+			},
+			{
+				"label": "调试",
+				"submenu": [{
+					"label": "环境管理",
+					"command": "debuggerServerMgr",
+					"apply": "all"
+				}]
+			},
+			{
+				"label": "选项",
+				"submenu": [{
+					"label": "设置",
+					"command": "devEnvSetting",
+					"apply": "all"
+				}]
+			}
+		]
+	}
+}

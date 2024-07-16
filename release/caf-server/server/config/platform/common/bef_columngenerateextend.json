@@ -1,0 +1,12 @@
+{
+    "ColumnGenerateConfigration": [{
+        "GenerateType": "Serial",
+        "Name": "com.inspur.edp.bef.insuite.core.generatorimpl.BefSerialGenerator"
+    },{
+		"GenerateType": "Guid",
+        "Name": "com.inspur.edp.bef.insuite.core.generatorimpl.BefGuidGenerator"
+	},{
+		"GenerateType": "UUID32",
+        "Name": "com.inspur.edp.bef.builtincomponents.idgen.UUID32"
+	}]
+}

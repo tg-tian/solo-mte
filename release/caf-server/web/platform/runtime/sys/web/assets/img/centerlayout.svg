@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="34px" viewBox="0 0 64 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 14</title>
+    <g id="系统设置" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="系统设置2" transform="translate(-529.000000, -1065.000000)">
+            <g id="居中布局" transform="translate(529.000000, 1057.000000)">
+                <g id="编组-14" transform="translate(0.000000, 8.000000)">
+                    <rect id="矩形" fill-opacity="0.6" fill="#F0F2F4" x="0" y="0" width="64" height="34"></rect>
+                    <rect id="矩形" fill="#B1B8CA" opacity="0.5" x="24" y="8" width="16" height="18" rx="2"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

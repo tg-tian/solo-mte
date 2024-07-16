@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="46px" viewBox="0 0 60 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>up</title>
+    <desc>Created with Sketch.</desc>
+    <g id="up" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g fill="#096DD9" id="Mask">
+            <rect transform="translate(30.000000, 23.000000) scale(1, -1) translate(-30.000000, -23.000000) " x="0" y="0" width="60" height="46"></rect>
+        </g>
+        <path d="M23.2956067,44.8609726 C22.8972054,45.1304594 22.3741514,44.9962916 22.1273329,44.5613004 C21.8805144,44.1263093 22.0033965,43.5552171 22.4017978,43.2857304 L30,40 L37.6166474,43.2985544 C38.0085619,43.5791513 38.1179365,44.1535085 37.8609424,44.5814171 C37.6039483,45.0093257 37.0779039,45.1287455 36.6859894,44.8481486 L30,42.3333333 L23.2956067,44.8609726 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 8</title>
+    <defs>
+        <circle id="path-1" cx="18" cy="18" r="18"></circle>
+        <filter x="-19.4%" y="-13.9%" width="138.9%" height="138.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.145323427 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="系统设置交互规约" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="登录页背景图预览" transform="translate(-1301.000000, -105.000000)">
+            <g id="编组-8" transform="translate(1305.000000, 107.000000)">
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <path d="M19.0513208,18 L23.7822643,13.2690565 C24.0725786,12.9787422 24.0725786,12.5080499 23.7822643,12.2177357 C23.4919501,11.9274214 23.0212578,11.9274214 22.7309435,12.2177357 L18,16.9486792 L13.2690565,12.2177357 C12.9787422,11.9274214 12.5080499,11.9274214 12.2177357,12.2177357 C11.9274214,12.5080499 11.9274214,12.9787422 12.2177357,13.2690565 L16.9486792,18 L12.2177357,22.7309435 C11.9274214,23.0212578 11.9274214,23.4919501 12.2177357,23.7822643 C12.5080499,24.0725786 12.9787422,24.0725786 13.2690565,23.7822643 L18,19.0513208 L22.7309435,23.7822643 C23.0212578,24.0725786 23.4919501,24.0725786 23.7822643,23.7822643 C24.0725786,23.4919501 24.0725786,23.0212578 23.7822643,22.7309435 L19.0513208,18 Z" id="Combined-Shape" fill-opacity="0.65" fill="#000000"></path>
+            </g>
+        </g>
+    </g>
+</svg>

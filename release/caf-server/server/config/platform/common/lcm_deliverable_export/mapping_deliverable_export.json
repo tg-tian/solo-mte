@@ -1,0 +1,42 @@
+{
+  "deliverableExtend": [
+    {
+      "deliverableType": {
+        "code": "MAPPING_RULE",
+        "name": "数据转换规则",
+        "name_zh-CHT": "數據轉換規則",
+        "name_en": "Mapping Rule",
+        "category": "INTEGRATION_METADATA",
+        "applicable": ["DEV","RUNTIME"],
+        "enabled": true,
+        "suCode": "dip",
+        "orderForDev": 140,
+        "orderForRuntime": 140
+      },
+      "displayByExportRuleList": [{
+        "exportRuleId": "ac9587c4-e3fb-17d3-ae16-fe513afb8f60",
+        "dboCode": "gspmappingruledef",
+        "columnNameEntity": {
+          "boId": "bizobjid",
+          "billCategoryId": "biztypeid",
+          "id": "id",
+          "name": "name_chs",
+          "name_zh-CHT": "name_cht",
+          "name_en": "name_en",
+          "desc": "code",
+          "lastChangedBy": "lastmodifier",
+          "lastChangedOn": "lastmodifiedtime"
+        },
+        "exportRuleCode": "HipMappingRule"
+      }],
+      "collectByExportRuleList": [
+        {
+          "exportRuleId": "ac9587c4-e3fb-17d3-ae16-fe513afb8f60",
+          "dboCode": "gspmappingruledef",
+          "columnName": "id",
+          "exportRuleCode": "HipMappingRule"
+        }
+      ]
+    }
+  ]
+}

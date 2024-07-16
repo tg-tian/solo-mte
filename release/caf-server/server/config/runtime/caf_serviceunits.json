@@ -1,0 +1,10 @@
+{
+  "DeploymentConfiguration": {
+    "IsDev": true,
+    "DeployMode": "OnPremise",
+    "AppType": "Monolithic",
+    "IP": "127.0.0.1",
+    "Port": "5000",
+    "ServiceUnits": []
+  }
+}

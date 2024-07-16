@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="6px" viewBox="0 0 11 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>下拉</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-456.000000, -67.000000)">
+            <g id="下拉" transform="translate(453.000000, 62.000000)">
+                <rect id="矩形" fill-rule="nonzero" x="0" y="0" width="16" height="16"></rect>
+                <path d="M8.04475169,10.9996237 C7.91068442,11.0046331 7.77544134,10.9523507 7.67865025,10.8448533 L3.12040486,5.78240897 C2.947178,5.59002105 2.96271111,5.29363172 3.15509903,5.12040486 C3.34748694,4.947178 3.64387628,4.96271111 3.81710313,5.15509903 L8.04475169,9.85037842 L12.2724002,5.15509903 C12.4456271,4.96271111 12.7420164,4.947178 12.9344044,5.12040486 C13.1267923,5.29363172 13.1423254,5.59002105 12.9690985,5.78240897 L8.41085313,10.8448533 C8.31406204,10.9523507 8.17881897,11.0046331 8.04475169,10.9996237 Z" id="down" fill-opacity="0.45" fill="#000000"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,44 @@
+﻿{
+  "deliverableExtend": [
+    {
+      "deliverableType": {
+        "code": "QUERY_JOIN_SEARCH",
+        "name": "查询联查",
+        "name_zh-CHT": "查詢聯查",
+        "name_en": "Query join search",
+        "category": "CONFIG_DATA",
+        "applicable": ["DEV","RUNTIME"],
+        "enabled": true,
+        "suCode": "bcc",
+        "orderForDev": 65,
+        "orderForRuntime": 65
+      },
+      "display": {
+        "className": "com.inspur.edp.qdp.api.data.QueryJoinSearchDisplayImpl"
+      },
+      "collect": {
+        "className": "com.inspur.edp.qdp.api.data.QueryJoinSearchCollectImpl"
+      }
+    },
+    {
+      "deliverableType": {
+        "code": "QUERY_FORMAT",
+        "name": "查询格式",
+        "name_zh-CHT": "查詢格式",
+        "name_en": "Query format",
+        "category": "CONFIG_DATA",
+        "applicable": ["DEV","RUNTIME"],
+        "enabled": true,
+        "suCode": "bcc",
+        "orderForDev": 65,
+        "orderForRuntime": 65
+      },
+      "display": {
+        "className": "com.inspur.edp.qdp.api.data.QueryFormatDisplayImpl"
+      },
+      "collect": {
+        "className": "com.inspur.edp.qdp.api.data.QueryFormatCollectImpl"
+      }
+    }
+  ]
+}

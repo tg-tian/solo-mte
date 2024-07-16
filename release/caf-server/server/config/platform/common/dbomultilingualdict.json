@@ -1,0 +1,1514 @@
+[
+  {
+    "id": "GSP_DBO_0001",
+    "code" : "GSP_DBO_0001",
+    "info_chs" : "根据ID判断设计时DBO是否存在报错，数据库对象ID为：",
+    "info_cht" : "根據ID判斷設計時DBO是否存在報錯，資料庫對象ID為：",
+    "info_en" : "Determine whether there are any errors in the DBO during design based on the ID, and the database object ID is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0002",
+    "code" : "GSP_DBO_0002",
+    "info_chs" : "删除设计时DBO记录报错：",
+    "info_cht" : "删除設計時DBO記錄錯誤：",
+    "info_en" : "DBO record error when deleting design:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0003",
+    "code" : "GSP_DBO_0003",
+    "info_chs" : "获取数据库对象配置信息报错",
+    "info_cht" : "獲取資料庫對象配寘信息報錯",
+    "info_en" : "Error in obtaining database object configuration information",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0004",
+    "code" : "GSP_DBO_0004",
+    "info_chs" : "获取数据库对象部署配置报错",
+    "info_cht" : "獲取資料庫對象部署配寘報錯",
+    "info_en" : "Error in obtaining database object deployment configuration",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0005",
+    "code" : "GSP_DBO_0005",
+    "info_chs" : "无异常描述",
+    "info_cht" : "無異常描述",
+    "info_en" : "No abnormal information",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0006",
+    "code" : "GSP_DBO_0006",
+    "info_chs" : "数据库对象表中不存在ID为 %1$s 的字段",
+    "info_cht" : "資料庫對象錶中不存在ID為 %1$s 的欄位",
+    "info_en" : "Field with ID %1$s does not exist in the database object table",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0007",
+    "code" : "GSP_DBO_0007",
+    "info_chs" : "当前字段数据类型不支持多语，字段编号为 %1$s ，当前数据类型为 %2$s ，请确认。",
+    "info_cht" : "當前欄位資料類型不支持多語，欄位編號為 %1$s ，當前資料類型為 %2$s ，請確認。",
+    "info_en" : "The current field data type does not support multilingualism. The field number is %1$s , and the current data type is %2$s . Please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0008",
+    "code" : "GSP_DBO_0008",
+    "info_chs" : "数据库类型不正确:",
+    "info_cht" : "資料庫類型不正確：",
+    "info_en" : "Incorrect database type:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0009",
+    "code" : "GSP_DBO_0009",
+    "info_chs" : "获取缓存失败",
+    "info_cht" : "獲取緩存失敗",
+    "info_en" : "Failed to obtain cache",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0010",
+    "code" : "GSP_DBO_0010",
+    "info_chs" : "关闭Statement出错:",
+    "info_cht" : "關閉Statement出錯：",
+    "info_en" : "Error closing Statement:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0011",
+    "code" : "GSP_DBO_0011",
+    "info_chs" : "获取数据库Connection出错:",
+    "info_cht" : "獲取資料庫Connection出錯：",
+    "info_en" : "Error obtaining database connection:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0012",
+    "code" : "GSP_DBO_0012",
+    "info_chs" : "关闭Connection出错",
+    "info_cht" : "關閉Connection出錯",
+    "info_en" : "Error closing Connection:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0013",
+    "code" : "GSP_DBO_0013",
+    "info_chs" : "sql执行出错:",
+    "info_cht" : "sql執行出錯：",
+    "info_en" : "SQL execution error:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0014",
+    "code" : "GSP_DBO_0014",
+    "info_chs" : "构造数据库连接出错，找不到Driver:",
+    "info_cht" : "構造資料庫連接出錯，找不到Driver:",
+    "info_en" : "Error constructing database connection, Driver not found:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0015",
+    "code" : "GSP_DBO_0015",
+    "info_chs" : "数据库对象类型不正确，请确认。",
+    "info_cht" : "資料庫對象類型不正確，請確認。",
+    "info_en" : "The database object type is incorrect, please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0016",
+    "code" : "GSP_DBO_0016",
+    "info_chs" : "该文件名后缀不正确",
+    "info_cht" : "該檔名尾碼不正確",
+    "info_en" : "The file name suffix is incorrect",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0017",
+    "code" : "GSP_DBO_0017",
+    "info_chs" : "当前字段不存在，字段ID为",
+    "info_cht" : "當前欄位不存在，欄位ID為",
+    "info_en" : "The current field does not exist, field ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0018",
+    "code" : "GSP_DBO_0018",
+    "info_chs" : "当前主键字段是否可为空属性不能为true",
+    "info_cht" : "當前主鍵欄位是否可為空内容不能為true",
+    "info_en" : "The attribute of whether the current primary key field can be empty cannot be true",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0019",
+    "code" : "GSP_DBO_0019",
+    "info_chs" : "多语字段不许设置成主键",
+    "info_cht" : "多語欄位不許設定成主鍵",
+    "info_en" : "Multilingual fields cannot be set as primary keys",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0020",
+    "code" : "GSP_DBO_0020",
+    "info_chs" : "当前主键字段是否唯一属性不能为false",
+    "info_cht" : "當前主鍵欄位是否唯一内容不能為false",
+    "info_en" : "The property of whether the current primary key field is unique cannot be false",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0021",
+    "code" : "GSP_DBO_0021",
+    "info_chs" : "当前字段类型不支持设置为主键，请确认。当前字段编号为： %1$s ，字段类型为 %2$s",
+    "info_cht" : "當前欄位類型不支持設定為主鍵，請確認。 當前欄位編號為： %1$s ，欄位類型為 %2$s",
+    "info_en" : "The current field type does not support setting it as a primary key. Please confirm. The current field number is: %1$s , and the field type is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0022",
+    "code" : "GSP_DBO_0022",
+    "info_chs" : "数据库对象表必须包含主键或ID字段，请确认。",
+    "info_cht" : "資料庫對象錶必須包含主鍵或ID欄位，請確認。",
+    "info_en" : "The database object table must contain a primary key or ID field, please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0023",
+    "code" : "GSP_DBO_0023",
+    "info_chs" : "数据库对象表未设置主键时，ID字段必须是非空的",
+    "info_cht" : "資料庫對象錶未設定主鍵時，ID欄位必須是非空的",
+    "info_en" : "When the database object table has no primary key set, the ID field must be non empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0024",
+    "code" : "GSP_DBO_0024",
+    "info_chs" : "数据库对象字段列表不能为空。",
+    "info_cht" : "資料庫對象欄位清單不能為空。",
+    "info_en" : "The database object field list cannot be empty.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0025",
+    "code" : "GSP_DBO_0025",
+    "info_chs" : "当前字段类型不支持设置唯一约束，请确认。当前字段编号为： %1$s ，字段类型为 %2$s",
+    "info_cht" : "當前欄位類型不支持設定唯一約束，請確認。 當前欄位編號為： %1$s ，欄位類型為 %2$s",
+    "info_en" : "The current field type does not support setting unique constraints. Please confirm. The current field number is: %1$s , and the field type is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0026",
+    "code" : "GSP_DBO_0026",
+    "info_chs" : "字段为唯一字段，要求字段为非空字段，请了解。字段编号为 %1$s",
+    "info_cht" : "欄位為唯一欄位，要求欄位為非空欄位，請瞭解。 欄位編號為 %1$s",
+    "info_en" : "The field is unique and requires a non empty field. Please understand. Field number is %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0027",
+    "code" : "GSP_DBO_0027",
+    "info_chs" : "%1$s 中 %2$s 字段数据类型不支持，请修改。",
+    "info_cht" : "%1$s 中 %2$s 欄位資料類型不支持，請修改。",
+    "info_en" : "The data type of the %2$s field in %1$s is not supported. Please modify it.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0028",
+    "code" : "GSP_DBO_0028",
+    "info_chs" : "%1$s 是数据库对象保留字，字段编号不能是数据库对象保留字，请确认。当前编号： %2$s",
+    "info_cht" : "%1$s 是資料庫對象保留字，欄位編號不能是資料庫對象保留字，請確認。 當前編號： %2$s",
+    "info_en" : "%1$s is a reserved word for database objects, and the field number cannot be a reserved word for database objects. Please confirm. Current number: %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0029",
+    "code" : "GSP_DBO_0029",
+    "info_chs" : "编号/对象名命名不规范:只能包含字母,数字,下划线,并且不可以用数字开头!",
+    "info_cht" : "編號/對象名命名不規範：只能包含字母，數位，底線，並且不可以用數位開頭！",
+    "info_en" : "Number/object name naming is not standardized: it can only contain letters, digits, and the bottom line, and cannot start with digits!",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0030",
+    "code" : "GSP_DBO_0030",
+    "info_chs" : "数据库对象存在ID重复的字段,ID为： %1$s",
+    "info_cht" : "資料庫對象存在ID重複的欄位，ID為： %1$s",
+    "info_en" : "Database object has a field with a duplicate ID, ID: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0031",
+    "code" : "GSP_DBO_0031",
+    "info_chs" : "数据库对象存在编号重复的字段,编号为： %1$s",
+    "info_cht" : "資料庫對象存在編號重複的欄位，編號為： %1$s",
+    "info_en" : "Database object has a field with duplicate number: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0032",
+    "code" : "GSP_DBO_0032",
+    "info_chs" : "当前字段数据类型不支持多语，字段编号为 %1$s ，当前数据类型为 %2$s ，请确认。",
+    "info_cht" : "當前欄位資料類型不支持多語，欄位編號為 %1$s ，當前資料類型為 %2$s ，請確認。",
+    "info_en" : "The current field data type does not support multilingualism. The field number is %1$s , and the current data type is %2$s . Please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0033",
+    "code" : "GSP_DBO_0033",
+    "info_chs" : "数据库表只能包含一个聚集索引，请确认。dbo编号为 %1$s",
+    "info_cht" : "資料庫錶只能包含一個聚集索引，請確認。dbo編號為 %1$s",
+    "info_en" : "Database tables can only contain one clustered index, please confirm. DBO number is %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0034",
+    "code" : "GSP_DBO_0034",
+    "info_chs" : "索引关联的字段不能为空，索引编号为 %1$s",
+    "info_cht" : "索引關聯的欄位不能為空，索引編號為 %1$s",
+    "info_en" : "The field associated with the index cannot be empty, index number is %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0035",
+    "code" : "GSP_DBO_0035",
+    "info_chs" : "当前字段类型不支持设置索引，请确认。当前字段编号为： %1$s ，字段类型为 %2$s",
+    "info_cht" : "當前欄位類型不支持設定索引，請確認。 當前欄位編號為： %1$s ，欄位類型為 %2$s",
+    "info_en" : "The current field type does not support setting indexes. Please confirm. The current field number is: %1$s, and the field type is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0036",
+    "code" : "GSP_DBO_0036",
+    "info_chs" : "编号为 %1$s 的字段已设置非空约束/主键，无法再添加索引，请确认。",
+    "info_cht" : "編號為 %1$s 的欄位已設定非空約束/主鍵，無法再添加索引，請確認。",
+    "info_en" : "The field with number %1$s has set a non empty constraint/primary key and cannot be indexed again. Please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0037",
+    "code" : "GSP_DBO_0037",
+    "info_chs" : "编号为 %1$s 的索引关联字段与主键关联字段相同，无法创建该索引，请确认。",
+    "info_cht" : "編號為 %1$s 的索引關聯欄位與主鍵關聯欄位相同，無法創建該索引，請確認。",
+    "info_en" : "The index associated field with number %1$s is the same as the primary key associated field and cannot be created. Please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0038",
+    "code" : "GSP_DBO_0038",
+    "info_chs" : "数据库对象存在ID重复的索引,ID为 %1$s",
+    "info_cht" : "",
+    "info_en" : "",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0039",
+    "code" : "GSP_DBO_0039",
+    "info_chs" : "数据库对象存在编号重复的索引,编号为 %1$s",
+    "info_cht" : "資料庫對象存在ID重複的索引，ID為 %1$s",
+    "info_en" : "Database object has index with duplicate ID, ID %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0040",
+    "code" : "GSP_DBO_0040",
+    "info_chs" : "获取数据库对象名称最大长度配置报错。",
+    "info_cht" : "獲取資料庫對象名稱最大長度配寘報錯。",
+    "info_en" : "An error occurred while obtaining the maximum length configuration for database object names.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0041",
+    "code" : "GSP_DBO_0041",
+    "info_chs" : "数据库对象表编号超长，编号为： %1$s",
+    "info_cht" : "資料庫對象錶編號超長，編號為： %1$s",
+    "info_en" : "Database object table number is too long, number is: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0042",
+    "code" : "GSP_DBO_0042",
+    "info_chs" : "数据库对象表字段编号超长，字段编号为： %1$s ，数据库对象编号为 %2$s",
+    "info_cht" : "資料庫對象錶欄位編號超長，欄位編號為： %1$s ，資料庫對象編號為 %2$s",
+    "info_en" : "Database object table field number is too long, field number is: %1$s , database object number is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0043",
+    "code" : "GSP_DBO_0043",
+    "info_chs" : "约束名称超长，约束名称为： %1$s ，数据库对象编号为 %2$s",
+    "info_cht" : "約束名稱超長，約束名稱為： %1$s ，資料庫對象編號為 %2$s",
+    "info_en" : "Constraint name is too long, constraint name is: %1$s , database object number is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0044",
+    "code" : "GSP_DBO_0044",
+    "info_chs" : "数据库对象表索引编号超长，索引编号为：%1$s ，数据库对象编号为 %2$s",
+    "info_cht" : "資料庫對象錶索引編號超長，索引編號為：%1$s ，資料庫對象編號為 %2$s",
+    "info_en" : "Database object table index number is too long, index number is: %1$s, database object number is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0045",
+    "code" : "GSP_DBO_0045",
+    "info_chs" : "主键名称超长，主键名称为：%1$s ，数据库对象编号为 %2$s",
+    "info_cht" : "主鍵名稱超長，主鍵名稱為：%1$s ，資料庫對象編號為 %2$s",
+    "info_en" : "The primary key name is too long, the primary key name is: %1$s , and the database object number is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0046",
+    "code" : "GSP_DBO_0046",
+    "info_chs" : "%1$s 不能为空或长度为0",
+    "info_cht" : "%1$s 不能為空或長度為0",
+    "info_en" : "%1$s cannot be empty or length 0",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0047",
+    "code" : "GSP_DBO_0047",
+    "info_chs" : "%1$s 不能为null",
+    "info_cht" : "%1$s 不能為null",
+    "info_en" : "%1$s cannot be null",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0048",
+    "code" : "GSP_DBO_0048",
+    "info_chs" : "反序列化数据库对象报错：",
+    "info_cht" : "反序列化資料庫對象報錯：",
+    "info_en" : "Error in deserializing database objects:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0049",
+    "code" : "GSP_DBO_0049",
+    "info_chs" : "获取类型出错：",
+    "info_cht" : "獲取類型出錯：",
+    "info_en" : "Error obtaining type:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0050",
+    "code" : "GSP_DBO_0050",
+    "info_chs" : "数据库对象编号不允许修改，当前DBO编号为：%1$s ,原DBO编号为 %2$s",
+    "info_cht" : "資料庫對象編號不允許修改，當前DBO編號為：%1$s ,原DBO編號為 %2$s",
+    "info_en" : "The database object number cannot be modified. The current DBO number is: %1$s , and the original DBO number is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0051",
+    "code" : "GSP_DBO_0051",
+    "info_chs" : "类型修改不兼容，表编号: %1$s ,列编号: %2$s ,当前类型: %3$s ,目标类型: %4$s",
+    "info_cht" : "類型修改不相容，錶編號：%1$s ,列編號： %2$s ,當前類型： %3$s ,目標類型： %4$s",
+    "info_en" : "Incompatible type modification, table number: %1$s , column number: %2$s, current type: %3$s, target type: %4$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0052",
+    "code" : "GSP_DBO_0052",
+    "info_chs" : "DBO表名规则不能移除或修改，DBO编号为: %1$s",
+    "info_cht" : "DBO錶名規則不能移除或修改，DBO編號為： %1$s",
+    "info_en" : "The DBO table name rule cannot be removed or modified. The DBO number is: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0053",
+    "code" : "GSP_DBO_0053",
+    "info_chs" : "是否同步历史表不能由启用改为不启用，DBO编号为: %1$s",
+    "info_cht" : "是否同步歷史錶不能由啟用改為不啟用，DBO編號為： %1$s",
+    "info_en" : "Synchronize history table cannot be changed from enabled to not enabled, DBO number is: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0054",
+    "code" : "GSP_DBO_0054",
+    "info_chs" : "是否启用时间戳字段不能由启用改为不启用，DBO编号为: %1$s",
+    "info_cht" : "是否啟用時間戳記欄位不能由啟用改為不啟用，DBO編號為： %1$s",
+    "info_en" : "Enable timestamp field cannot be changed from enabled to not enabled, DBO number is: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0055",
+    "code" : "GSP_DBO_0055",
+    "info_chs" : "字段不能由启用多语改为不启用，DBO编号为: %1$s，字段ID为 %2$s",
+    "info_cht" : "欄位不能由啟用多語改為不啟用，DBO編號為：%1$s，欄位ID為 %2$s",
+    "info_en" : "The field cannot be changed from enabled multilingualism to not enabled. The DBO number is: %1$s , and the field ID is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0056",
+    "code" : "GSP_DBO_0056",
+    "info_chs" : "数据库对象字段编号不允许调整，请确认。当前DBO编号为: %1$s ;当前字段编号为 %2$s  原有字段编号为 %3$s",
+    "info_cht" : "資料庫對象欄位編號不允許調整，請確認。 當前DBO編號為： %1$s； 當前欄位編號為 %2$s 原有欄位編號為 %3$s",
+    "info_en" : "The database object field number cannot be adjusted. Please confirm. The current DBO number is: %1$s ; The current field number is %2$s , and the original field number is %3$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0057",
+    "code" : "GSP_DBO_0057",
+    "info_chs" : "获取数据库表时出错",
+    "info_cht" : "獲取資料庫錶時出錯",
+    "info_en" : "Error getting database table",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0058",
+    "code" : "GSP_DBO_0058",
+    "info_chs" : "判断表中字段是否存在出错",
+    "info_cht" : "判斷錶中欄位是否存在出錯",
+    "info_en" : "Determine if there is an error in the fields in the table",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0059",
+    "code" : "GSP_DBO_0059",
+    "info_chs" : "获取fiYear中所有年度出错:",
+    "info_cht" : "獲取fiYear中所有年度出錯：",
+    "info_en" : "Error in obtaining all years in fiYear:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0060",
+    "code" : "GSP_DBO_0060",
+    "info_chs" : "获取默认值出错:表为 %1$s , 列为 %2$s",
+    "info_cht" : "獲取預設值出錯：錶為 %1$s ，列為 %2$s",
+    "info_en" : "Error obtaining preset values: Table is %1$s , column is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0061",
+    "code" : "GSP_DBO_0061",
+    "info_chs" : "检测到增长表字段长度操作，但是对应表不存在，请确认！表名称为：",
+    "info_cht" : "檢測到增長錶欄位長度操作，但是對應表不存在，請確認！ 錶名稱為：",
+    "info_en" : "Detected an operation to increase the length of a table field, but the corresponding table does not exist. Please confirm! The table name is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0062",
+    "code" : "GSP_DBO_0062",
+    "info_chs" : "获取数据库对象函数映射配置报错",
+    "info_cht" : "獲取資料庫對象函數映射配寘報錯",
+    "info_en" : "Error in obtaining database object function image configuration",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0063",
+    "code" : "GSP_DBO_0063",
+    "info_chs" : "获取临时表创建SQL出错",
+    "info_cht" : "獲取臨時表創建SQL出錯",
+    "info_en" : "Error creating SQL for obtaining temporary table",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0064",
+    "code" : "GSP_DBO_0064",
+    "info_chs" : "部署的数据库对象列表不能为null、不能包含null!",
+    "info_cht" : "部署的資料庫對象清單不能為null、不能包含null！",
+    "info_en" : "The deployed database object list cannot be null or contain nulls!",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0065",
+    "code" : "GSP_DBO_0065",
+    "info_chs" : "获取表名规则扩展实现配置报错，表名规则为：",
+    "info_cht" : "獲取錶名規則擴展實現配寘報錯，錶名規則為：",
+    "info_en" : "Obtain table name rule extension implementation configuration error, table name rule is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0066",
+    "code" : "GSP_DBO_0066",
+    "info_chs" : "未获取到表名规则扩展实现，表名规则为：",
+    "info_cht" : "未获取到表名规则扩展实现，表名规则为：",
+    "info_en" : "Unable to obtain table name rule extension implementation, table name rule is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0067",
+    "code" : "GSP_DBO_0067",
+    "info_chs" : "执行SQL出错，SQL语句为：",
+    "info_cht" : "執行SQL出錯，SQL語句為：",
+    "info_en" : "Error executing SQL, SQL statement is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0068",
+    "code" : "GSP_DBO_0068",
+    "info_chs" : "获取数据库DBO出错：",
+    "info_cht" : "獲取資料庫DBO出錯：",
+    "info_en" : "Error obtaining database DBO:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0069",
+    "code" : "GSP_DBO_0069",
+    "info_chs" : "生成失败",
+    "info_cht" : "生成失敗",
+    "info_en" : "Generation failed",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0070",
+    "code" : "GSP_DBO_0070",
+    "info_chs" : "ParamName不能为空",
+    "info_cht" : "ParamName不能為空",
+    "info_en" : "ParamName cannot be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0071",
+    "code" : "GSP_DBO_0071",
+    "info_chs" : "typeName不能为空",
+    "info_cht" : "typeName不能為空",
+    "info_en" : "typeName cannot be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0072",
+    "code" : "GSP_DBO_0072",
+    "info_chs" : "生成器[%1$s]没有设置包名",
+    "info_cht" : "",
+    "info_en" : "",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0073",
+    "code" : "GSP_DBO_0073",
+    "info_chs" : "生成器[%1$s]没有设置类名",
+    "info_cht" : "生成器[%1$s]沒有設定包名",
+    "info_en" : "Generator [%1$s] does not have a package name set",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0074",
+    "code" : "GSP_DBO_0074",
+    "info_chs" : "编译失败",
+    "info_cht" : "編譯失敗",
+    "info_en" : "Compilation failed",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0075",
+    "code" : "GSP_DBO_0075",
+    "info_chs" : "打包失败",
+    "info_cht" : "打包失敗",
+    "info_en" : "Packaging failed",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0076",
+    "code" : "GSP_DBO_0076",
+    "info_chs" : "获取 %1$s 数据库中所有表信息出错：",
+    "info_cht" : "獲取 %1$s 資料庫中所有錶資訊出錯：",
+    "info_en" : "Error obtaining all table information in database %1$s:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0077",
+    "code" : "GSP_DBO_0077",
+    "info_chs" : "数据库中不存在表：",
+    "info_cht" : "資料庫中不存在錶：",
+    "info_en" : "Table does not exist in the database:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0078",
+    "code" : "GSP_DBO_0078",
+    "info_chs" : "根据表 %1$s 导出DBO出错：",
+    "info_cht" : "根據錶 %1$s 匯出DBO出錯：",
+    "info_en" : "Error exporting DBO from table %1$s:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0079",
+    "code" : "GSP_DBO_0079",
+    "info_chs" : "获取字段名称报错：",
+    "info_cht" : "獲取欄位名稱報錯：",
+    "info_en" : "Error in obtaining field name:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0080",
+    "code" : "GSP_DBO_0080",
+    "info_chs" : "暂不支持的数据类型",
+    "info_cht" : "暫不支持的資料類型",
+    "info_en" : "Unsupported data type at the moment",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0081",
+    "code" : "GSP_DBO_0081",
+    "info_chs" : "获取表 %1$s 中 %2$s 列默认值出错:",
+    "info_cht" : "獲取錶 %1$s 中 %2$s 列預設值出錯：",
+    "info_en" : "Error obtaining default values for column %1$s in table %2$s:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0082",
+    "code" : "GSP_DBO_0082",
+    "info_chs" : "新建或更新DBO文件出错:",
+    "info_cht" : "新建或更新DBO檔案出錯：",
+    "info_en" : "Error creating or updating DBO file:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0083",
+    "code" : "GSP_DBO_0083",
+    "info_chs" : "%1$s 文件写入内容出错:",
+    "info_cht" : "%1$s 檔案寫入內容出錯：",
+    "info_en" : "Error writing content to file %1$s :",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0084",
+    "code" : "GSP_DBO_0084",
+    "info_chs" : "根据路径获取数据库对象报错",
+    "info_cht" : "根據路徑獲取資料庫對象報錯",
+    "info_en" : "Error reported when obtaining database objects based on path",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0085",
+    "code" : "GSP_DBO_0085",
+    "info_chs" : "目录不存在:",
+    "info_cht" : "目錄不存在：",
+    "info_en" : "Directory does not exist:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0086",
+    "code" : "GSP_DBO_0086",
+    "info_chs" : "调用该方法时，数据库对象编号和ID不能同时为空",
+    "info_cht" : "調用該方法時，資料庫對象編號和ID不能同時為空",
+    "info_en" : "When calling this method, the database object number and ID cannot both be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0087",
+    "code" : "GSP_DBO_0087",
+    "info_chs" : "%1$s 已经存在编号为 %2$s 的数据库对象",
+    "info_cht" : "%1$s 已經存在編號為 %2$s 的資料庫對象",
+    "info_en" : "Database object with number %2$s already exists for %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0088",
+    "code" : "GSP_DBO_0088",
+    "info_chs" : "存在多个相同ID的数据库对象，数据库对象ID为：",
+    "info_cht" : "存在多個相同ID的資料庫對象，資料庫對象ID為：",
+    "info_en" : "There are multiple database objects with the same ID, and the database object ID is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0089",
+    "code" : "GSP_DBO_0089",
+    "info_chs" : "存在多个相同cdoe的数据库对象，数据库对象code为：",
+    "info_cht" : "存在多個相同cdoe的資料庫對象，資料庫對象code為：",
+    "info_en" : "There are multiple database objects with the same CDOE, and the database object code is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0090",
+    "code" : "GSP_DBO_0090",
+    "info_chs" : "反序列化数据库对象 %1$s 报错",
+    "info_cht" : "反序列化資料庫對象 %1$s 報錯",
+    "info_en" : "Error in deserializing database object %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0091",
+    "code" : "GSP_DBO_0091",
+    "info_chs" : "RPC设计时DBO保存异常：",
+    "info_cht" : "RPC設計時DBO保存异常：",
+    "info_en" : "DBO save exception during RPC design:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0092",
+    "code" : "GSP_DBO_0092",
+    "info_chs" : "RPC部署过程中异常：",
+    "info_cht" : "RPC部署過程中异常：",
+    "info_en" : "Exception during RPC deployment:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0093",
+    "code" : "GSP_DBO_0093",
+    "info_chs" : "序列化DBO出错：",
+    "info_cht" : "序列化DBO出錯：",
+    "info_en" : "Serialization DBO error:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0094",
+    "code" : "GSP_DBO_0094",
+    "info_chs" : "部署DBO报错",
+    "info_cht" : "部署DBO報錯",
+    "info_en" : "Deploy DBO error",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0095",
+    "code" : "GSP_DBO_0095",
+    "info_chs" : "根据dboId创建临时表出错：",
+    "info_cht" : "根據dboId創建臨時表出錯：",
+    "info_en" : "Error creating temporary table based on dboId:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0096",
+    "code" : "GSP_DBO_0096",
+    "info_chs" : "修改复制后的content内容异常",
+    "info_cht" : "修改複製後的content內容异常",
+    "info_en" : "Abnormal modification of copied content content",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0097",
+    "code" : "GSP_DBO_0097",
+    "info_chs" : "获取数据库对象列表报错",
+    "info_cht" : "",
+    "info_en" : "",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0098",
+    "code" : "GSP_DBO_0098",
+    "info_chs" : "获取GSP数据库对象列表报错",
+    "info_cht" : "獲取資料庫對象清單報錯",
+    "info_en" : "Error in obtaining database object list",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0099",
+    "code" : "GSP_DBO_0099",
+    "info_chs" : "根据ID获取数据库对象报错，对象ID为",
+    "info_cht" : "根據ID獲取資料庫對象報錯，對象ID為",
+    "info_en" : "Obtaining database object error based on ID, object ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0100",
+    "code" : "GSP_DBO_0100",
+    "info_chs" : "清理一组DBO缓存出错：",
+    "info_cht" : "清理一組DBO緩存出錯：",
+    "info_en" : "Error cleaning a set of DBO cache:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0101",
+    "code" : "GSP_DBO_0101",
+    "info_chs" : "数据库对象内容不能为空",
+    "info_cht" : "資料庫對象內容不能為空",
+    "info_en" : "Database object content cannot be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0102",
+    "code" : "GSP_DBO_0102",
+    "info_chs" : "根据编号获取数据库对象报错，对象ID为",
+    "info_cht" : "根據編號獲取資料庫對象報錯，對象ID為",
+    "info_en" : "Obtaining database object error based on number, object ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0103",
+    "code" : "GSP_DBO_0103",
+    "info_chs" : "获取数据库对象编号报错，对象ID为",
+    "info_cht" : "獲取資料庫對象編號報錯，對象ID為",
+    "info_en" : "Error in obtaining database object number, object ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0104",
+    "code" : "GSP_DBO_0104",
+    "info_chs" : "判断表[%1$s]是否存在出错：",
+    "info_cht" : "判斷錶[%1$s]是否存在出錯：",
+    "info_en" : "Determine if there is an error in table [%1$s]:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0105",
+    "code" : "GSP_DBO_0105",
+    "info_chs" : "删除临时表[%1$s]出错：",
+    "info_cht" : "删除臨時表[%1$s]出錯：",
+    "info_en" : "Error deleting temporary table [%1$s]:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0106",
+    "code" : "GSP_DBO_0106",
+    "info_chs" : "数据库存储数据库对象的表中已存在编号为 %1$s 的数据库对象，如果原有数据库对象已废弃，请删除后重试。否则，修改dbo文件里的Code后重试",
+    "info_cht" : "資料庫存儲資料庫對象的錶中已存在編號為 %1$s 的資料庫對象，如果原有資料庫對象已廢棄，請删除後重試。 否則，修改dbo檔案裏的Code後重試",
+    "info_en" : "A database object with number %1$s already exists in the table where the database object is stored. If the original database object is obsolete, please delete it and try again. Otherwise, modify the Code in the dbo file and try again",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0107",
+    "code" : "GSP_DBO_0107",
+    "info_chs" : "数据库存储数据库对象的表中除了当前数据库对象外，还有重编号的数据库对象，请确认。数据库对象编号为：",
+    "info_cht" : "資料庫存儲資料庫對象的錶中除了當前資料庫對象外，還有重編號的資料庫對象，請確認。 資料庫對象編號為：",
+    "info_en" : "In addition to the current database object, there are also renumbered database objects in the table where database objects are stored. Please confirm. The database object number is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0108",
+    "code" : "GSP_DBO_0108",
+    "info_chs" : "向数据库表中更新、保存或新增数据库对象报错，数据库对象编号为：",
+    "info_cht" : "向資料庫錶中更新、保存或新增資料庫對象報錯，資料庫對象編號為：",
+    "info_en" : "An error is reported when updating, saving, or adding a database object to a database table. The database object number is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0109",
+    "code" : "GSP_DBO_0109",
+    "info_chs" : "根据ID判断数据库表中数据库对象是否存在报错，数据库对象ID为：",
+    "info_cht" : "根據ID判斷資料庫錶中資料庫對象是否存在報錯，資料庫對象ID為：",
+    "info_en" : "Determine whether there is an error in the database object in the database table based on its ID. The database object ID is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0110",
+    "code" : "GSP_DBO_0110",
+    "info_chs" : "根据规则编号获取数据库对象列表报错，规则编号为：",
+    "info_cht" : "根據規則編號獲取資料庫對象清單報錯，規則編號為：",
+    "info_en" : "An error was reported when obtaining the database object list based on the rule number. The rule number is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0111",
+    "code" : "GSP_DBO_0111",
+    "info_chs" : "根据DBO编号获取字段名列表出错，当前DBO编号为：",
+    "info_cht" : "根據DBO編號獲取欄位名清單出錯，當前DBO編號為：",
+    "info_en" : "Error in obtaining field name list based on DBO number, current DBO number is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0112",
+    "code" : "GSP_DBO_0112",
+    "info_chs" : "数据库对象表中不存在为 %1$s 的数据库对象，请确认。",
+    "info_cht" : "資料庫對象錶中不存在為 %1$s 的資料庫對象，請確認。",
+    "info_en" : "There is no database object named %1$s in the database object table. Please confirm.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0113",
+    "code" : "GSP_DBO_0113",
+    "info_chs" : "获取表名规则扩展实现配置报错，表名规则为：",
+    "info_cht" : "獲取錶名規則擴展實現配寘報錯，錶名規則為：",
+    "info_en" : "Obtain table name rule extension implementation configuration error, table name rule is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0114",
+    "code" : "GSP_DBO_0114",
+    "info_chs" : "未获取到表名规则扩展实现，表名规则为：",
+    "info_cht" : "未獲取到錶名規則擴展實現，錶名規則為：",
+    "info_en" : "Unable to obtain table name rule extension implementation, table name rule is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0115",
+    "code" : "GSP_DBO_0115",
+    "info_chs" : "获取启用多语的数据库对象列表报错",
+    "info_cht" : "獲取啟用多語的資料庫對象清單報錯",
+    "info_en" : "Error in obtaining the list of database objects enabled for multilingualism",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0116",
+    "code" : "GSP_DBO_0116",
+    "info_chs" : "根据ID删除数据库对象报错，数据库对象ID为",
+    "info_cht" : "根據ID删除資料庫對象報錯，資料庫對象ID為",
+    "info_en" : "Error deleting database object based on ID, database object ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0117",
+    "code" : "GSP_DBO_0117",
+    "info_chs" : "ID为 %1$s 的数据库对象不存在，请确认",
+    "info_cht" : "ID為 %1$s 的資料庫對象不存在，請確認",
+    "info_en" : "The database object with ID %1$s does not exist. Please confirm",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0118",
+    "code" : "GSP_DBO_0118",
+    "info_chs" : "根据表ID和字段ID列表获取带多语后缀的字段编号出错，当前表ID为",
+    "info_cht" : "根據錶ID和欄位ID清單獲取帶多語尾碼的欄位編號出錯，當前錶ID為",
+    "info_en" : "Error in obtaining field numbers with multilingual suffixes based on table ID and field ID list, current table ID",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0119",
+    "code" : "GSP_DBO_0119",
+    "info_chs" : "当前传入的column为空，columnID为",
+    "info_cht" : "當前傳入的column為空，columnID為",
+    "info_en" : "The current incoming column is empty, and the columnID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0120",
+    "code" : "GSP_DBO_0120",
+    "info_chs" : "当前column不是数据库对象表里的字段，columnID为",
+    "info_cht" : "當前column不是資料庫對象表裡的欄位，columnID為",
+    "info_en" : "The current column is not a field in the database object table, and the columnID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0121",
+    "code" : "GSP_DBO_0121",
+    "info_chs" : "根据业务对象ID获取数据库对象列表报错，业务对象ID为",
+    "info_cht" : "根據業務對象ID獲取資料庫對象清單報錯，業務對象ID為",
+    "info_en" : "An error was reported when obtaining the database object list based on the business object ID. The business object ID is",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0122",
+    "code" : "GSP_DBO_0122",
+    "info_chs" : "%1$s 不能为空",
+    "info_cht" : "%1$s 不能為空",
+    "info_en" : "%1$s Cannot be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0123",
+    "code" : "GSP_DBO_0123",
+    "info_chs" : "%1$s 不能为null",
+    "info_cht" : "%1$s 不能為null",
+    "info_en" : "%1$s Cannot be null",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0124",
+    "code" : "GSP_DBO_0124",
+    "info_chs" : "根据code或dboId获取映射对象出错",
+    "info_cht" : "根據code或dboId獲取映射對象出錯",
+    "info_en" : "Error obtaining image object based on code or dboId",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0125",
+    "code" : "GSP_DBO_0125",
+    "info_chs" : "根据id[%1$s]获取设计时DBO异常:",
+    "info_cht" : "根據id[%1$s]獲取設計時DBO异常：",
+    "info_en" : "Obtain DBO exception during design based on id [%1$s]:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0126",
+    "code" : "GSP_DBO_0126",
+    "info_chs" : "根据code[%1$s]获取设计时DBO异常:",
+    "info_cht" : "根據code[%1$s]獲取設計時DBO异常：",
+    "info_en" : "Obtain DBO exception during design based on code [%1$s]:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0127",
+    "code" : "GSP_DBO_0127",
+    "info_chs" : "数据库中已存在编号为 %1$s 的设计时DBO，如果原有DBO已废弃，请删除后重试。否则，修改Code后重试",
+    "info_cht" : "資料庫中已存在編號為 %1$s 的設計時DBO，如果原有DBO已廢棄，請删除後重試。 否則，修改Code後重試",
+    "info_en" : "A design time DBO with number %1$s already exists in the database. If the original DBO is obsolete, please delete it and try again. Otherwise, modify the Code and try again",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0128",
+    "code" : "GSP_DBO_0128",
+    "info_chs" : "数据库中除了当前设计时DBO，还有重编号的设计时DBO，请确认。编号为：",
+    "info_cht" : "資料庫中除了當前設計時DBO，還有重編號的設計時DBO，請確認。 編號為：",
+    "info_en" : "In addition to the current design time DBO, there are also renumbered design time DBOs in the database. Please confirm. Number:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0129",
+    "code" : "GSP_DBO_0129",
+    "info_chs" : "向数据库表中保存设计时DBO报错，编号为：",
+    "info_cht" : "向資料庫錶中保存設計時DBO報錯，編號為：",
+    "info_en" : "DBO reported an error while saving the design to the database table, with the number:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0130",
+    "code" : "GSP_DBO_0130",
+    "info_chs" : "保存设计时DBO记录报错：",
+    "info_cht" : "保存設計時DBO記錄報錯：",
+    "info_en" : "DBO record error while saving design:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0131",
+    "code" : "GSP_DBO_0131",
+    "info_chs" : "数据库中不存在要更新的设计时DBO，DBO的Id为：%1$s",
+    "info_cht" : "資料庫中不存在要更新的設計時DBO，DBO的Id為：%1$s",
+    "info_en" : "There is no design time DBO to update in the database, the DBO's Id is: %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0132",
+    "code" : "GSP_DBO_0132",
+    "info_chs" : "维度值信息不能为空。",
+    "info_cht" : "維度值資訊不能為空。",
+    "info_en" : "Dimension value information cannot be empty.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0133",
+    "code" : "GSP_DBO_0133",
+    "info_chs" : "获取默认年度集合为空，fiyear表中不存在年度数据。",
+    "info_cht" : "獲取默認年度集合為空，fiyear錶中不存在年度數據。",
+    "info_en" : "The default year set obtained is empty, and there is no year data in the fiyear table.",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0134",
+    "code" : "GSP_DBO_0134",
+    "info_chs" : "表名规则中维度策略不能为空，dbo编号为：%1$s，表名规则标识为 %2$s",
+    "info_cht" : "錶名規則中維度策略不能為空，dbo編號為：%1$s，錶名規則標識為 %2$s",
+    "info_en" : "The dimension policy in the table name rule cannot be empty. The dbo number is: %1$s , and the table name rule ID is %2$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0135",
+    "code" : "GSP_DBO_0135",
+    "info_chs" : "维度值信息中不包含所需的维度信息，维度key值为 %1$s",
+    "info_cht" : "維度值資訊中不包含所需的維度資訊，維度key值為 %1$s",
+    "info_en" : "The dimension value information does not contain the required dimension information, and the dimension key value is %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0136",
+    "code" : "GSP_DBO_0136",
+    "info_chs" : "获取锁失败",
+    "info_cht" : "獲取鎖失敗",
+    "info_en" : "Failed to acquire lock",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0137",
+    "code" : "GSP_DBO_0137",
+    "info_chs" : "检测到字段长度减小的逆向操作，已忽略！当前DBO编号为 %1$s ;当前字段编号为 %2$s ,原有字段长度为 %3$s ,当前字段长度为 %4$s",
+    "info_cht" : "檢測到欄位長度减小的逆向操作，已忽略！ 當前DBO編號為 %1$s； 當前欄位編號為 %2$s，原有欄位長度為 %3$s，當前欄位長度為 %4$s",
+    "info_en" : "Detected reverse operation with reduced field length, ignored! The current DBO number is %1$s; The current field number is %2$s , the original field length is %3$s , and the current field length is %4$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0138",
+    "code" : "GSP_DBO_0138",
+    "info_chs" : "检测到字段精度减小的逆向操作，已忽略！当前DBO编号为 %1$s ;当前字段编号为 %2$s ,原有字段长度为( %3$s , %4$s ) ,当前DBO文件中字段长度为 ( %5$s , %6$s )",
+    "info_cht" : "檢測到欄位精度减小的逆向操作，已忽略！ 當前DBO編號為%1$s； 當前欄位編號為%2$s，原有欄位長度為（%3$s，%4$s），當前DBO檔案中欄位長度為（%5$s，%6$s）",
+    "info_en" : "Detected reverse operation with reduced field accuracy, ignored! The current DBO number is %1$s; The current field number is %2$s, the original field length is ( %3$s , %4$s ), and the current field length is ( %5$s , %6$s )",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0139",
+    "code" : "GSP_DBO_0139",
+    "info_chs" : "检测数据库中表字段长度大于DBO中字段长度，已忽略！当前表名为 %1$s ;字段编号为 %2$s ,数据库中字段长度为 %3$s ,DBO中字段长度为 %4$s",
+    "info_cht" : "檢測資料庫中表欄位長度大於DBO中欄位長度，已忽略！ 當前錶名為 %1$s； 欄位編號為 %2$s，資料庫中欄位長度為 %3$s，DBO中欄位長度為 %4$s",
+    "info_en" : "Detected reverse operation with reduced field accuracy, ignored! The current DBO number is %1$s; The current field number is %2$s, and the original field length is ( %3$s , %4$s ).",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0140",
+    "code" : "GSP_DBO_0140",
+    "info_chs" : "临时表创建SQL：",
+    "info_cht" : "臨時表創建SQL：",
+    "info_en" : "Temporary table creation SQL:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0141",
+    "code" : "GSP_DBO_0141",
+    "info_chs" : "索引创建SQL：",
+    "info_cht" : "索引創建SQL：",
+    "info_en" : "Index creation SQL:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0142",
+    "code" : "GSP_DBO_0142",
+    "info_chs" : "执行SQL：",
+    "info_cht" : "執行SQL：",
+    "info_en" : "Execute SQL:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0143",
+    "code" : "GSP_DBO_0143",
+    "info_chs" : "pg数据库,移除依赖表[ %1$s ]的视图",
+    "info_cht" : "pg資料庫，移除依賴錶[ %1$s ]的視圖",
+    "info_en" : "Pg database, removing views from dependent table [%1$s]",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0144",
+    "code" : "GSP_DBO_0144",
+    "info_chs" : "执行的临时表创建SQL为：",
+    "info_cht" : "執行的臨時表創建SQL為：",
+    "info_en" : "The SQL for creating temporary tables executed is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0145",
+    "code" : "GSP_DBO_0145",
+    "info_chs" : "不支持的几何类型",
+    "info_cht" : "不支持的幾何類型",
+    "info_en" : "Unsupported geometric type",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0146",
+    "code" : "GSP_DBO_0146",
+    "info_chs" : "不支持创建GIS的数据库类型",
+    "info_cht" : "不支持創建GIS的資料庫類型",
+    "info_en" : "Creating a database type for GIS is not supported",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0147",
+    "code" : "GSP_DBO_0147",
+    "info_chs" : "获取数据库视图时出错",
+    "info_cht" : "獲取資料庫視圖時出錯",
+    "info_en" : "Error getting database view",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0148",
+    "code" : "GSP_DBO_0148",
+    "info_chs" : "%1$s.dbo文件中存在不合规的列描述信息修改，请对比gspdatabaseobject中content的内容与当前文件的差异",
+    "info_cht" : "%1$s.dbo檔案中存在不合規的列描述資訊修改，請對比gspdatabaseobject中content的內容與當前檔案的差异",
+    "info_en" : "There is non compliant column description information modification in the %1$s.dbo file. Please compare the difference between the content in gspdatabaseobject and the current file",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_0149",
+    "code" : "GSP_DBO_0149",
+    "info_chs" : "检测到字段精度扩长超出限制！当前DBO编号为 %1$s ;当前字段编号为 %2$s ,原有字段长度为( %3$s , %4$s ) ,当前字段长度为 ( %5$s , %6$s ),扩长计算后的字段长度为 ( %7$s , %8$s )",
+    "info_cht" : "檢測到欄位精度擴長超出限制！ 當前DBO編號為%1$s； 當前欄位編號為%2$s，原有欄位長度為（%3$s，%4$s），當前欄位長度為（%5$s，%6$s），擴長計算後的欄位長度為（%7$s，%8$s）",
+    "info_en" : "Detected field precision expansion exceeding limit! The current DBO number is %1$s; The current field number is %2$s, the original field length is (%3$s,%4$s), the current field length is (%5$s,%6$s), and the calculated field length after expansion is (%7$s,%8$s)",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1001",
+    "code" : "GSP_DBO_LCM_1001",
+    "info_chs" : "新建DBO文件出错：",
+    "info_cht" : "新建DBO檔案出錯:",
+    "info_en" : "Error creating DBO file:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1002",
+    "code" : "GSP_DBO_LCM_1002",
+    "info_chs" : "更新DBO文件出错：",
+    "info_cht" : "更新DBO檔案出錯:",
+    "info_en" : "Error updating DBO file : ",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1003",
+    "code" : "GSP_DBO_LCM_1003",
+    "info_chs" : "%1$s 目录下已存在文件 %2$s 的文件",
+    "info_cht" : "%1$s 目錄下已存在檔案 %2$s 的檔案",
+    "info_en" : "File %2$s already exists in directory %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1004",
+    "code" : "GSP_DBO_LCM_1004",
+    "info_chs" : "%1$s 文件不存在，数据库对象编号为 %2$s",
+    "info_cht" : "%1$s 檔案不存在，資料庫對象編號為 %2$s",
+    "info_en" : "File %2$s already exists in directory %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1005",
+    "code" : "GSP_DBO_LCM_1005",
+    "info_chs" : "已经存在id为 %1$s 的数据库对象",
+    "info_cht" : "已經存在id為 %1$s 的資料庫對象",
+    "info_en" : "A database object with id %1$s already exists",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1006",
+    "code" : "GSP_DBO_LCM_1006",
+    "info_chs" : "文件名后缀不正确，当前文件名为：",
+    "info_cht" : "檔名尾碼不正確，當前檔名為：",
+    "info_en" : "The file name suffix is incorrect, the current file name is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1007",
+    "code" : "GSP_DBO_LCM_1007",
+    "info_chs" : "%1$s 路径下需要更新的DBO不存在，当前DBO的id为： %2$s 编号为： %3$s",
+    "info_cht" : "%1$s 路徑下需要更新的DBO不存在，當前DBO的id為：%2$s 編號為： %3$s",
+    "info_en" : "The DBO that needs to be updated under path %1$s does not exist. The current DBO ID is: %2$s, and the number is: %3$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1008",
+    "code" : "GSP_DBO_LCM_1008",
+    "info_chs" : "存在多个相同ID的数据库对象，数据库对象ID为：",
+    "info_cht" : "存在多個相同ID的資料庫對象，資料庫對象ID為：",
+    "info_en" : "There are multiple database objects with the same ID, and the database object ID is:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1009",
+    "code" : "GSP_DBO_LCM_1009",
+    "info_chs" : "%1$s 路径下不存在数据库对象ID为： %2$s",
+    "info_cht" : "%1$s 路徑下不存在資料庫對象ID為： %2$s",
+    "info_en" : "Database object ID: %2$s does not exist in path %1$s",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1010",
+    "code" : "GSP_DBO_LCM_1010",
+    "info_chs" : "部署DBO异常:",
+    "info_cht" : "部署DBO异常：",
+    "info_en" : "Deployment DBO exception:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1011",
+    "code" : "GSP_DBO_LCM_1011",
+    "info_chs" : "获取DBO异常:",
+    "info_cht" : "獲取DBO异常:",
+    "info_en" : "Exception in obtaining DBO:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1012",
+    "code" : "GSP_DBO_LCM_1012",
+    "info_chs" : "不支持的数据类型:",
+    "info_cht" : "不支持的資料類型",
+    "info_en" : "Unsupported data type",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1013",
+    "code" : "GSP_DBO_LCM_1013",
+    "info_chs" : "数据库对象 %1$s 反序列化失败: ",
+    "info_cht" : "資料庫對象 %1$s 反序列化失敗：",
+    "info_en" : "Database object %1$s deserialization failed:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1014",
+    "code" : "GSP_DBO_LCM_1014",
+    "info_chs" : "%1$s 文件写入内容出错: ",
+    "info_cht" : "%1$s 檔案寫入內容出錯：",
+    "info_en" : "Error writing content to file %1$s:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1015",
+    "code" : "GSP_DBO_LCM_1015",
+    "info_chs" : "IO异常: ",
+    "info_cht" : "IO异常:",
+    "info_en" : "IO exception:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1016",
+    "code" : "GSP_DBO_LCM_1016",
+    "info_chs" : "%1$s 不能为空",
+    "info_cht" : "%1$s 不能為空",
+    "info_en" : "%1$s cannot be empty",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1017",
+    "code" : "GSP_DBO_LCM_1017",
+    "info_chs" : "%1$s 不能为null",
+    "info_cht" : "%1$s 不能為null",
+    "info_en" : "%1$s cannot be null",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1018",
+    "code" : "GSP_DBO_LCM_1018",
+    "info_chs" : "提取DBO出错：",
+    "info_cht" : "選取DBO出錯:",
+    "info_en" : "Error extracting DBO:",
+    "info_es" : "",
+    "info_pt" : ""
+  },
+  {
+    "id": "GSP_DBO_LCM_1019",
+    "code" : "GSP_DBO_LCM_1019",
+    "info_chs" : "不识别的数据类型：",
+    "info_cht" : "不識別的資料類型:",
+    "info_en" : "Unrecognized data type:",
+    "info_es" : "",
+    "info_pt" : ""
+  }
+]

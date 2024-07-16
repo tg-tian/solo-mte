@@ -1,0 +1,20 @@
+{
+	"DeploymentType": [
+		{
+			"TypeCode": "BaseMigration",
+			"Enable": true,
+			"Deployer": {
+				"Name": "com.inspur.edp.lcm.metadata.extend.action.DeployActionImpl",
+				"Assembly": "lcm-metadata-extend.jar"
+			}
+		},		
+		{
+			"TypeCode": "DBO",
+			"Enable": true,
+			"Deployer": {
+				"Name": "com.inspur.edp.lcm.project.deployer.core.service.DboDeployActionImpl",
+				"Assembly": "lcm-project-deployer-core.jar"
+			}
+		}
+	]
+}

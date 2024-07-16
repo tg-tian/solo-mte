@@ -1,0 +1,10 @@
+﻿{
+	"rule": {
+		"maven-gsp-snapshots":
+		[
+			"https://repos.iec.io/repository/maven-gsp-snapshots/"
+		]
+	}
+}
+
+

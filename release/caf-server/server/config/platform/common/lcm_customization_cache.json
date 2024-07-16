@@ -1,0 +1,12 @@
+﻿{
+	"GlobalVerisonConfigs": [
+		{
+			"Type": "Metadata",
+			"Name":"com.inspur.edp.metadata.rtcustomization.core.cache.MetadataGlobalCacheManager",
+			"Assembly":"metadata-rtcustomization-core.jar"
+		}
+	],
+	"Preload" : "false",
+	"CacheMode": "SINGLE_TENANT",
+	"Comments": ["SINGLE_TENANT", "MULTI_TENANT"]
+}

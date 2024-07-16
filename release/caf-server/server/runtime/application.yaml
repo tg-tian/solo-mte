@@ -1,0 +1,228 @@
+caf-error-page:
+  enabled: false
+  pages:
+    - status: 403
+      path: /platform/common/web/message/403.html
+    - status: 404
+      path: /platform/common/web/message/404.html
+    - status: 500
+      path: /platform/common/web/message/500.html
+spring:
+  #liquibase
+  liquibase:
+    enabled: false
+    change-log: classpath*:liquibase/Changes.xml
+    # 存储服务执行版本信息，每执行一次changeset会新增一条记录
+    database-change-log-table: LQBS_CAF_CHANGELOG
+    # 用于保证多台实例只执行一次脚本
+    database-change-log-lock-table: LQBS_CAF_CHANGELOG_LOCK
+  mvc:
+    servlet:
+      load-on-startup: 0
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ENC(gF40FL2rRoUoLcJCF2KwsvjXaC8QZLbOyn+JxJ5l7V/9WTTkoQV6ClaqHm/v7An0bP9yJ+lZMLudtOoAHsdW7Y5RPk9N1CvN)
+    driver-class-name: org.postgresql.Driver
+    username: ENC(fw3xFZnPQ+pn+Z/4oPTOhEzq6hvqHv/2I2Na8OTgpqY=)
+    password: ENC(Aiy3Bpr/RDCG83C3QNuyVthhxN8sQJC2aXUkiAv3KF1fe1PGkUF4zQ==)
+    hikari:
+      pool-name: hikari-cp
+      connection-test-query: SELECT 1
+      maximum-pool-size: 50
+      minimum-idle: 1
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+        temp:
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.CAFPostgreSQL95Dialect
+        show_sql: false
+        format_sql: false
+        generate_statistics: false
+        bytecode:
+          use_reflection_optimizer: true
+        multiTenancy: database
+        multi_tenant_connection_provider: io.iec.edp.caf.tenancy.core.extensions.MultiTenantConnectionProviderImpl
+        tenant_identifier_resolver: io.iec.edp.caf.tenancy.core.extensions.MultiTenantIdentifierResolver
+        implicit_naming_stategy: io.iec.edp.caf.data.orm.jpa.CAFImplicitNamingStrategy
+        physical_naming_stategy: io.iec.edp.caf.data.orm.jpa.CAFPhysicalNamingStrategy
+        ejb:
+          interceptor: io.iec.edp.caf.data.orm.jpa.CAFHibernateInterceptor
+    open-in-view: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+  main:
+    lazy-initialization: false
+  application:
+    edition: Standard-File
+  session:
+    store-type: redis
+    timeout: 1800
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+  profiles:
+    active: prod
+  cloud:
+    stream:
+      defaultBinder: rabbit
+      binders:
+        rabbit:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: null
+                port: 5672
+                username: null
+                password: null
+                virtual-host: /
+jasypt:
+  encryptor:
+    bean: cafConfigEncryptor
+    proxyPropertySources: true
+redis:
+  enabled: false
+msu:
+  enable: false
+  serviceName: MicroServiceUnit
+  applicationName: iGIX-Server
+  deployMode: OnPremise
+  ip:
+    prefix: ''
+nacos:
+  discovery:
+    server-addr: 127.0.0.1:8848
+startup:
+  messages:
+    - The iGIX server has started successfully in {uptime} seconds，Now listening on:{port}
+server:
+  port: 5200
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types:
+      - text/html
+      - text/xml
+      - text/plain
+      - text/css
+      - text/javascript
+      - application/javascript
+      - application/json
+      - application
+      - image/svg+xml
+      - image/png
+      - image/jpeg
+    min-response-size: 1024
+caf-boot:
+  server:
+    home-page: /index.html
+    mime-mapping:
+      - extension: ngfactory
+        mime-type: text/javascript
+    static-resources:
+      enable-cache: true
+      external-static-resources:
+        - file:///$EDP_HOME/../web/
+        - file:///$EDP_HOME/../components/
+  persistence:
+    gsp-cloud:
+      compatibility-mode: true
+cxf:
+  path: /api
+  servlet:
+    init:
+      hide-service-list-page: true
+caf-security:
+  general:
+    white-list:
+      - /**/*.apk
+      - /api/runtime/sys/v1.0/myauthenconfigs
+      - /platform/runtime/sys/web/rtf.common.manifest.json
+      - /api/runtime/sys/v1.0/authenitems/rule/passwordstrategy
+      - /
+      - /actuator/info
+      - /actuator/health
+      - /**/*.js
+      - /**/*.css
+      - /**/*.html
+      - /**/*.png
+      - /**/*.jpg
+      - /**/*.svg
+      - /**/*.ttf
+      - /**/*.ngfactory
+      - /api/v1/**
+      - /api/*
+      - /platform/runtime/sys/web/login_module/i18n/*.properties
+      - /platform/runtime/common/web/runtime.common.manifest.json
+      - /api/runtime/sys/v1.0/authenstrategies/*/*
+      - /api/runtime/sys/v1.0/loginInfo
+      - /api/runtime/sys/v1.0/oauth2configs
+      - /api/runtime/sys/v1.0/authenitems/reset
+      - /api/runtime/sys/v1.0/logout
+      - /api/runtime/sys/v1.0/rtf-configuration/loginresource/*/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.msu.api.server.MsuServiceRegistry.register/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.msu.api.server.MsuServiceRegistry.deRegister/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.msu.api.server.MsuServiceDiscovery.discover/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.api.service.RpcDefinitionQuery.queryList/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.api.service.RpcDefinitionQuery.detail/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.api.service.RpcDefinitionRegistry.register/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.registry.api.RpcDefinitionQuery.queryList/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.registry.api.RpcDefinitionQuery.detail/*
+      - /api/runtime/communication/v1.0/rpc/io.iec.edp.caf.rpc.registry.api.RpcDefinitionRegistry.register/*
+      - /api/runtime/sys/v1.0/authenitems/before
+      - /api/runtime/sys/v1.0/certificates/*
+      - /api/runtime/sys/v1.0/authenitems/vCode
+    logout-uri: /logout
+    logout-success-uri: /login.html
+  authn:
+    rate-limit:
+      enabled: true
+      duration-in-minute: 10
+      limit: 5
+    rules:
+      - matchers:
+          - /api/runtime/sys/v1.0/routerRedirect
+        flows:
+          - PASSPORT
+      - matchers:
+          - /api/runtime/Prt/v1.0/job/sendPrintJobStatus
+        flows:
+          - API_KEY
+      - matchers:
+          - /api/**
+        flows:
+          - FORM_LOGIN
+      - matchers:
+          - /actuator/**
+        flows:
+          - API_KEY
+    flows:
+      form-login:
+        enabled: true
+        login-page-uri: /login.html
+        login-processing-uri: /sign-in
+        login-success-uri: /platform/runtime/sys/web/index.html#/ssologin
+        login-failure-uri: /login.html#error=
+      passport:
+        enabled: true
+        authorization-uri: https://id.inspuronline.com/oauth2.0/authorize
+        redirect-uri: /oauth2.0/sign-in
+        accessToken-uri: https://id.inspuronline.com/oauth2.0/token
+        user-info-uri: https://id.inspuronline.com/oauth2.0/user-info
+        login-success-uri: /api/runtime/sys/v1.0/routerRedirect
+        login-failure-uri: /login-info.html#error=
+        client-id: xxxx
+        client-secret: xxxx
+
+
+logging:
+  config: ${spring.config.location}/logback-spring.xml

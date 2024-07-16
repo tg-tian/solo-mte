@@ -1,0 +1,67 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+FROM openjdk:8-jdk-bullseye
+
+# 指定app目录为当前运行目录
+WORKDIR /haiyue/igix
+
+# 安装字体
+RUN  apt-get update \
+  && apt-get install -y fontconfig locales \
+  && rm -rf /var/lib/apt/lists/* \
+  && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
+  && useradd -ms /bin/bash haiyue
+
+# 设置环境变量
+ENV LANG zh_CN.UTF-8
+# docker容器默认时区是0时区，需要改成东八区的需要放开以下注释
+# ENV TZ=Asia/Shanghai
+
+COPY docker/all/rootfs /
+
+# 将文件部署模式下服务目录[Cloud]拷贝到容器
+COPY --chown=haiyue:haiyue bin     /haiyue/igix/bin
+COPY --chown=haiyue:haiyue server  /haiyue/igix/server
+COPY --chown=haiyue:haiyue web     /haiyue/igix/web
+
+# 执行命令，给sh脚本赋予执行权限
+RUN  chmod a+x /haiyue/igix/bin/*.sh \
+  && mkdir -p /haiyue/igix/logs \
+  && mkdir -p /haiyue/igix/temp \
+  && chown -R haiyue:haiyue /haiyue/igix/logs \
+  && chown -R haiyue:haiyue /haiyue/igix/temp
+
+#外挂临时目录
+VOLUME /haiyue/igix/logs
+VOLUME /haiyue/igix/temp
+
+##
+# 暴露端口
+##
+# JMX监控端口
+EXPOSE 4999
+# 远程调试端口
+EXPOSE 5005
+# 产品服务端口
+EXPOSE 5200
+
+USER haiyue
+
+#docker入口，指定启动后需要执行的脚本- docker_entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["/haiyue/igix/bin/caf-server.sh", "run"]

@@ -1,0 +1,1324 @@
+﻿{
+  "MetadataConfiguration": [
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.bizentity.GspBusinessEntity",
+        "Assembly": "com.inspur.edp.bef.bizentity.jar",
+        "TypeCode": "GSPBusinessEntity",
+        "TypeName": "业务实体",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.bemanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.bemanager.TransferSerializer",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.bemanager.BEMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.bef.bemanager.i18nservice.BizEntityI18nService",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.bef.bemanager.service.MetadataReferenceService",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      },
+	  "SavedToDB": {
+        "Name": "com.inspur.edp.bef.bemanager.service.BESavedToDBExtend",
+        "Assembly": "com.inspur.edp.bef.bemanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.udt.designtime.api.entity.UnifiedDataTypeDef",
+        "Assembly": "com.inspur.edp.udt.designtime.api.jar",
+        "TypeCode": "UnifiedDataType",
+        "TypeName": "业务字段",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.udt.designtime.manager.ContentSerializer",
+        "Assembly": "com.inspur.edp.udt.designtime.manager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.udt.designtime.manager.UdtManager",
+        "Assembly": "com.inspur.edp.udt.designtime.manager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.udt.designtime.manager.UdtMetadataContentManager",
+        "Assembly": "com.inspur.edp.udt.designtime.manager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.udt.designtime.manager.i18nservice.UdtI18nService",
+        "Assembly": "com.inspur.edp.udt.designtime.manager.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.udt.designtime.manager.services.MetadataReferenceService",
+        "Assembly": "com.inspur.edp.udt.designtime.manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.bemgr.BEMgrComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "BEMgrComponent",
+        "TypeName": "自定义构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.be.BEComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "BEComponent",
+        "TypeName": "业务实体构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.determination.DeterminationComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "DeterminationComponent",
+        "TypeName": "联动计算构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.validation.ValidationComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "ValidationComponent",
+        "TypeName": "校验规则构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.udtvalidation.UDTValidComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "UDTValidComponent",
+        "TypeName": "业务字段校验规则构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.udtdetermination.UDTDtmComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "UDTDtmComponent",
+        "TypeName": "业务字段联动规则构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.bef.component.detailcmpentity.vm.VMComponent",
+        "Assembly": "com.inspur.edp.bef.component.jar",
+        "TypeCode": "VMComponent",
+        "TypeName": "VM构件"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.bef.componentmanager.ComponentTransferSerializer",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.bef.componentmanager.initialization.ComponentMetadataContentManager",
+        "Assembly": "com.inspur.edp.bef.componentmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.formserver.viewmodel.GspViewModel",
+        "Assembly": "com.inspur.edp.formserver.viewmodel.jar",
+        "TypeCode": "GSPViewModel",
+        "TypeName": "视图对象",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.formserver.vmmanager.ContentSerializer",
+        "Assembly": "com.inspur.edp.formserver.vmmanager.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.formserver.vmmanager.TransferSerializer",
+        "Assembly": "com.inspur.edp.formserver.vmmanager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.formserver.vmmanager.i18nservice.ViewModelI18nService",
+        "Assembly": "com.inspur.edp.formserver.vmmanager.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.formserver.vmmanager.service.MetadataReferenceService",
+        "Assembly": "com.inspur.edp.formserver.vmmanager.jar"
+      },
+	  "SavedToDB": {
+        "Name": "com.inspur.edp.formserver.vmmanager.service.VOSavedToDBExtend",
+        "Assembly": "com.inspur.edp.formserver.vmmanager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.sgf.api.entity.SgMetadata",
+        "Assembly": "cdp-sgf-api.jar",
+        "TypeCode": "ExternalApi",
+        "TypeName": "外部服务",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.sgf.core.serializer.JsonSerializer",
+        "Assembly": "cdp-sgf-core.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.sgf.dt.core.initializer.EapiInitializer",
+        "Assembly": "cdp-sgf-dt-core.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.sgf.dt.core.refer.EapiRefConstraint",
+        "Assembly": "cdp-sgf-dt-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.svc.mapping.rule.MappingRule",
+        "Assembly": "com.inspur.edp.svc.mapping.rule.jar",
+        "TypeCode": "MappingRule",
+        "TypeName": "数据映射规则",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.svc.mapping.designer.MappingSerializer",
+        "Assembly": "com.inspur.edp.svc.mapping.rule.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.help.metadata.HelpMetadataContent",
+        "Assembly": "web-help-metadata-0.1.0-SNAPSHOT.jar",
+        "TypeCode": "HelpMetadata",
+        "TypeName": "帮助定义",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.help.metadata.serializer.JsonSerializer",
+        "Assembly": "web-help-metadata-0.1.0-SNAPSHOT.jar"
+      },
+      "TransferSerializer": {
+        "Name": "com.inspur.edp.web.help.metadata.serializer.HelpMetadataTransferSerializer",
+        "Assembly": "web-help-metadata.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.web.help.metadata.i18n.HelpMetadataI18nService",
+        "Assembly": "web-help-metadata.jar"
+      },
+	  "Reference": {
+        "Name": "com.inspur.edp.web.help.metadata.service.MetadataReferenceService",
+        "Assembly": "web-help-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.help.metadata.HelpMetadataContentManager",
+        "Assembly": "web-help-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.internalservice.api.entity.InternalApiMetadata",
+        "Assembly": "cdp-iapi-api.jar",
+        "TypeCode": "InternalApi",
+        "TypeName": "内部服务定义",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.internalservice.core.serializer.JsonSerializer",
+        "Assembly": "cdp-iapi-core.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.internalservice.dt.core.init.Initializer",
+        "Assembly": "cdp-iapi-dt-core.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.internalservice.dt.core.refer.IapiRefConstraint",
+        "Assembly": "cdp-iapi-dt-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.cdp.coderule.metadata.common.CodeRuleMetadata",
+        "Assembly": "pf-coderule-metadata-0.1.0-SNAPSHOT.jar",
+        "TypeCode": "CodeRule",
+        "TypeName": "编号规则",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.cdp.coderule.metadata.serializer.JsonSerializer",
+        "Assembly": "pf-coderule-metadata-0.1.0-SNAPSHOT.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.cdp.cdf.component.metadata.CommonComponentMetadata",
+        "Assembly": "cdf-component-metadata.jar",
+        "TypeCode": "CommonComponent",
+        "TypeName": "通用构件",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.cdp.cdf.component.metadata.serializer.CommonComponentSerializer",
+        "Assembly": "cdf-component-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.cdf.component.dt.core.initializer.CommonComponentInitializer",
+        "Assembly": "cdf-component-dt-core.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.cdf.component.dt.core.refer.RefConstraint",
+        "Assembly": "cdf-component-dt-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.qdp.api.QueryObject",
+        "Assembly": "qdp-qo-metadata-api.jar",
+        "TypeCode": "QueryObject",
+        "TypeName": "查询对象",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.qdp.qo.manager.ContentSerializer",
+        "Assembly": "qdp-qo-metadata-manager.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.qdp.qo.manager.QOMetadataContentManager",
+        "Assembly": "qdp-qo-metadata-manager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.qdp.qo.manager.i18nservice.QueryObjectI18nService",
+        "Assembly": "qdp-qo-metadata-manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.qdp.qo.component.customcmp.QDPProcessUnitCmp",
+        "Assembly": "qdp-qo-metadata-component.jar",
+        "TypeCode": "QdpProcessUnitCmp",
+        "TypeName": "自定义处理单元构件"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.QOCustomCmpManager",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.CmpContentSerializer",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.qdp.qo.component.conditioncmp.QDPConditionCmp",
+        "Assembly": "qdp-qo-metadata-component.jar",
+        "TypeCode": "QdpConditionCmp",
+        "TypeName": "查询条件构件"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.QDPConditionCmpManager",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.CmpContentSerializer",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.qdp.qo.component.determinationcmp.QDPDeterminationCmp",
+        "Assembly": "qdp-qo-metadata-component.jar",
+        "TypeCode": "QdpDeterminationCmp",
+        "TypeName": "查询联动计算构件"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.QDPDeterminationCmpManager",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.CmpContentSerializer",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.qdp.qo.component.validationcmp.QDPValidationCmp",
+        "Assembly": "qdp-qo-metadata-component.jar",
+        "TypeCode": "QdpValidationCmp",
+        "TypeName": "查询校验规则构件"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.QOValidationCmpManager",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.qdp.qo.componentmanager.CmpContentSerializer",
+        "Assembly": "qdp-qo-metadata-component-manager.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.webservicecomponent.metadata.WebServiceComponent",
+        "Assembly": "webservice-component-metadata.jar",
+        "TypeCode": "WebServiceComponent",
+        "TypeName": "远程调用代理",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.webservicecomponent.metadata.serializer.WebServiceCmpSerializer",
+        "Assembly": "webservice-component-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.webservicecomponent.dt.core.initializer.Initializer",
+        "Assembly": "webservice-component-dt-core.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.webservicecomponent.dt.core.refer.RefConstraint",
+        "Assembly": "webservice-component-dt-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.dataie.entity.DataImportExportRule",
+        "Assembly": "dataie-entity.jar",
+        "TypeCode": "DataExport",
+        "TypeName": "数据导出",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.dataie.manager.DataIESerializer",
+        "Assembly": "dataie-manager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.dataie.manager.i18n.DataIEEntityI18nService",
+        "Assembly": "dataie-manager.jar"
+      },
+      "Manager": {
+        "Name": "Inspur.Gsp.Dip.ImportExport.DesignerCore.DataIEContentManager",
+        "Assembly": "Inspur.Gsp.Dip.ImportExport.DesignerCore.dll"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.dataie.entity.DataImportExportRule",
+        "Assembly": "dataie-entity.jar",
+        "TypeCode": "DataImport",
+        "TypeName": "数据导入",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.dataie.manager.DataIESerializer",
+        "Assembly": "dataie-manager.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.dataie.manager.i18n.DataIEEntityI18nService",
+        "Assembly": "dataie-manager.jar"
+      },
+      "Manager": {
+        "Name": "Inspur.Gsp.Dip.ImportExport.DesignerCore.DataImportContentManager",
+        "Assembly": "Inspur.Gsp.Dip.ImportExport.DesignerCore.dll"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.dto.metadata.GspDtotMetadata",
+        "Assembly": "cdp-dto-metadata.jar",
+        "TypeCode": "DataTransferObject",
+        "TypeName": "数据传输对象",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.dto.metadata.serializer.DtoSerializer",
+        "Assembly": "cdp-dto-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.dto.metadata.init.DtoInitializer",
+        "Assembly": "cdp-dto-metadata.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.dto.metadata.refer.RefConstraint",
+        "Assembly": "cdp-dto-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.cdt.metadata.obsoletecdt.CdtMetadata",
+        "Assembly": "cdp-cdt-metadata.jar",
+        "TypeCode": "CommonDataType",
+        "TypeName": "通用数据结构",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.cdt.metadata.serializer.CdtSerializer",
+        "Assembly": "cdp-cdt-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.cdt.dt.core.init.Initializer",
+        "Assembly": "cdp-cdt-dt-core.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.cdt.dt.core.refer.RefConstraint",
+        "Assembly": "cdp-cdt-dt-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.i18n.resource.api.metadata.ResourceMetadata",
+        "Assembly": "i18n-resource-api.jar",
+        "TypeCode": "ResourceMetadata",
+        "TypeName": "资源元数据",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.i18n.resource.devtime.core.serializer.ResourceMetadataSerializer",
+        "Assembly": "i18n-resource-devtime-core.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.i18n.resource.devtime.core.ResourceMetadataManager",
+        "Assembly": "i18n-resource-devtime-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.i18n.resource.api.metadata.LinguisticResource",
+        "Assembly": "i18n-resource-api.jar",
+        "TypeCode": "LinguisticResource",
+        "TypeName": "多语资源元数据",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.i18n.resource.devtime.core.serializer.LinguisticMetadataSerializer",
+        "Assembly": "i18n-resource-devtime-core.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.i18n.resource.devtime.core.LinguisticResourceManager",
+        "Assembly": "i18n-resource-devtime-core.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.command.component.metadata.WebCommandsMetadata",
+        "Assembly": "web-command-component-metadata.jar",
+        "TypeCode": "WebCommand",
+        "TypeName": "Web构件",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.command.component.serializer.WebCmdMetadataSerializer",
+        "Assembly": "web-command-component-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.command.component.initializer.Initializer",
+        "Assembly": "web-command-component-metadata.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.web.command.component.refer.RefConstraint",
+        "Assembly": "web-command-component-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.cdp.web.component.metadata.define.WebComponentMetadata",
+        "Assembly": "web-component-metadata.jar",
+        "TypeCode": "WebComponent",
+        "TypeName": "Web方法构件",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.cdp.web.component.metadata.serializer.JsonSerializer",
+        "Assembly": "web-component-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.cdp.web.component.metadata.initializer.Initializer",
+        "Assembly": "web-component-metadata.jar"
+      },
+      "Reference": {
+        "Name": "com.inspur.edp.cdp.web.component.metadata.refer.RefConstraint",
+        "Assembly": "web-component-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.statemachine.metadata.StateMachineMetadataContent",
+        "Assembly": "web-statemachine-metadata.jar",
+        "TypeCode": "StateMachine",
+        "TypeName": "状态机",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.statemachine.serializer.StateMachineSerializer",
+        "Assembly": "web-statemachine-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.pageflow.metadata.entity.PageFlowMetadataEntity",
+        "Assembly": "web-pageflow-metadata.jar",
+        "TypeCode": "PageFlowMetadata",
+        "TypeName": "页面流",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.pageflow.metadata.serializer.PageFlowMetadataEntitySerializer",
+        "Assembly": "web-pageflow-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.pageflow.metadata.manager.PageFlowMetadataEntityManager",
+        "Assembly": "web-pageflow-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.pageflow.metadata.entity.PageFlowMetadataEntity",
+        "Assembly": "web-pageflow-metadata.jar",
+        "TypeCode": "MobilePageFlowMetadata",
+        "TypeName": "移动页面流",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.pageflow.metadata.serializer.PageFlowMetadataEntitySerializer",
+        "Assembly": "web-pageflow-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.pageflow.metadata.manager.PageFlowMetadataEntityManager",
+        "Assembly": "web-pageflow-metadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.formmetadata.metadata.FormMetadataContent",
+        "Assembly": "web-jitengine-formmetadata.jar",
+        "TypeCode": "Form",
+        "TypeName": "表单",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.formmetadata.serializer.FormMetadataContentSerializer",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.formmetadata.initialization.FormMetadataInitialization",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.web.formmetadata.i18n.FormMetadataI18nService",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.formmetadata.metadata.FormMetadataContent",
+        "Assembly": "web-jitengine-formmetadata.jar",
+        "TypeCode": "MobileForm",
+        "TypeName": "移动表单",
+        "IsCreatingResourceMetadata": true
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.formmetadata.serializer.FormMetadataContentSerializer",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.formmetadata.initialization.FormMetadataInitialization",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      },
+      "I18nConfigData": {
+        "Name": "com.inspur.edp.web.formmetadata.i18n.FormMetadataI18nService",
+        "Assembly": "web-jitengine-formmetadata.jar"
+      }
+    },
+    {
+      "Common": {
+        "Type": "com.inspur.edp.web.sourcecode.metadata.entity.SourceCodeMetadataEntity",
+        "Assembly": "web-sourcecode-metadata.jar",
+        "TypeCode": "SourceCodeMetadata",
+        "TypeName": "自定义Web构件",
+        "IsCreatingResourceMetadata": false
+      },
+      "Serializer": {
+        "Name": "com.inspur.edp.web.sourcecode.metadata.serializer.SourceCodeMetadataEntitySerializer",
+        "Assembly": "web-sourcecode-metadata.jar"
+      },
+      "Manager": {
+        "Name": "com.inspur.edp.web.sourcecode.metadata.manager.SourceCodeMetadataManager",
+        "Assembly": "web-sourcecode-metadata.jar"
+      }
+    }
+  ],
+  "MetadataType": [
+    {
+      "TypeCode": "GSPBusinessEntity",
+      "TypeName": "业务实体",
+      "TypeName_zh-CHT": "業務實體",
+      "TypeName_en": "Business Entity",
+      "Description": "业务实体（Business Entity，简称BE）目的是为实现业务逻辑与展现分离，业务逻辑的抽取与沉淀。业务实体首先要描述数据结构，即业务实现需要哪几个表结构，以及表结构之间的从属关系；此外业务实体还要描述业务逻辑，除了内置的CRUD操作外，还能以BE构件的方式对几种逻辑类型进行扩展。",
+      "Postfix": ".be",
+      "GroupID": "be",
+      "GroupName": "业务实体",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "be",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "Form",
+      "TypeName": "PC表单",
+      "TypeName_zh-CHT": "PC表單",
+      "TypeName_en": "Page For Desktop",
+      "Description": "PC表单元数据",
+      "Postfix": ".frm",
+      "GroupID": "frm",
+      "GroupName": "表单",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "components",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "MobileForm",
+      "TypeName": "移动表单",
+      "TypeName_zh-CHT": "移動表單",
+      "TypeName_en": "Page For Mobile",
+      "Description": "移动表单元数据",
+      "Postfix": ".mfrm",
+      "GroupID": "frm",
+      "GroupName": "表单",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "components",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "HelpMetadata",
+      "TypeName": "帮助定义",
+      "TypeName_zh-CHT": "幫助定義",
+      "TypeName_en": "Lookup",
+      "Description": "帮助元数据",
+      "Postfix": ".hlp",
+      "GroupID": "help",
+      "GroupName": "帮助",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "lookups",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "GSPViewModel",
+      "TypeName": "视图对象",
+      "TypeName_zh-CHT": "視圖對象",
+      "TypeName_en": "View Object",
+      "Description": "视图对象",
+      "Postfix": ".vo",
+      "GroupID": "be",
+      "GroupName": "业务实体",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "bff",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "QueryObject",
+      "TypeName": "查询对象",
+      "TypeName_zh-CHT": "查詢對象",
+      "TypeName_en": "Query Object",
+      "Description": "查询对象元数据，记录查询数据的组织信息",
+      "Postfix": ".qo",
+      "GroupID": "query",
+      "GroupName": "查询",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "qo",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "InternalApi",
+      "TypeName": "内部服务定义",
+      "TypeName_zh-CHT": "内部服務定義",
+      "TypeName_en": "Internal Service Definition",
+      "Description": "内部服务定义将GS产品的功能进行定义封装并发布成内部服务。",
+      "Postfix": ".iapi",
+      "GroupID": "api",
+      "GroupName": "服务定义",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "iapi",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "ExternalApi",
+      "TypeName": "外部服务定义",
+      "TypeName_zh-CHT": "外部服務定義",
+      "TypeName_en": "External Service Definition",
+      "Description": "外部服务定义提供了一个快速，可靠，以及便捷的方式将GS产品已有的功能和数据与外部业务和运营系统集成，服务定义可以将GS产品的功能进行定义封装并发布成标准的Web服务，同时实现参数的标准化处理并隐藏不需要对调用者暴露的参数，提高服务的安全性。",
+      "Postfix": ".eapi",
+      "GroupID": "api",
+      "GroupName": "服务定义",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "eapi",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "CommonComponent",
+      "TypeName": "通用构件",
+      "TypeName_zh-CHT": "通用構件",
+      "TypeName_en": "Common Component",
+      "Description": "通用构件",
+      "Postfix": ".ccmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "ccmp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "WebServiceComponent",
+      "TypeName": "远程调用代理",
+      "TypeName_zh-CHT": "遠程調用代理",
+      "TypeName_en": "Web Service Component",
+      "Description": "远程调用代理",
+      "Postfix": ".wscmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "wscmp",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "UnifiedDataType",
+      "TypeName": "业务字段",
+      "TypeName_zh-CHT": "業務字段",
+      "TypeName_en": "Business Field",
+      "Description": "业务数据属性类型（Unified Data Type，简称udt），描述公共字段的基本属性和扩展属性，旨在实现产品开发时的协作统一、避免重复的开发工作、提高产品的易用性。",
+      "Postfix": ".udt",
+      "GroupID": "be",
+      "GroupName": "业务实体",
+      "Flag": true,
+      "IsNeedGuide": true,
+      "Folder": "udt",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "QdpProcessUnitCmp",
+      "TypeName": "自定义处理单元构件",
+      "TypeName_zh-CHT": "自定義處理單元構件",
+      "TypeName_en": "Custom Processing Unit Component",
+      "Description": "自定义处理单元构件",
+      "Postfix": ".qoCustomCmp",
+      "GroupID": "query",
+      "GroupName": "查询",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "qo",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "CommonDataType",
+      "TypeName": "通用数据结构",
+      "TypeName_zh-CHT": "通用數據結構",
+      "TypeName_en": "Common Data Type",
+      "Description": "通用数据结构",
+      "Postfix": ".cdt",
+      "GroupID": "be",
+      "GroupName": "业务实体",
+      "Flag": true,
+      "Folder": "cdt",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "WebCommand",
+      "TypeName": "Web命令构件",
+      "TypeName_zh-CHT": "Web命令構件",
+      "TypeName_en": "Front-end Command",
+      "Description": "Web命令构件元数据",
+      "Postfix": ".webcmd",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "webcmd",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "WebComponent",
+      "TypeName": "Web构件",
+      "TypeName_zh-CHT": "Web構件",
+      "TypeName_en": "Front-end Service",
+      "Description": "Web构件元数据",
+      "Postfix": ".webcmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "webcmp",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "Component",
+      "TypeName": "构件",
+      "TypeName_zh-CHT": "構件",
+      "TypeName_en": "Component",
+      "Description": "构件",
+      "Postfix": ".cmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+
+    {
+      "TypeCode": "BEMgrComponent",
+      "TypeName": "自定义构件",
+      "TypeName_zh-CHT": "自定義構件",
+      "TypeName_en": "Business Entity Public Method Component",
+      "Description": "自定义构件元数据",
+      "Postfix": ".beMgrCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "BEComponent",
+      "TypeName": "业务实体构件",
+      "TypeName_zh-CHT": "業務實體構件",
+      "TypeName_en": "Business Entity Private Method Component",
+      "Description": "业务实体构件元数据",
+      "Postfix": ".beCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "DeterminationComponent",
+      "TypeName": "联动计算构件",
+      "TypeName_zh-CHT": "聯動計算構件",
+      "TypeName_en": "Business Entity Determination Component",
+      "Description": "联动计算构件元数据",
+      "Postfix": ".beDtmCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "ValidationComponent",
+      "TypeName": "校验规则构件",
+      "TypeName_zh-CHT": "校驗規則構件",
+      "TypeName_en": "Business Entity Validation Component",
+      "Description": "校验规则构件元数据",
+      "Postfix": ".beValCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "UDTValidComponent",
+      "TypeName": "业务字段校验规则构件",
+      "TypeName_zh-CHT": "業務字段校驗規則構件",
+      "TypeName_en": "Business Field Validation Component",
+      "Description": "业务字段校验规则构件元数据",
+      "Postfix": ".udtValCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "UDTDtmComponent",
+      "TypeName": "业务字段联动规则构件",
+      "TypeName_zh-CHT": "業務字段聯動規則構件",
+      "TypeName_en": "Business Field Determination Component",
+      "Description": "业务字段联动规则构件元数据",
+      "Postfix": ".udtDtmCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "VMComponent",
+      "TypeName": "视图对象构件",
+      "TypeName_zh-CHT": "視圖對象構件",
+      "TypeName_en": "View Model Component",
+      "Description": "VM构件元数据",
+      "Postfix": ".vmCmp",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "comp",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "Event",
+      "TypeName": "事件定义",
+      "TypeName_zh-CHT": "事件定義",
+      "TypeName_en": "Event Definition",
+      "Description": "Ebs事件定义",
+      "Postfix": ".event",
+      "GroupID": "api",
+      "GroupName": "服务定义",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "event",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "Action",
+      "TypeName": "动作定义",
+      "TypeName_zh-CHT": "動作定義",
+      "TypeName_en": "Action Definition",
+      "Description": "Ebs动作定义",
+      "Postfix": ".action",
+      "GroupID": "api",
+      "GroupName": "服务定义",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "action",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "PubSub",
+      "TypeName": "发布订阅关系定义",
+      "TypeName_zh-CHT": "發佈訂閲關係定義",
+      "TypeName_en": "Publish And Subscribe Relationship Definition",
+      "Description": "Ebs发布订阅关系",
+      "Postfix": ".pubsub",
+      "GroupID": "api",
+      "GroupName": "服务定义",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "pubsub",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "MappingRule",
+      "TypeName": "数据映射规则",
+      "TypeName_zh-CHT": "數據映射規則",
+      "TypeName_en": "Data Mapping Rules",
+      "Description": "不同业务实体之间的转换规则。",
+      "Postfix": ".map",
+      "GroupID": "dip",
+      "GroupName": "数据交换",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "mapping",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "ResourceMetadata",
+      "TypeName": "国际化资源",
+      "TypeName_zh-CHT": "國際化資源",
+      "TypeName_en": "Internationalized Resources",
+      "Description": "国际化资源元数据",
+      "Postfix": ".res",
+      "GroupID": "res",
+      "GroupName": "资源",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "resources",
+      "Apply": "all",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE,RESOURCE"
+    },
+    {
+      "TypeCode": "LinguisticResource",
+      "TypeName": "多语资源",
+      "TypeName_zh-CHT": "多語資源",
+      "TypeName_en": "Linguistic Resources",
+      "Description": "多语资源元数据",
+      "Postfix": ".lres",
+      "GroupID": "lres",
+      "GroupName": "多语资源",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "resources",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE,LINGUISTIC"
+    },
+    {
+      "TypeCode": "DataExport",
+      "TypeName": "数据导出",
+      "TypeName_zh-CHT": "數據導出",
+      "TypeName_en": "Data Export",
+      "Description": "把表单数据导出到本地文件(Excel等)的规则。",
+      "Postfix": ".exp",
+      "GroupID": "impexp",
+      "GroupName": "导入导出",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "export",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "DataImport",
+      "TypeName": "数据导入",
+      "TypeName_zh-CHT": "數據導入",
+      "TypeName_en": "Data Import",
+      "Description": "把本地文件(Excel等)数据导入到表单的规则。",
+      "Postfix": ".imp",
+      "GroupID": "impexp",
+      "GroupName": "导入导出",
+      "Flag": false,
+      "IsNeedGuide": false,
+      "Folder": "import",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "CodeRule",
+      "TypeName": "编号规则",
+      "TypeName_zh-CHT": "編號規則",
+      "TypeName_en": "Code Rule",
+      "Description": "编号规则元数据",
+      "Postfix": ".coderule",
+      "GroupID": "coderule",
+      "GroupName": "编号规则",
+      "Flag": false,
+      "IsNeedGuide": true,
+      "Folder": "coderule",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "StateMachine",
+      "TypeName": "状态机",
+      "TypeName_zh-CHT": "狀態機",
+      "TypeName_en": "State Machine",
+      "Description": "状态机元数据",
+      "Postfix": ".sm",
+      "GroupID": "frm",
+      "GroupName": "状态机",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "sm",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "PageFlowMetadata",
+      "TypeName": "PC页面流",
+      "TypeName_zh-CHT": "PC頁面流",
+      "TypeName_en": "Page Flow For Desktop",
+      "Description": "PC页面流元数据，记录多个PC表单的流转信息",
+      "Postfix": ".pf",
+      "GroupID": "frm",
+      "GroupName": "页面流",
+      "Flag": true,
+      "Folder": "route",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "MobilePageFlowMetadata",
+      "TypeName": "移动页面流",
+      "TypeName_zh-CHT": "移動頁面流",
+      "TypeName_en": "Page Flow For Mobile",
+      "Description": "移动页面流元数据，记录多个移动表单的流转信息",
+      "Postfix": ".mpf",
+      "GroupID": "frm",
+      "GroupName": "页面流",
+      "Flag": true,
+      "Folder": "route",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    },
+    {
+      "TypeCode": "QdpConditionCmp",
+      "TypeName": "查询条件构件",
+      "TypeName_zh-CHT": "查詢條件構件",
+      "TypeName_en": "Query Condition Component",
+      "Description": "查询条件构件",
+      "Postfix": ".qoConditionCmp",
+      "GroupID": "query",
+      "GroupName": "查询",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "qo",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "QdpDeterminationCmp",
+      "TypeName": "查询联动计算构件",
+      "TypeName_zh-CHT": "查詢聯動計算構件",
+      "TypeName_en": "Query Linkage Computation Component",
+      "Description": "查询联动计算构件",
+      "Postfix": ".qoDeterminationCmp",
+      "GroupID": "query",
+      "GroupName": "查询",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "qo",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "QdpValidationCmp",
+      "TypeName": "查询校验规则构件",
+      "TypeName_zh-CHT": "查詢校驗規則構件",
+      "TypeName_en": "Query Validation Rule Component",
+      "Description": "查询校验规则构件",
+      "Postfix": ".qoValidationCmp",
+      "GroupID": "query",
+      "GroupName": "查询",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "qo",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK"
+    },
+    {
+      "TypeCode": "DataTransferObject",
+      "TypeName": "公共数据结构",
+      "TypeName_zh-CHT": "公共數據結構",
+      "TypeName_en": "Data Transfer Object",
+      "Description": "公共数据结构",
+      "Postfix": ".dto",
+      "GroupID": "be",
+      "GroupName": "业务实体",
+      "Flag": true,
+      "Folder": "dto",
+      "Apply": "backend",
+      "OperationEnum":"METADATA_PACK,JAVA_GENERATE"
+    },
+    {
+      "TypeCode": "SourceCodeMetadata",
+      "TypeName": "自定义Web构件",
+      "TypeName_zh-CHT": "自定義Web構件",
+      "TypeName_en": "Front-end Source Code",
+      "Description": "自定义Web构件元数据",
+      "Postfix": ".webcode",
+      "GroupID": "cmp",
+      "GroupName": "构件",
+      "Flag": true,
+      "IsNeedGuide": false,
+      "Folder": "cwebcmd",
+      "Apply": "frontend",
+      "OperationEnum":"METADATA_PACK,WEB_GENERATE"
+    }
+  ]
+}

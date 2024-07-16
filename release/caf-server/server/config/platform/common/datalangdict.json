@@ -1,0 +1,155 @@
+[
+  {
+  "id": "GSP_DATA_001",
+  "code": "GSP_DATA_001",
+  "info_chs": "序列化DBO出错",
+  "info_cht":"序列化DBO出錯",
+  "info_en": "Serialization DBO error",
+  "info_es":"",
+  "info_pt":""
+},
+  {
+    "id": "GSP_DATA_002",
+    "code": "GSP_DATA_002",
+    "info_chs": "生成加密压缩文件出错",
+    "info_cht":"生成加密壓縮檔出錯",
+    "info_en": "Error generating encrypted compressed file",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_003",
+    "code": "GSP_DATA_003",
+    "info_chs": "新增规则出错",
+    "info_cht":"新增規則出錯",
+    "info_en": "Error adding rule",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_004",
+    "code": "GSP_DATA_004",
+    "info_chs": "编辑规则出错",
+    "info_cht":"編輯規則出錯",
+    "info_en": "Error editing rule",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_005",
+    "code": "GSP_DATA_005",
+    "info_chs": "删除规则出错",
+    "info_cht":"删除規則出錯",
+    "info_en": "Error deleting rule",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_006",
+    "code": "GSP_DATA_006",
+    "info_chs": "根据规则导出数据异常",
+    "info_cht":"根據規則匯出數據异常",
+    "info_en": "Export data exceptions according to rules",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_007",
+    "code": "GSP_DATA_007",
+    "info_chs": "此功能仅限开发环境使用",
+    "info_cht":"此功能僅限開發環境使用",
+    "info_en": "This feature is limited to development environments only",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_008",
+    "code": "GSP_DATA_008",
+    "info_chs": "业务配置数据文件上传附件存储出错",
+    "info_cht":"業務配寘資料檔案上傳附件存儲出錯",
+    "info_en": "Business configuration data file upload attachment storage error",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_009",
+    "code": "GSP_DATA_009",
+    "info_chs": "生成业务数据文件出错",
+    "info_cht":"生成業務資料檔案出錯",
+    "info_en": "Error generating business data file",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_010",
+    "code": "GSP_DATA_010",
+    "info_chs": "转换文件流出错",
+    "info_cht":"轉換檔案流出錯",
+    "info_en": "Error converting file stream",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_011",
+    "code": "GSP_DATA_011",
+    "info_chs": "写入data文件失败",
+    "info_cht":"寫入data檔案失敗",
+    "info_en": "Failed to write data file",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_012",
+    "code": "GSP_DATA_012",
+    "info_chs": "数据库中不存在id为 %1$s 的DBO记录",
+    "info_cht":"資料庫中不存在id為 %1$s 的DBO記錄",
+    "info_en": "DBO record with id is %1$s does not exist in the database",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_013",
+    "code": "GSP_DATA_013",
+    "info_chs": "获取表 %1$s 中的数据异常",
+    "info_cht":"獲取錶%1$s中的數據异常",
+    "info_en": "Abnormal data acquisition in Table %1$s",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_014",
+    "code": "GSP_DATA_014",
+    "info_chs": " 获取表 %1$s 中的数据异常，查询SQL为 %2$s，异常信息：",
+    "info_cht":"獲取錶%1$s中的數據异常，査詢SQL為%2$s，异常資訊：",
+    "info_en": "Obtain the data exception in Table %1$s, query SQL as %2$s, and the exception information is:",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_015",
+    "code": "GSP_DATA_015",
+    "info_chs": "过滤类型不正确",
+    "info_cht":"過濾類型不正確",
+    "info_en": "Incorrect filter type",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_016",
+    "code": "GSP_DATA_016",
+    "info_chs": "文件夹复制失败",
+    "info_cht":"資料夾複製失敗",
+    "info_en": "Folder replication failed",
+    "info_es":"",
+    "info_pt":""
+  },
+  {
+    "id": "GSP_DATA_017",
+    "code": "GSP_DATA_017",
+    "info_chs": "删除分组出错",
+    "info_cht":"删除分組出錯",
+    "info_en": "Error deleting group",
+    "info_es":"",
+    "info_pt":""
+  }
+]

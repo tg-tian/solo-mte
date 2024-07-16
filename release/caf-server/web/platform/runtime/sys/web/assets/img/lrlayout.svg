@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="50px" viewBox="0 0 64 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>左右布局</title>
+    <desc>Created with Sketch.</desc>
+    <g id="系统设置" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Farris系统设置页面选择横向导航时" transform="translate(-415.000000, -444.000000)">
+            <g id="左右布局" transform="translate(415.000000, 444.000000)">
+                <rect id="矩形" fill="#F6F7F9" x="0" y="0" width="64" height="50" rx="4"></rect>
+                <path d="M4,0 L60,0 C62.209139,-4.05812251e-16 64,1.790861 64,4 L64,8 L64,8 L0,8 L0,4 C-2.705415e-16,1.790861 1.790861,4.05812251e-16 4,0 Z" id="矩形备份-6" fill="#FFFFFF"></path>
+                <path d="M4,42 L60,42 C62.209139,42 64,43.790861 64,46 L64,50 L64,50 L0,50 L0,46 C-2.705415e-16,43.790861 1.790861,42 4,42 Z" id="矩形备份-71" fill="#FFFFFF" transform="translate(32.000000, 46.000000) scale(1, -1) translate(-32.000000, -46.000000) "></path>
+                <rect id="矩形" fill="#B1B8CA" opacity="0.5" x="38" y="16" width="16" height="18" rx="2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
