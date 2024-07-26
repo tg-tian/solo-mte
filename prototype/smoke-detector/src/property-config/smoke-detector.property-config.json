@@ -1,0 +1,81 @@
+{
+    "title": "smoke-detector",
+    "description": "A Farris Component",
+    "type": "object",
+    "categories": {
+        "basic": {
+            "description": "Basic Infomation",
+            "title": "基本信息",
+            "properties": {
+                "id": {
+                    "description": "组件标识",
+                    "title": "标识",
+                    "type": "string",
+                    "readonly": true
+                },
+                "type": {
+                    "description": "组件类型",
+                    "title": "控件类型",
+                    "type": "select",
+                    "editor": {
+                        "type": "waiting for modification",
+                        "enum": []
+                    }
+                }
+            }
+        },
+        "bussinessProperties": {
+            "description": "",
+            "title": "业务属性",
+            "properties": {
+                "voltageA": {
+                    "description": "A相电压",
+                    "type": "number",
+                    "title": "A相电压",
+                    "default": -1
+                },
+                "voltageB": {
+                    "description": "B相电压",
+                    "type": "number",
+                    "title": "B相电压",
+                    "default": -1
+                },
+                "voltageC": {
+                    "description": "C相电压",
+                    "type": "number",
+                    "title": "C相电压",
+                    "default": -1
+                },
+                "forwardActiveTotalPower": {
+                    "description": "正向有功总电量",
+                    "type": "number",
+                    "title": "正向有功总电量",
+                    "default": -1
+                },
+                "totalPositiveReactivePower": {
+                    "description": "正向无功总电量",
+                    "type": "number",
+                    "title": "正向无功总电量",
+                    "default": -1
+                },
+                "reverseTotalActivePower": {
+                    "description": "反向有功总电量",
+                    "type": "number",
+                    "title": "反向有功总电量",
+                    "default": -1
+                },
+                "reverseTotalReactivePower": {
+                    "description": "反向无功总电量",
+                    "type": "number",
+                    "title": "反向无功总电量",
+                    "default": -1
+                },
+                "toDeliverData": {
+                    "description": "下发数据",
+                    "type": "string",
+                    "title": "下发数据"
+                }
+            }
+        }
+    }
+}
