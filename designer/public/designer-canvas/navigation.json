@@ -1,0 +1,68 @@
+{
+    "id": "root-component",
+    "type": "component",
+    "componentType": "frame",
+    "contents": [
+        {
+            "id": "root-layout",
+            "type": "content-container",
+            "appearance": {
+                "class": "f-page f-page-navigate f-page-is-listnav"
+            },
+            "size": null,
+            "contents": [
+                {
+                    "id": "root-layout-content",
+                    "type": "content-container",
+                    "appearance": {
+                        "class": "f-page-main"
+                    },
+                    "size": null,
+                    "contents": [
+                        {
+                            "id": "page-content",
+                            "type": "layout",
+                            "appearance": {
+                                "class": "f-page-content"
+                            },
+                            "size": null,
+                            "contents": [
+                                {
+                                    "id": "list-nav",
+                                    "type": "layout-pane",
+                                    "position": "left",
+                                    "width": "400",
+                                    "contents": []
+                                },
+                                {
+                                    "id": "page-content-main",
+                                    "type": "layout-pane",
+                                    "position": "center",
+                                    "contents": [
+                                        {
+                                            "id": "page-content-layout",
+                                            "type": "content-container",
+                                            "appearance": {
+                                                "class": "f-page f-page-is-managelist "
+                                            },
+                                            "contents": [
+                                                {
+                                                    "id": "page-main",
+                                                    "type": "content-container",
+                                                    "appearance": {
+                                                        "class": "f-page-main"
+                                                    },
+                                                    "contents": []
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

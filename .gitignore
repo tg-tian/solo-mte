@@ -19,3 +19,4 @@ buildNumber.properties
 .DS_Store
 release/caf-server/temp
 release/caf-server/logs
+node_modules

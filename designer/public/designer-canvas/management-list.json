@@ -1,0 +1,248 @@
+{
+    "id": "root-component",
+    "type": "component",
+    "name": "根组件",
+    "componentType": "frame",
+    "contents": [
+        {
+            "id": "root-layout",
+            "type": "content-container",
+            "appearance": {
+                "class": "f-page f-page-is-managelist f-page-has-scheme"
+            },
+            "contents": [
+                {
+                    "id": "query-solution-1718595759352",
+                    "type": "query-solution",
+                    "appearance": {
+                        "id": "undefined-1718595759352",
+                        "class": "f-section-scheme f-section-in-managelist"
+                    },
+                    "fields": [{
+                        "id": "date",
+                        "labelCode": "date",
+                        "code": "date",
+                        "name": "日期",
+                        "editor": {
+                            "type": "date",
+                            "require": "false",
+                            "returnFormat": "yyyy-MM-dd", 
+                            "format": "yyyy-MM-dd"
+           
+                        }
+                    }],
+                    "isControlInline": true,
+                    "filterText": "筛选文案",
+                    "expanded": false
+                },
+                {
+                    "id": "page-header",
+                    "type": "page-header",
+                    "appearance": {
+                        "class": "f-page-header"
+                    },
+                    "icon": "f-icon f-icon-page-title-administer",
+                    "title": "报销单据管理列表",
+                    "toolbar": {
+                        "type": "response-toolbar",
+                        "buttons": [
+                            {
+                                "id": "button-add",
+                                "type": "ToolBarItem",
+                                "appearance": {
+                                    "class": "btn-primary"
+                                },
+                                "text": "新增"
+                            },
+                            {
+                                "id": "button-edit",
+                                "type": "ToolBarItem",
+                                "text": "编辑"
+                            },
+                            {
+                                "id": "button-view",
+                                "type": "ToolBarItem",
+                                "text": "查看"
+                            },
+                            {
+                                "id": "button-delete",
+                                "type": "ToolBarItem",
+                                "text": "删除"
+                            },
+                            {
+                                "id": "toolBarItem_6575",
+                                "type": "ToolBarItem",
+                                "text": "稽核通过"
+                            },
+                            {
+                                "id": "toolBarItem_8063",
+                                "type": "ToolBarItem",
+                                "text": "稽核不通过"
+                            },
+                            {
+                                "id": "button-view-changeLog",
+                                "type": "ToolBarItem",
+                                "text": "查看业务变更日志"
+                            },
+                            {
+                                "id": "button-print",
+                                "type": "ToolBarItem",
+                                "text": "打印"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "page-main",
+                    "type": "content-container",
+                    "appearance": {
+                        "class": "f-page-main"
+                    },
+                    "contents": [
+                        {
+                            "id": "filter-bar-1719903249152",
+                            "type": "filter-bar",
+                            "appearance": {
+                                "id": "undefined-1719903249152"
+                            },
+                            "resetText": "清空已选wenan",
+                            "showReset": false,
+                            "mode": "display-only"
+                        },
+                        {
+                            "id": "data-grid-component",
+                            "type": "component",
+                            "appearance": {
+                                "class": "f-struct-wrapper f-utils-fill-flex-column"
+                            },
+                            "contents": [
+                                {
+                                    "id": "data-grid-section",
+                                    "type": "section",
+                                    "appearance": {
+                                        "class": "f-section-grid f-section-in-managelist"
+                                    },
+                                    "showHeader":false,
+                                    "contents": [
+                                        {
+                                            "id": "dataGrid",
+                                            "type": "data-grid",
+                                            "appearance": {
+                                                "class": "f-component-grid"
+                                            },
+                                            "columns": [
+                                                {
+                                                    "id": "billType_0ac6dd9f_rsnc",
+                                                    "type": "GridField",
+                                                    "title": "报销类型",
+                                                    "field": "billType",
+                                                    "dataType": "enum",
+                                                    "enumData": [
+                                                        {
+                                                            "name": "差旅费",
+                                                            "value": "CL"
+                                                        },
+                                                        {
+                                                            "name": "手机费",
+                                                            "value": "SJ"
+                                                        },
+                                                        {
+                                                            "name": "交通费",
+                                                            "value": "JT"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "id": "employee_Employee_Name_24534726_vdxd",
+                                                    "type": "GridField",
+                                                    "title": "报销人",
+                                                    "field": "employee.employee_Name",
+                                                    "dataType": "string"
+                                                },
+                                                {
+                                                    "id": "code_729c8ec9_ukae",
+                                                    "type": "GridField",
+                                                    "title": "单据编号",
+                                                    "field": "code",
+                                                    "dataType": "string"
+                                                },
+                                                {
+                                                    "id": "department_Department_name_8e551f99_w82g",
+                                                    "type": "GridField",
+                                                    "title": "所属部门",
+                                                    "field": "department.department_name",
+                                                    "dataType": "string"
+                                                },
+                                                {
+                                                    "id": "totalSum_25592d80_8whb",
+                                                    "type": "GridField",
+                                                    "title": "报帐金额",
+                                                    "field": "totalSum",
+                                                    "dataType": "number"
+                                                },
+                                                {
+                                                    "id": "billState_BillState_e77749d1_2qzj",
+                                                    "type": "GridField",
+                                                    "title": "单据状态",
+                                                    "field": "billState.billState",
+                                                    "dataType": "enum",
+                                                    "enumData": [
+                                                        {
+                                                            "name": "制单",
+                                                            "value": "Billing"
+                                                        },
+                                                        {
+                                                            "name": "提交审批",
+                                                            "value": "SubmitApproval"
+                                                        },
+                                                        {
+                                                            "name": "审批通过",
+                                                            "value": "Approved"
+                                                        },
+                                                        {
+                                                            "name": "审批不通过",
+                                                            "value": "ApprovalNotPassed"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "id": "createDate_ac6fab1f_45bs",
+                                                    "type": "GridField",
+                                                    "title": "制单日期",
+                                                    "field": "createDate",
+                                                    "dataType": "datetime"
+                                                },
+                                                {
+                                                    "id": "auditStatus_5aeb26bc_5jnn",
+                                                    "type": "GridField",
+                                                    "title": "稽核状态",
+                                                    "field": "auditStatus",
+                                                    "dataType": "enum",
+                                                    "enumData": [
+                                                        {
+                                                            "name": "未稽核",
+                                                            "value": "None"
+                                                        },
+                                                        {
+                                                            "name": "通过",
+                                                            "value": "Passed"
+                                                        },
+                                                        {
+                                                            "name": "未通过",
+                                                            "value": "Reject"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "componentType": "data-grid"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

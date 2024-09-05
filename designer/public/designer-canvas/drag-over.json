@@ -1,0 +1,537 @@
+{
+    "id": "root-component",
+    "type": "component",
+    "componentType": "frame",
+    "contents": [
+        {
+            "id": "root-layout",
+            "type": "content-container",
+            "appearance": {
+                "class": "f-page f-page-navigate f-page-is-grid-card"
+            },
+            "contents": [
+                {
+                    "id": "page-header",
+                    "type": "page-header",
+                    "appearance": {
+                        "class": "f-page-header"
+                    },
+                    "icon": "f-icon f-icon-page-title-dictionary",
+                    "title": "项目字典",
+                    "toolbar": {
+                        "type": "response-toolbar",
+                        "buttons": [
+                            {
+                                "id": "button-add",
+                                "type": "response-toolbar-item",
+                                "appearance": {
+                                    "class": "btn-primary"
+                                },
+                                "text": "新增"
+                            },
+                            {
+                                "id": "button-edit",
+                                "type": "response-toolbar-item",
+                                "text": "编辑"
+                            },
+                            {
+                                "id": "button-save",
+                                "type": "response-toolbar-item",
+                                "text": "保存"
+                            },
+                            {
+                                "id": "button-cancel",
+                                "type": "response-toolbar-item",
+                                "text": "取消"
+                            },
+                            {
+                                "id": "button-delete",
+                                "type": "response-toolbar-item",
+                                "text": "删除"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "main-container",
+                    "type": "content-container",
+                    "appearance": {
+                        "class": "f-page-main"
+                    },
+                    "contents": [
+                        {
+                            "id": "content-splitter",
+                            "type": "splitter",
+                            "appearance": {
+                                "class": "f-page-content"
+                            },
+                            "contents": [
+                                {
+                                    "id": "content-list",
+                                    "type": "splitter-pane",
+                                    "appearance": {
+                                        "class": "f-col-w6 f-page-content-nav"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "data-grid-component",
+                                            "type": "component",
+                                            "componentType": "data-grid",
+                                            "appearance": {
+                                                "class": "f-struct-wrapper  f-utils-fill-flex-column"
+                                            },
+                                            "contents": [
+                                                {
+                                                    "id": "data-grid-section",
+                                                    "type": "section",
+                                                    "appearance": {
+                                                        "class": "f-section-grid f-section-in-nav"
+                                                    },
+                                                    "showHeader": false,
+                                                    "contents": [
+                                                        {
+                                                            "id": "dataGrid",
+                                                            "type": "data-grid",
+                                                            "appearance": {
+                                                                "class": "f-component-grid"
+                                                            },
+                                                            "columns": [
+                                                                {
+                                                                    "id": "code_6d5f8d5b_1fvq",
+                                                                    "type": "GridField",
+                                                                    "title": "项目编号",
+                                                                    "field": "code",
+                                                                    "dataType": "string",
+                                                                    "binding": {
+                                                                        "type": "Form",
+                                                                        "path": "code",
+                                                                        "field": "6d5f8d5b-c68a-47fa-9f3b-f3805489cfae"
+                                                                    },
+                                                                    "resizable": true
+                                                                },
+                                                                {
+                                                                    "id": "name_2efe6193_lljv",
+                                                                    "type": "GridField",
+                                                                    "title": "项目名称",
+                                                                    "field": "name",
+                                                                    "dataType": "string",
+                                                                    "binding": {
+                                                                        "type": "Form",
+                                                                        "path": "name",
+                                                                        "field": "2efe6193-278c-4b5f-9f31-cdd8ee48751a"
+                                                                    },
+                                                                    "resizable": true
+                                                                },
+                                                                {
+                                                                    "id": "projectStatus_7d2dd238_3d6l",
+                                                                    "type": "GridField",
+                                                                    "title": "项目状态",
+                                                                    "binding": {
+                                                                        "type": "Form",
+                                                                        "path": "projectStatus",
+                                                                        "field": "7d2dd238-42a7-4643-a849-cdac3b4fe13f",
+                                                                        "fullPath": "ProjectStatus"
+                                                                    },
+                                                                    "field": "projectStatus",
+                                                                    "dataType": "enum",
+                                                                    "data": [
+                                                                        {
+                                                                            "name": "进行中",
+                                                                            "value": "1"
+                                                                        },
+                                                                        {
+                                                                            "name": "已结项",
+                                                                            "value": "2"
+                                                                        }
+                                                                    ],
+                                                                    "resizable": true
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "position": "left"
+                                },
+                                {
+                                    "id": "content-main",
+                                    "type": "splitter-pane",
+                                    "appearance": {
+                                        "class": "f-page-content-main"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "detail-form-component",
+                                            "type": "component",
+                                            "componentType": "form-col-1",
+                                            "appearance": {
+                                                "class": "f-struct-wrapper"
+                                            },
+                                            "contents": [
+                                                {
+                                                    "id": "detail-form-section",
+                                                    "type": "section",
+                                                    "appearance": {
+                                                        "class": "f-section-form f-section-in-main"
+                                                    },
+                                                    "mainTitle": "基本信息",
+                                                    "contents": [
+                                                        {
+                                                            "id": "detail-form-layout",
+                                                            "type": "response-form",
+                                                            "appearance": {
+                                                                "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "code_6d5f8d5b_9fr4",
+                                                                    "type": "form-group",
+                                                                    "label": "项目编号",
+                                                                    "appearance": {
+                                                                        "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "input-group"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "name_2efe6193_39dg",
+                                                                    "type": "form-group",
+                                                                    "label": "项目名称",
+                                                                    "appearance": {
+                                                                        "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "input-group"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "projectType_ddd6903b_6eoa",
+                                                                    "type": "form-group",
+                                                                    "label": "项目类别",
+                                                                    "appearance": {
+                                                                        "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "combo-list",
+                                                                        "data": [
+                                                                            {
+                                                                                "name": "产品类",
+                                                                                "value": "Product"
+                                                                            },
+                                                                            {
+                                                                                "name": "服务类",
+                                                                                "value": "Service"
+                                                                            },
+                                                                            {
+                                                                                "name": "其他类",
+                                                                                "value": "Other"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "projectStatus_7d2dd238_bbnz",
+                                                                    "type": "form-group",
+                                                                    "label": "项目状态",
+                                                                    "appearance": {
+                                                                        "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "combo-list",
+                                                                        "data": [
+                                                                            {
+                                                                                "name": "进行中",
+                                                                                "value": "1"
+                                                                            },
+                                                                            {
+                                                                                "name": "已结项",
+                                                                                "value": "2"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "department_Department_name_bfbd5da4_8fuc",
+                                                                    "type": "form-group",
+                                                                    "label": "所属部门",
+                                                                    "appearance": {
+                                                                        "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "lookup",
+                                                                        "mappingFields": {"code": "department_code"}
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "advanced-form-component",
+                                            "type": "component",
+                                            "componentType": "form-col-1",
+                                            "appearance": {
+                                                "class": "f-struct-wrapper"
+                                            },
+                                            "contents": [
+                                                {
+                                                    "id": "advanced-form-section",
+                                                    "type": "section",
+                                                    "appearance": {
+                                                        "class": "f-section-form f-section-in-main"
+                                                    },
+                                                    "mainTitle": "高级信息",
+                                                    "contents": [
+                                                        {
+                                                            "id": "advanced-form-layout",
+                                                            "type": "content-container",
+                                                            "appearance": {
+                                                                "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "total_29cf60dd_mmq3",
+                                                                    "type": "form-group",
+                                                                    "label": "项目金额",
+                                                                    "appearance": {
+                                                                        "class": "col-12"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "number-spinner"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "description_847d76a3_gzfo",
+                                                                    "type": "form-group",
+                                                                    "label": "项目备注",
+                                                                    "appearance": {
+                                                                        "class": "col-12"
+                                                                    },
+                                                                    "editor": {
+                                                                        "type": "text"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "detail-container",
+                                            "type": "content-container",
+                                            "appearance": {
+                                                "class": "f-struct-wrapper"
+                                            },
+                                            "size": null,
+                                            "contents": [
+                                                {
+                                                    "id": "detail-section",
+                                                    "type": "section",
+                                                    "appearance": {
+                                                        "class": "f-section-tabs f-section-in-mainsubcard"
+                                                    },
+                                                    "showHeader": false,
+                                                    "contents": [
+                                                        {
+                                                            "id": "detail-tab",
+                                                            "type": "tabs",
+                                                            "controlSource": "Farris",
+                                                            "appearance": {
+                                                                "class": "f-component-tabs f-tabs-has-grid"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "bxddemodetail-tab-page",
+                                                                    "type": "tab-page",
+                                                                    "title": "报销明细",
+                                                                    "appearance": null,
+                                                                    "contents": [
+                                                                        {
+                                                                            "id": "bxddemodetail-component",
+                                                                            "type": "component",
+                                                                            "appearance": {
+                                                                                "class": "f-struct-is-subgrid"
+                                                                            },
+                                                                            "contents": [
+                                                                                {
+                                                                                    "id": "bxddemodetail-component-layout",
+                                                                                    "type": "content-container",
+                                                                                    "appearance": {
+                                                                                        "class": "f-grid-is-sub f-utils-flex-column"
+                                                                                    },
+                                                                                    "contents": [
+                                                                                        {
+                                                                                            "id": "dataGrid_bxddemodetail",
+                                                                                            "type": "data-grid",
+                                                                                            "dataSource": "bxdDemoDetails",
+                                                                                            "columns": [
+                                                                                                {
+                                                                                                    "id": "detailDate_f72e0c49_t5rz",
+                                                                                                    "type": "GridField",
+                                                                                                    "title": "费用日期",
+                                                                                                    "field": "detailDate",
+                                                                                                    "dataType": "datetime",
+                                                                                                    "editor": {
+                                                                                                        "id": "detailDate_f72e0c49_7fjv",
+                                                                                                        "type": "date-picker",
+                                                                                                        "title": "日期选择"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "id": "amount_d99e60e7_lkns",
+                                                                                                    "type": "GridField",
+                                                                                                    "title": "报销金额",
+                                                                                                    "field": "amount",
+                                                                                                    "dataType": "number",
+                                                                                                    "editor": {
+                                                                                                        "id": "amount_d99e60e7_mcnp",
+                                                                                                        "type": "number-spinner",
+                                                                                                        "title": "数值框"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "id": "description_10492a0d_ldc1",
+                                                                                                    "type": "GridField",
+                                                                                                    "title": "费用说明",
+                                                                                                    "field": "description",
+                                                                                                    "dataType": "string",
+                                                                                                    "editor": {
+                                                                                                        "id": "description_10492a0d_rj53",
+                                                                                                        "type": "input-group",
+                                                                                                        "title": "多行文本框"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "id": "invoiceNumber_4b707cce_m1tt",
+                                                                                                    "type": "GridField",
+                                                                                                    "title": "发票号码",
+                                                                                                    "field": "invoiceNumber",
+                                                                                                    "dataType": "string",
+                                                                                                    "editor": {
+                                                                                                        "id": "invoiceNumber_4b707cce_qrci",
+                                                                                                        "type": "input-group",
+                                                                                                        "title": "文本"
+                                                                                                    }
+                                                                                                }
+                                                                                            ],
+                                                                                            "appearance": {
+                                                                                                "class": "f-component-grid f-utils-fill"
+                                                                                            }
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ],
+                                                                            "componentType": "dataGrid"
+                                                                        }
+                                                                    ],
+                                                                    "toolbar": {
+                                                                        "id": "bxddemodetail-tab-toolbar",
+                                                                        "type": "response-toolbar",
+                                                                        "position": "inHead",
+                                                                        "buttons": [
+                                                                            {
+                                                                                "id": "bxddemodetailAddButton",
+                                                                                "type": "response-toolbar-item",
+                                                                                "text": "新增",
+                                                                                "appearance": {
+                                                                                    "class": "btn btn-secondary f-btn-ml"
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                "id": "bxddemodetailRemoveButton",
+                                                                                "type": "response-toolbar-item",
+                                                                                "text": "删除",
+                                                                                "appearance": {
+                                                                                    "class": "btn btn-secondary f-btn-ml"
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "id": "bxddemoattachment-tab-page",
+                                                                    "type": "tab-page",
+                                                                    "title": "附件",
+                                                                    "appearance": null,
+                                                                    "contents": [
+                                                                        {
+                                                                            "id": "bxddemoattachment-component",
+                                                                            "type": "component",
+                                                                            "appearance": {
+                                                                                "class": "f-struct-is-subgrid"
+                                                                            },
+                                                                            "contents": [
+                                                                                {
+                                                                                    "id": "bxddemoattachment-component-layout",
+                                                                                    "type": "content-container",
+                                                                                    "appearance": {
+                                                                                        "class": "f-grid-is-sub f-utils-flex-column"
+                                                                                    },
+                                                                                    "contents": [
+                                                                                        {
+                                                                                            "id": "dataGrid_bxddemoattachment",
+                                                                                            "type": "uploader",
+                                                                                            "dataSource": "bxddemoattachments",
+                                                                                            "appearance": {
+                                                                                                "class": "f-component-grid f-utils-fill"
+                                                                                            }
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ],
+                                                                            "componentType": "dataGrid"
+                                                                        }
+                                                                    ],
+                                                                    "toolbar": {
+                                                                        "id": "bxddemoattachment-tab-toolbar",
+                                                                        "type": "response-toolbar",
+                                                                        "position": "inHead",
+                                                                        "buttons": [
+                                                                            {
+                                                                                "id": "bxddemoattachmentAddButton",
+                                                                                "type": "response-toolbar-item",
+                                                                                "text": "上传",
+                                                                                "appearance": {
+                                                                                    "class": "btn btn-secondary f-btn-ml"
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                "id": "bxddemoattachmentRemoveButton",
+                                                                                "type": "response-toolbar-item",
+                                                                                "text": "删除",
+                                                                                "appearance": {
+                                                                                    "class": "btn btn-secondary f-btn-ml"
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "toolbar": {
+                                                        "id": "detail-section-toolbar",
+                                                        "type": "SectionToolbar",
+                                                        "position": "inHead",
+                                                        "contents": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "position": "main"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

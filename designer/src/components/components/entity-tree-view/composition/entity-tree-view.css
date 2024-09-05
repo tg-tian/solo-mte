@@ -1,0 +1,27 @@
+.designer-schema-tree {
+    display: block;
+    height: 100%;
+    color: #212529 !important;
+    background: #fcfdff;
+    padding-left: 4px;
+}
+
+.designer-schema-tree .fv-tree {
+    height: 100% !important;
+}
+
+.designer-schema-tree .fv-tree .fv-tree-content {
+    background: #fcfdff !important;
+}
+
+.designer-schema-tree .fv-tree .fv-tree-data {
+    overflow: auto;
+}
+
+.designer-schema-tree .fv-tree .fv-grid-row-selected {
+    border-radius: 10px;
+}
+
+.designer-schema-tree .fv-tree .fv-grid-row-hover {
+    border-radius: 10px;
+}

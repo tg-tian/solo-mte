@@ -1,0 +1,203 @@
+{
+    "id": "root-component",
+    "type": "component",
+    "componentType": "frame",
+    "contents": [
+        {
+            "id": "data-grid-node",
+            "type": "flow-node",
+            "position": {
+                "x": 900,
+                "y": 700
+            },
+            "content": [
+                {
+                    "id": "smoke-detector",
+                    "type": "smoke-detector"
+                }
+            ]
+        },
+        {
+            "id": "detail-form-node",
+            "type": "flow-node",
+            "position": {
+                "x": 900,
+                "y": 100
+            },
+            "content": [
+                {
+                    "id": "detail-form-component",
+                    "type": "component",
+                    "componentType": "form-col-1",
+                    "appearance": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "contents": [
+                        {
+                            "id": "detail-form-section",
+                            "type": "section",
+                            "appearance": {
+                                "class": "f-section-form f-section-in-main"
+                            },
+                            "mainTitle": "基本信息",
+                            "contents": [
+                                {
+                                    "id": "detail-form-layout",
+                                    "type": "response-form",
+                                    "appearance": {
+                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "code_6d5f8d5b_9fr4",
+                                            "type": "form-group",
+                                            "label": "项目编号",
+                                            "appearance": {
+                                                "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                            },
+                                            "editor": {
+                                                "type": "input-group"
+                                            }
+                                        },
+                                        {
+                                            "id": "name_2efe6193_39dg",
+                                            "type": "form-group",
+                                            "label": "项目名称",
+                                            "appearance": {
+                                                "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                            },
+                                            "editor": {
+                                                "type": "input-group"
+                                            }
+                                        },
+                                        {
+                                            "id": "projectType_ddd6903b_6eoa",
+                                            "type": "form-group",
+                                            "label": "项目类别",
+                                            "appearance": {
+                                                "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                            },
+                                            "editor": {
+                                                "type": "combo-list",
+                                                "data": [
+                                                    {
+                                                        "name": "产品类",
+                                                        "value": "Product"
+                                                    },
+                                                    {
+                                                        "name": "服务类",
+                                                        "value": "Service"
+                                                    },
+                                                    {
+                                                        "name": "其他类",
+                                                        "value": "Other"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": "projectStatus_7d2dd238_bbnz",
+                                            "type": "form-group",
+                                            "label": "项目状态",
+                                            "appearance": {
+                                                "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                            },
+                                            "editor": {
+                                                "type": "combo-list",
+                                                "data": [
+                                                    {
+                                                        "name": "进行中",
+                                                        "value": "1"
+                                                    },
+                                                    {
+                                                        "name": "已结项",
+                                                        "value": "2"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": "department_Department_name_bfbd5da4_8fuc",
+                                            "type": "form-group",
+                                            "label": "所属部门",
+                                            "appearance": {
+                                                "class": "col-12 col-md-6 col-xl-6 col-el-6"
+                                            },
+                                            "editor": {
+                                                "type": "lookup",
+                                                "mappingFields": {
+                                                    "code": "department_code"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "advanced-form-node",
+            "type": "flow-node",
+            "position": {
+                "x": 600,
+                "y": 400
+            },
+            "content": [
+                {
+                    "id": "advanced-form-component",
+                    "type": "component",
+                    "componentType": "form-col-1",
+                    "appearance": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "contents": [
+                        {
+                            "id": "advanced-form-section",
+                            "type": "section",
+                            "appearance": {
+                                "class": "f-section-form f-section-in-main"
+                            },
+                            "mainTitle": "高级信息",
+                            "contents": [
+                                {
+                                    "id": "advanced-form-layout",
+                                    "type": "content-container",
+                                    "appearance": {
+                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "total_29cf60dd_mmq3",
+                                            "type": "form-group",
+                                            "label": "项目金额",
+                                            "appearance": {
+                                                "class": "col-12"
+                                            },
+                                            "editor": {
+                                                "type": "number-spinner"
+                                            }
+                                        },
+                                        {
+                                            "id": "description_847d76a3_gzfo",
+                                            "type": "form-group",
+                                            "label": "项目备注",
+                                            "appearance": {
+                                                "class": "col-12"
+                                            },
+                                            "editor": {
+                                                "type": "text"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

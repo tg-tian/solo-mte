@@ -1,0 +1,1054 @@
+{
+    "id": "root-component",
+    "type": "component",
+    "componentType": "frame",
+    "contents": [
+        {
+            "id": "root-layout",
+            "type": "content-container",
+            "appearance": {
+                "class": "f-page f-page-card f-page-is-mainsubcard"
+            },
+            "contents": [
+                {
+                    "id": "page-header",
+                    "type": "page-header",
+                    "appearance": {
+                        "class": "f-page-header"
+                    },
+                    "icon": "f-icon f-icon-page-title-record",
+                    "title": "添加计划卡片"
+                },
+                {
+                    "id": "main-container",
+                    "type": "content-container",
+                    "appearance": {
+                        "class": "f-page-main"
+                    },
+                    "contents": [
+                        {
+                            "id": "like-card-container",
+                            "type": "content-container",
+                            "appearance": {
+                                "class": "f-struct-like-card"
+                            },
+                            "contents": [
+                                {
+                                    "id": "basic-form-component",
+                                    "type": "component",
+                                    "componentType": "form-col-4",
+                                    "appearance": {
+                                        "class": "f-struct-wrapper"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "basic-form-section",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": "f-section-form f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "基本信息",
+                                            "contents": [
+                                                {
+                                                    "id": "basic-form-layout",
+                                                    "type": "response-form",
+                                                    "appearance": {
+                                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "entryName_3b41420a_8d8s",
+                                                            "type": "form-group",
+                                                            "label": "项目名称",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectNumber_4a244f92_u81b",
+                                                            "type": "form-group",
+                                                            "label": "项目编号",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectType_c578493a_7z97",
+                                                            "type": "form-group",
+                                                            "label": "项目类型",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "combo-list",
+                                                                "data": [
+                                                                    {
+                                                                        "name": "重大",
+                                                                        "value": "major"
+                                                                    },
+                                                                    {
+                                                                        "name": "重点",
+                                                                        "value": "keynote"
+                                                                    },
+                                                                    {
+                                                                        "name": "一般",
+                                                                        "value": "general"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "priority_33bbe4c4_4fwq",
+                                                            "type": "form-group",
+                                                            "label": "优先级",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "combo-list",
+                                                                "data": [
+                                                                    {
+                                                                        "name": "低",
+                                                                        "value": "0"
+                                                                    },
+                                                                    {
+                                                                        "name": "中",
+                                                                        "value": "1"
+                                                                    },
+                                                                    {
+                                                                        "name": "高",
+                                                                        "value": "2"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "customerName_84a0dff1_bfbu",
+                                                            "type": "form-group",
+                                                            "label": "客户名称",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectPhase_9f51cccb_1vcj",
+                                                            "type": "form-group",
+                                                            "label": "项目阶段",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "combo-list",
+                                                                "data": [
+                                                                    {
+                                                                        "name": "计划中",
+                                                                        "value": "0"
+                                                                    },
+                                                                    {
+                                                                        "name": "立项中",
+                                                                        "value": "1"
+                                                                    },
+                                                                    {
+                                                                        "name": "实施中",
+                                                                        "value": "2"
+                                                                    },
+                                                                    {
+                                                                        "name": "已验收",
+                                                                        "value": "3"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectManager_43bd544d_xc5k",
+                                                            "type": "form-group",
+                                                            "label": "项目经理",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "updateInfo_CreatedBy_1c3b33f4_wp9s",
+                                                            "type": "form-group",
+                                                            "label": "创建人",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "updateInfo_CreatedOn_1c3b33f4_529o",
+                                                            "type": "form-group",
+                                                            "label": "创建时间",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "date-picker"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "updateInfo_LastChangedBy_1c3b33f4_nga1",
+                                                            "type": "form-group",
+                                                            "label": "最后修改人",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "updateInfo_LastChangedOn_1c3b33f4_3z4k",
+                                                            "type": "form-group",
+                                                            "label": "最后修改时间",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "date-picker"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectDescription_f3ab1fbf_omx3",
+                                                            "type": "form-group",
+                                                            "label": "项目说明",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "proinfomg-02xn-component",
+                                    "type": "component",
+                                    "componentType": "form-col-4",
+                                    "appearance": {
+                                        "class": "f-struct-wrapper"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "proinfomg-02xn-form-section",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": "f-section-form f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "实施进展",
+                                            "contents": [
+                                                {
+                                                    "id": "proinfomg-02xn-form-layout",
+                                                    "type": "response-form",
+                                                    "appearance": {
+                                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "plannedDuration_8ff4d999_y21n",
+                                                            "type": "form-group",
+                                                            "label": "计划工期",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "startDate_abd56175_bu85",
+                                                            "type": "form-group",
+                                                            "label": "开始日期",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "date-picker"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "endDate_217cee38_ofcp",
+                                                            "type": "form-group",
+                                                            "label": "结束日期",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "date-picker"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "schedule_42551086_lher",
+                                                            "type": "form-group",
+                                                            "label": "项目进度",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "taskSituationSub_215d09e8_nc1a",
+                                                            "type": "form-group",
+                                                            "label": "任务情况（未完成）",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "delayRate_3e1fe3a3_jndm",
+                                                            "type": "form-group",
+                                                            "label": "延误率",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "overExpenditure_2db76154_ixe0",
+                                                            "type": "form-group",
+                                                            "label": "是否超支",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "combo-list",
+                                                                "data": [
+                                                                    {
+                                                                        "name": "是",
+                                                                        "value": "yes"
+                                                                    },
+                                                                    {
+                                                                        "name": "否",
+                                                                        "value": "no"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "proinfomg-fd2s-component",
+                                    "type": "component",
+                                    "componentType": "form-col-4",
+                                    "appearance": {
+                                        "class": "f-struct-wrapper"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "proinfomg-fd2s-form-section",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": "f-section-form f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "项目预算",
+                                            "contents": [
+                                                {
+                                                    "id": "proinfomg-fd2s-form-layout",
+                                                    "type": "response-form",
+                                                    "appearance": {
+                                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "contractAmount_2860f46f_29na",
+                                                            "type": "form-group",
+                                                            "label": "合同额（万元）",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "repayAmount_c7e60c93_zmp5",
+                                                            "type": "form-group",
+                                                            "label": "回款额",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "expectedRevenue_e8ab1901_0z0p",
+                                                            "type": "form-group",
+                                                            "label": "预计收入",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profitRate_7f57dc06_7g0j",
+                                                            "type": "form-group",
+                                                            "label": "利润率",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "projectSource_d6643525_h4zh",
+                                                            "type": "form-group",
+                                                            "label": "项目来源",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "combo-list",
+                                                                "data": [
+                                                                    {
+                                                                        "name": "集团外",
+                                                                        "value": "InGroup"
+                                                                    },
+                                                                    {
+                                                                        "name": "集团内",
+                                                                        "value": "OutGroup"
+                                                                    },
+                                                                    {
+                                                                        "name": "研发",
+                                                                        "value": "Dev"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profit_20ae771d_ksmh",
+                                                            "type": "form-group",
+                                                            "label": "利润（万元）",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "cost_c2886ec2_jjz1",
+                                                            "type": "form-group",
+                                                            "label": "成本",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "budget_8b87967d_4vt9",
+                                                            "type": "form-group",
+                                                            "label": "预算",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profitRateShow_9b108590_gipy",
+                                                            "type": "form-group",
+                                                            "label": "利率关联",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profitRateShow_ProfitRateShow_Profit_f927ad64_gdru",
+                                                            "type": "form-group",
+                                                            "label": "利润",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profitRateShow_ProfitRateShow_ProfitRate_56e3c428_px3e",
+                                                            "type": "form-group",
+                                                            "label": "利润率",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "profitRateShow_ProfitRateShow_Name_d02f639c_h8md",
+                                                            "type": "form-group",
+                                                            "label": "关联利润",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "input-group"
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "detail-container-taskmanager",
+                                    "type": "content-container",
+                                    "appearance": {
+                                        "class": "f-utils-flex-column"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "detail-section-taskmanager",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": " f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "任务管理",
+                                            "contents": [
+                                                {
+                                                    "id": "taskmanager-component",
+                                                    "type": "component",
+                                                    "componentType": "data-grid",
+                                                    "appearance": {
+                                                        "class": "f-struct-is-subgrid"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "taskmanager-component-layout",
+                                                            "type": "content-container",
+                                                            "appearance": {
+                                                                "class": "f-grid-is-sub f-utils-flex-column"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "dataGrid_taskmanager",
+                                                                    "type": "data-grid",
+                                                                    "appearance": {
+                                                                        "class": "f-component-grid f-utils-fill"
+                                                                    },
+                                                                    "columns": [
+                                                                        {
+                                                                            "id": "projectPeriod_8873e280_vv6q",
+                                                                            "type": "GridField",
+                                                                            "title": "项目阶段",
+                                                                            "field": "projectPeriod",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "childPeriod_519e9a86_2r5x",
+                                                                            "type": "GridField",
+                                                                            "title": "子阶段",
+                                                                            "field": "childPeriod",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "projectDesc_c9e08592_21o1",
+                                                                            "type": "GridField",
+                                                                            "title": "阶段任务概述",
+                                                                            "field": "projectDesc",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "startDate_1061795c_q7dr",
+                                                                            "type": "GridField",
+                                                                            "title": "开始时间",
+                                                                            "field": "startDate",
+                                                                            "dataType": "datetime",
+                                                                            "editor": {
+                                                                                "type": "date-picker"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "endDate_de243f0b_1bak",
+                                                                            "type": "GridField",
+                                                                            "title": "结束时间",
+                                                                            "field": "endDate",
+                                                                            "dataType": "datetime",
+                                                                            "editor": {
+                                                                                "type": "date-picker"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "reponsibility_Reponsibility_name_6742d702_x5up",
+                                                                            "type": "GridField",
+                                                                            "title": "责任人",
+                                                                            "field": "reponsibility.reponsibility_name",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "deliverables_8599ab72_afbj",
+                                                                            "type": "GridField",
+                                                                            "title": "交付物",
+                                                                            "field": "deliverables",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "note_055bebe1_q89w",
+                                                                            "type": "GridField",
+                                                                            "title": "备注",
+                                                                            "field": "note",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "toolbar": {
+                                                "id": "detail-section-taskmanager-toolbar",
+                                                "type": "response-toolbar",
+                                                "position": "inHead",
+                                                "contents": [
+                                                    {
+                                                        "id": "taskmanagerAddButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "新增",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    },
+                                                    {
+                                                        "id": "taskmanagerRemoveButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "删除",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "detail-container-proinfomgteam",
+                                    "type": "content-container",
+                                    "appearance": {
+                                        "class": "f-utils-flex-column"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "detail-section-proinfomgteam",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": " f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "项目管理团队",
+                                            "contents": [
+                                                {
+                                                    "id": "proinfomgteam-component",
+                                                    "type": "component",
+                                                    "componentType": "dataGrid",
+                                                    "appearance": {
+                                                        "class": "f-struct-is-subgrid"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "proinfomgteam-component-layout",
+                                                            "type": "content-container",
+                                                            "appearance": {
+                                                                "class": "f-grid-is-sub f-utils-flex-column"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "dataGrid_proinfomgteam",
+                                                                    "type": "data-grid",
+                                                                    "columns": [
+                                                                        {
+                                                                            "id": "role_9b630cd6_ydh1",
+                                                                            "type": "GridField",
+                                                                            "title": "角色",
+                                                                            "field": "role",
+                                                                            "dataType": "enum",
+                                                                            "editor": {
+                                                                                "type": "combo-list",
+                                                                                "data": [
+                                                                                    {
+                                                                                        "name": "项目经理",
+                                                                                        "value": "promanage"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "架构师",
+                                                                                        "value": "architects"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "产品经理",
+                                                                                        "value": "productmanager"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "ui设计师",
+                                                                                        "value": "ui"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "开发",
+                                                                                        "value": "dev"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "测试",
+                                                                                        "value": "test"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "运维",
+                                                                                        "value": "operation"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "roleResponsibility_476f5ea5_g21g",
+                                                                            "type": "GridField",
+                                                                            "title": "角色职责",
+                                                                            "field": "roleResponsibility",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "type": "input-group"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "levelCode_b155eef0_yf0y",
+                                                                            "type": "GridField",
+                                                                            "title": "级别",
+                                                                            "field": "levelCode",
+                                                                            "dataType": "enum",
+                                                                            "editor": {
+                                                                                "type": "combo-list",
+                                                                                "data": [
+                                                                                    {
+                                                                                        "name": "低",
+                                                                                        "value": "0"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "中",
+                                                                                        "value": "1"
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "高",
+                                                                                        "value": "2"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "cost_9831c3bb_j49x",
+                                                                            "type": "GridField",
+                                                                            "title": "成本（人/天）",
+                                                                            "field": "cost",
+                                                                            "dataType": "number",
+                                                                            "editor": {
+                                                                                "type": "number-spinner"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "estWorkingHours_3a358106_05my",
+                                                                            "type": "GridField",
+                                                                            "title": "预计工时（人/天）",
+                                                                            "field": "estWorkingHours",
+                                                                            "dataType": "number",
+                                                                            "editor": {
+                                                                                "type": "number-spinner"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "total_ab4014b9_oh46",
+                                                                            "type": "GridField",
+                                                                            "title": "预计人力成本(元)",
+                                                                            "dataType": "number",
+                                                                            "editor": {
+                                                                                "type": "number-spinner"
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "appearance": {
+                                                                        "class": "f-component-grid f-utils-fill"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "toolbar": {
+                                                "id": "SectionToolbar",
+                                                "type": "response-toolbar",
+                                                "position": "inHead",
+                                                "contents": [
+                                                    {
+                                                        "id": "proinfomgteamAddButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "新增",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    },
+                                                    {
+                                                        "id": "proinfomgteamRemoveButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "删除",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "detail-container-laborcosts",
+                                    "type": "content-container",
+                                    "appearance": {
+                                        "class": "f-utils-flex-column"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "detail-section-laborcosts",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": " f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "人力成本",
+                                            "contents": [
+                                                {
+                                                    "id": "laborcosts-component",
+                                                    "type": "component",
+                                                    "componentType": "dataGrid",
+                                                    "appearance": {
+                                                        "class": "f-struct-is-subgrid"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "laborcosts-component-layout",
+                                                            "type": "content-container",
+                                                            "appearance": {
+                                                                "class": "f-grid-is-sub f-utils-flex-column"
+                                                            },
+                                                            "contents": [
+                                                                {
+                                                                    "id": "dataGrid_laborcosts",
+                                                                    "type": "data-grid",
+                                                                    "dataSource": "laborcostss",
+                                                                    "columns": [
+                                                                        {
+                                                                            "id": "roleName_81ce2aa5_1ndb",
+                                                                            "type": "GridField",
+                                                                            "title": "角色名称",
+                                                                            "field": "roleName",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "id": "roleName_81ce2aa5_1ndb",
+                                                                                "type": "input-group",
+                                                                                "title": "角色名称"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "unit_d6e72a20_f506",
+                                                                            "type": "GridField",
+                                                                            "title": "单位",
+                                                                            "field": "unit",
+                                                                            "dataType": "string",
+                                                                            "editor": {
+                                                                                "id": "roleName_81ce2aa5_1ndb",
+                                                                                "type": "input-group",
+                                                                                "title": "单位"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "cost_37ee6449_t3dw",
+                                                                            "type": "GridField",
+                                                                            "title": "成本（人/天）",
+                                                                            "dataType": "number",
+                                                                            "editor": {
+                                                                                "id": "cost_37ee6449_t3dw",
+                                                                                "type": "input-group",
+                                                                                "title": "成本（人/天）"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "id": "costTotal_61e61f59_678i",
+                                                                            "type": "GridField",
+                                                                            "title": "费用小计",
+                                                                            "dataType": "number",
+                                                                            "editor": {
+                                                                                "id": "costTotal_61e61f59_678i",
+                                                                                "type": "input-group",
+                                                                                "title": "费用小计"
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "appearance": {
+                                                                        "class": "f-component-grid f-utils-fill"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "toolbar": {
+                                                "id": "detail-section-laborcosts-toolbar",
+                                                "type": "response-toolbar",
+                                                "position": "inHead",
+                                                "buttons": [
+                                                    {
+                                                        "id": "laborcostsAddButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "新增",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    },
+                                                    {
+                                                        "id": "laborcostsRemoveButton",
+                                                        "type": "response-toolbar-item",
+                                                        "text": "删除",
+                                                        "appearance": {
+                                                            "class": "btn btn-secondary f-btn-ml"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "htmltemplate_6260",
+                                    "type": "html-template",
+                                    "html": "<div class=\"f-grid-total-row\">\r\n\t<div class=\"f-content\">\r\n\t\t<dl class=\"f-grid-total-detail\">\r\n\t\t\t<dt>预计成本：</dt>\r\n\t\t\t<dd class=\"text-success\">{{viewModel['bindingData']['estimatedCost']}}</dd>\r\n\t\t\t<dt>预计利润：</dt>\r\n\t\t\t<dd class=\"text-success h3\">{{viewModel['bindingData']['expectedProfit']}} </dd>\r\n\t\t\t<dt>预计利润率：</dt>\r\n\t\t\t<dd class=\"text-success h3\">{{viewModel['bindingData']['expectedProfitMargin']}} %</dd>\r\n\t\t</dl>\r\n\t</div>\r\n</div>"
+                                },
+                                {
+                                    "id": "proinfomg-s3hp-component",
+                                    "type": "component",
+                                    "componentType": "form-col-4",
+                                    "appearance": {
+                                        "class": "f-struct-wrapper"
+                                    },
+                                    "contents": [
+                                        {
+                                            "id": "proinfomg-s3hp-form-section",
+                                            "type": "section",
+                                            "appearance": {
+                                                "class": "f-section-form f-section-in-mainsubcard"
+                                            },
+                                            "mainTitle": "项目信息管理",
+                                            "contents": [
+                                                {
+                                                    "id": "proinfomg-s3hp-form-layout",
+                                                    "type": "response-form",
+                                                    "appearance": {
+                                                        "class": "f-form-layout farris-form farris-form-controls-inline"
+                                                    },
+                                                    "contents": [
+                                                        {
+                                                            "id": "estimatedCost_3a6306ae_tzii",
+                                                            "type": "form-group",
+                                                            "label": "预计成本",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "expectedProfit_021322b0_c90k",
+                                                            "type": "form-group",
+                                                            "label": "预计利润",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        },
+                                                        {
+                                                            "id": "expectedProfitMargin_543c5c4d_mks2",
+                                                            "type": "form-group",
+                                                            "label": "预计利润率",
+                                                            "appearance": {
+                                                                "class": "col-12 col-md-6 col-xl-3 col-el-6"
+                                                            },
+                                                            "editor": {
+                                                                "type": "number-spinner"
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "toolbar": {
+                                                "id": "proinfomg-s3hp-form-section-toolbar",
+                                                "type": "response-toolbar",
+                                                "position": "inHead",
+                                                "contents": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

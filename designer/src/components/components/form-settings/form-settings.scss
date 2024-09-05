@@ -1,0 +1,58 @@
+.f-designer-option-panel {
+    box-shadow: 0 0 10px 0 #eceff4;
+    border-radius: 5px;
+    background: #fff;
+    padding: 8px 14px;
+    width: 70%;
+    margin: 14px auto;
+    overflow: auto;
+
+    .f-section-header {
+
+        margin: 0 0 4px;
+
+
+    }
+
+    .text-muted {
+        color: #969ba5 !important;
+    }
+
+    .badge {
+        padding: .25rem .5rem;
+    }
+
+    .col-form-label {
+        justify-content: start !important;
+        width: auto;
+        display: inline-block;
+    }
+
+    .badge {
+        padding: .25rem .5rem;
+    }
+
+    small {
+        font-size: 90%;
+    }
+
+    .mr-4 {
+        display: inline-block;
+        margin: 4px 24px 3px 10px;
+    }
+
+    .custom-control-label {
+        display: inline-block;
+
+    }
+
+    .custom-control.custom-radio {
+        margin: 8px 8px 6px 1px;
+        display: inline-block !important;
+    }
+
+    .form-group {
+        margin: 4px 1px 3px 1px;
+    }
+
+}

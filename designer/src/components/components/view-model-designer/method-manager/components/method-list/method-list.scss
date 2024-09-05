@@ -1,0 +1,26 @@
+.view-model-method-list {
+    margin-left: 1rem !important;
+    padding-top: .25rem !important;
+    overflow-y: hidden !important;
+    overflow-x: auto !important;
+
+    .main-panel {
+        min-width: 800px;
+        margin-bottom: 10px;
+
+        .command-panel {
+            border-radius: 6px;
+            width: 50%;
+        }
+
+        .param-panel {
+            .text-tip {
+                font-size: 14px;
+            }
+
+            .update-param>.f-icon {
+                font-size: 14px;
+            }
+        }
+    }
+}
