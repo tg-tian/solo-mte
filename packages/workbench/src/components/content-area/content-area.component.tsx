@@ -1,0 +1,71 @@
+import { defineComponent, inject, withModifiers } from 'vue';
+import { FunctionInstance, UseFunctionInstance } from '../../composition/types';
+
+import './content-area.css';
+
+export default defineComponent({
+    name: 'FAContentArea',
+    emits: [],
+    setup() {
+        const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
+        const { activeInstanceId, functionInstances, close } = useFunctionInstanceComposition;
+
+        function onClickFunctionTabItem(functionInstance: FunctionInstance) {
+            activeInstanceId.value = functionInstance.instanceId;
+        }
+
+        function getFunctionTabClass(functionInstance: FunctionInstance) {
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'fix': functionInstance.fix,
+                'f-admin-main-tab-item': true
+            } as Record<string, true>;
+            return classObject;
+        }
+
+        function getFunctionContentClass(functionInstance:FunctionInstance){
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'f-admin-main-tab-content': true
+            } as Record<string, true>;
+            return classObject;
+        }
+
+        function renderTabs() {
+            return functionInstances.value.map((tabItem: FunctionInstance) => {
+                return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
+                    {tabItem.icon && <span><i class={tabItem.icon}></i></span>}
+                    {tabItem.name && <span>{tabItem.name}</span>}
+                    {!tabItem.fix && <div class="f-admin-main-tab-item-close" onClick={withModifiers(() => close(tabItem.instanceId), ['stop'])}>
+                        <i class="f-icon f-icon-close"></i>
+                    </div>}
+                </div>;
+            });
+        }
+
+        function renderContents() {
+            return functionInstances.value.map((functionInstance: FunctionInstance) => {
+                return <div class={getFunctionContentClass(functionInstance)}>
+                    <iframe title={functionInstance.instanceId} src={functionInstance.url}></iframe>
+                </div>;
+            });
+        }
+
+        return () => {
+            return (
+                <div class="f-page f-page-card f-page-is-mainsubcard">
+                    <div class="f-admin-main-header"></div>
+                    <div class="f-admin-main-tabs">
+                        <div class="f-admin-main-tabs-content">
+                            {renderTabs()}
+                        </div>
+                        <div class="f-admin-main-tabs-background"></div>
+                    </div>
+                    <div class="f-admin-main-content">
+                        {renderContents()}
+                    </div>
+                </div>
+            );
+        };
+    }
+});

@@ -1,0 +1,94 @@
+.f-admin-main-header {
+    height: 60px;
+    width: 100%;
+    background-image: url(./assets/images/top.svg);
+}
+
+.f-admin-main-tabs {
+    position: relative;
+    height: 48px;
+    margin: 0 24px;
+}
+
+.f-admin-main-tabs > .f-admin-main-tabs-background {
+    background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+    border-radius: 8px;
+    box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+    height: 100%;
+    opacity: 0.66;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+}
+
+.f-admin-main-tabs > .f-admin-main-tabs-content {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item {
+    border-radius: 8px;
+    color: #355782;
+    cursor: pointer;
+    display: flex;
+    float: left;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 10px 14px;
+    margin: auto 0;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item.active {
+    background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+    color: white;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item > span {
+    margin-left: 20px;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item > .f-admin-main-tab-item-close {
+    display: flex;
+    margin: 0 0 0 4px;
+    width: 16px;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item > .f-admin-main-tab-item-close > i {
+    display: none;
+    margin: auto;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item:hover > .f-admin-main-tab-item-close > i {
+    display: block;
+}
+
+.f-admin-main-tabs .f-admin-main-tab-item.fix > span {
+    margin-left: 0;
+}
+
+.f-admin-main-content {
+    flex: 1;
+    position: relative;
+}
+
+.f-admin-main-content .f-admin-main-tab-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.f-admin-main-content .f-admin-main-tab-content.active {
+    display: block;
+}
+
+.f-admin-main-content .f-admin-main-tab-content > iframe {
+    border: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

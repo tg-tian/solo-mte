@@ -1,0 +1,88 @@
+.f-admin-function-board {
+    max-height: 800px;
+    max-width: 860px;
+    min-height: 400px;
+    min-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+    overflow: hidden;
+}
+
+.f-admin-function-board .f-admin-function-board-menu-items {
+    padding: 20px 0 16px 20px;
+    border-bottom: 1px dashed #ccd1dd;
+}
+
+.f-admin-function-board .f-admin-function-board-menu-items > .farris-nav {
+    border-bottom: none;
+}
+
+.f-admin-function-board .f-admin-function-board-menu-items > .farris-nav .farris-nav-item-link {
+    border-bottom: none;
+}
+.f-admin-function-board .f-admin-function-board-menu-items > .farris-nav .farris-nav-item .farris-nav-item-bottom-line{
+    height: 4px;
+    margin: 4px auto 0;
+}
+
+.f-admin-function-board .f-admin-function-board-menu-items > .farris-nav .farris-nav-item.active .farris-nav-item-bottom-line {
+    height: 4px;
+    background-image: linear-gradient(186deg, #0E6DED 10%, #1F7CFA 100%);
+    box-shadow: 0 2px 10px 0 rgba(13, 106, 246, 0.40);
+    border-radius: 2px;
+    max-width: 50%;
+    margin: 4px auto 0;
+}
+
+.f-admin-function-board .f-admin-function-board-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.f-admin-function-board .f-admin-function-board-content .f-list-view-content{
+    overflow: hidden;
+}
+
+.f-admin-function-board .f-admin-function-board-content .f-admin-function-groups{
+    overflow: visible;
+}
+
+.f-admin-function-board .f-admin-function-group {
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.f-admin-function-board .f-admin-function-group > span {
+    margin: auto 0;
+    padding-left: 10px;
+}
+
+.f-admin-function-board .f-admin-function-group > .f-admin-function-group-icon {
+    padding: 4px;
+    background-color: aliceblue;
+    border-radius: 14px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+    color: cornflowerblue;
+}
+
+.f-admin-function-board .f-admin-function-group > .f-admin-function-group-icon > i {
+    margin: auto;
+}
+
+.f-admin-function-board .f-admin-function-item {
+    font-size: 13px;
+    padding: 10px 0;
+    padding-left: 38px;
+    width: 160px;
+}

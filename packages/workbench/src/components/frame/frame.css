@@ -1,0 +1,9 @@
+.f-side-bar-collapsed .f-admin-navigation-footer-handle {
+    transform: rotate(180deg);
+}
+
+.f-admin-content {
+    background: rgba(255, 255, 255, 0.93);
+    box-shadow: -8px 0 8px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 24px 0 0 24px;
+}
