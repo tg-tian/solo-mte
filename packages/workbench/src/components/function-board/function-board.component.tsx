@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, ref } from 'vue';
+import { computed, defineComponent, inject, ref, watch } from 'vue';
 import { FListView, FNav } from '@farris/ui-vue/components';
 import { FunctionBoardProps, functionBoardProps } from './function-board.props';
 import { FunctionItem, MenuGroupItem, UseFunctionInstance } from '../../composition/types';
@@ -37,6 +37,11 @@ export default defineComponent({
                 'display': 'flex',
                 'transform': `translateY(${offsetY.value}px)`
             };
+        });
+
+        watch(() => props.functionItems, (latestFunctionItems: FunctionItem[]) => {
+            functionItems.value = latestFunctionItems;
+            functionListViewRef.value?.updateDataSource(functionItems.value);
         });
 
         function onClickMenuItemNavigation(menuItem: MenuGroupItem) {

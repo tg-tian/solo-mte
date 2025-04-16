@@ -61,21 +61,24 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
         activeInstanceId.value = openedFunctionInstance.instanceId;
     }
 
+    function openNewFunctionUrl(functionId: string, code: string, name: string, url: string, icon = '', fix = false) {
+        const instanceId = `${functionId}${Date.now()}`;
+        const newFunctionInstance = { functionId, instanceId, code, name, url, icon, fix };
+        functionInstances.value.push(newFunctionInstance);
+        functionInstanceMap.set(functionId, newFunctionInstance);
+        activeInstanceId.value = instanceId;
+    }
+
     /**
      * 
-     * @param functionId 功能菜单标识
-     * @param code 功能菜单编号
-     * @param name 在已打开功能菜单页签集合中显示的文本
+     * @param functionItem 功能菜单对象
      * @param icon 图标
      * @param fix 固定在左侧
      */
-    function openNewFunction(functionId: string, code: string, name: string, icon = '', fix = false) {
-        const instanceId = `${functionId}${Date.now()}`;
-        useResolveFunctionUrlComposition.resolve(functionId).then((url: string) => {
-            const newFunctionInstance = { functionId, instanceId, code, name, url, icon, fix };
-            functionInstances.value.push(newFunctionInstance);
-            functionInstanceMap.set(functionId, newFunctionInstance);
-            activeInstanceId.value = instanceId;
+    function openNewFunction(functionItem: FunctionItem, icon = '', fix = false) {
+        useResolveFunctionUrlComposition.resolve(functionItem).then((url: string) => {
+            const { id: functionId, code, name } = functionItem;
+            openNewFunctionUrl(functionId, code, name, url, icon, fix);
         });
     }
 
@@ -84,12 +87,21 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
      * @param functionItem 功能菜单对象
      */
     function open(functionItem: FunctionItem) {
-        const { id: functionId, code, name } = functionItem;
+        const { id: functionId } = functionItem;
         const hasOpenedTheFunction = functionInstanceMap.has(functionId);
         if (hasOpenedTheFunction) {
             activeFunctionInstance(functionId);
         } else {
-            openNewFunction(functionId, code, name);
+            openNewFunction(functionItem);
+        }
+    }
+
+    function openUrl(functionId: string, code: string, name: string, functionUrl: string) {
+        const hasOpenedTheFunction = functionInstanceMap.has(functionUrl);
+        if (hasOpenedTheFunction) {
+            activeFunctionInstance(functionUrl);
+        } else {
+            openNewFunctionUrl(functionId, code, name, functionUrl);
         }
     }
 
@@ -105,5 +117,5 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
         }
     }
 
-    return { activeInstanceId, close, functionInstances, open, setResidentInstance };
+    return { activeInstanceId, close, functionInstances, open, openUrl, setResidentInstance };
 }
