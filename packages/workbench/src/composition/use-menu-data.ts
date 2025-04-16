@@ -45,32 +45,37 @@ export function useMenuData(): UseMenuData {
 
     /**
      * 构造功能组对象
+     * @param appDomain 应用程序域。第1级应用部署结构。
+     * @param appModule 应用模块。第2级应用部署结构。
      * @param rawFunctionGroup 功能组原始数据
      * @returns 功能组对象
      */
-    function buildFunctionGroup(rawFunctionGroup: Record<string, any>) {
+    function buildFunctionGroup(appDomain: string, appModule: string, rawFunctionGroup: Record<string, any>) {
         const { id, code, name: category, menuPath } = rawFunctionGroup;
+        const appGroup = code;
         const rawFunctionItemsData = parentIdAndChildrenMap.get(id) || [];
         const functionGroupItems: FunctionGroupItem[] = rawFunctionItemsData.map((rawFunctionItemData: any) => {
             const { id, code, name, menuPath } = rawFunctionItemData;
-            return { id, category, code, name, menuPath } as FunctionGroupItem;
+            return { id, appDomain, appModule, appGroup, category, code, name, menuPath } as FunctionGroupItem;
         });
         return { id, code, name: category, menuPath, functionGroupItems } as FunctionGroup;
     }
 
     /**
      * 构造功能菜单对象
+     * @param appDomain 应用程序域。第1级应用部署结构。
+     * @param appModule 应用模块。第2级应用部署结构。
      * @param rawFunctionGroupsData 功能组原始数据
      * @returns 功能菜单对象
      */
-    function buildFunctionItems(rawFunctionGroupsData: Record<string, any>[]) {
+    function buildFunctionItems(appDomain: string, appModule: string, rawFunctionGroupsData: Record<string, any>[]) {
         const functionItems: FunctionItem[] = [];
         rawFunctionGroupsData.reduce((functions: FunctionItem[], rawFunctionGroupData: any) => {
-            const { id: functionGroupId, name: category } = rawFunctionGroupData;
+            const { id: functionGroupId, code: appGroup, name: category } = rawFunctionGroupData;
             const rawFunctionItemsData = parentIdAndChildrenMap.get(functionGroupId) || [];
             rawFunctionItemsData.reduce((result: FunctionItem[], rawFunctionItemData: any) => {
                 const { id, code, name, menuPath } = rawFunctionItemData;
-                result.push({ id, category, code, name, menuPath } as FunctionGroupItem);
+                result.push({ id, appDomain, appModule, appGroup, category, code, name, menuPath } as FunctionGroupItem);
                 return result;
             }, functions);
             return functions;
@@ -80,16 +85,18 @@ export function useMenuData(): UseMenuData {
 
     /**
      * 构造菜单项对象
+     * @param appDomain 应用程序域。第1级应用部署结构。
      * @param rawMenuGroupItemData 菜单项原始数据
      * @returns 菜单项对象
      */
-    function buildMenuGroupItem(rawMenuGroupItemData: Record<string, any>): MenuGroupItem {
+    function buildMenuGroupItem(appDomain: string, rawMenuGroupItemData: Record<string, any>): MenuGroupItem {
         const { id, code, name, menuPath } = rawMenuGroupItemData;
+        const appModule = code;
         const rawFunctionGroupsData = parentIdAndChildrenMap.get(id) || [];
         const functionGroups: FunctionGroup[] = rawFunctionGroupsData.map((rawFunctionGroupData: any) => {
-            return buildFunctionGroup(rawFunctionGroupData);
+            return buildFunctionGroup(appDomain, appModule, rawFunctionGroupData);
         });
-        const functions: FunctionItem[] = buildFunctionItems(rawFunctionGroupsData);
+        const functions: FunctionItem[] = buildFunctionItems(appDomain, appModule, rawFunctionGroupsData);
         return { id, code, name, menuPath, functions, functionGroups } as MenuGroupItem;
     }
 
@@ -100,9 +107,10 @@ export function useMenuData(): UseMenuData {
      */
     function buildMenuGroup(rawMenuGroupData: Record<string, any>): MenuGroup {
         const { id, code, name, icon } = rawMenuGroupData;
+        const appDomain = code;
         const rawMenuGroupItemsData = parentIdAndChildrenMap.get(id) || [];
         const items: MenuGroupItem[] = rawMenuGroupItemsData.map((rawMenuGroupItemData: any) => {
-            return buildMenuGroupItem(rawMenuGroupItemData);
+            return buildMenuGroupItem(appDomain, rawMenuGroupItemData);
         });
         return { id, code, name, icon, items } as MenuGroup;
 

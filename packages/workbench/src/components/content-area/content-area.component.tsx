@@ -1,4 +1,4 @@
-import { defineComponent, inject, withModifiers } from 'vue';
+import { defineComponent, inject, onMounted, withModifiers } from 'vue';
 import { FunctionInstance, UseFunctionInstance } from '../../composition/types';
 
 import './content-area.css';
@@ -8,7 +8,7 @@ export default defineComponent({
     emits: [],
     setup() {
         const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
-        const { activeInstanceId, functionInstances, close } = useFunctionInstanceComposition;
+        const { activeInstanceId, functionInstances, close, openUrl } = useFunctionInstanceComposition;
 
         function onClickFunctionTabItem(functionInstance: FunctionInstance) {
             activeInstanceId.value = functionInstance.instanceId;
@@ -23,7 +23,7 @@ export default defineComponent({
             return classObject;
         }
 
-        function getFunctionContentClass(functionInstance:FunctionInstance){
+        function getFunctionContentClass(functionInstance: FunctionInstance) {
             const classObject = {
                 'active': functionInstance.instanceId === activeInstanceId.value,
                 'f-admin-main-tab-content': true
@@ -50,6 +50,19 @@ export default defineComponent({
                 </div>;
             });
         }
+
+        onMounted(() => {
+            window.addEventListener('message', (message: MessageEvent) => {
+                const messageEvent = message.data;
+                if (typeof messageEvent === 'object' && messageEvent.eventType === 'invoke') {
+                    const invokeMethod = messageEvent.method;
+                    if (invokeMethod === 'openUrl') {
+                        const [functionId, code, name, url] = messageEvent.params;
+                        openUrl(functionId, code, name, url);
+                    }
+                }
+            });
+        });
 
         return () => {
             return (

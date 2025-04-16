@@ -23,6 +23,15 @@
             "@farris/ui-vue/components": ["../../node_modules/@farris/ui-vue"]
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "apps/**/*.ts",
+        "apps/**/*.d.ts",
+        "apps/**/*.tsx",
+        "apps/**/*.vue"
+    ]
     // "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,6 +1,6 @@
 {
     "emptyFunctionPage": "./assets/empty-page.html",
-    "functionSourceUri": "./assets/functions.json",
+    "functionSourceUri": "./assets/solo-functions.json",
     "residentFunctions": [
         {
             "functionId": "home",
@@ -12,5 +12,6 @@
             "fix": true
         }
     ],
-    "resolveFunctionUri": "/api/runtime/sys/v1.0/functions/funcInvok"
+    "resolveFunctionUri": "/api/runtime/sys/v1.0/functions/funcInvok",
+    "fallbackResovleFunctionUri": ""
 }

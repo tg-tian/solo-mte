@@ -2,6 +2,9 @@ import { Ref } from "vue";
 
 export interface FunctionGroupItem {
     id: string;
+    appDomain: string;
+    appModule: string;
+    appGroup: string;
     category: string;
     code: string;
     name: string;
@@ -11,6 +14,9 @@ export interface FunctionGroupItem {
 
 export interface FunctionItem {
     id: string;
+    appDomain: string;
+    appModule: string;
+    appGroup: string;
     category: string;
     code: string;
     name: string;
@@ -63,15 +69,17 @@ export interface UseFunctionInstance {
 
     open: (functionItem: FunctionItem) => void;
 
+    openUrl: (functionId: string, code: string, name: string, functionUrl: string) => void;
+
     setResidentInstance: (functions: FunctionInstance[]) => void;
 }
 
 export interface UseMenuData {
 
     menuData: Ref<MenuGroup[]>;
-    
+
     menuMap: Map<string, any>;
-    
+
     generateFunctionMenu: (functionSourceUri: string) => void;
 }
 

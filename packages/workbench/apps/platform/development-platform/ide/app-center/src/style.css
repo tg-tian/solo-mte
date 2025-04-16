@@ -1,0 +1,79 @@
+.f-admin-app-center > .f-page-header > .f-page-header-base {
+    padding: 0;
+}
+
+.f-admin-app-center .f-page-header .f-title {
+    width: 400px;
+}
+
+.f-admin-app-center .f-page-header .f-title-logo {
+    background-image: url(/assets/images/farris_design_light.png);
+    background-position-x: unset;
+    background-size: cover;
+    height: 32px;
+    margin: 4px 4px 0 12px;
+    width: 32px;
+}
+
+.f-admin-app-center .f-page-header .farris-nav {
+    border-bottom: none;
+    margin: auto;
+}
+
+.f-admin-app-center .f-page-header .farris-nav .farris-nav-item-link {
+    border-bottom: none;
+}
+.f-admin-app-center .f-page-header .farris-nav .farris-nav-item .farris-nav-item-bottom-line {
+    height: 4px;
+    margin: 4px auto 0;
+}
+
+.f-admin-app-center .f-page-header .farris-nav .farris-nav-item.active .farris-nav-item-bottom-line {
+    height: 4px;
+    background-image: linear-gradient(186deg, #0e6ded 10%, #1f7cfa 100%);
+    box-shadow: 0 2px 10px 0 rgba(13, 106, 246, 0.4);
+    border-radius: 2px;
+    max-width: 50%;
+    margin: 4px auto 0;
+}
+
+.f-admin-app-center .f-page-header .f-header-toolbar {
+    display: flex;
+    justify-content: end;
+    padding-right: 20px;
+    position: relative;
+    width: 400px;
+}
+.f-admin-app-center .f-page-header .f-header-toolbar .nav {
+    display: flex;
+    align-items: center;
+}
+
+.f-admin-app-center .f-page-header .f-header-toolbar .f-app-center-toolbar-split {
+    margin: 0 1rem;
+    height: 20px;
+    border-right: 1px solid #ccc;
+}
+
+.f-admin-app-center .f-page-header .f-header-toolbar .f-app-center-user {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+.f-admin-app-center .f-page-header .f-header-toolbar .f-app-center-user .f-app-center-user-icon {
+    align-items: center;
+    background: #dae9ff;
+    border-radius: 20px;
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.f-admin-app-center .f-page-header .f-app-center-user .f-app-center-user-icon .f-icon {
+    color: #529dff;
+}
+.f-admin-app-center .f-page-header .f-app-center-user .f-app-center-user-name {
+    margin-left: 0.5rem;
+}

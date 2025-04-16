@@ -25,6 +25,14 @@ export default defineConfig({
             }
         }
     },
+    build: {
+        rollupOptions: {
+            input: {
+                main: resolve(__dirname, 'index.html'),
+                domain: resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html')
+            }
+        }
+    },
     resolve: {
         alias: {
             '@': resolve(__dirname, '../'),

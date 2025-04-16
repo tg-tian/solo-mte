@@ -1,13 +1,13 @@
 {
     "emptyFunctionPage": "./assets/empty-page.html",
-    "functionSourceUri": "./assets/solo-functions.json",
+    "appDataSourceUri": "/api/runtime/sys/v1.0/business-objects-lock/bolistwithlock",
     "residentFunctions": [
         {
             "functionId": "home",
             "instanceId": "home",
             "code": "home",
             "name": "",
-            "url": "/platform/runtime/sys/web/home/index.html",
+            "url": "./assets/default-home.html",
             "icon": "f-icon f-icon-index-face",
             "fix": true
         }
