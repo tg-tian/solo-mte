@@ -47,7 +47,17 @@ export interface UseAppDomain {
 
     appDomainMap: Map<string, any>;
 
+    currentAppDomain: Ref<AppDomain>;
+
+    currentAppModule: Ref<AppModule>;
+
+    currentAppObjects: Ref<AppObject[]>;
+
     generateAppDomain: (appSourceUri: string) => void;
+
+    setAppDomainSourceUri: (dataUri: string) => void;
+
+    updateAppDomain: () => void;
 }
 
 export interface AppConfigOptions {

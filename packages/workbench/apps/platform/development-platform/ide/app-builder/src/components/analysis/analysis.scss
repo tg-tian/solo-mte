@@ -1,0 +1,105 @@
+.f-app-analysis {
+    .f-page-header {
+        position: relative;
+        height: 48px;
+        margin-bottom: 1rem !important;
+
+        .f-page-header-base {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+
+            .f-toolbar {
+                .btn {
+                    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+                    border-radius: 15px;
+                    margin: 0 6px;
+                }
+
+                .btn-primary {
+                    background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+                }
+            }
+        }
+
+        .f-page-header-background {
+            background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+            border-radius: 8px;
+            box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+            height: 100%;
+            opacity: 0.66;
+            position: absolute;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+
+    .f-page-main {
+        height: 100%;
+
+        .f-app-analysis-task {
+            background-image: linear-gradient(0deg, #F7FBFF 0%, #FFFFFF 100%);
+            border: 1px solid rgba(42, 135, 255, 0.1);
+            border-radius: 6px;
+            display: flex;
+            margin-bottom: 10px;
+
+            >div {
+                padding: 24px 20px 10px;
+            }
+
+            label {
+                color: rgba(45, 47, 51, 0.65);
+                display: block;
+                font-size: 13px;
+                font-weight: 400;
+                margin-bottom: 10px;
+            }
+
+            .analysis-creation-time {
+                div {
+                    font-size: 13px;
+                    color: #58CACC;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .analysis-completed-time {
+                div {
+                    font-size: 13px;
+                    color: #5FC875;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .analysis-target-app {
+                span {
+                    font-size: 13px;
+                    color: #2A87FF;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .analysis-options {
+                span {
+                    background: rgba(89, 161, 255, 0.10);
+                    border: 0.8px solid rgba(56, 143, 255, 0.8);
+                    border-radius: 11px;
+                    color: #388FFF;
+                    font-size: 12px;
+                    text-align: left;
+                    font-weight: 500;
+                    padding: 0px 8px;
+                    margin-right: 6px;
+                }
+            }
+
+            .analysis-status {
+                flex: 1;
+            }
+        }
+    }
+}

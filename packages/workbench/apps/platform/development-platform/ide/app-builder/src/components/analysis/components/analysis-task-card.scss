@@ -1,0 +1,68 @@
+.f-app-analysis-task-card {
+    background-image: url(/apps/platform/development-platform/ide/app-builder/assets/images/analysis-task-card-background.png);
+    background-position: center;
+    flex: 1;
+
+    .task-card-banner {
+        display: flex;
+        flex-direction: column;
+        padding-top: 57px;
+        margin-bottom: 36px;
+
+        .task-card-icon {
+            background-image: url(/apps/platform/development-platform/ide/app-builder/assets/images/analysis-task-card-background-icon.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 36px;
+            margin-bottom: 20px;
+        }
+
+        .task-card-title {
+            color: #2D2F33;
+            font-size: 24px;
+            font-weight: 500;
+            margin: auto;
+        }
+    }
+
+    .task-card-progress {
+        display: flex;
+        flex-direction: column;
+
+        .f-progress-step {
+            margin: auto;
+        }
+    }
+
+    .task-card-options {
+        display: flex;
+        justify-content: center;
+
+        .f-app-analysis-form {
+            flex: 1;
+            max-width: 26.625rem;
+        }
+    }
+
+    .task-card-toolbar {
+        display: flex;
+        justify-content: center;
+
+        .btn {
+            background: #FFFFFF;
+            border: 1px solid rgba(233, 236, 243, 1);
+            box-shadow: 0px 2px 6px 0px rgba(31, 35, 41, 0.06);
+            border-radius: 6px;
+        }
+
+        .btn-primary {
+            background-image: linear-gradient(-51deg, #328BFF 0%, #2A87FF 100%);
+            box-shadow: 0px 4px 10px 0px rgba(69, 144, 255, 0.25);
+            border-radius: 6px;
+            font-size: 13px;
+            color: #FFFFFF;
+            font-weight: 400;
+        }
+    }
+}

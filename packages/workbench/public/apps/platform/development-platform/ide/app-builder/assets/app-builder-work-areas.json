@@ -1,0 +1,103 @@
+[
+    {
+        "id": "profile",
+        "code": "profile",
+        "name": "应用信息"
+    },
+    {
+        "id": "work-flow",
+        "code": "work-flow",
+        "name": "业务流程",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ]
+    },
+    {
+        "id": "devices",
+        "code": "devices",
+        "name": "设备管理",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ]
+    },
+    {
+        "id": "pages",
+        "code": "pages",
+        "name": "页面管理",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/platform/dev/main/web/webide/newide/index.html?path=/SagiDemo/SagiDemeModule/CommonDictionaries&boId=d8b09de6-5e7c-bfdf-d308-468827ba0d6b&ws=625s7acd&version=2.0#/home",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ],
+        "showHeader": false
+    },
+    {
+        "id": "page-flow",
+        "code": "page-flow",
+        "name": "页面流",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ]
+    },
+    {
+        "id": "menu",
+        "code": "menu",
+        "name": "菜单管理"
+    },
+    {
+        "id": "variables",
+        "code": "variables",
+        "name": "全局变量"
+    },
+    {
+        "id": "analysis",
+        "code": "analysis",
+        "name": "质量保障"
+    },
+    {
+        "id": "default",
+        "code": "default",
+        "name": "default",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ]
+    }
+]

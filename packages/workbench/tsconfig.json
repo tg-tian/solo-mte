@@ -20,7 +20,8 @@
         "types": ["vitest/globals", "@types/jest"],
         "baseUrl": "./",
         "paths": {
-            "@farris/ui-vue/components": ["../../node_modules/@farris/ui-vue"]
+            "@farris/ui-vue/components": ["../../node_modules/@farris/ui-vue"],
+            "@farris/admin": ["./src"]
         }
     },
     "include": [

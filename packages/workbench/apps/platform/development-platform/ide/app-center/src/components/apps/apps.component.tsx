@@ -1,6 +1,7 @@
-import { defineComponent, inject, onMounted, Ref, ref } from "vue";
-import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FSearchBox } from "@farris/ui-vue/components";
+import { defineComponent, inject, onMounted, Ref, ref, watch } from "vue";
+import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FSearchBox } from "@farris/ui-vue/components";
 import { AppDomain, AppModule, AppObject, UseAppDomain } from "../../composition/type";
+import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 
 import './apps.css';
 
@@ -10,12 +11,13 @@ export default defineComponent({
     emits: [],
     setup() {
         const useAppDomainComposition = inject('f-app-center-app-domain') as UseAppDomain;
-        const { appDomains, appDomainMap } = useAppDomainComposition;
+        const { appDomains, appDomainMap, currentAppDomain, currentAppModule, currentAppObjects, updateAppDomain } = useAppDomainComposition;
         const appListViewRef = ref();
-        const currentAppDomain = ref();
-        const currentAppModule = ref();
-        const currentAppObjects: Ref<AppObject[]> = ref([]);
+        // const currentAppDomain = ref();
+        // const currentAppModule = ref();
+        // const currentAppObjects: Ref<AppObject[]> = ref([]);
         const defaultAppDomainIconUrl = '';
+        const appWizardComponentRef = ref();
 
         function resetMenuItemSelectionStatus() {
             Array.from(appDomainMap.entries()).forEach(([appDomainId, appDomainInstanceRef]) => {
@@ -31,12 +33,33 @@ export default defineComponent({
             currentAppDomain.value = appDomain;
             currentAppModule.value = item;
             currentAppObjects.value = item.apps;
-            appListViewRef.value.updateDataSource(currentAppObjects.value);
         }
+
+        watch(() => currentAppObjects.value, () => {
+            appListViewRef.value.updateDataSource(currentAppObjects.value);
+        });
 
         function onClickMenuItem(payload: MouseEvent, appDomain: AppDomain, appModule: AppModule) {
             resetMenuItemSelectionStatus();
             updateAppObjects(appDomain, appModule);
+        }
+
+        function acceptToCreateNewApp() {
+            if (appWizardComponentRef.value) {
+                appWizardComponentRef.value.acceptToCreateNewApp().then(() => {
+                    updateAppDomain();
+                });
+            }
+        }
+
+        function onClickNewApp() {
+            const options = {
+                title: '创建应用',
+                width: 540,
+                render: () => <AppWizardComponent ref={appWizardComponentRef} appModule={currentAppModule.value}></AppWizardComponent>,
+                acceptCallback: acceptToCreateNewApp
+            } as any;
+            FModalService.show(options);
         }
 
         function renderAppModule(appDomain: AppDomain, { item, index, selectedItem }) {
@@ -80,7 +103,7 @@ export default defineComponent({
                         <FSearchBox></FSearchBox>
                     </div>
                     <div class="f-admin-apps-tool-bar">
-                        <FButton style="float:right">新建应用</FButton>
+                        <FButton style="float:right" onClick={onClickNewApp}>新建应用</FButton>
                     </div>
                 </div>
             );
@@ -92,9 +115,17 @@ export default defineComponent({
             return { '--bg': colorMap.get(colorIndex) };
         }
 
+        function onClickAppCard(appObject: AppObject) {
+            const appPath = `/${currentAppDomain.value.code}/${currentAppModule.value.code}/${appObject.code}`;
+            // const appUri = `/platform/dev/main/web/webide/newide/index.html?path=${appPath}&boId=${appObject.id}&ws=625s7acd&version=2.0#/home`;
+            const appUri = '/apps/platform/development-platform/ide/app-builder/index.html';
+
+            window.open(appUri);
+        }
+
         function renderAppCard({ item, index, selectedItem }) {
             return (
-                <div class="f-app-card f-template-card-row">
+                <div class="f-app-card f-template-card-row" onClick={() => onClickAppCard(item)}>
                     <div class="f-app-card-header listview-item-content">
                         <div class="listview-item-icon" style={getIconColor(item, index)}>
                             <i class="f-icon f-icon-engineering"></i>
@@ -112,9 +143,9 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            if (appDomains.value.length && appDomains.value[0].modules.length) {
-                updateAppObjects(appDomains.value[0], appDomains.value[0].modules[0]);
-            }
+            // if (appDomains.value.length && appDomains.value[0].modules.length) {
+            //     updateAppObjects(appDomains.value[0], appDomains.value[0].modules[0]);
+            // }
         });
 
         return () => {
