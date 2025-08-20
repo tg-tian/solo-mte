@@ -1,14 +1,21 @@
 import { defineComponent, inject, onMounted, withModifiers } from 'vue';
-import { FunctionInstance, UseFunctionInstance } from '../../composition/types';
+import { ConfigOptions, FunctionInstance, UseConfig, UseFunctionInstance } from '../../composition/types';
 
 import './content-area.css';
+import { useFunctionInstance } from '../../composition/use-function-instance';
+import { contentAreaProps, ContentAreaProps } from './content-area.props';
 
 export default defineComponent({
     name: 'FAContentArea',
+    props: contentAreaProps,
     emits: [],
-    setup() {
-        const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
-        const { activeInstanceId, functionInstances, close, openUrl } = useFunctionInstanceComposition;
+    setup(props: ContentAreaProps, context) {
+        const useConfigInstance = inject('f-admin-config') as UseConfig;
+        // 初始化功能菜单实例管理服务
+        const useFunctionInstanceComposition = useFunctionInstance(useConfigInstance);
+        // const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
+        const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
+        setResidentInstance(props.residentFunctions);
 
         function onClickFunctionTabItem(functionInstance: FunctionInstance) {
             activeInstanceId.value = functionInstance.instanceId;
@@ -32,15 +39,20 @@ export default defineComponent({
         }
 
         function renderTabs() {
-            return functionInstances.value.map((tabItem: FunctionInstance) => {
-                return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
-                    {tabItem.icon && <span><i class={tabItem.icon}></i></span>}
-                    {tabItem.name && <span>{tabItem.name}</span>}
-                    {!tabItem.fix && <div class="f-admin-main-tab-item-close" onClick={withModifiers(() => close(tabItem.instanceId), ['stop'])}>
-                        <i class="f-icon f-icon-close"></i>
-                    </div>}
-                </div>;
-            });
+            return <div class="f-admin-main-tabs">
+                <div class="f-admin-main-tabs-content">
+                    {functionInstances.value.map((tabItem: FunctionInstance) => {
+                        return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
+                            {tabItem.icon && <span><i class={tabItem.icon}></i></span>}
+                            {tabItem.name && <span>{tabItem.name}</span>}
+                            {!tabItem.fix && <div class="f-admin-main-tab-item-close" onClick={withModifiers(() => close(tabItem.instanceId), ['stop'])}>
+                                <i class="f-icon f-icon-close"></i>
+                            </div>}
+                        </div>;
+                    })}
+                </div>
+                <div class="f-admin-main-tabs-background"></div>
+            </div>;
         }
 
         function renderContents() {
@@ -64,16 +76,13 @@ export default defineComponent({
             });
         });
 
+        context.expose({ open });
+
         return () => {
             return (
                 <div class="f-page f-page-card f-page-is-mainsubcard">
                     <div class="f-admin-main-header"></div>
-                    <div class="f-admin-main-tabs">
-                        <div class="f-admin-main-tabs-content">
-                            {renderTabs()}
-                        </div>
-                        <div class="f-admin-main-tabs-background"></div>
-                    </div>
+                    {props.showHeader && renderTabs()}
                     <div class="f-admin-main-content">
                         {renderContents()}
                     </div>

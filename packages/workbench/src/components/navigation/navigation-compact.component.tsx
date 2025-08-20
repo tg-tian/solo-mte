@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, nextTick, onMounted, ref } from 'vue';
 import { FListView, FPopover } from '@farris/ui-vue/components';
-import { navigationProps } from './navigation.props';
+import { NavigationProps, navigationProps } from './navigation.props';
 import FFunctionNavigation from '../function-board/function-board.component';
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData } from '../../composition/types';
 
@@ -9,8 +9,8 @@ import './navigation.css';
 export default defineComponent({
     name: 'Vertical Navigation Compact',
     props: navigationProps,
-    emits: [],
-    setup() {
+    emits: ['OpenFunction'],
+    setup(props: NavigationProps, context) {
         const useMenuDataComposition = inject('f-admin-menu-data') as UseMenuData;
         const { menuData, menuMap } = useMenuDataComposition;
         const navigationPanelRef = ref();
@@ -55,12 +55,18 @@ export default defineComponent({
                 functionGroups: []
             };
             currentMenuGroupItems.value = [defaultMenuItem, ...item.items];
-            nextTick(() => {
-                if (popoverRef.value) {
-                    popoverRef.value.show(popoverReference);
-                }
-                showPopover.value = true;
-            });
+            if (item.items.length) {
+                nextTick(() => {
+                    if (popoverRef.value) {
+                        popoverRef.value.show(popoverReference);
+                    }
+                    showPopover.value = true;
+                });
+            }
+        }
+
+        function onOpenFunction(functionItem: FunctionItem) {
+            context.emit('OpenFunction', functionItem);
         }
 
         function renderPopoverPanel() {
@@ -76,7 +82,12 @@ export default defineComponent({
                     onHidden={() => {
                         showPopover.value = false;
                     }}>
-                    <FFunctionNavigation functionItems={currentFunctionItems.value} menuItems={currentMenuGroupItems.value} onFunctionOpened={resetMenuItemSelectionStatus}></FFunctionNavigation>
+                    <FFunctionNavigation
+                        functionItems={currentFunctionItems.value}
+                        menuItems={currentMenuGroupItems.value}
+                        onFunctionOpened={resetMenuItemSelectionStatus}
+                        onOpenFunction={onOpenFunction}
+                    ></FFunctionNavigation>
                 </FPopover>
             );
         }

@@ -83,14 +83,33 @@ export interface UseMenuData {
     generateFunctionMenu: (functionSourceUri: string) => void;
 }
 
+export interface WorkAreaInstance {
+
+    id: string;
+
+    code: string;
+
+    name: string;
+
+    functions: FunctionInstance[];
+
+    showHeader: boolean;
+}
+
 export interface ConfigOptions {
+    title: string;
+
     emptyFunctionPage: string;
 
     functionSourceUri: string;
 
+    residentWorkAreas: WorkAreaInstance[];
+
     residentFunctions: FunctionInstance[];
 
     resolveFunctionUri: string;
+
+    workAreaSourceUri: string;
 }
 
 export interface UseConfig {
@@ -98,4 +117,27 @@ export interface UseConfig {
     options: ConfigOptions;
 
     initialize: () => Promise<any>
+}
+
+export interface WorkAreaItem {
+    id: string;
+    code: string;
+    name: string;
+    menuPath: string;
+    url: string;
+}
+
+export interface UseWorkAreaInstance {
+
+    activeInstanceId: Ref<string>;
+
+    activeWorkAreaInstance: (workAreaId: string) => void;
+
+    loadWorkAreaConfiguration: (workAreaSourceUri: string) => void;
+
+    workAreaInstances: Ref<WorkAreaInstance[]>;
+
+    workAreaInstanceMap: Map<string, any>;
+
+    setResidentInstance: (residentInstances: WorkAreaInstance[]) => void;
 }

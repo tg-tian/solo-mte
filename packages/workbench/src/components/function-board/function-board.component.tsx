@@ -8,7 +8,7 @@ import './function-board.css';
 export default defineComponent({
     name: 'FAFunctionBoard',
     props: functionBoardProps,
-    emits: ['FunctionOpened'],
+    emits: ['FunctionOpened', 'OpenFunction'],
     setup(props: FunctionBoardProps, context) {
         // 记录功能列表元素
         const functionListViewRef = ref();
@@ -50,7 +50,8 @@ export default defineComponent({
         }
 
         function onClickFunctionItem(functionItem: FunctionItem) {
-            open(functionItem);
+            // open(functionItem);
+            context.emit('OpenFunction', functionItem);
             context.emit('FunctionOpened');
         }
 
