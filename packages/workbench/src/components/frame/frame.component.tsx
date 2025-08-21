@@ -2,10 +2,12 @@ import { computed, defineComponent, onMounted, provide, ref } from 'vue';
 import FANavigation from '../navigation/navigation.component';
 import FANavigationCompact from '../navigation/navigation-compact.component';
 import FAContentArea from '../content-area/content-area.component';
-import { ConfigOptions } from '../../composition/types';
+import { ConfigOptions, FunctionItem, WorkAreaInstance } from '../../composition/types';
 import { useConfig } from '../../composition/use-config';
 import { useFunctionInstance } from '../../composition/use-function-instance';
 import { useMenuData } from '../../composition/use-menu-data';
+import { useWorkAreaInstance } from '../../composition/use-work-area-instance';
+import innerComponentRegistry from '../component-registry';
 
 import './frame.css';
 
@@ -15,18 +17,26 @@ export default defineComponent({
     setup() {
         const adminMainElementRef = ref();
         const sideBarCollapsed = ref(false);
+        const title = ref('');
+        // const workAreaMap = new Map<string, any>();
         // 初始化Farris Admin全局配置对象
         const config = useConfig();
         // 初始化Farris Admin全局配置对象，并记录初始化异步对象，用于监听初始化完成事件
         const configInitialized = config.initialize();
         // 初始化功能菜单实例管理服务
         const useFunctionInstanceComposition = useFunctionInstance(config);
+
+        const useWorkAreaInstanceComposition = useWorkAreaInstance();
+        const { activeInstanceId, workAreaInstances, workAreaInstanceMap } = useWorkAreaInstanceComposition;
         // 初始化导航菜单数据
         const useMenuDataComposition = useMenuData();
         // 监听Farris Admin全局配置对象初始化完成事件
         configInitialized.then((result: ConfigOptions) => {
+            title.value = result.title;
+            useWorkAreaInstanceComposition.loadWorkAreaConfiguration(result.workAreaSourceUri);
+            // useWorkAreaInstanceComposition.setResidentInstance(result.residentWorkAreas);
             // 根据配置选项设置初始状态下打开的预制菜单，默认状态下为用户工作中心首页
-            useFunctionInstanceComposition.setResidentInstance(result.residentFunctions);
+            // useFunctionInstanceComposition.setResidentInstance(result.residentFunctions);
             // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
             useMenuDataComposition.generateFunctionMenu(result.functionSourceUri);
         });
@@ -50,9 +60,30 @@ export default defineComponent({
             };
             return classObject;
         });
+        
+        function getWorkAreaClass(workAreaInstance: WorkAreaInstance) {
+            const classObject = {
+                'active': workAreaInstance.id === activeInstanceId.value,
+            } as Record<string, true>;
+            return classObject;
+        }
+
 
         function onClickSidebarHandle() {
             sideBarCollapsed.value = !sideBarCollapsed.value;
+        }
+
+        function onActiveWorkArea(workAreaId: string) {
+            if (workAreaInstanceMap.has(workAreaId)) {
+                activeInstanceId.value = workAreaId;
+            }
+        }
+
+        function onOpenFunction(functionItem: FunctionItem) {
+            const activeWorkArea = workAreaInstanceMap.get(activeInstanceId.value);
+            if (activeWorkArea.value) {
+                activeWorkArea.value.open(functionItem);
+            }
         }
 
         function renderSidebarHandle() {
@@ -63,10 +94,23 @@ export default defineComponent({
             </div>;
         }
 
+        function renderWorkAreas() {
+            return workAreaInstances.value.map((workAreaInstance: WorkAreaInstance) => {
+                const workAreaInstanceRef = workAreaInstanceMap.get(workAreaInstance.id);
+                if (innerComponentRegistry.has(workAreaInstance.id)) {
+                    const InnerComponent = innerComponentRegistry.get(workAreaInstance.id);
+                    return <InnerComponent ref={workAreaInstanceRef}></InnerComponent>;
+                }
+                return <FAContentArea class={getWorkAreaClass(workAreaInstance)} ref={workAreaInstanceRef} residentFunctions={workAreaInstance.functions}></FAContentArea>;
+            });
+        }
+
         // 在依赖注入服务中注册功能菜单实例管理服务
         provide('f-admin-function-instance', useFunctionInstanceComposition);
         // 在依赖注入服务中注册功能菜单数据服务
         provide('f-admin-menu-data', useMenuDataComposition);
+
+        provide('f-admin-config', config);
 
         onMounted(() => {
             // 在依赖注入服务中注册Farris Admin主框架Html元素
@@ -80,12 +124,13 @@ export default defineComponent({
                         <div ref={adminMainElementRef} class="f-admin-main f-page-main">
                             <div class="f-page-content">
                                 <div class={sideContentClass.value} style={sideContentStyle.value}>
-                                    {!sideBarCollapsed.value && <FANavigation></FANavigation>}
-                                    {sideBarCollapsed.value && <FANavigationCompact></FANavigationCompact>}
+                                    {!sideBarCollapsed.value && <FANavigation title={title.value} onActiveWorkArea={onActiveWorkArea} onOpenFunction={onOpenFunction}></FANavigation>}
+                                    {sideBarCollapsed.value && <FANavigationCompact title={title.value} onOpenFunction={onOpenFunction}></FANavigationCompact>}
                                     {renderSidebarHandle()}
                                 </div>
                                 <div class="f-admin-content f-page-content-main">
-                                    <FAContentArea></FAContentArea>
+                                    {renderWorkAreas()}
+                                    {/* <FAContentArea></FAContentArea> */}
                                 </div>
                             </div>
                         </div>

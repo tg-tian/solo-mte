@@ -1,4 +1,5 @@
 {
+    "title":"Farris Admin",
     "emptyFunctionPage": "./assets/empty-page.html",
     "functionSourceUri": "/api/runtime/sys/v1.0/functions/funcGroups?funcType=4",
     "residentFunctions": [

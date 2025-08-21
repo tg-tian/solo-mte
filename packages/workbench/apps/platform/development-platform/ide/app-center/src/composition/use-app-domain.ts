@@ -1,13 +1,42 @@
 import axios from "axios";
-import { AppDomain, AppModule, AppObject, RawAppDataItem } from "./type";
-import { ref } from "vue";
+import { AppDomain, AppModule, AppObject, RawAppDataItem, UseAppDomain } from "./type";
+import { Ref, ref } from "vue";
 
-export function useAppDomain() {
+export function useAppDomain(): UseAppDomain {
     const rawAppDomainDataItemMap = new Map<string, RawAppDataItem>();
     const rawAppDataItemMap = new Map<string, RawAppDataItem>();
     const parentIdAndChildrenMap = new Map<string, RawAppDataItem[]>();
     const appDomains = ref<AppDomain[]>([]);
     const appDomainMap = new Map<string, any>();
+    const appDomainSourceUri = ref('');
+    const currentAppDomain = ref();
+    const currentAppModule = ref();
+    const currentAppObjects: Ref<AppObject[]> = ref([]);
+
+    function setAppDomainSourceUri(dataUri: string) {
+        appDomainSourceUri.value = dataUri;
+    }
+
+    function updateCurrent() {
+        if (!currentAppDomain.value) {
+            if (appDomains.value.length) {
+                currentAppDomain.value = appDomains.value[0];
+            }
+        } else {
+            const currentAppDomainId = currentAppDomain.value.id;
+            currentAppDomain.value = (appDomains.value as AppDomain[]).find((appDomain: AppDomain) => appDomain.id === currentAppDomainId);
+        }
+        if (!currentAppModule.value) {
+            currentAppModule.value = currentAppDomain.value.modules[0];
+        } else {
+            const currentAppModuleId = currentAppModule.value.id;
+            currentAppModule.value = (currentAppDomain.value.modules as AppModule[]).find((appModule: AppModule) => appModule.id === currentAppModuleId);
+            if (!currentAppModule.value) {
+                currentAppModule.value = currentAppDomain.value.modules[0];
+            }
+        }
+        currentAppObjects.value = (currentAppModule.value as AppModule).apps;
+    }
 
     /**
      * 将原始数据加载为字典，以便于检索数据
@@ -122,8 +151,19 @@ export function useAppDomain() {
         getAppData(appSourceUri).then((rawAppData: any[]) => {
             const appDomains = generateAppDomains(rawAppData);
             loadAppDomain(appDomains);
+            updateCurrent();
         });
     }
 
-    return { appDomains, appDomainMap, generateAppDomain };
+    function updateAppDomain() {
+        if (appDomainSourceUri.value) {
+            getAppData(appDomainSourceUri.value).then((rawAppData: any[]) => {
+                const appDomains = generateAppDomains(rawAppData);
+                loadAppDomain(appDomains);
+                updateCurrent();
+            });
+        }
+    }
+
+    return { appDomains, appDomainMap, currentAppDomain, currentAppModule, currentAppObjects, generateAppDomain, setAppDomainSourceUri, updateAppDomain };
 }

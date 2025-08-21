@@ -28,6 +28,7 @@ export default defineComponent({
         const useAppDomainComposition = useAppDomain();
         // 监听Farris Admin全局配置对象初始化完成事件
         configInitialized.then((result: AppConfigOptions) => {
+            useAppDomainComposition.setAppDomainSourceUri(result.appDataSourceUri);
             // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
             useAppDomainComposition.generateAppDomain(result.appDataSourceUri);
         });

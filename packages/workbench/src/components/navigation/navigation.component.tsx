@@ -1,6 +1,6 @@
 import { computed, defineComponent, inject, onMounted, ref } from 'vue';
 import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from '@farris/ui-vue/components';
-import { navigationProps } from './navigation.props';
+import { NavigationProps, navigationProps } from './navigation.props';
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData } from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
 
@@ -9,8 +9,8 @@ import './navigation.css';
 export default defineComponent({
     name: 'Vertical Navigation',
     props: navigationProps,
-    emits: [],
-    setup() {
+    emits: ['OpenFunction', 'ActiveWorkArea'],
+    setup(props: NavigationProps, context) {
         const useMenuDataComposition = inject('f-admin-menu-data') as UseMenuData;
         const { menuData, menuMap } = useMenuDataComposition;
         const navigationPanelRef = ref();
@@ -33,8 +33,9 @@ export default defineComponent({
             }
         }
 
-        function onClickMenuGroupHeader() {
+        function onClickMenuGroupHeader(menuGroupId: string) {
             resetMenuItemSelectionStatus();
+            context.emit('ActiveWorkArea', menuGroupId);
         }
 
         function onClickMenuItem(payload: MouseEvent, item: MenuGroupItem) {
@@ -47,6 +48,10 @@ export default defineComponent({
                 popoverRef.value.show(popoverReference);
             }
             showPopover.value = true;
+        }
+
+        function onOpenFunction(functionItem: FunctionItem) {
+            context.emit('OpenFunction', functionItem);
         }
 
         function renderPopoverPanel() {
@@ -62,7 +67,10 @@ export default defineComponent({
                     onHidden={() => {
                         showPopover.value = false;
                     }}>
-                    <FFunctionNavigation functionItems={currentFunctionItems.value} onFunctionOpened={resetMenuItemSelectionStatus}></FFunctionNavigation>
+                    <FFunctionNavigation functionItems={currentFunctionItems.value}
+                        onFunctionOpened={resetMenuItemSelectionStatus}
+                        onOpenFunction={onOpenFunction}
+                    ></FFunctionNavigation>
                 </FPopover>
             );
         }
@@ -89,8 +97,8 @@ export default defineComponent({
         function renderNavigationMenu(menuGroups: any[]) {
             return <FAccordion customClass="f-admin-menu-groups">
                 {menuGroups.map((menuGroup: MenuGroup) => {
-                    return <FAccordionItem customClass="f-admin-menu-group" iconUri={menuGroup.icon} title={menuGroup.name} onClickHeader={onClickMenuGroupHeader}>
-                        {renderMenuItems(menuGroup, menuGroup.items)}
+                    return <FAccordionItem customClass="f-admin-menu-group" enableFold={menuGroup.items.length > 0} iconUri={menuGroup.icon} title={menuGroup.name} onClickHeader={() => onClickMenuGroupHeader(menuGroup.id)}>
+                        {menuGroup.items.length > 0 && renderMenuItems(menuGroup, menuGroup.items)}
                     </FAccordionItem>;
                 })}
             </FAccordion>;
@@ -146,7 +154,7 @@ export default defineComponent({
                 <div class="f-admin-navigation-content" style="display:flex;flex-direction:column;">
                     <div>
                         <div class="f-admin-navigation-logo">
-                            <span>Farris Admin</span>
+                            <span>{props.title}</span>
                         </div>
                         <div class="f-admin-navigation-search-bar">
                             <FSearchBox></FSearchBox>

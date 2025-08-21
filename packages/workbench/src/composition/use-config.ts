@@ -9,14 +9,20 @@ export function useConfig(): UseConfig {
     // const defaultConfigFileUrl = './assets/config-for-inBuilder.json';
     // 全局配置对象接口
     const options: ConfigOptions = {
+        /** 标题 */
+        title: '',
         /** 缺省菜单页面地址 */
         emptyFunctionPage: '',
         /** 功能菜单数据Url */
         functionSourceUri: '',
+        /** 初始预制工作区数据源 */
+        residentWorkAreas: [],
         /** 初始预制菜单数据源 */
         residentFunctions: [],
         /** 解析功能菜单Url地址服务 */
-        resolveFunctionUri: ''
+        resolveFunctionUri: '',
+        /** 解析工作区Url地址服务 */
+        workAreaSourceUri: ''
     };
 
     function initialize() {
@@ -24,8 +30,11 @@ export function useConfig(): UseConfig {
             axios.get(defaultConfigFileUrl).then((response) => {
                 const config = response.data;
                 if (config) {
+                    options.title = config['title'] || options.title;
                     options.emptyFunctionPage = config['emptyFunctionPage'] || options.emptyFunctionPage;
                     options.functionSourceUri = config['functionSourceUri'] || options.functionSourceUri;
+                    options.workAreaSourceUri = config['workAreaSourceUri'] || options.workAreaSourceUri;
+                    options.residentWorkAreas = config['residentWorkAreas'] || options.residentWorkAreas;
                     options.residentFunctions = config['residentFunctions'] || options.residentFunctions;
                     options.resolveFunctionUri = config['resolveFunctionUri'] || options.resolveFunctionUri;
                 }
