@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, ref } from "vue";
-import { FButton, FDynamicForm, FDynamicFormGroup, FListView, FPageHeader, FSection } from "@farris/ui-vue/components";
+import { FButton, FDynamicForm, FDynamicFormGroup, FListView, FPageHeader, FSection } from "@farris/ui-vue";
 
 import './domain-management.css';
 import { useDomain } from "../composition/use-domain";

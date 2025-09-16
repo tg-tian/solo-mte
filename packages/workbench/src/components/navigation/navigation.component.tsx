@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, onMounted, ref } from 'vue';
-import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from '@farris/ui-vue/components';
+import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from '@farris/ui-vue';
 import { NavigationProps, navigationProps } from './navigation.props';
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData } from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';

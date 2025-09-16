@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, nextTick, onMounted, ref } from 'vue';
-import { FListView, FPopover } from '@farris/ui-vue/components';
+import { FListView, FPopover } from '@farris/ui-vue';
 import { NavigationProps, navigationProps } from './navigation.props';
 import FFunctionNavigation from '../function-board/function-board.component';
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData } from '../../composition/types';

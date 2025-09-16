@@ -1,7 +1,7 @@
 import { computed, defineComponent, provide, ref } from "vue";
 import FApps from './components/apps/apps.component';
 import FWelcome from './components/welcome/welcome.component';
-import { FNav } from '@farris/ui-vue/components';
+import { FNav } from '@farris/ui-vue';
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions } from "./composition/type";
