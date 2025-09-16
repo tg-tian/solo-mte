@@ -1,4 +1,4 @@
-import { FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue/components";
+import { FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { defineComponent, ref } from "vue";
 import { AppWizardProps, appWizardProps } from "./app-wizard.props";
 import { useCreateApp } from './composition/use-create-app';

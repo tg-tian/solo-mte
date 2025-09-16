@@ -38,7 +38,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': resolve(__dirname, '../'),
-            '@farris/ui-vue': resolve(__dirname, '../ui-vue'),
+            // '@farris/ui-vue': resolve(__dirname, '../ui-vue'),
             '@farris/farris-admin': resolve(__dirname, './src')
         }
     }

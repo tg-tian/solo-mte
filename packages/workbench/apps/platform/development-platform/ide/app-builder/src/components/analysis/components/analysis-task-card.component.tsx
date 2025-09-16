@@ -1,5 +1,5 @@
 import { defineComponent, ref } from "vue";
-import { FButton, FDynamicForm, FDynamicFormGroup, FStep } from "@farris/ui-vue/components";
+import { FButton, FDynamicForm, FDynamicFormGroup, FStep } from "@farris/ui-vue";
 import { analysisTaskCardProps, AnalysisTaskCardProps } from "./analysis-task-card.props";
 
 import './analysis-task-card.scss';

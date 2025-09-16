@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, ref, watch } from 'vue';
-import { FListView, FNav } from '@farris/ui-vue/components';
+import { FListView, FNav } from '@farris/ui-vue';
 import { FunctionBoardProps, functionBoardProps } from './function-board.props';
 import { FunctionItem, MenuGroupItem, UseFunctionInstance } from '../../composition/types';
 

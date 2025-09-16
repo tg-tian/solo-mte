@@ -1,5 +1,5 @@
 import { computed, defineComponent, ref } from "vue";
-import { FButton, FListView, FProgress, FSection } from "@farris/ui-vue/components";
+import { FButton, FListView, FProgress, FSection } from "@farris/ui-vue";
 import { AnalysisProps, analysisProps } from "./analysis.props";
 import { mockAnalysisTasks } from './mock-data';
 

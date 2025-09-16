@@ -1,5 +1,5 @@
 import { defineComponent, inject, onMounted, Ref, ref, watch } from "vue";
-import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FSearchBox } from "@farris/ui-vue/components";
+import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FSearchBox } from "@farris/ui-vue";
 import { AppDomain, AppModule, AppObject, UseAppDomain } from "../../composition/type";
 import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 
