@@ -1,0 +1,7 @@
+.plugin-frame{
+    display: none;
+    height: 100%;
+}
+.plugin-frame.active {
+    display: block;
+}

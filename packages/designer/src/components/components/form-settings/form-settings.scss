@@ -1,58 +1,47 @@
-.f-designer-option-panel {
-    box-shadow: 0 0 10px 0 #eceff4;
-    border-radius: 5px;
-    background: #fff;
-    padding: 8px 14px;
-    width: 70%;
-    margin: 14px auto;
-    overflow: auto;
+.f-designer-settings {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
 
-    .f-section-header {
+    .f-designer-option-panel {
+        width: 80%;
 
-        margin: 0 0 4px;
+        .panel-title {
+            color: #000;
+            display: inline-flex;
+            align-items: center;
+            line-height: 1.375rem;
+            width: 100%;
+            background: #F7F8FA;
+            padding: 4px 10px;
+            border-radius: 4px;
 
+            .menu-item-icon {
+                margin-right: 5px;
+                color: #5B89FE;
+            }
 
+            .title-text {
+                font-size: 12px;
+                line-height: 17px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin-bottom: 0;
+                margin-right: 10px;
+            }
+        }
+
+        .panel-main {
+            padding: 20px 40px;
+
+            .form-text {
+                font-size: 90%;
+                color: #969ba5 !important;
+            }
+        }
     }
-
-    .text-muted {
-        color: #969ba5 !important;
-    }
-
-    .badge {
-        padding: .25rem .5rem;
-    }
-
-    .col-form-label {
-        justify-content: start !important;
-        width: auto;
-        display: inline-block;
-    }
-
-    .badge {
-        padding: .25rem .5rem;
-    }
-
-    small {
-        font-size: 90%;
-    }
-
-    .mr-4 {
-        display: inline-block;
-        margin: 4px 24px 3px 10px;
-    }
-
-    .custom-control-label {
-        display: inline-block;
-
-    }
-
-    .custom-control.custom-radio {
-        margin: 8px 8px 6px 1px;
-        display: inline-block !important;
-    }
-
-    .form-group {
-        margin: 4px 1px 3px 1px;
-    }
-
 }

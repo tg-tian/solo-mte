@@ -1,11 +1,5 @@
 import { defineComponent, provide, ref } from "vue";
-import { ComponentSchema } from "@farris/ui-vue/components/designer-canvas";
-import { FFlowCanvas } from "@farris/ui-vue/components/flow-canvas";
-import { FDesignerOutline } from "@farris/ui-vue/components/designer-outline";
-import { FDesignerToolbox } from "@farris/ui-vue/components/designer-toolbox";
-import { FPropertyPanel } from '@farris/ui-vue/components/property-panel';
-import { FSplitter, FSplitterPane } from '@farris/ui-vue/components/splitter';
-import { FTabs, FTabPage } from "@farris/ui-vue/components/tabs";
+import { ComponentSchema, FFlowCanvas, FDesignerOutline, FDesignerToolbox, FPropertyPanel, FSplitter, FSplitterPane, FTabs, FTabPage } from "@farris/ui-vue";
 import { FlowDesignerProps, flowDesignerProps } from "./flow-designer.props";
 import { useComponentSchemaService } from '../../composition/component-schema.service';
 

@@ -1,0 +1,70 @@
+.editor-panel--wrapper{
+    overflow: hidden;
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.ide-loading-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 2000;
+    user-select: none;
+    overflow: hidden;
+    background-color: #FFFFFF
+}
+
+.ide-loading-overlay .circular {
+    opacity: 0;
+    margin-top: -21px;
+    height: 42px;
+    width: 42px;
+    animation: loading-rotate 2s linear infinite;
+    animation-delay: 500ms
+}
+
+.ide-loading-overlay .path {
+    animation: loading-dash 1.5s ease-in-out infinite;
+    stroke-dasharray: 90,150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #60BEFF;
+    stroke-linecap: round
+}
+
+@keyframes loading-rotate {
+    from {
+        opacity: 1
+    }
+
+    to {
+        opacity: 1;
+        transform: rotate(1turn)
+    }
+}
+
+@keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1,200;
+        stroke-dashoffset: 0
+    }
+
+    50% {
+        stroke-dasharray: 90,150;
+        stroke-dashoffset: -40px
+    }
+
+    to {
+        stroke-dasharray: 90,150;
+        stroke-dashoffset: -120px
+    }
+}

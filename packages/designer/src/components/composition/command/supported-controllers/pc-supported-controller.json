@@ -1,0 +1,588 @@
+{
+    "d7de1993-d500-44fd-9922-43c78d477aa3": [
+        {
+            "id": "dba10520-f564-31a4-13ac-f07709402304",
+            "code": "LoadNavTree"
+        },
+        {
+            "id": "b9241e0d-90d1-72e7-c9b6-8f08caaef8ad",
+            "code": "LoadSubList"
+        },
+        {
+            "id": "ae60fedd-e0e7-ac7a-eaa9-430833dbefc7",
+            "code": "RouteToAdd"
+        },
+        {
+            "id": "8b6f29b4-7326-f9f8-0625-3954a71f3595",
+            "code": "RouteToEdit"
+        },
+        {
+            "id": "74cda30e-6abb-5269-64a4-0f43c189ed74",
+            "code": "RouteToView"
+        },
+        {
+            "id": "4c183907-66c4-1b02-c8ab-aa13a4efc8f3",
+            "code": "Remove"
+        },
+        {
+            "id": "294afc8c-bea9-658c-81f0-42982f8c7eb0",
+            "code": "Close"
+        }
+    ],
+    "8172a979-2c80-4637-ace7-b13074d3f393": [
+        {
+            "id": "0c67fafb-3bb7-d0a5-d546-3dae63434212",
+            "code": "Load"
+        },
+        {
+            "id": "05c445e5-4e18-f4e6-2dc8-997228dc36a7",
+            "code": "LoadAndAdd"
+        },
+        {
+            "id": "052104fd-3f13-0738-058e-4945b5f95c27",
+            "code": "LoadAndView"
+        },
+        {
+            "id": "2ecf6524-ffc0-ada5-2765-2103c597f880",
+            "code": "LoadAndEdit"
+        },
+        {
+            "id": "363d6a62-afb8-6789-39ef-cae0a5c4ae9d",
+            "code": "Add"
+        },
+        {
+            "id": "63bc76df-1626-eff7-ab55-03ed9b44750d",
+            "code": "Edit"
+        },
+        {
+            "id": "bd081bfc-7ce8-979e-e54c-3b01fc8ffc96",
+            "code": "Cancel"
+        },
+        {
+            "id": "c22ff5a0-cfeb-aab1-ac01-937cfcd80c6a",
+            "code": "Save"
+        },
+        {
+            "id": "eeb436cf-6684-874f-3ca7-d42aec83730d",
+            "code": "Close"
+        },
+        {
+            "id": "6f987222-ebe2-0f3c-1594-a12408b22801",
+            "code": "AddItem"
+        },
+        {
+            "id": "0cdeddcc-8332-f13f-be96-b5eeac84a334",
+            "code": "RemoveItem"
+        },
+        {
+            "id": "af181469-5bda-7c9f-e187-dc173cfd7356",
+            "code": "LoadAndCascadeAdd"
+        },
+        {
+            "id": "89904e71-5b79-9caf-b9d6-77e878cc1552",
+            "code": "cascadeAdd"
+        }
+    ],
+    "26436aa8-88a7-4aee-bf0b-9843c1e8afbf": [
+        {
+            "id": "f7dd2c84-7abd-d4bf-6b31-71d96035c034",
+            "code": "LoadNavList"
+        },
+        {
+            "id": "e8e6433a-7c00-1773-0f0d-b4f9c3060e56",
+            "code": "LoadSubList"
+        },
+        {
+            "id": "59858a08-f940-413c-4717-2c65212c9303",
+            "code": "RouteToAdd"
+        },
+        {
+            "id": "b448888e-7200-e9d6-ec51-23257a61904f",
+            "code": "RouteToEdit"
+        },
+        {
+            "id": "ea5e9181-70e6-5344-536f-e586f0f1c00a",
+            "code": "RouteToView"
+        },
+        {
+            "id": "5d2c531e-f0f4-7330-e627-52745352117d",
+            "code": "Remove"
+        },
+        {
+            "id": "0f69d3b4-a81e-b98f-d7a1-e18810dbc98f",
+            "code": "Close"
+        },
+        {
+            "id": "c0a61c65-f3f2-95f3-2672-aa52d18ad047",
+            "code": "ChangePage"
+        }
+    ],
+    "eb07c2e4-7cc1-4d95-aad0-410823006d71": [
+        {
+            "id": "acd815d6-a80a-e617-962f-37b445a15fb1",
+            "code": "execute"
+        }
+    ],
+    "70b4abd4-9f2c-4b7c-90e9-6ac6f4b74c72": [
+        {
+            "id": "86c9f281-e5bc-5d5c-1b86-d1e17ab2e850",
+            "code": "Load"
+        },
+        {
+            "id": "0430f234-634a-0b1d-878f-706d06c53948",
+            "code": "Remove"
+        },
+        {
+            "id": "b7da52d1-761c-6263-08d4-30a0061c922c",
+            "code": "Add"
+        },
+        {
+            "id": "1d2b8b9b-7a7d-f807-6e51-9ea6e945635a",
+            "code": "View"
+        },
+        {
+            "id": "405ec4c7-21f6-bffb-a2d0-edbeb47a042c",
+            "code": "Edit"
+        },
+        {
+            "id": "b5103abd-bd9c-2f56-9b56-68c94959f757",
+            "code": "Close"
+        },
+        {
+            "id": "e86b4c09-d3d7-0f5a-1d03-17d4da6603e4",
+            "code": "RemoveRows"
+        },
+        {
+            "id": "62d673bf-6219-a55b-1080-a4116ca1058c",
+            "code": "ChangePage"
+        },
+        {
+            "id": "d7c77f23-fca6-8a90-8e20-8f84f5709663",
+            "code": "refresh"
+        },
+        {
+            "id": "45047397-5422-d878-fc63-67195172d5b4",
+            "code": "Filter"
+        },
+        {
+            "id": "9aaeafe1-d782-369d-2b42-8c1a617858a0",
+            "code": "AddWithDimension"
+        },
+        {
+            "id": "835bc9e6-8d95-86ca-3a34-ac0191be1fa0",
+            "code": "EditWithDimension"
+        },
+        {
+            "id": "8af6d57f-51eb-b004-2433-88058ea95674",
+            "code": "ViewWithDimension"
+        }
+    ],
+    "d7ce1ba6-49c7-4a27-805f-f78f42e72725": [
+        {
+            "id": "f80e026b-bd9b-002b-d2aa-52c44a633bec",
+            "code": "Load"
+        },
+        {
+            "id": "8a19b303-4e75-c267-e42a-b56d059577a9",
+            "code": "Add"
+        },
+        {
+            "id": "79aa9a7b-1189-8cba-dcad-2089d95aee72",
+            "code": "Edit"
+        },
+        {
+            "id": "8253428a-0287-8390-0ea1-a31eefa1a057",
+            "code": "Save"
+        },
+        {
+            "id": "6118693c-9d5c-f401-7101-8344744183f2",
+            "code": "Cancel"
+        },
+        {
+            "id": "a82e6e67-ff48-05ce-a780-26a10b83253b",
+            "code": "Remove"
+        },
+        {
+            "id": "8034cae9-ecd7-e6ab-22c2-0cdf7cfd536f",
+            "code": "Close"
+        },
+        {
+            "id": "6bf1ed43-a493-f2dd-de19-77ebfb79916a",
+            "code": "ChangePage"
+        },
+        {
+            "id": "dfd86e25-5cfa-313c-617a-8fd5e2eb8fc9",
+            "code": "RemoveRows"
+        }
+    ],
+    "45be24f9-c1f7-44f7-b447-fe2ada458a61": [
+        {
+            "id": "17021da1-61a5-a90a-072c-6dda3bad01a7",
+            "code": "LoadList"
+        },
+        {
+            "id": "5fb563aa-e860-b439-bf64-39c9cdc341db",
+            "code": "LoadCard"
+        },
+        {
+            "id": "90603e99-8f81-968e-ca25-a6017fd874d5",
+            "code": "Add"
+        },
+        {
+            "id": "87d3f0aa-f087-c806-466f-cda147730eb0",
+            "code": "Edit"
+        },
+        {
+            "id": "fa100da6-83a0-e552-2aa9-415c8c27c3dd",
+            "code": "Save"
+        },
+        {
+            "id": "1a373dee-261d-0824-9c99-a158eb376864",
+            "code": "Cancel"
+        },
+        {
+            "id": "f9f05646-5c0d-c5d3-5218-d9acf49ebe16",
+            "code": "Close"
+        },
+        {
+            "id": "250cd2a2-9995-4c01-64aa-5029afba08ca",
+            "code": "AddItem"
+        },
+        {
+            "id": "a2c06958-29b1-0582-5f3e-c3cfcc741f8f",
+            "code": "RemoveItem"
+        },
+        {
+            "id": "1425afaa-d91a-9e64-39cd-c4a0bb98e336",
+            "code": "ChangePage"
+        },
+        {
+            "id": "1cde1e30-3c4e-2695-e2b6-7a0229368a58",
+            "code": "Remove"
+        },
+        {
+            "id": "378fcd7d-ce91-c052-5947-d60ecdb38df9",
+            "code": "batchDelete"
+        }
+    ],
+    "7c48ef46-339c-42d4-8365-a21236c63044": [
+        {
+            "id": "e573d6a2-8261-9ad4-c9f1-2e59af53302d",
+            "code": "loadList"
+        },
+        {
+            "id": "d1054fa5-d18e-c22c-ed3f-2f13b4692702",
+            "code": "loadCard"
+        },
+        {
+            "id": "6b9556d9-f510-2484-07b8-e1e190f03169",
+            "code": "add"
+        },
+        {
+            "id": "ca451c36-4ab8-5576-545f-0bd13c1cb320",
+            "code": "edit"
+        },
+        {
+            "id": "dbc290b7-8f64-1ce3-862f-d63e4c6db956",
+            "code": "save"
+        },
+        {
+            "id": "5c3f88c9-52b2-bddb-b4ab-a975ec0e48d7",
+            "code": "cancel"
+        },
+        {
+            "id": "3e722416-f1e4-d795-0194-0b876adfa253",
+            "code": "close"
+        },
+        {
+            "id": "aae5dda3-7941-6d19-dab5-c4126d20e457",
+            "code": "remove"
+        },
+        {
+            "id": "40302ced-33be-8d2f-9c4b-023b90351206",
+            "code": "changePage"
+        }
+    ],
+    "8fe977a1-2b32-4f0f-a6b3-2657c4d03574": [
+        {
+            "id": "0970ba99-fe9f-c08c-81bb-60841ca94b8f",
+            "code": "LoadTree"
+        },
+        {
+            "id": "ecd91cda-e8c0-bc59-b454-78b4027b9f9b",
+            "code": "LoadCard"
+        },
+        {
+            "id": "57f3d943-2daf-39aa-5087-58efe7708d38",
+            "code": "AddSibling"
+        },
+        {
+            "id": "e470716b-a104-5637-357f-ae6fa92cba05",
+            "code": "AddChild"
+        },
+        {
+            "id": "963ed4ff-b425-d832-e887-3968feae44b4",
+            "code": "Remove"
+        },
+        {
+            "id": "aeb647c7-8a0a-e02b-9c7a-8fd785da4b63",
+            "code": "Edit"
+        },
+        {
+            "id": "531835dc-7c8a-5f52-7912-2c69744f8496",
+            "code": "Save"
+        },
+        {
+            "id": "0a2a4b5c-3624-9d55-417e-10247271b556",
+            "code": "Cancel"
+        },
+        {
+            "id": "21b0c3af-3caf-b11d-2360-d9af20016501",
+            "code": "AddItem"
+        },
+        {
+            "id": "113f1d77-65a4-63bf-3973-80dd15f294d1",
+            "code": "RemoveItem"
+        },
+        {
+            "id": "52334335-4e0f-dc9d-2bff-fb09cd479dcf",
+            "code": "Close"
+        }
+    ],
+    "54bddc89-5f7e-4b91-9c45-80dd6606cfe9": [
+        {
+            "id": "92cd8b0e-4d95-3976-f0aa-c4a4cde1a60b",
+            "code": "Filter"
+        }
+    ],
+    "26e6016a-ef26-4682-bcdb-84114e934696": [
+        {
+            "id": "062fa90d-76c1-8e99-5931-9aa0fa60e25d",
+            "code": "openDialog"
+        },
+        {
+            "id": "70582221-f092-9809-85ff-17c01b0f4ee9",
+            "code": "openApp"
+        }
+    ],
+    "9280ec35-9194-4c8c-9020-37329f064876": [
+        {
+            "id": "eab03d67-c390-2e2e-e252-99446062d76f",
+            "code": "getSlimBillCreationProcessEntityExById"
+        },
+        {
+            "id": "42079fe1-c0ff-7457-ba94-c9cb38975d5a",
+            "code": "getFormSettingsById"
+        },
+        {
+            "id": "cdf4352a-fd35-ff71-963e-10b3c079bd0f",
+            "code": "executeBillCreationProcess"
+        },
+        {
+            "id": "30ddac60-12cc-a3c0-ca68-3bde93247313",
+            "code": "createEntityDatas"
+        },
+        {
+            "id": "9d72dad6-2f5d-dd60-b064-16d0f993e9a2",
+            "code": "updateEntityDatas"
+        },
+        {
+            "id": "1a57e83b-8c27-246d-aa23-6bcfe6dce064",
+            "code": "pushTaskCenter"
+        },
+        {
+            "id": "93358329-127c-a470-6893-74f3c30ef3b8",
+            "code": "getCreationResultById"
+        },
+        {
+            "id": "27f7cfd4-a916-d2db-4b08-f05d1d28e7a9",
+            "code": "addFormBillCreationProcessExecutorResult"
+        }
+    ],
+    "9bb60b70-6653-430f-a88a-768cc8204f85": [
+        {
+            "id": "694a8da6-181a-76bf-17e3-ebc638c1e3be",
+            "code": "pushByCreationProcessId"
+        },
+        {
+            "id": "65f76fe3-ca5b-8aed-85ad-4a922d699012",
+            "code": "openBillCreationProcessSelector4Push"
+        },
+        {
+            "id": "ef5be4c9-9e0b-ad6d-be04-d8512a36439d",
+            "code": "openBillCreationProcessSelector4SpecificPush"
+        },
+        {
+            "id": "106c22a1-9972-1de7-381c-f2f19f543ecb",
+            "code": "openTargetApp"
+        },
+        {
+            "id": "082b705e-f43b-3ab2-257f-0d990ae82709",
+            "code": "pushBySourceCmId"
+        },
+        {
+            "id": "91963fe4-cb21-2eb9-0e7d-c7731d723837",
+            "code": "pushBySourceCmIdAndTargetCmId"
+        }
+    ],
+    "eae0e38a-9456-4186-af17-f8113b369989": [
+        {
+            "id": "57e67070-efa9-8988-5bf0-c8b5d5eb9618",
+            "code": "bifLoad"
+        },
+        {
+            "id": "9437aa86-1100-0f60-cded-016116c190bb",
+            "code": "referByCreationProcessId"
+        },
+        {
+            "id": "81f7d111-903a-180b-5157-d8c4271c47e3",
+            "code": "openBillCreationProcessSelector4Pull"
+        },
+        {
+            "id": "1f012cd9-483a-b93b-eee4-5256e1579d08",
+            "code": "openBillCreationProcessSelector4SpecificPull"
+        },
+        {
+            "id": "2a1f1c6d-569d-e1d6-04da-798b1df3ddc9",
+            "code": "openSourceDataSelector4Pull"
+        },
+        {
+            "id": "fc0be3b1-0273-1c84-a872-69bb1362b15e",
+            "code": "getCreationResult"
+        },
+        {
+            "id": "dd847401-5e8c-c0e0-7465-5cb2c50652c2",
+            "code": "referByTargetCmId"
+        },
+        {
+            "id": "64a9ce2a-4586-cf2f-22d2-8338b67119e0",
+            "code": "referBySourceCmIdAndTargetCmId"
+        }
+    ],
+    "824361ac-8baf-4742-8843-ddab5182a342": [
+        {
+            "id": "7a71f224-0465-4bda-b507-6bee22a44c00",
+            "code": "startProcess"
+        },
+        {
+            "id": "852cac4c-2689-42bb-a5c4-71bb16b327c0",
+            "code": "viewProcessInstance"
+        }
+    ],
+    "a7cb7d01-9df1-4a32-8202-99c9d0f4c339": [
+        {
+            "id": "570ffa0f-b80e-58fb-d327-ee44dc1d31d5",
+            "code": "submitWithBizDefKey"
+        },
+        {
+            "id": "a0c24027-1c0a-63df-2a34-0f4de060ba86",
+            "code": "cancelSubmitWithDataId"
+        },
+        {
+            "id": "f7a1b394-4659-f041-cb5d-2aa277fb4420",
+            "code": "batchSubmitWithBizDefKey"
+        },
+        {
+            "id": "548db8ec-ca86-4a18-c481-af88038c413b",
+            "code": "batchCancelSubmitWithDataId"
+        },
+        {
+            "id": "f32b5f55-2689-a398-0b56-f74973473b5a",
+            "code": "childSubmit"
+        },
+        {
+            "id": "43d82ccc-26f2-91a1-614c-e9e810509b81",
+            "code": "childCancelSubmit"
+        },
+        {
+            "id": "0f804753-536d-fda0-add8-0ec287c15cf8",
+            "code": "childBatchSubmit"
+        },
+        {
+            "id": "a5ad23bc-9dec-995a-476e-1387060d4fc3",
+            "code": "childBatchCancelSubmit"
+        },
+        {
+            "id": "f90e9df2-1bb3-e222-1cba-c41c600306a6",
+            "code": "viewFlowChartWithForecast"
+        },
+        {
+            "id": "b749634e-473b-0d52-3f0a-3d78c255b03c",
+            "code": "viewProcessWithDataId"
+        },
+        {
+            "id": "5e32c926-f5d3-ce1f-adb3-298f3dd658db",
+            "code": "viewApprovalLog"
+        }
+    ],
+    "43f68561-eae4-4495-b318-d629615523f8": [
+        {
+            "id": "d5f67e0a-767d-a238-5ad4-b1285476c16f",
+            "code": "copyRow"
+        }
+    ],
+    "3f40288a-d11e-4dbd-89ba-388abf931ca3": [
+        {
+            "id": "2e237692-05ae-8c84-6ec9-5f9c42ad7f82",
+            "code": "DataImport"
+        },
+        {
+            "id": "474eb4bb-f218-664d-dc2d-796ab04d79a1",
+            "code": "DataExport"
+        },
+        {
+            "id": "608a3c5f-448d-2b05-d58f-de72af9a3566",
+            "code": "CardDataImport"
+        },
+        {
+            "id": "6a8d583c-3a7b-db67-5910-ab4e1e518f6b",
+            "code": "DownloadTemplate"
+        },
+        {
+            "id": "9194b00d-1b61-a33f-ad3d-38ebbf6ef022",
+            "code": "ListDataExport"
+        }
+    ],
+    "2eb7bbd1-fabd-4d0f-991d-7242f53225b1": [
+        {
+            "id": "2a84e28f-7202-d858-1466-748a8040c1f9",
+            "code": "UploadAndUpdateRow"
+        },
+        {
+            "id": "e6fc25ca-853b-0b2d-76c9-a1f7a253679b",
+            "code": "UploadAndBatchAddRows"
+        },
+        {
+            "id": "be2a6cc1-9357-9374-cc8e-5665e6bc1bdc",
+            "code": "download"
+        },
+        {
+            "id": "2e222e9f-9178-042a-4a5c-29b0e180b59a",
+            "code": "BatchDownloadByDataIds"
+        },
+        {
+            "id": "b707e9c2-61c7-01d8-bd0e-aac222271602",
+            "code": "PreviewBySubDirName"
+        }
+    ],
+    "e353b4e9-e073-4e18-b9f7-ec4cc8ac72b1": [
+        {
+            "id": "abbfb7aa-7a2d-1683-fab4-19e6da2bc45a",
+            "code": "printSingle"
+        },
+        {
+            "id": "774fa275-2da1-e927-e8bf-d27d9886a168",
+            "code": "printMulti"
+        },
+        {
+            "id": "9891fa58-14de-9753-12b8-415fe185978b",
+            "code": "printByIds"
+        }
+    ],
+    "1a8484e8-20eb-49d0-bc49-9fbbc4df20c6": [
+        {
+            "id": "5e915b73-3ef6-d0c8-2800-85b456d130eb",
+            "code": "batchAppend"
+        }
+    ]
+}

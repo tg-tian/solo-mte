@@ -1,0 +1,99 @@
+.f-pages-list .f-page-card {
+  background-image: url('/assets/images/card-background.png') !important;
+  background-size: cover !important;
+  border-radius: 10px;
+  margin: 6px;
+  padding: 20px 20px 14px 20px;
+  position: relative;
+  width: 280px;
+}
+
+.f-pages-list .f-page-card-header.listview-item-content {
+  display: flex;
+}
+
+.f-pages-list .f-page-card-header .listview-item-icon {
+  display: flex;
+  height: 42px;
+  margin-right: 20px;
+  width: 42px;
+  background: url('./assets/images/page.svg') no-repeat center center;
+}
+
+.f-page-card-header .listview-item-icon > i {
+  margin: auto;
+  font-size: 22px;
+  color: white;
+}
+
+.f-page-card-header .listview-item-title {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.11px;
+  line-height: 1.4rem;
+  margin-bottom: 0;
+}
+
+.f-page-card-header .listview-item-subtitle {
+  color: #7a8dae;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.f-page-card-header .bage {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 20px;
+  width: 50px;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.f-page-card-header .bage-testing {
+  background: #eef5ff;
+  border: 1px solid rgba(56, 143, 255, 0.8);
+  color: #388fff;
+}
+
+.f-page-card-header .bage-published {
+  background: #fff4e5;
+  border: 1px solid rgba(255, 152, 0, 0.8);
+  color: #ff9800;
+}
+
+.f-page-card-header .bage-editing {
+  background: #f0f9f2;
+  border: 1px solid rgba(51, 186, 143, 1);
+  color: #33ba8f;
+}
+
+.f-page-card-content p {
+  color: #7a8dae;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-bottom: 0.375rem;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.f-page-card-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 14px;
+}
+
+.f-page-card-footer .btn-group {
+  visibility: hidden;
+}
+
+.f-listview-hover .btn-group {
+  visibility: visible;
+}

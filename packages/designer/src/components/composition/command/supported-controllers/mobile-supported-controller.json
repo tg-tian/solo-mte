@@ -1,0 +1,282 @@
+{
+    "9ef56595-7cb7-4bbe-8f64-c6efcb7b1f9d": [
+        {
+            "id": "faa47af6-1354-5139-2849-2f676b4e0c19",
+            "code": "Create"
+        },
+        {
+            "id": "2df293ac-eab4-065c-38be-16d1427281e3",
+            "code": "CreateByPath"
+        },
+        {
+            "id": "77ab0b98-2cc1-dcbc-6e21-16552efeea88",
+            "code": "Append"
+        }
+    ],
+    "0a68799b-48c6-4c9f-b0d7-140683c62b58": [
+        {
+            "id": "06351c11-ec4b-f7b0-d9b4-e8bca9202b86",
+            "code": "LoadForList"
+        },
+        {
+            "id": "cb7f4216-0eb4-26a0-80b5-a38448e393c1",
+            "code": "LoadForCard"
+        },
+        {
+            "id": "67edc617-d63a-b4f5-cdc7-4adba1b6e48b",
+            "code": "LoadAndAddForCard"
+        },
+        {
+            "id": "33e538a8-717d-00ad-4cb6-a575f4b151c7",
+            "code": "LoadAndEditForCard"
+        },
+        {
+            "id": "d868341e-5eff-2a65-ba96-8b4fe5b243d7",
+            "code": "LoadAndViewForCard"
+        },
+        {
+            "id": "afc70350-24fc-9879-9505-689f57575ec2",
+            "code": "LoadAndAddForChildCard"
+        },
+        {
+            "id": "4a7b5ccb-f61a-ac4f-e308-c00f6b52860b",
+            "code": "LoadAndEditForChildCard"
+        },
+        {
+            "id": "9272925f-38d0-d814-2161-605f75240169",
+            "code": "LoadAndViewForChildCard"
+        }
+    ],
+    "4ed10691-451e-4dd2-821a-0d2421e7c334": [
+        {
+            "id": "ff453ad8-cd6a-2f01-4e94-d0d382f6f429",
+            "code": "View"
+        },
+        {
+            "id": "1a6adc1d-bd2e-b8c3-1e01-c4c6e0803659",
+            "code": "ViewByPath"
+        }
+    ],
+    "05592163-fd45-474e-b0ab-61d7dc02e5c0": [
+        {
+            "id": "d5b847bd-ceb3-1b27-ed7f-b6b1e38088cd",
+            "code": "Cancel"
+        }
+    ],
+    "f863c66a-bf93-4d1f-9f99-bcd76009609d": [
+        {
+            "id": "129fb301-123d-6011-755d-c1aad5bf1dd3",
+            "code": "SaveForCard"
+        },
+        {
+            "id": "2ade863f-4b38-7d2b-ca9f-87f1e18d8692",
+            "code": "SaveForChildCard"
+        },
+        {
+            "id": "f7ebeab7-0481-041a-2cc4-d524840c6468",
+            "code": "SaveAndGoBackForChildCard"
+        },
+        {
+            "id": "7eab8d99-4698-c0d4-4d2b-08bf724ed439",
+            "code": "Save"
+        },
+        {
+            "id": "55eb3067-d220-56dd-41b3-2228db302ae0",
+            "code": "SaveAndValidateDataForCard"
+        }
+    ],
+    "f458e095-a3c6-43e8-a95b-fc886f6f619e": [
+        {
+            "id": "b0dfb230-7548-c4c7-66db-370cf5e98ee8",
+            "code": "Edit"
+        },
+        {
+            "id": "aaf37f29-c5a4-5571-473c-1e8a252d0782",
+            "code": "EditByPath"
+        }
+    ],
+    "dab6b7f1-f56f-490a-879c-3d74232cd3ba": [
+        {
+            "id": "eca45728-53c9-ca70-14ca-ec8eb468ee44",
+            "code": "RemoveById"
+        },
+        {
+            "id": "6036c9c0-1ee6-ab06-e311-78f5becca6b4",
+            "code": "RemoveByIds"
+        },
+        {
+            "id": "a35467a1-4ca7-5655-cd2a-18ce42a3097a",
+            "code": "RemoveByPathAndId"
+        }
+    ],
+    "eae5387b-042d-45bf-93fa-f2c8085e9e5d": [
+        {
+            "id": "f7bd5f2f-abc8-9fd4-35df-a9199b47a434",
+            "code": "Update"
+        }
+    ],
+    "910661bd-963a-4287-aa32-441c95b8720f": [
+        {
+            "id": "973bb999-b8dc-0ff5-0ba1-5cd7b816eba9",
+            "code": "Navigate"
+        },
+        {
+            "id": "4dd30b6a-f0d7-0799-7c04-593e5b71fd7b",
+            "code": "NavigateForRtc"
+        },
+        {
+            "id": "9dca239c-9153-70f9-e522-5ba2c384aa4f",
+            "code": "GoBack"
+        },
+        {
+            "id": "632f46ae-620e-3bb7-a75e-c43473624c49",
+            "code": "GoBackAndCheck"
+        },
+        {
+            "id": "34c9cb64-0ea0-f483-2d51-c36ff0ee6cb2",
+            "code": "GoBackForChildCard"
+        },
+        {
+            "id": "9740b808-9900-f494-516c-08e89640f5af",
+            "code": "CloseWindow"
+        },
+        {
+            "id": "66371216-60d9-f2c3-734e-6b56b6e71d27",
+            "code": "NavigateAndCheck"
+        },
+        {
+            "id": "b0d557ac-1ee8-8afe-73ea-006c43bd10d1",
+            "code": "NavigateForChildCard"
+        }
+    ],
+    "91cc23fb-2ecf-418b-9700-99469eab2e84": [
+        {
+            "id": "0fcae913-ce17-a5ba-2d4a-99de7e92a4b4",
+            "code": "SubmitApprove"
+        },
+        {
+            "id": "f1229a4f-ecfc-5eda-e870-e50a5fc69a96",
+            "code": "SaveAndSubmit"
+        },
+        {
+            "id": "d59bbde0-d2a6-9e6b-0aa7-7a9a47472e48",
+            "code": "CancelSubmit"
+        },
+        {
+            "id": "1eda006d-5b2d-e3ff-21a7-061eba33ac30",
+            "code": "SubmitWithBizDefKey"
+        },
+        {
+            "id": "fd018acf-f6d0-2ef2-335f-a39c955f2c67",
+            "code": "CancelSubmitWithDataId"
+        },
+        {
+            "id": "809b783b-38d3-e70a-64f4-95bc80955cc2",
+            "code": "BatchSubmitWithBizDefKey"
+        },
+        {
+            "id": "2daf7893-a636-dd79-a26e-80fdd6a19b7c",
+            "code": "BatchCancelSubmitWithDataId"
+        },
+        {
+            "id": "171df093-e755-59f1-319b-bd51cfb8a38f",
+            "code": "ChildSubmit"
+        },
+        {
+            "id": "175197fd-6064-697c-d6ee-d90e9fe6ecc7",
+            "code": "ChildCancelSubmit"
+        },
+        {
+            "id": "3abbaf6f-2644-2e2e-2bd6-2d04809ec594",
+            "code": "ChildBatchSubmit"
+        },
+        {
+            "id": "50283e79-e71b-8429-98db-1fe2d919eb0c",
+            "code": "ChildBatchCancelSubmit"
+        }
+    ],
+    "ad4b014c-ff01-4bb0-8b3a-cb5e7dd2f8ea": [
+        {
+            "id": "f1925f3d-e442-2010-f441-cb7c6d5c0e49",
+            "code": "uploadAndUpdateRow"
+        },
+        {
+            "id": "cd84830a-e9aa-ccbf-7417-dac561df7828",
+            "code": "uploadAndBatchAddRows"
+        },
+        {
+            "id": "32d549ab-9f9c-1427-7aaf-f3e9c50de517",
+            "code": "removeAttachmentRows"
+        },
+        {
+            "id": "23ca8283-05ba-448e-809b-427ef90ffdc2",
+            "code": "updateAttachmentField"
+        },
+        {
+            "id": "8c0c6bc3-1a4b-4f17-95e4-91a7b14f617c",
+            "code": "clearAttachmentField"
+        }
+    ],
+    "82cebb17-9f81-40be-86c3-389c5912bde7": [
+        {
+            "id": "4d2d6302-6891-f7c2-116a-f29f059d1dd4",
+            "code": "ExecuteAction"
+        }
+    ],
+    "f8149a59-0133-49cb-8793-1eacbdc357bd": [
+        {
+            "id": "e8938f1c-0e85-4a65-bf9f-f3e7a8e719b5",
+            "code": "AddComment"
+        },
+        {
+            "id": "141eabe0-0792-6b62-18df-e51d1b4629fc",
+            "code": "QueryInitComments"
+        },
+        {
+            "id": "37030d87-8eb1-cccd-c895-638b2b8bfca4",
+            "code": "SetReplyUser"
+        },
+        {
+            "id": "d2ba691d-8121-166d-52d3-dbc365624313",
+            "code": "registerBeforeGetData"
+        }
+    ],
+    "2051ecc9-0c92-4d26-99b9-24361b2a2335": [
+        {
+            "id": "d2124707-ecf8-b5df-5f71-acd81f981929",
+            "code": "SetLookupCustomData"
+        }
+    ],
+    "cf5e568a-5243-4539-94ea-e195eb4d6736": [
+        {
+            "id": "e875be9f-07b8-b8ac-e20b-53e6b3e7894d",
+            "code": "LoadPage"
+        },
+        {
+            "id": "98b8d9a5-dc18-77e8-7bdf-7ea191c6bc8d",
+            "code": "LoadPageForList"
+        },
+        {
+            "id": "dd80df23-0cd7-b11c-1fa5-df8a8847b81b",
+            "code": "LoadPageForCard"
+        },
+        {
+            "id": "54f3153f-e646-e185-b403-5467b9984a78",
+            "code": "LoadPageForChildCard"
+        },
+        {
+            "id": "6441c6c5-4f8d-e53e-2db0-639b4c81e418",
+            "code": "LoadListPage"
+        },
+        {
+            "id": "53827e22-6f6f-e0f3-e4a2-9ca3e6b8f568",
+            "code": "LoadCardPage"
+        }
+    ],
+    "efab0177-e16d-4d1f-9567-0bd1f607e53a": [
+        {
+            "id": "63af6df0-163c-8e0e-1ed4-a9766f4921ae",
+            "code": "setFieldsTruncateConfig"
+        }
+    ]
+}

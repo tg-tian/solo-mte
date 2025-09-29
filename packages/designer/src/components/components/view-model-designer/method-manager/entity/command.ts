@@ -37,13 +37,13 @@ export class Command implements ITreeNode {
     root?: ITreeNode;
 
     /** 是否为运行时定制添加的命令 */
-    isRTCmd?: boolean;
+    isRtcCommand?: boolean;
 
     /** 命令的参数是否需要刷新--用于构件中删除命令参数的场景 */
     needRefreshParam = false;
 
     /** 命令是否已失效（被删除） */
-    isInValid? = false;
+    isInValid?= false;
 
     /** 命令描述信息 */
     description?: string;
@@ -63,6 +63,13 @@ export class Command implements ITreeNode {
 
     /** 命令在构件中的名称 */
     handlerShowName?: string;
+
+    /** 控制器信息 */
+    controller?: {
+        label: string;
+        name: string;
+        isCommon: boolean;
+    };
 
     get children(): ITreeNode[] {
         return this.handlers || [];
@@ -113,6 +120,7 @@ export class Command implements ITreeNode {
             this.cmpId = commandJsonOrCmpId.cmpId;
             this.isNewGenerated = commandJsonOrCmpId.isNewGenerated;
             this.targetComponent = commandJsonOrCmpId.targetComponent;
+            this.isRtcCommand = commandJsonOrCmpId.isRtcCommand;
             this.extensions = [];
 
             // 添加快捷键配置
@@ -136,6 +144,12 @@ export class Command implements ITreeNode {
             this.controllerName = webCmd.Name;
 
             this.isFromPresetController = !webCmd.Code.includes('_frm_');
+
+            this.controller = {
+                label: webCmd.Code,
+                name: webCmd.Name,
+                isCommon: webCmd.Extends.IsCommon
+            };
         }
 
         this.handlers = new OperationCollection();
@@ -157,7 +171,7 @@ export class Command implements ITreeNode {
             cmpId: this.cmpId,
             shortcut: this.shortcut ? JSON.parse(JSON.stringify(this.shortcut)) : {},
             extensions,
-            isRTCmd: this.isRTCmd,
+            isRtcCommand: this.isRtcCommand,
             isInvalid: this.isInValid
         };
         if (this.isNewGenerated !== undefined) {
@@ -207,6 +221,7 @@ export class Command implements ITreeNode {
         handler.postExtendable = methodItem.IsAfterExpansion;
 
         handler.root = this;
+        handler.controller = this.controller;
 
         // 处理扩展
         const extensions = extensionMap.get(handler.id);

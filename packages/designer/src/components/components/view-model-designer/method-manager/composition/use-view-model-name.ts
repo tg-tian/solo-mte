@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import { inject } from "vue";
 import { ComponentType, FormComponent, UseFormSchema } from "../../../../types";
 
@@ -41,7 +40,7 @@ export function useViewModelName() {
         const componentRefParentContainer = componentRefResult.parentNode;
 
         // 列表组件取父层容器的标题:容器可能为标签页或者section
-        if (componentRefParentContainer.type === 'tab-page') {
+        if (componentRefParentContainer.type === 'tab-page' && componentRefParentContainer.title) {
             return componentRefParentContainer.title + '组件';
         }
         if (componentRefParentContainer.type === 'section' && componentRefParentContainer.mainTitle) {
@@ -63,7 +62,7 @@ export function useViewModelName() {
             case ComponentType.dataGrid: {
                 return getDataGridComponentName(component);
             }
-            case ComponentType.attachmentPanel: {
+            case ComponentType.uploader: {
                 return '附件组件';
             }
             case ComponentType.listView: {

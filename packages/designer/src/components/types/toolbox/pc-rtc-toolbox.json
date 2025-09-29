@@ -1,0 +1,186 @@
+[
+    {
+        "type": "input",
+        "name": "输入类控件",
+        "items": [
+            {
+                "id": "TextBox",
+                "type": "input-group",
+                "name": "文本",
+                "category": "input"
+            },
+            {
+                "id": "MultiTextBox",
+                "type": "textarea",
+                "name": "多行文本",
+                "category": "input"
+            },
+            {
+                "id": "DateBox",
+                "type": "date-picker",
+                "name": "日期",
+                "category": "input"
+            },
+            {
+                "id": "EnumField",
+                "type": "combo-list",
+                "name": "下拉列表",
+                "category": "input"
+            },
+            {
+                "id": "NumericBox",
+                "type": "number-spinner",
+                "name": "数值",
+                "category": "input"
+            },
+            {
+                "id": "CheckBox",
+                "type": "check-box",
+                "name": "复选框",
+                "category": "input"
+            },
+            {
+                "id": "CheckBoxGroup",
+                "type": "check-group",
+                "name": "复选框组",
+                "category": "input"
+            },
+            {
+                "id": "RadioGroup",
+                "type": "radio-group",
+                "name": "单选组",
+                "category": "input"
+            },
+            {
+                "id": "SwitchField",
+                "type": "switch",
+                "name": "开关",
+                "category": "input"
+            },
+            {
+                "id": "LookupEdit",
+                "type": "lookup",
+                "name": "帮助",
+                "category": "input"
+            },
+            {
+                "id": "TimePicker",
+                "type": "time-picker",
+                "name": "时间选择",
+                "category": "input"
+            }
+        ]
+    },
+    {
+        "type": "dataCollection",
+        "name": "数据集合类控件",
+        "items": [
+            {
+                "id": "ResponseForm",
+                "type": "response-form",
+                "name": "卡片面板",
+                "category": "dataCollection"
+            },
+            {
+                "id": "DataGrid",
+                "type": "data-grid",
+                "name": "表格",
+                "category": "dataCollection"
+            }
+        ]
+    },
+    {
+        "type": "container",
+        "name": "容器类控件",
+        "items": [
+            {
+                "id": "Tab",
+                "type": "tabs",
+                "name": "标签页区域",
+                "category": "container"
+            },
+            {
+                "id": "HtmlTemplate",
+                "type": "html-template",
+                "name": "模板容器",
+                "category": "container"
+            },
+            {
+                "id": "Section",
+                "type": "section",
+                "name": "分组面板",
+                "category": "container"
+            },
+            {
+                "id": "Fieldset",
+                "type": "fieldset",
+                "name": "分组",
+                "category": "container"
+            },
+            {
+                "id": "ContentContainer",
+                "type": "content-container",
+                "name": "容器",
+                "category": "container"
+            }
+        ]
+    },
+    {
+        "type": "business",
+        "name": "业务类控件",
+        "items": [
+            {
+                "id": "QuerySolution",
+                "type": "query-solution",
+                "name": "筛选方案",
+                "category": "container"
+            }
+        ]
+    },
+    {
+        "type": "response-layout",
+        "name": "布局容器",
+        "items": [
+            {
+                "id": "ResponseLayout2",
+                "type": "response-layout",
+                "name": "1列",
+                "category": "container",
+                "feature": {
+                    "splitter": "12"
+                },
+                "icon": "response-layout-1"
+            },
+            {
+                "id": "ResponseLayout2",
+                "type": "response-layout",
+                "name": "2列",
+                "category": "container",
+                "feature": {
+                    "splitter": "6:6"
+                },
+                "icon": "response-layout-2"
+            },
+            {
+                "id": "ResponseLayout3",
+                "type": "response-layout",
+                "name": "3列",
+                "category": "container",
+                "feature": {
+                    "splitter": "4:4:4"
+                },
+                "icon": "response-layout-3"
+            },
+            {
+                "id": "ResponseLayout4",
+                "type": "response-layout",
+                "name": "4列",
+                "category": "container",
+                "feature": {
+                    "splitter": "3:3:3:3"
+                },
+                "icon": "response-layout-4"
+            }
+        ]
+    }
+]

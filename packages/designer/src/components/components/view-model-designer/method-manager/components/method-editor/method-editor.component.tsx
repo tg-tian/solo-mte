@@ -1,12 +1,12 @@
 import { SetupContext, defineComponent, ref, inject } from "vue";
-import { FNotifyService } from "@farris/ui-vue/components/notify";
+import { FNotifyService } from "@farris/ui-vue";
 import { methodEditorProps, MethodEditorProps } from "./method-editor.props";
 import { UseFormSchema } from "../../../../../types";
 
 export default defineComponent({
     name: 'FMethodEditor',
     props: methodEditorProps,
-    emits: ['cancel','submit'],
+    emits: ['cancel', 'submit'],
     setup(props: MethodEditorProps, context) {
 
         const commandData = ref<any>({
@@ -69,6 +69,14 @@ export default defineComponent({
             context.emit('cancel');
         }
         function onSubmitClicked() {
+            if (!commandData.value?.name?.trim()) {
+                notifyService.warning('请输入方法名称');
+                return;
+            }
+            if (!commandData.value?.code?.trim()) {
+                notifyService.warning('请输入方法编号');
+                return;
+            }
             if (!validateCommand()) {
                 return;
             }

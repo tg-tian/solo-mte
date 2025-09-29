@@ -176,7 +176,7 @@ export enum ComponentType {
     /**
      *  附件
      */
-    attachmentPanel = 'attachment-panel',
+    uploader = 'uploader',
 
     /**
      * 子表弹出编辑后创建的模态框组件---运行态是动态创建的

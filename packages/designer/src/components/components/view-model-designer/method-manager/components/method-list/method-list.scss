@@ -11,6 +11,22 @@
         .command-panel {
             border-radius: 6px;
             width: 50%;
+
+            .invalid-row {
+                color: #a2a2a2 !important;
+            }
+
+            .fv-grid-cell {
+                user-select: text;
+            }
+
+            .text-error {
+                color: #F24645 !important;
+            }
+
+            .text-tip {
+                font-size: 14px;
+            }
         }
 
         .param-panel {

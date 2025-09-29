@@ -1,0 +1,168 @@
+.tab-item.from-ide-code-view {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.tab-item.from-ide-code-view .tab-item-content .tab-item-close {
+  margin-right: 5px;
+  color: #878787;
+}
+
+.tab-item.from-ide-code-view .tab-item-content .tab-item-icon {
+  padding-left: 0px;
+}
+
+.tab-item.from-ide-code-view .tab-item-content .tab-item-text {
+  display: block;
+  padding: 0px 6px 2px 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monaco-aria-container {
+  display: none !important;
+}
+
+/*----------------light theme begin-----------------*/
+$tabs-height: 40px;
+$tabs-bg-color: #FFFFFF;
+
+$tab-item-border-color: #E0E4E8;
+$tab-item-border-color-active: #5B89FE;
+
+$tab-item-close-btn-color: #DADEE4;
+$tab-item-close-btn-color-active: #8592A6;
+$tab-item-close-btn-bg-color: #E4E5E6;
+
+$tab-item-text-color: #8DA3CE;
+$tab-item-text-color-active: #202D40;
+/*----------------light theme end-------------------*/
+
+.ide-tabs.from-ide-code-view {
+  position: relative;
+  height: $tabs-height;
+  background-color: $tabs-bg-color;
+  user-select: none;
+  flex: 1 1 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  .smooth-dnd-container.horizontal {
+    display: inline-flex;
+  }
+
+  .tab-list-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tab-list {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    display: inline-flex;
+  }
+
+  // 标签项
+  .tab-list .tab-item {
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    height: $tabs-height;
+    align-items: center;
+    cursor: pointer !important;
+
+    .tab-item-content {
+      display: flex;
+      align-items: center;
+      height: $tabs-height;
+      overflow: hidden;
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+
+      // 标签右侧关闭按钮
+      .tab-item-close {
+        margin-right: 5px;
+        color: $tab-item-close-btn-color;
+
+        &.f-icon-close:hover {
+          background-color: $tab-item-close-btn-bg-color;
+          color: $tab-item-close-btn-color-active;
+          border-radius: 3px;
+          cursor: pointer !important;
+        }
+      }
+
+      // 标签左侧图标
+      .tab-item-icon {
+        padding-left: 0px;
+      }
+
+      // 标签标题文本
+      .tab-item-text {
+        display: block;
+        padding: 0px 6px 2px 14px;
+        white-space: nowrap;
+        color: $tab-item-text-color;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+      }
+    }
+
+    &.active {
+      cursor: default !important;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background-color: $tab-item-border-color-active;
+        border-radius: 1.5px;
+      }
+
+      .tab-item-text {
+        color: $tab-item-text-color-active;
+      }
+
+      .tab-item-close.f-icon-close {
+        color: $tab-item-close-btn-color-active;
+      }
+    }
+  }
+
+}
+
+.code-view-tabs-context-menu--wrapper .f-context-target-focus {
+  display: none !important;
+}
+
+.code-view-tabs-context-menu--wrapper {
+  .f-context-menu-panel {
+    border: none !important;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, .16) !important;
+    color: #616161;
+    background-color: #FFFFFF;
+    outline: none;
+    user-select: none;
+    font-size: 13px;
+
+    .menu-item.active,
+    .menu-item:hover:not(.menu-sep) {
+      background-color: #E8EBF3 !important;
+    }
+  }
+}

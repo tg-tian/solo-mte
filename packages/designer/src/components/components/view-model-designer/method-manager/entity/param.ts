@@ -47,7 +47,10 @@ export class ParamConfig {
         if (this.defaultValue !== undefined) {
             param.defaultValue = this.defaultValue;
         }
-
+        // 参数里增加类型，这样获取参数时能带type属性
+        if (this.type && this.type !== 'string') {
+            param.type = this.type;
+        }
         return param;
     }
 }

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import type { App } from 'vue';
 import Designer from './designer.component';
 
