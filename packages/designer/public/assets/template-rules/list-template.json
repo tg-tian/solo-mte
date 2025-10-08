@@ -1,0 +1,41 @@
+{
+    "f-struct-wrapper": {
+        "description": "管理列表的表格",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-section-grid"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-section-grid"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-section-grid"
+                    }
+                }
+            ]
+        }
+    }
+}

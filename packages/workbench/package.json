@@ -1,6 +1,6 @@
 {
-    "name": "@farris/farris-admin",
-    "version": "0.0.1",
+    "name": "@solo/workbench",
+    "version": "1.0.0",
     "type": "module",
     "scripts": {
         "dev": "vite --config ./vite.config.dev.ts",
@@ -9,7 +9,7 @@
         "build:system": "farris-cli build -c ./vite.config.build.ts"
     },
     "dependencies": {
-        "@farris/ui-vue": "latest",
+        "@farris/ui-vue": "^1.6.3",
         "@monaco-editor/loader": "^1.4.0",
         "axios": "^1.12.2",
         "monaco-editor": "^0.52.2",

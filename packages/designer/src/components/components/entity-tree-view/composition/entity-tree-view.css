@@ -6,22 +6,30 @@
     padding-left: 4px;
 }
 
-.designer-schema-tree .fv-tree {
+.designer-schema-tree .fv-grid {
     height: 100% !important;
 }
 
-.designer-schema-tree .fv-tree .fv-tree-content {
+.designer-schema-tree .fv-grid .fv-grid-content {
     background: #fcfdff !important;
 }
 
-.designer-schema-tree .fv-tree .fv-tree-data {
+.designer-schema-tree .fv-grid .fv-grid-data {
     overflow: auto;
 }
 
-.designer-schema-tree .fv-tree .fv-grid-row-selected {
+.designer-schema-tree .fv-grid .fv-grid-row-selected {
     border-radius: 10px;
 }
 
-.designer-schema-tree .fv-tree .fv-grid-row-hover {
+.designer-schema-tree .fv-grid .fv-grid-row-hover {
     border-radius: 10px;
+}
+
+.designer-schema-tree .fv-grid .fv-grid-row.occupied .f-icon-preview {
+    color: #2a87ff !important;
+}
+
+.designer-schema-tree .fv-grid .fv-grid-row.from-outside {
+    color: #878D99;
 }

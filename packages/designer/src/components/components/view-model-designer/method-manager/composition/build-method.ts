@@ -1,10 +1,13 @@
-/* eslint-disable no-restricted-syntax */
+
 import axios from 'axios';
 import { FormViewModel, FormWebCmd, UseFormSchema } from "../../../../types";
 import { Command } from "../entity/command";
 import { WebCommand, WebCommandMetadata } from "../entity/web-command";
 import { IdService } from "../service/id.service";
 import { MetadataService } from "../../../../composition/metadata.service";
+import { cloneDeep } from 'lodash-es';
+import { FMessageBoxService } from "@farris/ui-vue";
+import { DesignerMode } from '../../../../types/designer-context';
 
 export class MethodBuilder {
 
@@ -13,6 +16,10 @@ export class MethodBuilder {
     private commands: Command[] | any[] = [];
 
     private commandsTreeData: any[] = [];
+    private messageService = FMessageBoxService;
+
+    /** 控制器元数据集合 */
+    private controllers: any = [];
 
     /**
      * 加载表单相关的控制器和控制器内的方法，并组装为树表格所需的结构
@@ -23,12 +30,14 @@ export class MethodBuilder {
         return new Promise((resolve, reject) => {
             this.loadWebcmd().then((webcmds: WebCommandMetadata[]) => {
                 this.commands = [];
+                this.controllers = webcmds || [];
 
                 for (const commandJson of commandsJson) {
                     if (commandJson.isInvalid) {
                         const node = {
                             data: commandJson,
                             selectable: true,
+                            id: commandJson.id,
                             code: commandJson.code,
                             cmpId: commandJson.cmpId,
                             isInValid: true
@@ -90,7 +99,7 @@ export class MethodBuilder {
      * @returns
      */
     private loadWebcmd(): Promise<WebCommandMetadata[]> {
-        const webCmdInfos = this.useFormSchema.getFormSchema()?.module?.webcmds;
+        const webCmdInfos = this.useFormSchema.getCommands();
 
         const metadataInfo = this.useFormSchema.getFormMetadataBasicInfo();
 
@@ -100,16 +109,26 @@ export class MethodBuilder {
                 return;
             }
             const relativePath = metadataInfo ? metadataInfo.relativePath : '';
+            const existedCommands: any = [];
 
-            const requestCommandsMetadata = webCmdInfos.map((commandInfo: FormWebCmd) => {
-                return new MetadataService().queryMetadataById(relativePath, commandInfo.id).catch(error => {
-                    console.log(`获取元数据${commandInfo.name}失败，请检查。`);
+            let requestCommandsMetadata = webCmdInfos.map((commandInfo: FormWebCmd) => {
+                const existedController = this.controllers?.find(controller => controller.Id === commandInfo.id);
+                if (existedController && !commandInfo.nameSpace?.includes('.Front')) {
+                    existedCommands.push(existedController);
+                    return;
+                }
+                return new MetadataService().getRefMetadata(relativePath, commandInfo.id).catch(error => {
+                    this.messageService.warning(`获取元数据${commandInfo.name}失败，请检查。`, '');
                 });
-            });
 
+
+            });
+            requestCommandsMetadata = requestCommandsMetadata.filter(item => !!item);
             axios.all(requestCommandsMetadata).then(axios.spread((...metadataList) => {
-                const metadataContentList = metadataList.filter((item: any) => !!item.data)
+                let metadataContentList = metadataList.filter((item: any) => !!item?.data)
                     .map((item: any) => JSON.parse(item.data.content));
+
+                metadataContentList = existedCommands.concat(metadataContentList);
                 resolve(metadataContentList);
             }));
 
@@ -146,7 +165,8 @@ export class MethodBuilder {
                 name: commandData.name || commandData.data.name,
                 layer,
                 parent: parentTreeNode && parentTreeNode.id,
-                hasChildren: true
+                hasChildren: true,
+                collapse: true
             };
             commandTreeViewData.push(commandTreeData);
 
@@ -173,8 +193,10 @@ export class MethodBuilder {
 
         this.removeWebCommandHandler(selectedTreeNode.data);
 
+        const oldCommandsTreeData = cloneDeep(this.commandsTreeData);
         this.commandsTreeData = [];
         this.convertCommandsDataToTreeGridFormat(this.commands, this.commandsTreeData, 0, null);
+        this.assignTreeCollapseState(this.commandsTreeData, oldCommandsTreeData);
         this.updateViewModel(this.commands, activeViewModel);
 
         return { nextCommandId, commandsTreeData: this.commandsTreeData };
@@ -189,7 +211,7 @@ export class MethodBuilder {
     public addCommand(
         newCommandDatas: {
             selectedCommands: Array<{ command: WebCommand; controller: WebCommandMetadata }>;
-            newWebControllers: WebCommandMetadata;
+            newWebControllers: FormWebCmd[]
         },
         activeViewModel: FormViewModel
     ) {
@@ -197,8 +219,13 @@ export class MethodBuilder {
             return;
         }
 
-        // 新增的构件：TODO
-
+        // 新增的构件
+        const webcmdList = this.useFormSchema.getFormSchema().module.webcmds;
+        newCommandDatas.newWebControllers.forEach(newController => {
+            if (!webcmdList.find(controller => controller.id === newController.id)) {
+                webcmdList.push(newController);
+            }
+        });
         // 新增的命令
         newCommandDatas.selectedCommands.forEach((newCommandData: { command: WebCommand; controller: WebCommandMetadata }) => {
             const selectedCommand = newCommandData.command;
@@ -207,7 +234,9 @@ export class MethodBuilder {
             const command = new Command(selectedCommand, controller.Id, controller);
             command.id = new IdService().generate();
             command.isNewGenerated = false;
-
+            if (this.useFormSchema.designerMode === DesignerMode.PC_RTC) {
+                command.isRtcCommand = true;
+            }
             this.recursiveUniqueId(command.children);
 
             // 处理code、name
@@ -218,9 +247,10 @@ export class MethodBuilder {
             this.addWebCommandHandler(command);
 
         });
-
+        const oldCommandsTreeData = cloneDeep(this.commandsTreeData);
         this.commandsTreeData = [];
         this.convertCommandsDataToTreeGridFormat(this.commands, this.commandsTreeData, 0, null);
+        this.assignTreeCollapseState(this.commandsTreeData, oldCommandsTreeData);
         this.updateViewModel(this.commands, activeViewModel);
         return this.commandsTreeData;
 
@@ -315,12 +345,37 @@ export class MethodBuilder {
             return;
         }
 
-        activeViewModel.commands = commands.length > 0 ? commands.filter((command: Command) => command instanceof Command && command.toJson)
-            .map((command: Command) => command.toJson()) : [];
+        const commandsJson: any[] = [];
+        if (commands.length > 0) {
+            for (const command of commands) {
+                if (command instanceof Command && command.toJson) {
+                    commandsJson.push(command.toJson());
+                } else if (command.data) {
+                    commandsJson.push(command.data);
+                }
+            }
+            activeViewModel.commands = commandsJson;
+        } else {
+            activeViewModel.commands = [];
+        }
 
         const originalViewModel = this.useFormSchema?.getViewModelById(activeViewModel.id);
         if (originalViewModel) {
             originalViewModel.commands = activeViewModel.commands;
+        }
+
+    }
+    /**
+     * 更新树表数据后，保持上次的收折状态。
+     */
+    private assignTreeCollapseState(currentTreeData: any, oldTreeData: any) {
+        if (oldTreeData.length) {
+            currentTreeData.map(currentTreeNode => {
+                const oldTreeNode = oldTreeData.find(oldData => oldData.id === currentTreeNode.id);
+                if (oldTreeNode) {
+                    // currentTreeNode.collapse = oldTreeNode['__fv_collapse__'];
+                }
+            });
         }
 
     }

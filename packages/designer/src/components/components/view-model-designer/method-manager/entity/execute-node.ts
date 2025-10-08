@@ -93,6 +93,8 @@ export class ExecuteNode implements ITreeNode, IOperationNode {
     /** 操作所属的构件名称 */
     componentName = '';
 
+    controller?: { label: string; name: string; isCommon: boolean };
+
     constructor(executeNodeJson?: any, extension?: Extension, parent?: ITreeNode) {
         if (executeNodeJson) {
             this.parse(executeNodeJson, extension);
@@ -112,6 +114,7 @@ export class ExecuteNode implements ITreeNode, IOperationNode {
         this.extendLevel = executeNodeJson.extendLevel || OperationExtendLevel.Form;
         this.componentCode = executeNodeJson.componentCode;
         this.componentName = executeNodeJson.componentName;
+        this.controller = executeNodeJson.controller;
 
         if (extension) {
             this.belongedExt = extension;

@@ -44,6 +44,10 @@ export interface FormVariable {
 
     category: FormVariableCategory;
 
+    sourceName?: string;
+    
+    viewModelId?: string;
+
     fields?: any[];
 }
 
@@ -98,3 +102,4 @@ export interface FormViewModel {
     parentModalViewModel?: string;
 
 }
+

@@ -1,0 +1,163 @@
+/* 主内容 */
+.f-external-component-panel-container {
+    position: absolute;
+    z-index: 800;
+    bottom: 0;
+    padding-bottom: 40px;
+}
+
+.f-external-component-panel-track {
+    overflow: auto;
+    background: #F8FAFC;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 0px -10px 10px -10px rgba(215, 223, 244, 1);
+}
+
+.f-external-component-panel-main-content {
+    display: flex;
+    height: 400px;
+    min-width: 370px;
+}
+
+.f-external-component-panel-top-bar-container {
+    display: inline-flex;
+    position: absolute;
+    top: -30px;
+    right: 30px;
+}
+
+.f-external-component-panel-top-bar-container .f-icon {
+    position: absolute;
+    top: 10px;
+}
+
+.f-external-component-panel-top-bar-container .f-icon.f-legend-show {
+    left: 10px;
+}
+
+.f-external-component-panel-top-bar-container .f-icon.f-legend-collapse {
+    left: 8px;
+}
+
+.f-external-component-panel-mask {
+    position: absolute;
+    inset: 0;
+    z-index: 700;
+    background: rgba(0, 0, 0, 0.45);
+    pointer-events: auto;
+}
+
+/* 右侧模板 */
+.f-external-component-template-container {
+    background: white;
+    margin: 10px 10px 10px 0px;
+    width: 15%;
+    min-width: 160px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.f-external-component-usual-template-text {
+    width: 65px;
+    height: 26px;
+    background: #F0F3F9;
+    border-radius: 0px 0px 12px 12px;
+    text-align: center;
+    color: #8DA3CE;
+}
+
+.f-external-component-template-box-container {
+    width: 140px;
+    height: 140px;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.f-external-component-template-img-container {
+    width: 138px;
+    height: 106px;
+}
+
+.f-external-component-template-text-container {
+    height: 28px;
+    box-shadow: rgb(215, 223, 244) 0px -10px 10px -10px;
+    background: rgb(248, 250, 251);
+    display: flex;
+    align-items: center;
+}
+
+.f-external-component-template-text-container div {
+    margin: auto;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* 左侧外部组件 */
+.f-external-component-container {
+    display: flex;
+    margin: 10px;
+    width: 85%;
+    border-radius: 6px;
+}
+
+.f-external-component {
+    display: inline-block;
+    margin: 10px 0px 0px 10px;
+}
+
+.f-external-component-list-container {
+    display: flex;
+    flex: 1;
+    border-radius: 6px;
+    box-shadow: rgba(91, 163, 255, 0.1) 0px 0px 8px 0px;
+    flex-wrap: wrap;
+    overflow: auto;
+}
+
+.f-external-component-white-background {
+    background-color: white;
+}
+
+.f-external-component-drag-over:not(.no-drop) {
+    background-color: #f3f8ff !important;
+    border: 0.8px dashed #388fff !important;
+}
+
+.f-external-component-box-container {
+    width: 142px;
+    height: 140px;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+}
+
+.f-external-component-box-selected {
+    border: 2px solid #388fff !important;
+}
+
+.f-external-component-empty-container {
+    display: flex;
+    flex: 1;
+    box-shadow: rgba(91, 163, 255, 0.1) 0px 0px 8px 0px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-external-component-empty-container-border {
+    border: 0.8px dashed rgb(143, 157, 176);
+}
+
+.f-external-component-empty-drap-text {
+    width: 140px;
+    height: 20px;
+    opacity: 0.55;
+    font-size: 14px;
+    color: #3F4764;
+    text-align: center;
+    font-weight: 400;
+}

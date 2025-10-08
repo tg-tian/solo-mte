@@ -21,7 +21,7 @@ export default defineConfig({
     plugins: [vue(), vueJsx()],
     resolve: {
         alias: {
-            '@farris/ui-vue/components': resolve(__dirname, './node_modules/@farris/ui-vue'),
+            "@farris/ui-vue": resolve(__dirname, './node_modules/@farris/ui-vue'),
             '@farris/farris-admin': resolve(__dirname, './src/')
         }
     }

@@ -1,4 +1,4 @@
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { UseFormSchema } from "../../../../../types";
 import { MethodListProps } from "./method-list.props";
 import { Command } from "../../entity/command";
@@ -14,7 +14,8 @@ export function useViewModelMethod(props: MethodListProps) {
 
     /** 当前是否选中方法行。选中方法：true；选中操作或者分支：false */
     const isCommandNodeSelected = ref(false);
-
+    /** 当前是否选中有效的方法行 */
+    const isValidCommandSelected = computed(() => { return isCommandNodeSelected.value && (selectedTreeNode.value ? !selectedTreeNode.value.data?.isInValid : false); });
     /** 当前选中方法的参数列表 */
     const paramsData = ref([]);
 
@@ -22,6 +23,8 @@ export function useViewModelMethod(props: MethodListProps) {
     const activeViewModel = ref(props.activeViewModel);
 
     const useFormSchema = inject('useFormSchema') as UseFormSchema;
+
+    const selectTreeNodeIndex = ref(0);
 
     /**
      * 更新参数列表
@@ -43,7 +46,8 @@ export function useViewModelMethod(props: MethodListProps) {
      */
     function onChangeSelectedCommand(selectedItems: any[]) {
         selectedTreeNode.value = selectedItems[0];
-        // isCommandNodeSelected.value = !selectedTreeNode.value.parent;
+        selectTreeNodeIndex.value = commandsData.value.findIndex(command => command.id === selectedTreeNode.value.id);
+        isCommandNodeSelected.value = !selectedTreeNode.value.parent;
 
         refreshParamListData();
     }
@@ -52,22 +56,29 @@ export function useViewModelMethod(props: MethodListProps) {
      * 将变更同步到表单DOM中
      * @param commands 命令列表
      */
-    function updateViewModel(commands: Array<Command>) {
+    function updateViewModel(commands: any[]) {
         if (!commands || !activeViewModel.value) {
             return;
         }
 
-        activeViewModel.value.commands = commands.length > 0 ? commands
-            .filter((command: Command) => command.data instanceof Command && command.data.toJson)
-            .map((commandData: Command) => {
-                return commandData.toJson();
-            }) : [];
+        const commandsJson: any[] = [];
+        if (commands.length > 0) {
+            for (const command of commands) {
+                if (command.data instanceof Command && command.data.toJson) {
+                    commandsJson.push(command.data.toJson());
+                } else if (command['layer'] === 0) {
+                    commandsJson.push(command.data.data);
+                }
+            }
+            activeViewModel.value.commands = commandsJson;
+        } else {
+            activeViewModel.value.commands = [];
+        }
 
         const originalViewModel = useFormSchema?.getViewModelById(activeViewModel.value.id);
         if (originalViewModel) {
             originalViewModel.commands = activeViewModel.value.commands;
         }
-
     }
 
     /**
@@ -88,7 +99,10 @@ export function useViewModelMethod(props: MethodListProps) {
         selectedTreeNode,
         isCommandNodeSelected,
         paramsData,
+        selectTreeNodeIndex,
         onChangeSelectedCommand,
-        updateCommandParamFromWebCmd
+        updateCommandParamFromWebCmd,
+        updateViewModel,
+        isValidCommandSelected
     };
 }

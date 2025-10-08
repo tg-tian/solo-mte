@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+ 
 
 /** 构件操作参数 */
 export declare class Parameter {

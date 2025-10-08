@@ -1,0 +1,38 @@
+.designer-schema-tree {
+    .designer-schema-tree-header {
+        display: inline-block;
+        position: absolute;
+        right: 6px;
+        top: 4px;
+        z-index: 5;
+        background: #fcfdff;
+    }
+
+    .toolbar-action {
+        color: rgb(199, 205, 220);
+        background: #0000;
+        height: 100%;
+        width: 26px;
+        padding: 0 !important;
+    }
+
+    .toolbar-action.need-mouse-in {
+        display: none;
+    }
+
+    .fv-grid-row:hover .toolbar-action.need-mouse-in {
+        display: inline-flex;
+    }
+
+    .toolbar-panel {
+        right: -2px;
+        position: absolute;
+        top: -1px;
+        bottom: 0;
+        background: #fcfdff;
+    }
+
+    .fv-grid-row.fv-grid-row-selected .toolbar-panel {
+        background: #dae9ff;
+    }
+}

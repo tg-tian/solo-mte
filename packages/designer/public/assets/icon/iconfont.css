@@ -10,6 +10,31 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.fd_pc-Table:before {
+    content: "\e615";
+}
+
+.fd_pc-split-card:before {
+    content: "\e616";
+}
+
+.fd_pc-point-up:before {
+    content: "\e617";
+}
+
+.fd_pc-merge-like-card:before {
+    content: "\e618";
+}
+
+.fd_pc-cursor:before {
+    content: "\e619";
+}
+
+.fd_pc-split-like-card:before {
+    content: "\e61a";
+}
+
 .fd_pc-response-layout-4:before {
     content: '\e601';
 }
@@ -25,9 +50,11 @@
 .fd_pc-response-layout-1:before {
     content: '\e604';
 }
+
 .fd_pc-city-selector:before {
     content: '\e600';
 }
+
 .fd_pc-shenpiyijian:before {
     content: '\e073';
 }
@@ -228,6 +255,7 @@
 .fd_pc-anheimoshi:before {
     content: '\e041';
 }
+
 .fd_pc-tag:before {
     content: '\e040';
 }
@@ -293,7 +321,7 @@
     content: '\e031';
 }
 
-.fd_pc-sidebar:before {
+.fd_pc-drawer:before {
     content: '\e030';
 }
 
@@ -397,7 +425,7 @@
     content: '\e017';
 }
 
-.fd_pc-multi-text-box:before {
+.fd_pc-textarea:before {
     content: '\e016';
 }
 
@@ -413,11 +441,11 @@
     content: '\e013';
 }
 
-.fd_pc-field-set:before {
+.fd_pc-fieldset:before {
     content: '\e012';
 }
 
-.fd_pc-list-filter:before {
+.fd_pc-filter-bar:before {
     content: '\e011';
 }
 
@@ -429,7 +457,7 @@
     content: '\e00f';
 }
 
-.fd_pc-language-text-box:before {
+.fd_pc-language-textbox:before {
     content: '\e00e';
 }
 

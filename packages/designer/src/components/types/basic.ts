@@ -49,15 +49,13 @@ export interface FormExpressionConfig {
 * 表达式配置
 */
 export interface FormExpression {
-    fieldId: string;
+    /** 控件id或字段id */
+    target: string;
 
-    /** 其实存的是componentId */
-    viewModelId?: string;
-
-    expression: Array<FormExpressionConfig>;
+    rules: Array<FormExpressionConfig>;
 
     // 配置表达式的控件类型，字段类为'Field',按钮类为'Button'
-    sourceType?: string;
+    targetType?: string;
 }
 
 /**
@@ -131,6 +129,10 @@ export interface FormComponent {
 
     /** 移动自定义样式 */
     customClass?: string;
+
+    code?: string;
+    name?: string;
+    route?:any;
 }
 
 /**
@@ -148,3 +150,4 @@ export interface FormBinding {
     // 目前附件上传组件记录bindingPath
     bindingPath?: string;
 }
+

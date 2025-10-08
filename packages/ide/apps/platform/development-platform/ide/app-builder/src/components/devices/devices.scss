@@ -1,0 +1,277 @@
+.f-app-devices {
+    .f-page-header {
+        position: relative;
+        height: 48px;
+        margin-bottom: 1rem !important;
+
+        .f-page-header-base {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+
+            .f-toolbar {
+                .btn {
+                    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+                    border-radius: 15px;
+                    margin: 0 6px;
+                }
+
+                .btn-primary {
+                    background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+                }
+            }
+        }
+
+        .f-page-header-background {
+            background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+            border-radius: 8px;
+            box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+            height: 100%;
+            opacity: 0.66;
+            position: absolute;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+
+
+    .search-form {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .input-item,
+    .select-item {
+        display: flex;
+        align-items: center;
+        margin: 0 10px;
+    }
+
+    label {
+        margin-right: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    input,
+    select {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #409eff;
+        /* 焦点时边框变蓝色 */
+    }
+
+    .f-page-main {
+        height: 100%;
+
+        .f-app-devices-task {
+            background-image: linear-gradient(0deg, #F7FBFF 0%, #FFFFFF 100%);
+            border: 1px solid rgba(42, 135, 255, 0.1);
+            border-radius: 6px;
+            display: flex;
+            margin-bottom: 10px;
+
+            >div {
+                padding: 24px 20px 10px;
+            }
+
+            label {
+                color: rgba(45, 47, 51, 0.65);
+                display: block;
+                font-size: 13px;
+                font-weight: 400;
+                margin-bottom: 10px;
+            }
+
+            .devices-creation-time {
+                div {
+                    font-size: 13px;
+                    color: #58CACC;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .devices-completed-time {
+                div {
+                    font-size: 13px;
+                    color: #5FC875;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .devices-target-app {
+                span {
+                    font-size: 13px;
+                    color: #2A87FF;
+                    letter-spacing: 0.56px;
+                    font-weight: 400;
+                }
+            }
+
+            .devices-options {
+                span {
+                    background: rgba(89, 161, 255, 0.10);
+                    border: 0.8px solid rgba(56, 143, 255, 0.8);
+                    border-radius: 11px;
+                    color: #388FFF;
+                    font-size: 12px;
+                    text-align: left;
+                    font-weight: 500;
+                    padding: 0px 8px;
+                    margin-right: 6px;
+                }
+            }
+
+            .devices-status {
+                flex: 1;
+            }
+        }
+    }
+
+    
+/* 顶部导航栏 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+.add-btn {
+  background-color: #4169e1;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 筛选栏 */
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.filter-item label {
+  font-size: 16px;
+}
+.filter-item input,
+.filter-item select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.filter-btn {
+  background-color: #4169e1;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 设备列表 */
+.device-list {
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  padding: 4px 16px 0px 16px;
+}
+.device-list h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.device-list ul {
+  list-style: none;
+  padding: 0;
+}
+.device-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #ccc;
+}
+.device-item:last-child {
+  border-bottom: none;
+}
+.device-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.device-info img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.device-info h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+.device-info p {
+  font-size: 14px;
+  color: #666;
+}
+.status {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.active {
+  background-color: #c1e1c1;
+  color: #2c732c;
+}
+.inactive {
+  background-color: #e1c1c1;
+  color: #732c2c;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.actions button {
+  background-color: white;
+  color: #666;
+}
+.actions .detail-btn {
+  background-color: #4169e1;
+  color: white;
+}
+
+
+}

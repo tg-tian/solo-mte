@@ -8,6 +8,7 @@
     flex-direction: column;
     overflow: hidden;
     background: #F2F6FC;
+    user-select: none;
 
     .f-designer-header {
         font-size: 13px;
@@ -91,6 +92,16 @@
         overflow: hidden;
     }
 
+    .f-designer-page-content.f-designer-canvas {
+        .f-designer-page-content-nav {
+            z-index: 850;
+        }
+
+        >.f-splitter-horizontal-resize-proxy {
+            z-index: 850;
+        }
+    }
+
     .f-designer-page-content-nav {
         display: flex;
         flex-direction: column;
@@ -113,6 +124,39 @@
         flex-shrink: 1;
         flex-grow: 1;
         flex-basis: 0;
-        overflow: auto;
+        overflow: hidden;
+
+        .f-designer-view-tabs-item {
+            color: #6080AD;
+            height: 32px;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+
+            &.active {
+                background-color: #eff5ff;
+                color: #5B89FE;
+            }
+        }
+
+        .form-designer-view:not([hidden]) {
+            display: flex;
+        }
+
+        textarea.designer-code-text {
+            border: 0;
+            background: #282828;
+            outline: none;
+            font-size: 18px;
+            color: #e9e9e9;
+            word-wrap: inherit;
+            resize: none;
+        }
+
+        .property-panel {
+            z-index: 850;
+        }
     }
+
+
 }

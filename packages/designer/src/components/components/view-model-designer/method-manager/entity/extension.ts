@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import { IOperationNode } from './operation-node';
 import { ITreeNode } from './tree-node';
 import { ExecuteNode } from './execute-node';

@@ -1,13 +1,34 @@
 {
+    "title": "场景计算开发平台",
     "emptyFunctionPage": "./assets/empty-page.html",
     "functionSourceUri": "./assets/solo-functions.json",
+    "workAreaSourceUri": "./assets/work-areas.json",
+    "residentWorkAreas": [
+        {
+            "workAreaId": "default",
+            "instanceId": "default",
+            "code": "default",
+            "name": "default",
+            "functions": [
+                {
+                    "functionId": "home",
+                    "instanceId": "home",
+                    "code": "home",
+                    "name": "",
+                    "url": "/platform/runtime/sys/web/home/index.html",
+                    "icon": "f-icon f-icon-index-face",
+                    "fix": true
+                }
+            ]
+        }
+    ],
     "residentFunctions": [
         {
             "functionId": "home",
             "instanceId": "home",
             "code": "home",
             "name": "",
-            "url": "./assets/default-home.html",
+            "url": "/platform/runtime/sys/web/home/index.html",
             "icon": "f-icon f-icon-index-face",
             "fix": true
         }

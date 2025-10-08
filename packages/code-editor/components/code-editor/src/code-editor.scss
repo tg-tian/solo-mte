@@ -1,0 +1,17 @@
+.ide-code-editor {
+  box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  // overflow: hidden;
+
+  .editor-container {
+    height: 100%;
+  }
+}
+
+// 解决monaco代码编辑器垂直滚动条不显示的问题
+.ide-code-editor .editor-container ::ng-deep .monaco-scrollable-element .scrollbar {
+  z-index: 1;
+}

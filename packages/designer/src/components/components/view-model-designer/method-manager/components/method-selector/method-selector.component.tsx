@@ -1,13 +1,11 @@
-import { DataColumn } from "@farris/ui-vue/components/data-view";
-import { FLoadingService } from "@farris/ui-vue/components/loading";
-import { FNotifyService } from "@farris/ui-vue/components/notify";
-import { FTreeGrid } from "@farris/ui-vue/components/tree-grid";
+import { DataColumn, FLoadingService, FNotifyService, FTreeGrid, FSchemaSelector,ControllerSchemaRepositorySymbol,FModal } from "@farris/ui-vue";
 import { SetupContext, defineComponent, ref, inject, onMounted } from "vue";
 import { methodSelectorProps, MethodSelectorProps } from "./method-selector.props";
 import { useWebCommandSelector } from "./use-web-command-selector";
 import { WebCommand, WebCommandMetadata } from "../../entity/web-command";
 
 import './method-selector.scss';
+import { UseFormSchema } from "../../../../../types";
 
 export default defineComponent({
     name: 'FMethodSelector',
@@ -26,17 +24,25 @@ export default defineComponent({
         const selectionOption = { enableSelectRow: true, multiSelect: true, showCheckbox: true, multiSelectMode: 'OnCheckAndClick' };
         const hierarchy = { cascadeOption: { autoCheckChildren: true, autoCheckParent: true } };
 
-        const { webCommandsTreeData, loadWebCommands } = useWebCommandSelector();
-
+        const useFormSchema = inject('useFormSchema') as UseFormSchema;
+        const { webCommandsTreeData, loadWebCommands, addControllerMetadata } = useWebCommandSelector();
+        const showControllerSelectorModal = ref(false);
+        const controllerSelectorRef = ref();
+        const controllerSelectorParams = ref();
+        const newWebControllers: any = ref([]);
         onMounted(() => {
-            const LoadingService: any = inject<FLoadingService>('LoadingService');
-            const instance = LoadingService.show();
+            const LoadingService: any = inject<FLoadingService>('FLoadingService');
+            const instance = LoadingService?.show();
             loadWebCommands().then(() => {
                 methodSelectorGridRef.value.updateDataSource(webCommandsTreeData.value);
                 instance.value.close();
             }, (error: any) => {
                 instance.value.close();
             });
+
+            controllerSelectorParams.value = {
+                formBasicInfo: useFormSchema?.getFormMetadataBasicInfo()
+            };
         });
 
         function onSubmitClicked() {
@@ -47,6 +53,7 @@ export default defineComponent({
             }
 
             const selectedCommands: Array<{ command: WebCommand; controller: WebCommandMetadata }> = [];
+            const newControllers: any[] = [];
             selectedItems.forEach((selection: any) => {
                 const selectionData = selection.data;
                 // 去除控制器节点
@@ -54,6 +61,10 @@ export default defineComponent({
                     return;
                 }
                 const controllerNode: any = webCommandsTreeData.value.find((treeItem: any) => treeItem.id === selection.parent);
+                const newContoller = newWebControllers.value.find(controller => controller.id === controllerNode?.data.data.originalData.Id);
+                if (newContoller) {
+                    newControllers.push(newContoller);
+                }
                 selectedCommands.push({
                     command: selectionData.data.originalData,
                     controller: controllerNode?.data.data.originalData
@@ -66,15 +77,27 @@ export default defineComponent({
             }
             context.emit('submit', {
                 selectedCommands,
-                newWebControllers: []
+                newWebControllers: newControllers
             });
 
         }
         function onCancelClicked() {
             context.emit('cancel');
         }
+
         function onClickAddController() {
-            notifyService.warning('暂不支持');
+            showControllerSelectorModal.value = true;
+        }
+        async function onSubmitController(selectedController: any) {
+
+            await addControllerMetadata(selectedController, newWebControllers.value);
+
+            methodSelectorGridRef.value.updateDataSource(webCommandsTreeData.value);
+
+            showControllerSelectorModal.value = false;
+        }
+        function onCancelController(e) {
+            showControllerSelectorModal.value = false;
         }
         return () => {
             return (
@@ -89,10 +112,11 @@ export default defineComponent({
                         <FTreeGrid
                             ref={methodSelectorGridRef}
                             columns={columns}
-                            data={webCommandsTreeData}
+                            data={webCommandsTreeData.value}
                             hierarchy={hierarchy}
                             selection={selectionOption}
                             fit={true}
+                            columnOption={{fitColumns:true}}
                             row-number={rowNumberOption}
                         ></FTreeGrid>
                     </div>
@@ -101,7 +125,19 @@ export default defineComponent({
                         <button type="button" class="btn btn-secondary" onClick={onCancelClicked}>取消</button>
                         <button type="button" class="btn btn-primary" onClick={onSubmitClicked}>确定</button>
                     </div>
-
+                    {
+                        showControllerSelectorModal.value ?
+                            <FModal v-model={showControllerSelectorModal.value} show-buttons={false} title="选择控制器" width={950} height={560} fit-content={false} draggable={true}>
+                                <FSchemaSelector
+                                    ref={controllerSelectorRef}
+                                    injectSymbolToken={ControllerSchemaRepositorySymbol}
+                                    view-type="NavList"
+                                    editorParams={controllerSelectorParams.value}
+                                    showFooter={true}
+                                    onCancel={onCancelController}
+                                    onSubmit={onSubmitController}></FSchemaSelector>
+                            </FModal > : ''
+                    }
                 </div>
             );
         };

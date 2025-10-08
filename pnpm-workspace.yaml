@@ -1,4 +1,6 @@
 packages:
   # all packages in direct subdirs of packages/
   - 'packages/workbench'
+  - 'packages/ide'
+  - 'packages/code-editor'
   - 'packages/designer'

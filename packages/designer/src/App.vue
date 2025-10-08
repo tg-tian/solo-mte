@@ -13,6 +13,7 @@ const routes: Record<string, any> = {
 };
 
 const currentView = computed(() => {
+    // eslint-disable-next-line no-constant-binary-expression
     const routePath: string = `/${currentPath.value.slice(1)}` || '/';
     return routes[routePath] || FDesigner;
 });

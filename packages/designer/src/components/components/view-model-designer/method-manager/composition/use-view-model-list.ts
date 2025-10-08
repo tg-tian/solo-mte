@@ -1,6 +1,7 @@
 import { inject } from 'vue';
 import { ComponentType, FormViewModel, UseFormSchema } from '../../../../types';
 import { useViewModelName } from './use-view-model-name';
+import { UseDesignerContext } from '../../../../../components/types/designer-context';
 
 /**
  * 按照组件引用顺序构造视图模型列表
@@ -10,6 +11,8 @@ export function useViewModelNavigation() {
     const viewModelNameBuilder = useViewModelName();
     let componentListInModalFrame: any[] = [];
     const useFormSchema = inject('useFormSchema') as UseFormSchema;
+    const designerContext = inject('designerContext') as UseDesignerContext;
+
     const formSchema = useFormSchema.getFormSchema();
 
     function getAllComponentIdsBySort(componentSchema: any, componentIdList: string[], isInModalFrame = false) {
@@ -53,19 +56,24 @@ export function useViewModelNavigation() {
      * 按照组件引用的顺序排列ViewModel节点
      */
     function sortViewModels() {
-        const rootComponent = useFormSchema.getComponentById('root-component');
-        if (!rootComponent) {
+        const pageComponents = designerContext.getPageComponents(useFormSchema);
+
+        if (!pageComponents) {
             return [];
         }
         const componentIdList: string[] = [];
-        getAllComponentIdsBySort(rootComponent, componentIdList);
+        const sortedViewModels: FormViewModel[] = [];
+
+        pageComponents.forEach(pageComponent => {
+            getAllComponentIdsBySort(pageComponent, componentIdList);
+
+            const pageViewModel = useFormSchema.getViewModelById(pageComponent.viewModel);
+            if (pageViewModel) {
+                sortedViewModels.push(pageViewModel);
+            }
+        });
 
         const components = formSchema.module.components.filter(component => component.componentType !== ComponentType.Frame);
-        const sortedViewModels: FormViewModel[] = [];
-        const rootViewModel = useFormSchema.getViewModelById(rootComponent.viewModel);
-        if (rootViewModel) {
-            sortedViewModels.push(rootViewModel);
-        }
         componentIdList.forEach(componentId => {
             const targetComponent = components.find(component => component.id === componentId);
             if (targetComponent) {
@@ -75,7 +83,7 @@ export function useViewModelNavigation() {
         return sortedViewModels;
     }
 
-    function resolveViewModelList(): { viewModelTabs: any[]; activeViewModel: FormViewModel } | undefined {
+    function resolveViewModelList(activeViewModelId: string = ''): { viewModelTabs: any[]; activeViewModel: FormViewModel } | undefined {
         if (!formSchema?.module) {
             return;
         }
@@ -99,7 +107,14 @@ export function useViewModelNavigation() {
                 });
             }
         });
-        return { viewModelTabs, activeViewModel: viewModels[0] };
+        let activeViewModelIndex = 0;
+        if (activeViewModelId) {
+            const index = viewModels.findIndex(viewModel => viewModel.id === activeViewModelId);
+            if (index > 0) {
+                activeViewModelIndex = index;
+            }
+        }
+        return { viewModelTabs, activeViewModel: viewModels[activeViewModelIndex] };
 
     }
 

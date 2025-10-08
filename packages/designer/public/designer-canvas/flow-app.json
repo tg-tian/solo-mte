@@ -1,0 +1,117 @@
+{
+    "id": "root-component",
+    "type": "process",
+    "contents": [
+        {
+            "id": "start-event",
+            "type": "start-event"
+        },
+        {
+            "id": "start-event_smoke-detector-activity",
+            "type": "sequence-flow",
+            "source": "start-event",
+            "target": "smoke-detector-activity"
+        },
+        {
+            "id": "smoke-detector-activity",
+            "type": "component-node",
+            "content": [
+                {
+                    "id": "smoke-detector",
+                    "type": "smoke-detector"
+                }
+            ]
+        },
+        {
+            "id": "smoke-detector-activity_smoke-detector-event",
+            "type": "sequence-flow",
+            "source": "smoke-detector-activity",
+            "target": "smoke-detector-event"
+        },
+        {
+            "id": "smoke-detector-event",
+            "type": "event-node",
+            "content": [
+                {
+                    "id": "report-smoke",
+                    "type": "device-event"
+                }
+            ]
+        },
+        {
+            "id": "smoke-detector-event_greater_than_500",
+            "type": "sequence-flow",
+            "source": "smoke-detector-event",
+            "target": "greater_than_500"
+        },
+        {
+            "id": "greater_than_500",
+            "type": "logic-node",
+            "content": [
+                {
+                    "property": "smoke",
+                    "compare": "greater_than",
+                    "value": 500
+                }
+            ]
+        },
+        {
+            "id": "smoke-alert",
+            "type": "task-node",
+            "content": [
+                {
+                    "service": "alter",
+                    "params": []
+                }
+            ]
+        },
+        {
+            "id": "end-event",
+            "type": "end-event"
+        }
+    ],
+    "diagrams": [
+        {
+            "id": "start-event",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        },
+        {
+            "id": "smoke-detector-activity",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        },
+        {
+            "id": "smoke-detector-event",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        },
+        {
+            "id": "greater_than_500",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        },
+        {
+            "id": "smoke-alert",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        },
+        {
+            "id": "end-event",
+            "position": {
+                "x": 900,
+                "y": 700
+            }
+        }
+    ]
+}

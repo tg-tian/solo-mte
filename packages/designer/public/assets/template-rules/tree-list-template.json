@@ -1,0 +1,79 @@
+{
+    "f-struct-wrapper": {
+        "description": "左树右列表模板的树组件",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-content-nav"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-content-nav"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-content-nav"
+                    }
+                }
+            ]
+        }
+    },
+    "f-section-treegrid": {
+        "description": "树表格组件的父级分组面板",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "contents": [
+                        {
+                            "class": "f-component-treetable"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "contents": [
+                        {
+                            "class": "f-component-treetable"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-struct-wrapper"
+                        }
+                    ],
+                    "contents": [
+                        {
+                            "class": "f-component-treetable"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

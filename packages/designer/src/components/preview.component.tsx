@@ -1,7 +1,6 @@
 import { ref, provide, defineComponent } from 'vue';
 import { useFormSchema } from './composition/use-form-schema';
-import { FDesignerCanvas } from '@farris/ui-vue/components/designer-canvas';
-import { FDynamicView } from '@farris/ui-vue/components/dynamic-view';
+import { FDesignerCanvas, FDynamicView } from '@farris/ui-vue';
 
 import './preview.scss';
 
@@ -40,7 +39,7 @@ export default defineComponent({
         return () => {
             return (
                 <div style="display: flex; width: 100%">
-                    <FDynamicView v-model={componentJson.value} hidden={!showDynamicView.value}></FDynamicView>
+                    <FDynamicView schema={componentJson.value} hidden={!showDynamicView.value}></FDynamicView>
                     <div class="f-designer-page" hidden={showDynamicView.value}>
                         <FDesignerCanvas v-model={componentJson.value}></FDesignerCanvas>
                     </div>

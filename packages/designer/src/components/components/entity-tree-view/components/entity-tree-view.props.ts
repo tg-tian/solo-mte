@@ -18,7 +18,41 @@ import { ExtractPropTypes } from 'vue';
 export const entityTreeProps = {
     /** 表单schema */
     data: { type: Object, default: [] },
+    /** 拖拽框架 */
+    dragula: { type: Object }
 
 } as Record<string, any>;
 
 export type EntityTreeProps = ExtractPropTypes<typeof entityTreeProps>;
+
+
+export const createNewEntityProps = {
+    useFormSchema: { type: Object },
+    /** 当前已存在的实体编号 */
+    existedEntityCodes: { type: Array<string> }
+} as Record<string, any>;
+export type CreateNewEntityProps = ExtractPropTypes<typeof createNewEntityProps>;
+
+
+export const createNewFieldProps = {
+    useFormSchema: { type: Object },
+    /** 当前实体 */
+    entityCode: { type: String },
+    /** 当前实体中已有的字段 */
+    existedAllFields: { type: Object },
+    /** 当前实体是否为新建的子实体 */
+    isNewEntity: { type: Boolean }
+} as Record<string, any>;
+export type CreateNewFieldProps = ExtractPropTypes<typeof createNewFieldProps>;
+
+export const modifyFieldProps = {
+    useFormSchema: { type: Object },
+    /** 当前实体 */
+    entityCode: { type: String },
+    /** 当前编辑的字段节点 */
+    fieldNode: { type: Object },
+    /** 当前实体中已有的字段 */
+    existedAllFields: { type: Object },
+} as Record<string, any>;
+export type ModifyFieldProps = ExtractPropTypes<typeof modifyFieldProps>;
+

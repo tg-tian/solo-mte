@@ -1,0 +1,158 @@
+[
+    {
+        "type": "basic",
+        "name": "基础类控件",
+        "items": [
+            {
+                "id": "Button",
+                "type": "button",
+                "name": "按钮",
+                "category": "basic",
+                "icon": "button"
+            },
+            {
+                "id": "ButtonGroup",
+                "type": "button-group",
+                "name": "按钮组",
+                "category": "basic",
+                "icon": "button-group"
+            }
+        ]
+    },
+    {
+        "type": "input",
+        "name": "输入类控件",
+        "items": [
+            {
+                "id": "TextBox",
+                "type": "input-group",
+                "name": "文本框",
+                "category": "input",
+                "icon": "input-group"
+            },
+            {
+                "id": "MultiTextBox",
+                "type": "textarea",
+                "name": "多行文本",
+                "category": "input",
+                "icon": "textarea"
+            },
+            {
+                "id": "DateBox",
+                "type": "date-picker",
+                "name": "日期选择",
+                "category": "input",
+                "icon": "date-picker"
+            },
+            {
+                "id": "EnumField",
+                "type": "enum-field",
+                "name": "选择器",
+                "category": "input",
+                "icon": "input-group"
+            },
+            {
+                "id": "NumericBox",
+                "type": "number-spinner",
+                "name": "数值",
+                "category": "input",
+                "icon": "number-spinner"
+            },
+            {
+                "id": "RadioGroup",
+                "type": "radio-group",
+                "name": "单选组",
+                "category": "input",
+                "icon": "radio-group"
+            },
+            {
+                "id": "CheckBoxGroup",
+                "type": "check-group",
+                "name": "复选框组",
+                "category": "input",
+                "icon": "check-group"
+            },
+            {
+                "id": "SwitchField",
+                "type": "switch",
+                "name": "开关",
+                "category": "input",
+                "icon": "switch"
+            }
+        ]
+    },
+    {
+        "type": "navigation",
+        "name": "导航类控件",
+        "items": [
+            {
+                "id": "NavigationBar",
+                "type": "navigation-bar",
+                "name": "导航栏",
+                "category": "navigation",
+                "icon": "nav-tab"
+            }
+        ]
+    },
+    {
+        "type": "container",
+        "name": "容器类控件",
+        "items": [
+            {
+                "id": "PageHeaderContainer",
+                "type": "page-header-container",
+                "name": "页头容器",
+                "category": "container",
+                "icon": "content-container"
+            },
+            {
+                "id": "PageFooterContainer",
+                "type": "page-footer-container",
+                "name": "页尾容器",
+                "category": "container",
+                "icon": "content-container"
+            },
+            {
+                "id": "ContentContainer",
+                "type": "content-container",
+                "name": "通用容器",
+                "category": "container",
+                "icon": "content-container"
+            },
+            {
+                "id": "FloatContainer",
+                "type": "float-container",
+                "name": "浮动容器",
+                "category": "container",
+                "icon": "content-container"
+            },
+            {
+                "id": "Form",
+                "type": "form",
+                "name": "字段卡片",
+                "category": "container",
+                "icon": "response-form"
+            },
+            {
+                "id": "Card",
+                "type": "card",
+                "name": "卡片",
+                "category": "container",
+                "icon": "section"
+            }
+        ]
+    },
+    {
+        "type": "display",
+        "name": "展示类控件",
+        "items": [
+            {
+                "id": "ListView",
+                "type": "list-view",
+                "name": "列表",
+                "category": "display",
+                "icon": "list-view"
+            }
+        ]
+    }
+]

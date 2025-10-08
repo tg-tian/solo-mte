@@ -62,7 +62,7 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
     }
 
     function openNewFunctionUrl(functionId: string, code: string, name: string, url: string, icon = '', fix = false) {
-        const instanceId = `${functionId}${Date.now()}`;
+        const instanceId = `func${functionId}${Date.now()}`;
         const newFunctionInstance = { functionId, instanceId, code, name, url, icon, fix };
         functionInstances.value.push(newFunctionInstance);
         functionInstanceMap.set(functionId, newFunctionInstance);

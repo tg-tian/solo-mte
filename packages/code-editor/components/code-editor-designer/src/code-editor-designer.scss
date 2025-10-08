@@ -1,0 +1,191 @@
+.code-editor--wrapper {
+  box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  background-color: #FFFFFF;
+
+  .code-editor--content {
+    height: 98%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .code-editor--tool-bar {
+    flex: 0 0 50px;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    .tool-bar--left {
+      flex: 0 0 auto;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .tool-bar--center {
+      flex: 1 1 0;
+      height: 100%;
+      overflow: hidden;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .tool-bar--right {
+      flex: 0 0 auto;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .tool-bar--append {
+      flex: 0 0 auto;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+  }
+
+  .code-editor--main {
+    display: flex;
+    flex: 1 1 0;
+    // overflow: hidden;
+    min-height: 0;
+    .code-editor--monaco {
+      flex: 1;
+    }
+  }
+}
+
+.code-editor--switch-btn {
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  height: 24px;
+  padding: 0 8px;
+  padding-left: 28px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 3px 0px rgba(161, 179, 255, .37);
+  font-size: 13px;
+  color: #7C92BD;
+  background-color: #FFFFFF;
+  border: none !important;
+  outline: none !important;
+}
+.code-editor--switch-btn i {
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 8px;
+}
+.code-editor--switch-btn:active {
+  background-color: #FCFDFF;
+  box-shadow: 0px 0px 2px 0px rgba(161, 179, 255, .37);
+}
+.code-editor--switch-btn {
+  margin-left: 15px;
+  margin-right: 9px;
+}
+
+.code-editor--tool-btns {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  margin-left: 20px;
+  margin-right: 24px;
+
+  &.app-no-margin {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .code-editor--tool-btn {
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0;
+    font-weight: 500;
+    color: #627AAA;
+    background-color: #FFFFFF;
+
+    &:hover, &:active {
+      text-decoration: underline;
+    }
+    &:active {
+      color: #849CCC;
+    }
+    &:disabled {
+      text-decoration: none;
+      cursor: not-allowed;
+      color: #849CCC;
+    }
+    &.hide {
+      display: none;
+    }
+  }
+
+  .code-editor--tool-btn + .code-editor--tool-btn {
+    margin-left: 20px;
+  }
+}
+
+/* 预置的切换图标类 */
+[class*=" preset-switch-button-icon--"], [class^=preset-switch-button-icon--] {
+  width: 1.4em;
+  height: 1.4em;
+  display: inline-block;
+  background-position: 50% 50%;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+/* 代码图标 */
+.preset-switch-button-icon--code {
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='16' viewBox='0 0 18 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M6.003 3.167a.548.548 0 0 0-.787 0L1.17 7.057a.533.533 0 0 0 0 .779l3.935 3.891a.548.548 0 0 0 .787 0 .533.533 0 0 0 0-.778L2.405 7.502l3.598-3.557a.94.94 0 0 0 0-.778zm4.048 0c-.225 0-.562.11-.674.444l-2.024 7.56c-.113.334.112.556.45.667.337.111.562-.11.674-.444l2.024-7.56c.112-.223-.113-.556-.45-.667zm6.634 3.89l-3.935-3.89a.548.548 0 0 0-.787 0 .533.533 0 0 0 0 .778l3.485 3.557-3.598 3.558a.533.533 0 0 0 0 .778.548.548 0 0 0 .787 0l3.935-3.89c.225-.223.225-.668.113-.89z' fill='%238DA3CE' fill-rule='nonzero'/%3E%3Cpath d='M0 0h18v16H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* 方法描述图标 */
+.preset-switch-button-icon--method-desc {
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='16' viewBox='0 0 18 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M13.044 12.752v-2.126a.532.532 0 0 0-.532-.531h-2.126a.532.532 0 0 0-.532.531v.532H9.12L8.057 9.032h6.05V10.1a.532.532 0 0 0 .901.382l2.075-1.557a.55.55 0 0 0 0-.85L14.957 6.48a.532.532 0 0 0-.85.426v1.063H6.462l1.063-2.126h.828a1.595 1.595 0 1 0 0-1.063H7.197a.532.532 0 0 0-.476.293L5.274 7.97h-.805a2.126 2.126 0 1 0 0 1.063h2.4l1.447 2.895c.09.18.274.294.475.294h1.063v.531c0 .294.238.532.532.532h2.126a.532.532 0 0 0 .532-.532zM15.878 8.5l-.708.532V7.969l.708.531zm-5.492-3.189a.532.532 0 1 1-.532-.531.532.532 0 0 1 .532.531zM2.413 9.563A1.063 1.063 0 1 1 3.476 8.5c0 .587-.476 1.063-1.063 1.063zm8.504 2.658v-1.063h1.063v1.063h-1.063z' fill='%238DA3CE' fill-rule='nonzero'/%3E%3Cpath d='M0 0h18v16H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* 事件描述图标 */
+.preset-switch-button-icon--event-desc {
+  width: 1.2em;
+  height: 1.2em;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M3.857 6.076l-.077.064-1.607 1.607a4.023 4.023 0 0 0 0 5.679 3.989 3.989 0 0 0 2.84 1.174 3.99 3.99 0 0 0 2.672-1.018l.166-.156 1.607-1.608a.554.554 0 0 0-.707-.848l-.077.064-1.608 1.608c-1.107 1.099-3.01 1.099-4.11 0a2.918 2.918 0 0 1-.13-3.972l.13-.139 1.608-1.607a.554.554 0 0 0-.707-.848zm5.571-.685l-.077.065L5.447 9.36l-.064.076a.552.552 0 0 0 .46.867.543.543 0 0 0 .322-.104l.067-.056 3.903-3.904a.554.554 0 0 0-.622-.896l-.085.048zM7.9 2.021l-.16.152L6.133 3.78a.554.554 0 0 0 .003.783.56.56 0 0 0 .712.063l.078-.064 1.606-1.606a2.917 2.917 0 0 1 4.11 0 2.918 2.918 0 0 1 .13 3.972l-.13.139-1.608 1.607a.554.554 0 0 0-.064.707l.065.078c.192.191.49.212.705.062l.077-.064 1.6-1.606a4.023 4.023 0 0 0 .152-5.519l-.15-.16a4.024 4.024 0 0 0-5.353-.291l-.166.14z' fill='%238DA3CE' fill-rule='nonzero'/%3E%3Cpath d='M0 0h16v16H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* 构件图标 */
+.preset-switch-button-icon--component {
+  width: 1rem;
+  height: 1rem;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M3.128 2c.424 0 .774.317.825.727l.006.104v1.25a.831.831 0 0 1-.727.825l-.104.007-.122-.05-.05 2.762 3.872.05v-.156c0-.424.317-.774.727-.825l.104-.006h6.579c.423 0 .773.317.824.726l.007.105v1.25a.831.831 0 0 1-.727.825l-.104.006H7.659a.831.831 0 0 1-.824-.727l-.007-.104.05-.106-3.872-.05-.05 3.7 3.872.05v-.157c0-.424.317-.773.727-.825l.104-.006h6.579c.423 0 .773.317.824.727l.007.104v1.25a.831.831 0 0 1-.727.825l-.104.006H7.659a.831.831 0 0 1-.824-.726l-.007-.105.05-.106h-4.39a.519.519 0 0 1-.51-.426l-.01-.093.05-7.918h-.187a.831.831 0 0 1-.825-.727L1 4.08v-1.25c0-.424.317-.773.727-.825L1.831 2h1.297zm10.64 10.313h-5.64l-.073.007a.363.363 0 0 0-.282.282l-.007.073v.313l.007.073c.029.141.14.253.282.282l.073.007h5.64l.074-.007a.363.363 0 0 0 .282-.282l.007-.073v-.313l-.007-.073a.363.363 0 0 0-.355-.29zm0-4.688h-5.64l-.073.007a.363.363 0 0 0-.282.282l-.007.074V8.3l.007.073c.029.142.14.253.282.282l.073.008h5.64l.074-.008a.363.363 0 0 0 .282-.282l.007-.073v-.313l-.007-.073a.363.363 0 0 0-.355-.289zM14.239 2c.423 0 .773.317.824.727l.007.104v1.25a.831.831 0 0 1-.727.825l-.104.007h-8.61a.831.831 0 0 1-.825-.727l-.006-.105v-1.25c0-.424.317-.773.727-.825L5.628 2h8.61zm-11.585.938H2.3l-.073.007a.363.363 0 0 0-.282.282l-.008.073v.313l.008.073c.029.141.14.253.282.282l.073.007h.353l.073-.007a.363.363 0 0 0 .282-.282l.008-.073V3.3l-.008-.073a.363.363 0 0 0-.355-.29zm11.116 0H6.097l-.073.007a.363.363 0 0 0-.282.282l-.008.073v.313l.008.073c.029.141.14.253.282.282l.073.007h7.672l.073-.007a.363.363 0 0 0 .282-.282l.007-.073V3.3l-.007-.073a.363.363 0 0 0-.355-.29z' fill='%238DA3CE' fill-rule='nonzero'/%3E%3Cpath d='M0 0h16v16H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
