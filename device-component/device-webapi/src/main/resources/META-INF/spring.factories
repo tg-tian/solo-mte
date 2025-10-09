@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration= com.ubml.devicewebapi.DeviceWebApiServiceConfiguration,com.ubml.devicewebapi.DeviceWebApiGenerateServiceConfiguration

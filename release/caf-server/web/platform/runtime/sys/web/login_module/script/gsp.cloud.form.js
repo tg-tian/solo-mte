@@ -1,1 +1,0 @@
-window.gspformService=window.gspformService||{};gspformService.rtf=gspformService.rtf||{};gspformService.rtf=function(b){b.authenform=function(a){a.hidden=function(a){};a.show=function(a){};a.beformsubmit=function(a){};a.getcontext=function(a,b){};a.setInfo=function(a,b){};a.i18n=function(a){};return a}(b.authenform||{});return b}(gspformService.rtf||{},window);

@@ -1,9 +1,0 @@
-{
-	"ScheduleCenter": "false",
-	"JobType": [{
-		"Order": "1",
-		"Name": "构件任务",
-		"Code": "ComponentJob",
-		"ClassName": "io.iec.edp.caf.scheduler.core.job.ComponentJob"
-	}]
-}

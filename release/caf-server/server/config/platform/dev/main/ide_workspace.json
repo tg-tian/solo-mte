@@ -1,9 +1,0 @@
-{
-  "WorkspaceDataLocation": "/projects",
-  "wsdatabaselocation": "/ws",
-  "MavenConfigLocation": "config/platform/dev/main/settings.xml",
-  "DirConfigLocation": "",
-  "NodeModulesLocation": "config/node_modules",
-  "MetadataIndexIP": "support-md-index.inspures.com",
-  "MetadataIndexPort": "80"
-}
