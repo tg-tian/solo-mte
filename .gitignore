@@ -20,3 +20,4 @@ buildNumber.properties
 release/caf-server/temp
 release/caf-server/logs
 node_modules
+dist
