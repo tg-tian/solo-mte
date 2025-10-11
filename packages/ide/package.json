@@ -9,7 +9,7 @@
         "build:system": "farris-cli build -c ./vite.config.build.ts"
     },
     "dependencies": {
-        "@farris/ui-vue": "^1.6.4-beta.0",
+        "@farris/ui-vue": "^1.6.5-beta.3",
         "@monaco-editor/loader": "^1.4.0",
         "axios": "^1.12.2",
         "monaco-editor": "^0.52.2",

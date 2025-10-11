@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "axios": "^1.12.2",
-        "@farris/ui-vue": "^1.6.4-beta.0",
+        "@farris/ui-vue": "^1.6.5-beta.3",
         "@farris/mobile-ui-vue": "latest",
         "@solo/code-editor":"workspace:^",
         "@monaco-editor/loader": "^1.4.0",

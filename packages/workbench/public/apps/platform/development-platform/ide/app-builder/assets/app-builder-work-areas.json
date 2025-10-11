@@ -5,8 +5,8 @@
         "name": "应用信息"
     },
     {
-        "id": "work-flow",
-        "code": "work-flow",
+        "id": "logic-flow",
+        "code": "logic-flow",
         "name": "业务流程",
         "functions": [
             {
@@ -46,7 +46,7 @@
                 "instanceId": "home",
                 "code": "home",
                 "name": "",
-                "url": "/platform/dev/main/web/webide/newide/index.html?path=/SagiDemo/SagiDemeModule/CommonDictionaries&boId=d8b09de6-5e7c-bfdf-d308-468827ba0d6b&ws=625s7acd&version=2.0#/home",
+                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
                 "icon": "f-icon f-icon-index-face",
                 "fix": true
             }

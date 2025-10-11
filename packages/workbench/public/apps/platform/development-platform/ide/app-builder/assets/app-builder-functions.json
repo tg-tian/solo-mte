@@ -15,8 +15,8 @@
         "child": null
     },
     {
-        "id": "work-flow",
-        "code": "WorkFlow",
+        "id": "logic-flow",
+        "code": "LogicFlow",
         "name": "业务流程",
         "parentId": "0",
         "layer": "1",
