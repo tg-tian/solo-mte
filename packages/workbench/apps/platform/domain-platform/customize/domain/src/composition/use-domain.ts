@@ -3,7 +3,7 @@ import { UseDomain } from "./types";
 import axios from "axios";
 
 export function useDomain(): UseDomain {
-    const domainSourceUri = './assets/domains.json';
+    const domainSourceUri = 'http://139.196.147.52:8080/domains';
     const domains: Ref<Record<string, any>[]> = ref([]);
 
     // const domains = ref([
