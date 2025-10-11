@@ -1,5 +1,5 @@
 {
-    "title": "场景计算开发平台",
+    "title": "SOLO-MTE",
     "emptyFunctionPage": "./assets/empty-page.html",
     "functionSourceUri": "./assets/solo-functions.json",
     "workAreaSourceUri": "./assets/work-areas.json",
