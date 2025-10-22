@@ -2,7 +2,6 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import { FButton, FListView, FProgress, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { PagesProps, pagesProps } from "./pages.props";
 import { mockPagesTasks } from './mock-data';
-import './pages.scss';
 import { PagesTask } from "./type";
 import { usePage } from "./composition/use-page";
 

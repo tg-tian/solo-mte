@@ -1,0 +1,16 @@
+{
+    "apiResource": "local",
+    "canvasPattern": "designer-canvas",
+    "uriPattern": "restful",
+    "metadataBaseUri": "/api/dev/main/v1.0/metadatas",
+    "metadataDevBaseUri": "/api/dev/main/v1.0/mdservice",
+    "createSchemaUri": "/api/dev/main/v1.0/designschema/create",
+    "createSourceCodeUri": "/api/dev/main/v1.0/tsfile/create",
+    "localMetadataUri": "/designer-canvas/flows.json",
+    "templateRulesOfCommon": "assets/template-rules/common.json",
+    "templateRulesBaseUri": "assets/template-rules",
+    "publishStatusSocketUri": "/api/dev/main/v1.0/lcm-log/ws",
+    "publishApplicationUri": "/api/dev/main/v1.0/repo-packages/publish",
+    "deployApplicationUri": "/api/dev/main/v1.0/frontend-project/runvueform",
+    "lookupConfigUri": "/api/dev/main/v1.0/bff/handleHelpConfigFilterSort"
+}

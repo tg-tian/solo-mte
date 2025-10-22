@@ -4,8 +4,6 @@ import { NavigationProps, navigationProps } from './navigation.props';
 import FFunctionNavigation from '../function-board/function-board.component';
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData } from '../../composition/types';
 
-import './navigation.css';
-
 export default defineComponent({
     name: 'Vertical Navigation Compact',
     props: navigationProps,

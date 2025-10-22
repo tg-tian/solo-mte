@@ -14,8 +14,6 @@ import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from "@fa
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData ,WorkAreaInstance} from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
 
-import './workspace.css';
-
 export default defineComponent({
     name: 'FAppWorkspace',
     props: workspaceProps,

@@ -2,7 +2,6 @@ import { computed, defineComponent, ref } from "vue";
 import { FButton, FListView, FProgress, FSection, FPageHeader } from "@farris/ui-vue";
 import { VariablesProps, variablesProps } from "./variables.props";
 import { mockVariablesTask } from './mock-data';
-import './variables.scss';
 import { VariablesTask } from "./type";
 
 export default defineComponent({

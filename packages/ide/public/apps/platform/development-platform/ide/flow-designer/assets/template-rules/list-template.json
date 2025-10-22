@@ -1,0 +1,32 @@
+{
+    "f-struct-wrapper": {
+        "description": "管理列表的表格",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main"
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -4,8 +4,6 @@ import { AnalysisProps, analysisProps } from "./analysis.props";
 import { mockAnalysisTasks } from './mock-data';
 
 import FAppAnalysisTaskCard from './components/analysis-task-card.component';
-
-import './analysis.scss';
 import { AyalysisTask } from "./type";
 
 export default defineComponent({

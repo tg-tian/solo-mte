@@ -2,8 +2,6 @@ import { defineComponent } from "vue";
 import { FButton, FDynamicForm, FDynamicFormGroup, FSection } from "@farris/ui-vue";
 import { ProfileProps, profileProps } from "./profile.props";
 
-import './profile.scss';
-
 export default defineComponent({
     name: 'FAppProfile',
     props: profileProps,

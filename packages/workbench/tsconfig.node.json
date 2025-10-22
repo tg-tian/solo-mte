@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // "strict": true,
+    "strict": true,
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",

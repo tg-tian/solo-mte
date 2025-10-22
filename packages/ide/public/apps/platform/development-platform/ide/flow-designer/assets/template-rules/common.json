@@ -1,0 +1,463 @@
+{
+    "f-page": {
+        "description": "页面根容器",
+        "canAccept": false,
+        "canMove": false,
+        "canDelete": false
+    },
+    "f-page-header": {
+        "description": "页面头部",
+        "canAccept": false,
+        "canMove": false,
+        "canDelete": false
+    },
+    "f-page-main": {
+        "description": "页面主区域",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-page"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-page"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canAccept": false
+    },
+    "f-grid-is-sub": {
+        "description": "表格组件的父级容器",
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-grid"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-treetable"
+                    }
+                }
+            ]
+        },
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-grid"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-treetable"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-grid"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-is-subgrid"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-treetable"
+                    }
+                }
+            ]
+        }
+    },
+    "f-section-grid": {
+        "description": "表格组件内的父级分组面板",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-struct-wrapper"
+                        }
+                    ],
+                    "contents": [
+                        {
+                            "class": "f-component-grid"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-struct-wrapper"
+                        }
+                    ],
+                    "contents": [
+                        {
+                            "class": "f-component-grid"
+                        }
+                    ]
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": [
+                        {
+                            "class": "f-struct-wrapper"
+                        }
+                    ],
+                    "contents": [
+                        {
+                            "class": "f-component-grid"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "f-struct-wrapper": {
+        "description": "子表分组面板的父容器(container>section>component-ref)、子表tab的父容器(container>section>tab)",
+        "canMove": true,
+        "canDelete": true,
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "firstLevelChild": {
+                        "type": "section",
+                        "class": "f-section-tabs"
+                    },
+                    "secondLevelChild": {
+                        "type": "tabs"
+                    }
+                },
+                {
+                    "firstLevelChild": {
+                        "type": "section",
+                        "class": "f-section-in-main"
+                    },
+                    "secondLevelChild": {
+                        "type": "component-ref"
+                    }
+                },
+                {
+                    "firstLevelChild": {
+                        "type": "section",
+                        "class": "f-section-in-mainsubcard"
+                    },
+                    "secondLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        }
+    },
+    "f-section-form": {
+        "description": "卡片面板的父级分组面板、附件的父级分组面板",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-form-layout"
+                    }
+                },
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "type": "uploader"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-form-layout"
+                    }
+                },
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "type": "uploader"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-form-layout"
+                    }
+                },
+                {
+                    "parent": {
+                        "type": "component"
+                    },
+                    "firstLevelChild": {
+                        "type": "uploader"
+                    }
+                }
+            ]
+        }
+    },
+    "f-form-layout": {
+        "description": "卡片面板",
+        "canDelete": false,
+        "canAccept": true,
+        "canMove": false
+    },
+    "f-component-tabs": {
+        "description": "子表区域固定层级:container>section>tabs",
+        "canDelete": false,
+        "canAccept": false,
+        "canMove": false
+    },
+    "f-component-grid": {
+        "description": "表格组件",
+        "canDelete": false,
+        "canAccept": false,
+        "canMove": false
+    },
+    "f-section-in-mainsubcard": {
+        "description": "子表区域的父级section，container>section>tabs或者container>section>component-ref",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        }
+    },
+    "f-section-in-main": {
+        "description": "子表区域的父级section，container>section>tabs或者container>section>component-ref",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        },
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "class": "f-component-tabs"
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-struct-wrapper"
+                    },
+                    "firstLevelChild": {
+                        "type": "component-ref"
+                    }
+                }
+            ]
+        }
+    },
+    "f-page-content": {
+        "description": "分栏面板",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": false
+    },
+    "f-page-content-nav": {
+        "description": "分栏面板导航区域(左侧)",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": false
+    },
+    "f-page-content-main": {
+        "description": "分栏面板主区域(右侧)",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": true
+    },
+    "f-section-scheme": {
+        "description": "筛选方案的外层Section",
+        "canMove": true,
+        "canDelete": true,
+        "canAccept": {
+            "invalidContext": [
+                {
+                    "firstLevelChild": {
+                        "type": "query-solution"
+                    }
+                }
+            ]
+        }
+    },
+    "f-page-module": {
+        "description": "列表模板下的表格组件父容器",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": false
+    },
+    "f-template-grid": {
+        "description": "列表模板下的表格组件",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-module"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-module"
+                    }
+                }
+            ]
+        },
+        "canAccept": false
+    },
+    "f-template-grid-container": {
+        "description": "列表模板下的表格控件父容器",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": false
+    }
+}
