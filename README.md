@@ -42,7 +42,7 @@ package下其他目录的作用将另行说明。
 
 在开发环境命令行下使用npm run dev可启动基座，正常启动后访问Local:   http://localhost:5173/ 即可查看网页界面。
 
-注意：运行前，需先启动inBuilder社区版。参见1中的安装文档。
+注意：运行前，需先启动inBuilder社区版，确保inBuilder已经运行（默认在5200端口可以访问到inBuilder登录页面）。参见1中的安装文档。
 
 如果启动时出现依赖包缺失，则手工npm install缺失的包应能修复。
 
