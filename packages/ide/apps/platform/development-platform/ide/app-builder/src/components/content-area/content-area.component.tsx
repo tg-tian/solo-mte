@@ -1,7 +1,5 @@
 import { defineComponent, inject, onMounted, withModifiers } from 'vue';
 import { ConfigOptions, FunctionInstance, UseConfig, UseFunctionInstance } from '../../composition/types';
-
-import './content-area.css';
 import { useFunctionInstance } from '../../composition/use-function-instance';
 import { contentAreaProps, ContentAreaProps } from './content-area.props';
 

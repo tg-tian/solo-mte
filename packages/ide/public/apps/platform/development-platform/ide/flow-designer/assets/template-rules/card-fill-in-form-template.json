@@ -1,0 +1,14 @@
+{
+    "f-page-layout": {
+        "description": "页面主区域容器",
+        "canAccept": false,
+        "canMove": false,
+        "canDelete": false
+    },
+    "f-page-container": {
+        "description": "页面中心区域",
+        "canAccept": true,
+        "canMove": false,
+        "canDelete": false
+    }
+}

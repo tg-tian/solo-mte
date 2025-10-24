@@ -2,7 +2,6 @@ import { computed, defineComponent, ref } from "vue";
 import { FButton, FListView, FProgress, FSection, FPageHeader } from "@farris/ui-vue";
 import { DevicesProps, devicesProps } from "./devices.props";
 import { mockDevicesTasks } from './mock-data';
-import './devices.scss';
 import { DevicesTask } from "./type";
 
 export default defineComponent({

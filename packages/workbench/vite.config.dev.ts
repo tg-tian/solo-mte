@@ -30,16 +30,14 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
                 domain: resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
-                appBuilder: resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
-                appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html')
+                // appBuilder: resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
+                // appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html')
             }
         }
     },
     resolve: {
         alias: {
-            '@': resolve(__dirname, '../'),
-            // '@farris/ui-vue': resolve(__dirname, '../ui-vue'),
-            '@farris/farris-admin': resolve(__dirname, './src')
+            '@': resolve(__dirname, '../')
         }
     }
 });
