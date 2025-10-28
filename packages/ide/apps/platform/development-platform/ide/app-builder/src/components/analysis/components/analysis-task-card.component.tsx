@@ -2,8 +2,6 @@ import { defineComponent, ref } from "vue";
 import { FButton, FDynamicForm, FDynamicFormGroup, FStep } from "@farris/ui-vue";
 import { analysisTaskCardProps, AnalysisTaskCardProps } from "./analysis-task-card.props";
 
-import './analysis-task-card.scss';
-
 export default defineComponent({
     name: 'FAppAnalysisTaskCard',
     props: analysisTaskCardProps,

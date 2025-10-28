@@ -2,7 +2,6 @@ import { computed, defineComponent, ref } from "vue";
 import { FButton, FListView, FProgress, FSection,FPageHeader } from "@farris/ui-vue";
 import { menuProps, MenuProps } from "./menu.props";
 import { mockMenuTask } from './mock-data';
-import './menu.scss';
 import { MenuTask } from "./type";
 
 export default defineComponent({

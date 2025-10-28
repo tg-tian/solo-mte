@@ -1,0 +1,23 @@
+{
+    "f-struct-wrapper": {
+        "description": "表格组件",
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-content-nav"
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-content-nav"
+                    }
+                }
+            ]
+        }
+    }
+}

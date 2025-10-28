@@ -1,0 +1,45 @@
+{
+   
+    "f-struct-like-card": {
+        "description": "页面主区域like-card，若只有一个，那么不可移动、删除，但可以接收控件",
+        "canAccept": true,
+        "canMove": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main",
+                        "isUnique": true
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-scrollspy-content",
+                        "isUnique": true
+                    }
+                }
+            ]
+        },
+        "canDelete": {
+            "invalidContext": [
+                {
+                    "parent": {
+                        "class": "f-page-main",
+                        "isUnique": true
+                    }
+                },
+                {
+                    "parent": {
+                        "class": "f-scrollspy-content",
+                        "isUnique": true
+                    }
+                }
+            ]
+        }
+    },
+    "f-scrollspy-content": {
+        "description": "滚动监听容器",
+        "canMove": false,
+        "canDelete": false,
+        "canAccept": false
+    }
+}
