@@ -1,7 +1,6 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { FButton, FListView, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { PageFlowProps, pageFlowProps } from "./page-flow.props";
-import './page-flow.scss';
 import { usePageFlow } from "./composition/use-page-flow";
 
 export default defineComponent({

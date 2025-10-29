@@ -1,7 +1,6 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { FButton, FListView, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { LogicFlowProps, logicFlowProps } from "./logic-flow.props";
-import './logic-flow.scss';
 import { useLogicFlow } from "./composition/use-logic-flow";
 
 export default defineComponent({

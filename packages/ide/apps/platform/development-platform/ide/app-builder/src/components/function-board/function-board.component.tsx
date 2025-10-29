@@ -3,8 +3,6 @@ import { FListView, FNav } from '@farris/ui-vue';
 import { FunctionBoardProps, functionBoardProps } from './function-board.props';
 import { FunctionItem, MenuGroupItem, UseFunctionInstance } from '../../composition/types';
 
-import './function-board.css';
-
 export default defineComponent({
     name: 'FAFunctionBoard',
     props: functionBoardProps,
