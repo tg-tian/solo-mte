@@ -24,9 +24,6 @@ importers:
 
   packages/code-editor:
     dependencies:
-      '@farris/ui-vue':
-        specifier: ^1.6.5-beta.3
-        version: 1.6.5-beta.3(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))(vue@3.5.13(typescript@5.8.2))
       '@microsoft/tsdoc':
         specifier: 0.10.0
         version: 0.10.0
@@ -196,9 +193,6 @@ importers:
       '@farris/mobile-ui-vue':
         specifier: latest
         version: 0.0.1-beta.3(typescript@4.9.5)
-      '@farris/ui-vue':
-        specifier: ^1.6.5-beta.3
-        version: 1.6.5-beta.3(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0))(vue@3.5.13(typescript@4.9.5))
       '@monaco-editor/loader':
         specifier: ^1.4.0
         version: 1.5.0
@@ -1981,9 +1975,6 @@ packages:
 
   '@farris/mobile-ui-vue@0.0.1-beta.3':
     resolution: {integrity: sha512-499FnKEf5OwEX+5w++AEi7KqpCASNJ0aVoLO6TOW82Rin9UKh8u36+4GdDwLjQiqW/qjoYXFItP21dZXcA/kCA==}
-
-  '@farris/ui-vue@1.6.5-beta.3':
-    resolution: {integrity: sha512-kpGx4xHAmNcsaniU2Aoodv33J8QYFDEX0lo+zE4K2r9fGvltvbrnWD8y45+0zhpZ0aZDZiFKf7Xx7CxmEDfWkA==}
 
   '@farris/ui-vue@1.6.5-beta.6':
     resolution: {integrity: sha512-3+SXOZWtW/ra16AINi9hJWI3Vrg3U6GvtWVYjg3mJCIL27oy+FcV2BvfI3dOVmH3YawxH8jUeYdTfNeIGmZM1A==}
@@ -8325,68 +8316,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@farris/ui-vue@1.6.5-beta.3(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0))(vue@3.5.13(typescript@4.9.5))':
-    dependencies:
-      '@docsearch/js': 3.6.0(@algolia/client-search@4.24.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)
-      '@farris/designer-dragula': 0.0.5
-      '@monaco-editor/loader': 1.5.0
-      '@types/lodash-es': 4.17.12
-      '@vue/shared': 3.5.22
-      '@vueuse/core': 9.13.0(vue@3.5.13(typescript@4.9.5))
-      async-validator: 4.2.5
-      bignumber.js: 9.1.2
-      date-fns: 3.6.0
-      echarts: 5.6.0
-      jsonp: 0.2.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      rxjs: 7.8.2
-      vite-plugin-dts: 2.3.0(@types/node@22.13.14)(rollup@4.37.0)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0))
-      vue-i18n: 11.1.12(vue@3.5.13(typescript@4.9.5))
-    transitivePeerDependencies:
-      - '@algolia/client-search'
-      - '@types/node'
-      - '@types/react'
-      - '@vue/composition-api'
-      - react
-      - react-dom
-      - rollup
-      - search-insights
-      - supports-color
-      - vite
-      - vue
-
-  '@farris/ui-vue@1.6.5-beta.3(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))(vue@3.5.13(typescript@5.8.2))':
-    dependencies:
-      '@docsearch/js': 3.6.0(@algolia/client-search@4.24.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)
-      '@farris/designer-dragula': 0.0.5
-      '@monaco-editor/loader': 1.5.0
-      '@types/lodash-es': 4.17.12
-      '@vue/shared': 3.5.22
-      '@vueuse/core': 9.13.0(vue@3.5.13(typescript@5.8.2))
-      async-validator: 4.2.5
-      bignumber.js: 9.1.2
-      date-fns: 3.6.0
-      echarts: 5.6.0
-      jsonp: 0.2.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      rxjs: 7.8.2
-      vite-plugin-dts: 2.3.0(@types/node@22.13.14)(rollup@4.37.0)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))
-      vue-i18n: 11.1.12(vue@3.5.13(typescript@5.8.2))
-    transitivePeerDependencies:
-      - '@algolia/client-search'
-      - '@types/node'
-      - '@types/react'
-      - '@vue/composition-api'
-      - react
-      - react-dom
-      - rollup
-      - search-insights
-      - supports-color
-      - vite
-      - vue
-
   '@farris/ui-vue@1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))(vue@3.5.22(typescript@5.8.2))':
     dependencies:
       '@docsearch/js': 3.6.0(@algolia/client-search@4.24.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)
@@ -8403,7 +8332,7 @@ snapshots:
       lodash: 4.17.21
       lodash-es: 4.17.21
       rxjs: 7.8.2
-      vite-plugin-dts: 2.3.0(@types/node@22.13.14)(rollup@4.37.0)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))
+      vite-plugin-dts: 2.3.0(@types/node@22.13.14)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0))
       vue-i18n: 11.1.12(vue@3.5.22(typescript@5.8.2))
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -13847,7 +13776,7 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-dts@2.3.0(@types/node@22.13.14)(rollup@4.37.0)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)):
+  vite-plugin-dts@2.3.0(@types/node@22.13.14)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)):
     dependencies:
       '@babel/parser': 7.27.0
       '@microsoft/api-extractor': 7.52.2(@types/node@22.13.14)
@@ -14346,20 +14275,6 @@ snapshots:
   vue-demi@0.14.10(vue@3.5.22(typescript@5.8.2)):
     dependencies:
       vue: 3.5.22(typescript@5.8.2)
-
-  vue-i18n@11.1.12(vue@3.5.13(typescript@4.9.5)):
-    dependencies:
-      '@intlify/core-base': 11.1.12
-      '@intlify/shared': 11.1.12
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.13(typescript@4.9.5)
-
-  vue-i18n@11.1.12(vue@3.5.13(typescript@5.8.2)):
-    dependencies:
-      '@intlify/core-base': 11.1.12
-      '@intlify/shared': 11.1.12
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.13(typescript@5.8.2)
 
   vue-i18n@11.1.12(vue@3.5.22(typescript@5.8.2)):
     dependencies:
