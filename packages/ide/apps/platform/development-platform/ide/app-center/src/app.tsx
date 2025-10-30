@@ -11,13 +11,15 @@ import './style.css';
 export default defineComponent({
     name: 'FAAppCenter',
     setup() {
-        const title = "inBuilder Community";
+        const title = "SOLO - 场景低代码开发平台";
         const workspace = ref('ws-Sagi-01');
         const currentUserName = ref('Sagi');
         const currentView = ref('start');
         const navData = [
             { id: 'start', text: '开始' },
-            { id: 'my-apps', text: '我的应用' }
+            { id: 'my-apps', text: '我的应用' },
+            { id: 'env', text: '我的环境' },
+            { id: 'device', text: '我的物理设备' }
         ];
 
         // 初始化Farris Admin全局配置对象
@@ -35,6 +37,8 @@ export default defineComponent({
 
         const shouldShowWelcome = computed(() => currentView.value === 'start');
         const shouldShowAppsView = computed(() => currentView.value === 'my-apps');
+        const shouldShowEnv = computed(() => currentView.value === 'env');
+        const shouldShowDevice = computed(() => currentView.value === 'device');
 
         function renderTitleArea() {
             return <div class="f-title">
@@ -82,8 +86,10 @@ export default defineComponent({
                         </nav>
                     </div>
                     <div class="f-page-main">
-                        {shouldShowWelcome.value && <FWelcome></FWelcome>}
-                        {shouldShowAppsView.value && <FApps></FApps>}
+                        {shouldShowWelcome.value && <FWelcome>WelCome</FWelcome>}
+                        {shouldShowAppsView.value && <FApps>AppList</FApps>}
+                        {shouldShowEnv.value && <FWelcome>Env</FWelcome>}
+                        {shouldShowDevice.value && <FWelcome>DeviceList</FWelcome>}
                     </div>
                 </div>
             );
