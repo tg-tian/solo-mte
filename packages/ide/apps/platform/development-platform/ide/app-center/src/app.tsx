@@ -2,6 +2,8 @@ import { computed, defineComponent, provide, ref } from "vue";
 import FApps from './components/apps/apps.component';
 import FWelcome from './components/welcome/welcome.component';
 import { FNav } from '@farris/ui-vue';
+import Env from './components/env/env.vue';
+import Device from './components/device/device.vue';
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions } from "./composition/type";
@@ -11,13 +13,15 @@ import './style.css';
 export default defineComponent({
     name: 'FAAppCenter',
     setup() {
-        const title = "inBuilder Community";
+        const title = "SOLO - 场景低代码开发平台";
         const workspace = ref('ws-Sagi-01');
         const currentUserName = ref('Sagi');
-        const currentView = ref('start');
+        const currentView = ref('device');
         const navData = [
             { id: 'start', text: '开始' },
-            { id: 'my-apps', text: '我的应用' }
+            { id: 'my-apps', text: '我的应用' },
+            { id: 'env', text: '我的环境' },
+            { id: 'device', text: '我的物理设备' }
         ];
 
         // 初始化Farris Admin全局配置对象
@@ -35,6 +39,8 @@ export default defineComponent({
 
         const shouldShowWelcome = computed(() => currentView.value === 'start');
         const shouldShowAppsView = computed(() => currentView.value === 'my-apps');
+        const shouldShowEnv = computed(() => currentView.value === 'env');
+        const shouldShowDevice = computed(() => currentView.value === 'device');
 
         function renderTitleArea() {
             return <div class="f-title">
@@ -82,8 +88,10 @@ export default defineComponent({
                         </nav>
                     </div>
                     <div class="f-page-main">
-                        {shouldShowWelcome.value && <FWelcome></FWelcome>}
-                        {shouldShowAppsView.value && <FApps></FApps>}
+                        {shouldShowWelcome.value && <FWelcome>WelCome</FWelcome>}
+                        {shouldShowAppsView.value && <FApps>AppList</FApps>}
+                        {shouldShowEnv.value && <Env domainId={1} sceneId={1} />}
+                        {shouldShowDevice.value && <Device domainId={1} sceneId={1} />}
                     </div>
                 </div>
             );
