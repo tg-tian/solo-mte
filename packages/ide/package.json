@@ -12,8 +12,12 @@
         "@farris/ui-vue": "^1.6.5-beta.6",
         "@monaco-editor/loader": "^1.4.0",
         "axios": "^1.12.2",
+        "element-plus": "^2.9.7",
         "monaco-editor": "^0.52.2",
-        "vue": "^3.2.37"
+        "pinia": "^3.0.1",
+        "pinia-plugin-persistedstate": "^4.5.0",
+        "vue": "^3.2.37",
+        "vue-router": "^4.5.0"
     },
     "devDependencies": {
         "@babel/parser": "^7.19.0",

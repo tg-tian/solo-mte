@@ -2,6 +2,8 @@ import { computed, defineComponent, provide, ref } from "vue";
 import FApps from './components/apps/apps.component';
 import FWelcome from './components/welcome/welcome.component';
 import { FNav } from '@farris/ui-vue';
+import Env from './components/env/env.vue';
+import Device from './components/device/device.vue';
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions } from "./composition/type";
@@ -14,7 +16,7 @@ export default defineComponent({
         const title = "SOLO - 场景低代码开发平台";
         const workspace = ref('ws-Sagi-01');
         const currentUserName = ref('Sagi');
-        const currentView = ref('start');
+        const currentView = ref('device');
         const navData = [
             { id: 'start', text: '开始' },
             { id: 'my-apps', text: '我的应用' },
@@ -88,8 +90,8 @@ export default defineComponent({
                     <div class="f-page-main">
                         {shouldShowWelcome.value && <FWelcome>WelCome</FWelcome>}
                         {shouldShowAppsView.value && <FApps>AppList</FApps>}
-                        {shouldShowEnv.value && <FWelcome>Env</FWelcome>}
-                        {shouldShowDevice.value && <FWelcome>DeviceList</FWelcome>}
+                        {shouldShowEnv.value && <Env domainId={1} sceneId={1} />}
+                        {shouldShowDevice.value && <Device domainId={1} sceneId={1} />}
                     </div>
                 </div>
             );
