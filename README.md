@@ -34,19 +34,21 @@ inBuilder下载地址：[inBuilder下载页](https://ibc.inspures.com/inbuilder/
 
 ### 3、打开运行框架基座项目
 
-package/workbench是一个完整的vite前端项目。可用开发环境打开，使用npm install获取依赖。
+package/workbench是元工具环境中元级定义能力模块。
+package/ide是元工具环境中低代码开发能力基座模块，可作为场景平台的实现基座。
+它们都是完整的vite前端项目，可用开发环境打开，使用npm install获取依赖。
 
-package下其他目录的作用将另行说明。
+package下其他目录的作用将另行说明。项目也可在package下用pnpm过滤相应模块启动，相关说明后续更新。
 
 ### 4、运行框架基座
 
-在开发环境命令行下使用npm run dev可启动基座，正常启动后访问Local:   http://localhost:5173/ 即可查看网页界面。
-
-注意：运行前，需先启动inBuilder社区版，确保inBuilder已经运行（默认在5200端口可以访问到inBuilder登录页面）。参见1中的安装文档。
+在开发环境命令行下到workbench或者ide下使用npm run dev可分别启动元级定义能力模块或低代码开发能力基座模块。
+workbench正常启动后访问Local:   http://localhost:5173/ 即可查看网页界面。
+ide正常启动后有两个应用地址：
+- 应用中心（相当于场景平台的首页）访问 http://localhost:5173/apps/platform/development-platform/ide/app-center/index.html
+- 应用构造工具（相当于场景平台中开发单个应用时的开发环境）访问 http://localhost:5173/apps/platform/development-platform/ide/app-builder/index.html
 
 如果启动时出现依赖包缺失，则手工npm install缺失的包应能修复。
-
-
 
 ## 如何在基座上开发新的功能
 
