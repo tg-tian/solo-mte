@@ -32,11 +32,10 @@
               <el-table-column prop="deviceCode" label="设备编码" width="150"></el-table-column>
               <el-table-column prop="deviceName" label="设备名称" min-width="150"></el-table-column>
               <el-table-column prop="deviceType.name" label="设备类型" width="120"></el-table-column>
-              <el-table-column prop="protocolType" label="协议类型" width="120"></el-table-column>
+              <el-table-column prop="protocolType" label="设备平台" width="120"></el-table-column>
               <el-table-column prop="deviceLocation" label="设备位置" width="120"></el-table-column>
               <!-- <el-table-column prop="devicePosition" label="设备坐标" width="120"></el-table-column> -->
               <el-table-column prop="createTime" label="创建时间" width="150"></el-table-column>
-              <el-table-column prop="lastOnlineTime" label="最后上线时间" width="150"></el-table-column>
               <el-table-column prop="status" label="状态" width="100">
                 <template #default="scope">
                   <el-tag v-if="scope.row.status === 1" type="success">在线</el-tag>
@@ -44,16 +43,83 @@
                   <el-tag v-else type="info">未激活</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="220">
+              <el-table-column label="操作" width="320">
                 <template #default="scope">
                   <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
                   <el-button type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+                  <el-button type="warning" size="small" @click="openReportDialog(scope.row)">测试</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </div>
           <el-empty v-else description="暂无设备" />
     </el-card>
+    <!-- 
+   -->
+
+  <!-- 
+   <el-dialog v-model="deviceDialogVisible" :title="isEdit ? '编辑设备' : '添加设备'" width="50%">
+      <el-form :model="deviceForm" label-width="120px" :rules="deviceRules" ref="deviceFormRef">
+        <el-form-item label="设备编码" prop="code">
+          <el-input v-model="deviceForm.code" placeholder="请输入设备编码"></el-input>
+        </el-form-item>
+        <el-form-item label="设备名称" prop="name">
+          <el-input v-model="deviceForm.name" placeholder="请输入设备名称"></el-input>
+        </el-form-item>
+        <el-form-item label="设备类型" prop="deviceTypeId">
+          <el-select v-model="deviceForm.deviceTypeId" placeholder="请选择设备类型">
+            <el-option v-for="(item, index) in deviceTypeList" :value="item.id" :label="item.name"
+              :key="item.code"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备平台" prop="protocolType">
+          <el-select v-model="deviceForm.protocolType" placeholder="请选择协议类型">
+            <el-option label="MQTT" value="MQTT"></el-option>
+            <el-option label="HTTP" value="HTTP"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备位置" prop="deviceLocation">
+          <el-select v-model="deviceForm.deviceLocation" placeholder="请选择设备位置">
+            <el-option v-for="area in areaStore.areas" :key="area.id" :value="area.name" :label="area.name"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="deviceDialogVisible = false">取消</el-button>
+          调整为调用 submitDeviceForm
+          <el-button type="primary" @click="submitDeviceForm" :loading="submitting">确认</el-button>
+        </span>
+      </template>
+    </el-dialog> 
+    -->
+
+    <!-- 新增：从设备列表添加的选择弹窗 -->
+    <el-dialog v-model="envDeviceDialogVisible" title="添加设备" width="60%">
+      <el-table :data="mockDevices" border>
+        <el-table-column prop="deviceCode" label="设备编码" width="150" />
+        <el-table-column prop="deviceName" label="设备名称" min-width="150" />
+        <el-table-column prop="deviceType.name" label="设备类型" width="120" />
+        <el-table-column prop="protocolType" label="设备平台" width="120" />
+        <el-table-column prop="deviceLocation" label="设备位置" width="120" />
+        <el-table-column label="操作" width="140">
+          <template #default="scope">
+            <el-button
+              type="primary"
+              size="small"
+              :disabled="isInCurrentList(scope.row)"
+              @click="addDeviceFromEnv(scope.row)"
+            >
+              {{ isInCurrentList(scope.row) ? '已添加' : '添加' }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <template #footer>
+        <el-button @click="envDeviceDialogVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
+
     <el-dialog v-model="deviceDialogVisible" :title="isEdit ? '编辑设备' : '添加设备'" width="50%">
       <el-form :model="deviceForm" label-width="120px" :rules="deviceRules" ref="deviceFormRef">
         <el-form-item label="设备编码" prop="code">
@@ -68,7 +134,7 @@
               :key="item.code"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="协议类型" prop="protocolType">
+        <el-form-item label="设备平台" prop="protocolType">
           <el-select v-model="deviceForm.protocolType" placeholder="请选择协议类型">
             <el-option label="MQTT" value="MQTT"></el-option>
             <el-option label="HTTP" value="HTTP"></el-option>
@@ -88,6 +154,20 @@
         </span>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="reportDialogVisible" :title="reportDialogTitle" width="50%">
+      <el-descriptions v-if="Object.keys(reportProperties).length" :column="1" border>
+        <el-descriptions-item v-for="(value, key) in reportProperties" :key="key" :label="key">
+          <pre style="margin:0">{{ formatValue(value) }}</pre>
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-empty v-else description="无属性" />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="reportDialogVisible = false">关闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -104,6 +184,7 @@ import { getSceneById } from '../../api/scene'
 import { useRouter, useRoute } from 'vue-router'
 import { Device, Area, DeviceType, DeviceConnection, Connection } from '../../types/models'
 import defaultImage from '@/assets/default.png'
+import { mockDevices } from '../../api/mock'
 
 const props = defineProps<{ domainId: number ; sceneId: number }>()
 
@@ -237,19 +318,9 @@ const areaImageUrl = (area: Area) => {
   return imageUrl
 };
 
-// 新增方法：打开新增设备对话框
+// 修改“添加设备”行为：打开环境设备选择弹窗
 const handleAddDevice = () => {
-  isEdit.value = false
-  currentId.value = -1
-  deviceForm.value = {
-    code: '',
-    name: '',
-    deviceTypeId: undefined,
-    protocolType: 'MQTT',
-    sceneId: sceneId.value,
-    deviceLocation: '',
-  }
-  deviceDialogVisible.value = true
+  envDeviceDialogVisible.value = true
 }
 
 const handleAddArea = () => {
@@ -301,9 +372,9 @@ const editAreaTree = async (row: Area) => {
 const handleSearch = () => {
 }
 
-const handleDelete = (row: any) => {
+const handleDelete = (row: Device) => {
   ElMessageBox.confirm(
-    `确定要删除设备 "${row.name}" 吗？`,
+    `确定要删除设备 "${row.deviceName}" 吗？`,
     {
       title: '警告',
       confirmButtonText: '确定',
@@ -311,19 +382,16 @@ const handleDelete = (row: any) => {
       type: 'warning'
     },
   )
-    .then(async () => {
-      try {
-        await deviceStore.deleteDevice(row.id)
-        await deviceStore.fetchDevices(sceneId.value)
-        ElMessage.success('删除成功')
-      } catch (error) {
-        ElMessage.error('删除失败')
-      }
+    .then(() => {
+      deviceList.value = deviceList.value.filter((d) => d.id !== row.id)
+      ElMessage.success('删除成功')
     })
     .catch(() => {
       // 用户取消操作
     })
 }
+
+
 
 const resetSearch = () => {
   searchForm.value.name = ''
@@ -453,24 +521,65 @@ const resetFormData = () => {
   }
 }
 
-// 过滤后的设备列表
-const filteredDevices = computed(() => {
-  if (!deviceStore.devices) return []
+ 
 
-  return deviceStore.devices.filter((device: Device) => {
+// 设备列表数据源：初始为空，由“添加设备”操作插入
+const deviceList = ref<Device[]>([])
+
+// 过滤后的设备列表：基于本地数据源
+const filteredDevices = computed(() => {
+  const source = deviceList.value || []
+  return source.filter((device: Device) => {
     const nameMatch = !searchForm.value.name || device.deviceName.toLowerCase().includes(searchForm.value.name.toLowerCase())
     const statusMatch = !searchForm.value.status || device.status === searchForm.value.status
     return nameMatch && statusMatch
-  }).map((device: Device) => {
-    return {
-      ...device,
-      createTime: device.createTime?.split('.')[0].replace('T', ' '),
-      updateTime: device.updateTime?.split('.')[0].replace('T', ' '),
-      lastOnlineTime: device.lastOnlineTime?.split('.')[0].replace('T', ' ')
-    }
-  })
+  }).map((device: Device) => ({
+    ...device,
+    createTime: device.createTime ? device.createTime.split('.')[0].replace('T', ' ') : '',
+    updateTime: device.updateTime ? device.updateTime.split('.')[0].replace('T', ' ') : '',
+    lastOnlineTime: device.lastOnlineTime ? device.lastOnlineTime.split('.')[0].replace('T', ' ') : ''
+  }))
 })
 
+// 新增：从设备列表添加设备的弹窗状态与方法
+const envDeviceDialogVisible = ref(false)
+
+
+const isInCurrentList = (row: Device) => {
+  return deviceList.value.some(d => d.deviceCode === row.deviceCode)
+}
+
+const addDeviceFromEnv = (row: Device) => {
+  if (isInCurrentList(row)) {
+    ElMessage.info('该设备已在当前列表中')
+    return
+  }
+  const nextId = (deviceList.value.length ? Math.max(...deviceList.value.map((d) => d.id)) : 0) + 1
+  deviceList.value.push({
+    ...row,
+    id: nextId,
+    sceneId: props.sceneId ?? 0,
+    properties: row.properties,
+    createTime: new Date().toISOString(),
+    updateTime: new Date().toISOString(),
+    lastOnlineTime: new Date().toISOString()
+  })
+  ElMessage.success(`设备 "${row.deviceName}" 已添加`)
+}
+
+const reportDialogVisible = ref(false)
+const reportDialogTitle = ref('设备消息上报')
+const reportProperties = ref<Record<string, any>>({})
+const openReportDialog = (row: Device) => {
+  reportProperties.value = row.properties || {}
+  reportDialogTitle.value = `${row.deviceName} 消息上报`
+  reportDialogVisible.value = true
+}
+const formatValue = (val: any) => {
+  if (val === null || val === undefined) return ''
+  if (typeof val === 'object') return JSON.stringify(val, null, 2)
+  return String(val)
+}
 
 
 

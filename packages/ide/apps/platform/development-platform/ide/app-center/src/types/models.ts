@@ -55,6 +55,7 @@ export interface Device {
     updateTime: string;
     lastOnlineTime: string;
     deviceLocation: string;
+    properties?: Record<string, any>;
 }
 
 export interface ProtocolConfig {

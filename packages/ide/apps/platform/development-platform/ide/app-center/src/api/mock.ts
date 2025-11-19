@@ -91,41 +91,224 @@ export const mockScenes = reactive<Scene[]>([
 ])
 
 // Mock devices data
+// export const mockDevices = reactive<Device[]>([
+//     {
+//         id: 1,
+//         sceneId: 1,
+//         deviceCode: 'TemperatureA1',
+//         deviceName: '温度传感器-A1',
+//         deviceTypeId: 1,
+//         status: 1,
+//         lastOnlineTime: '2023-12-20 14:30:45',
+//         createTime: '',
+//         updateTime: '',
+//         protocolType: 'MQTT',
+//         protocolConfig: {
+//             type: "aliyun",
+//             configs: {}
+//         },
+//         deviceLocation: ""
+//     },
+//     {
+//         id: 2,
+//         sceneId: 1,
+//         deviceCode: 'PressureP1',
+//         deviceName: '压力监测器-P2',
+//         deviceTypeId: 1,
+//         status: 1,
+//         lastOnlineTime: '2023-12-20 14:35:22',
+//         createTime: '',
+//         updateTime: '',
+//         protocolType: 'MQTT',
+//         protocolConfig: {
+//             type: "none",
+//             configs: {}
+//         },
+//         deviceLocation: ""
+//     }
+// ])
+
 export const mockDevices = reactive<Device[]>([
-    {
-        id: 1,
-        sceneId: 1,
-        deviceCode: 'TemperatureA1',
-        deviceName: '温度传感器-A1',
-        deviceTypeId: 1,
-        status: 1,
-        lastOnlineTime: '2023-12-20 14:30:45',
-        createTime: '',
-        updateTime: '',
-        protocolType: 'MQTT',
-        protocolConfig: {
-            type: "aliyun",
-            configs: {}
-        },
-        deviceLocation: ""
+  {
+    id: 2,
+    deviceCode: 'DEV-002',
+    deviceName: '摄像头B',
+    deviceTypeId: 102,
+    deviceType: {
+      id: 102,
+      code: 'CAMERA',
+      name: '摄像头',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
     },
-    {
-        id: 2,
-        sceneId: 1,
-        deviceCode: 'PressureP1',
-        deviceName: '压力监测器-P2',
-        deviceTypeId: 1,
-        status: 1,
-        lastOnlineTime: '2023-12-20 14:35:22',
-        createTime: '',
-        updateTime: '',
-        protocolType: 'MQTT',
-        protocolConfig: {
-            type: "none",
-            configs: {}
-        },
-        deviceLocation: ""
+    sceneId: 0,
+    status: 1,
+    protocolType: 'HTTP',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-18T10:00:00.000Z',
+    updateTime: '2025-11-18T10:30:00.000Z',
+    lastOnlineTime: '2025-11-18T11:00:00.000Z',
+    deviceLocation: '二楼走廊',
+    properties: {
+      分辨率: '1920x1080',
+      镜头: '4mm',
+      夜视: true,
+      最大帧率: 30,
+      防水等级: 'IP66'
     }
+  },
+  {
+    id: 3,
+    deviceCode: 'DEV-003',
+    deviceName: '门禁C',
+    deviceTypeId: 103,
+    deviceType: {
+      id: 103,
+      code: 'ACCESS',
+      name: '门禁',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
+    },
+    sceneId: 0,
+    status: 1,
+    protocolType: 'MQTT',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-17T07:00:00.000Z',
+    updateTime: '2025-11-17T07:30:00.000Z',
+    lastOnlineTime: '2025-11-17T07:45:00.000Z',
+    deviceLocation: '三楼入口',
+    properties: {
+      解锁方式: ['卡', '密码', '手机'],
+      读卡器类型: 'RFID',
+      供电: '12V DC',
+      失效安全: true,
+      支持报警: true
+    }
+  },
+  {
+    id: 4,
+    deviceCode: 'DEV-004',
+    deviceName: '温度传感器D',
+    deviceTypeId: 101,
+    deviceType: {
+      id: 101,
+      code: 'TEMP',
+      name: '温度传感器',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
+    },
+    sceneId: 0,
+    status: 1,
+    protocolType: 'MQTT',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-19T09:00:00.000Z',
+    updateTime: '2025-11-19T09:10:00.000Z',
+    lastOnlineTime: '2025-11-19T09:10:00.000Z',
+    deviceLocation: '一楼机房',
+    properties: {
+      测量范围: { 最小: -40, 最大: 125, 单位: '°C' },
+      精度: '±0.5°C',
+      供电: '3.3V',
+      采样率Hz: 1,
+      安装方式: '壁挂'
+    }
+  },
+  {
+    id: 5,
+    deviceCode: 'DEV-005',
+    deviceName: '烟感器E',
+    deviceTypeId: 104,
+    deviceType: {
+      id: 104,
+      code: 'SMOKE',
+      name: '烟感器',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
+    },
+    sceneId: 0,
+    status: 1,
+    protocolType: 'MQTT',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-19T09:20:00.000Z',
+    updateTime: '2025-11-19T09:30:00.000Z',
+    lastOnlineTime: '2025-11-19T09:30:00.000Z',
+    deviceLocation: '二楼走廊',
+    properties: {
+      灵敏度: '高',
+      报警声级dB: 85,
+      供电: '5V',
+      自检: true,
+      防尘等级: 'IP5X'
+    }
+  },
+  {
+    id: 6,
+    deviceCode: 'DEV-006',
+    deviceName: '门磁F',
+    deviceTypeId: 105,
+    deviceType: {
+      id: 105,
+      code: 'DOOR_MAGNET',
+      name: '门磁',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
+    },
+    sceneId: 0,
+    status: 1,
+    protocolType: 'HTTP',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-19T09:40:00.000Z',
+    updateTime: '2025-11-19T09:40:00.000Z',
+    lastOnlineTime: '2025-11-19T09:40:00.000Z',
+    deviceLocation: '三楼入口',
+    properties: {
+      工作模式: '常闭',
+      触发距离mm: 15,
+      供电: '3V',
+      防水等级: 'IP65',
+      安装位置: '门框'
+    }
+  },
+  {
+    id: 7,
+    deviceCode: 'DEV-007',
+    deviceName: '湿度传感器G',
+    deviceTypeId: 106,
+    deviceType: {
+      id: 106,
+      code: 'HUMID',
+      name: '湿度传感器',
+      description: '示例设备类型',
+      createTime: '2025-11-19T08:00:00.000Z',
+      updateTime: '2025-11-19T08:00:00.000Z',
+      model: { properties: [], services: [], events: [] }
+    },
+    sceneId: 0,
+    status: 1,
+    protocolType: 'MQTT',
+    protocolConfig: { type: 'none', configs: {} },
+    createTime: '2025-11-19T10:00:00.000Z',
+    updateTime: '2025-11-19T10:00:00.000Z',
+    lastOnlineTime: '2025-11-19T10:00:00.000Z',
+    deviceLocation: '一楼大厅',
+    properties: {
+      测量范围: { 最小: 0, 最大: 100, 单位: '%' },
+      精度: '±2%RH',
+      供电: '3.3V',
+      采样率Hz: 2,
+      安装方式: '吊顶'
+    }
+  }
 ])
 
 // Mock deviceTypeData
@@ -217,7 +400,7 @@ export const mockDeviceTypes = reactive<DeviceType[]>([
             services: [],
             events: []
         }
-    }
+    },
 ])
 
 // Mock users data
@@ -265,5 +448,6 @@ export const mockTemplates = reactive<Template[]>([
         describing_the_model: "Vue",
         image_url: "https://ddst.sjtu.edu.cn/lctemplate/vue/screenshots/bgridalignselfvue.png",
         url: "http://lctemplates.gitlink.org.cn/templates/1627.json",
-    },
+  },
+  
 ])
