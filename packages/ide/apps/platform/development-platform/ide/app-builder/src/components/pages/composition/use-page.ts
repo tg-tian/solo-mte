@@ -3,7 +3,8 @@ import { UsePage } from "./types";
 import axios from "axios";
 
 export function usePage(): UsePage {
-    const pageSourceUri = './assets/pages.json';
+    // const pageSourceUri = './assets/pages.json';
+    const pageSourceUri = '/api/dev/main/v1.0/mdservice/ide/metadataexplore?path=/Cases/ApplicationTemplates/Contacts&metadataTypeList='
     const pages: Ref<Record<string, any>[]> = ref([]);
 
     function createPage() { }
@@ -11,9 +12,9 @@ export function usePage(): UsePage {
     function getPages() {
         return new Promise<any[]>((resolve, reject) => {
             axios.get(pageSourceUri).then((response) => {
-                const pageData = response.data;
-                pages.value = pageData;
-                resolve(pageData);
+                const pageData = response.data as Record<string, any>[];
+                pages.value = pageData.filter((page) => page.type === 'Form');
+                resolve(pages.value);
             }, (error) => {
                 resolve([]);
             });

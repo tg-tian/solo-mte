@@ -13,6 +13,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false
             },
+            "/apps/platform/development-platform": {
+                target: "http://localhost:5174",
+                changeOrigin: true,
+                secure: false
+            },
             "/platform": {
                 target: "http://localhost:5200",
                 changeOrigin: true,

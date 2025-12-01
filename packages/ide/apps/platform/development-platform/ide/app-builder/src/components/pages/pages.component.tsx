@@ -12,7 +12,7 @@ export default defineComponent({
     setup(props: PagesProps, context) {
         const title = '自助咖啡服务-应用页面列表';
         const pagesListViewRef = ref();
-        const pagesTasks = ref<PagesTask[]>(mockPagesTasks);
+        const pagesTasks = ref<PagesTask[]>([]);
         const currentView = ref('listView');
         const shouldShowListView = computed(() => currentView.value === 'listView');
         const shouldShowCardView = computed(() => currentView.value === 'cardView');
@@ -144,7 +144,7 @@ export default defineComponent({
                 <div class="f-pages-list f-page f-page-is-managelist">
                     <FPageHeader title="应用页面列表" buttons={items}></FPageHeader>
                     <div class="f-page-main">
-                        <FSection>
+                        {/* <FSection>
                             <FDynamicForm class="f-form-layout farris-form farris-form-controls-inline">
                                 <FDynamicFormGroup id="input-group" class="col-12 col-md-4 col-xl-4 col-el-4" label="平台名称">
                                 </FDynamicFormGroup>
@@ -155,7 +155,7 @@ export default defineComponent({
                                     <FButton style="float:right">筛选</FButton>
                                 </div>
                             </FDynamicForm>
-                        </FSection>
+                        </FSection> */}
                         <FSection class="f-utils-fill-flex-column">
                             <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
                                 {{
