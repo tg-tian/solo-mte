@@ -4,6 +4,7 @@ import axios from "axios";
 
 export function usePage(): UsePage {
     // const pageSourceUri = './assets/pages.json';
+    // todo: 讲pageSourceUri的path路径改成当前应用实际路径
     const pageSourceUri = '/api/dev/main/v1.0/mdservice/ide/metadataexplore?path=/Cases/ApplicationTemplates/Contacts&metadataTypeList='
     const pages: Ref<Record<string, any>[]> = ref([]);
 
