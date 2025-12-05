@@ -13,7 +13,8 @@ export function usePage(): UsePage {
         return new Promise<any[]>((resolve, reject) => {
             axios.get(pageSourceUri).then((response) => {
                 const pageData = response.data as Record<string, any>[];
-                pages.value = pageData.filter((page) => page.type === 'Form');
+                // pages.value = pageData.filter((page) => page.type === 'Form');
+                pages.value = pageData;
                 resolve(pages.value);
             }, (error) => {
                 resolve([]);

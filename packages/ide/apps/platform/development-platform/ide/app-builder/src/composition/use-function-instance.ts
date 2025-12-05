@@ -6,7 +6,7 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
     const activeInstanceId = ref('');
     const functionInstances = ref<FunctionInstance[]>([]);
     const functionInstanceMap = new Map<string, FunctionInstance>();
-    const useResolveFunctionUrlComposition = useResolveFunctionUrl(config);
+    // const useResolveFunctionUrlComposition = useResolveFunctionUrl(config);
 
     /**
      * 用于在加载完全局配置文件后，设置初始化状态下默认打开的功能菜单
@@ -76,10 +76,10 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
      * @param fix 固定在左侧
      */
     function openNewFunction(functionItem: FunctionItem, icon = '', fix = false) {
-        useResolveFunctionUrlComposition.resolve(functionItem).then((url: string) => {
-            const { id: functionId, code, name } = functionItem;
-            openNewFunctionUrl(functionId, code, name, url, icon, fix);
-        });
+        // useResolveFunctionUrlComposition.resolve(functionItem).then((url: string) => {
+        //     const { id: functionId, code, name } = functionItem;
+        //     openNewFunctionUrl(functionId, code, name, url, icon, fix);
+        // });
     }
 
     /**

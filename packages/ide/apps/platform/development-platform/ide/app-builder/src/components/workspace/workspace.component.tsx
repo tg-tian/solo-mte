@@ -106,9 +106,12 @@ export default defineComponent({
         // 在依赖注入服务中注册功能菜单数据服务
         provide('f-admin-menu-data', useMenuDataComposition);
 
+
         onMounted(() => {
             // 在依赖注入服务中注册Farris Admin主框架Html元素
             provide('f-admin-main-element', adminMainElementRef.value);
+            provide('f-admin-config', config);
+
         });
 
         return () => {
