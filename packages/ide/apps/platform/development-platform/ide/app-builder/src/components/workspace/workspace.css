@@ -1,7 +1,0 @@
-.f-admin .f-admin-content > div {
-    display: none;
-}
-
-.f-admin .f-admin-content > div.active {
-    display: flex;
-}

@@ -1,50 +1,48 @@
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref, withModifiers } from "vue";
 import { FButton, FListView, FProgress, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { PagesProps, pagesProps } from "./pages.props";
 import { mockPagesTasks } from './mock-data';
 import { PagesTask } from "./type";
 import { usePage } from "./composition/use-page";
+import { useFunctionInstance } from "../../composition/use-function-instance";
+import { UseConfig, FunctionInstance } from "../../composition/types";
 
 export default defineComponent({
     name: 'FAppPages',
     props: pagesProps,
     emits: [],
     setup(props: PagesProps, context) {
+        // const useConfigInstance = inject('f-admin-config') as UseConfig;
+        // 初始化功能菜单实例管理服务
+        const useFunctionInstanceComposition = useFunctionInstance(null as any);
+        // const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
+        const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
+        setResidentInstance([            {
+            "functionId": "home",
+            "instanceId": "home",
+            "code": "home",
+            "name": "",
+            "url": "/platform/runtime/sys/web/home/index.html",
+            "icon": "f-icon f-icon-index-face",
+            "fix": true
+        }]);
+        const designerMap = new Map<string, string>([
+            ['Form', '/platform/common/web/farris-designer/index.html'],
+            ['GSPBusinessEntity', '/platform/dev/main/web/webide/plugins-new/be-designer/index.html'],
+            ['GSPViewModel','/platform/dev/main/web/webide/plugins-new/vo-designer/index.html'],
+            ['ExternalApi','/platform/dev/main/web/webide/plugins/eapi-package/index.html'],
+            ['ResourceMetadata','/platform/dev/main/web/webide/plugins/resource-metadata-designer/index.html'],
+            ['StateMachine','/platform/dev/main/web/webide/plugins/state-machine-designer/index.html'],
+            ['PageFlowMetadata','/platform/dev/main/web/webide/plugins/page-flow-designer/index.html'],
+            ['DBO','/platform/dev/main/web/webide/plugins/dbo-manager/index.html']
+        ])
+
         const title = '自助咖啡服务-应用页面列表';
         const pagesListViewRef = ref();
         const pagesTasks = ref<PagesTask[]>([]);
         const currentView = ref('listView');
-        const shouldShowListView = computed(() => currentView.value === 'listView');
-        const shouldShowCardView = computed(() => currentView.value === 'cardView');
 
-        const items = [{ id: 'createPage', text: '创建页面', class: 'btn-primary', onClick: () => void 0 }];
-        const statusMap = new Map<string, string>([['testing', '测试中'], ['published', '已发布'], ['editing', '定制中']]);
-        const editorOptions = {
-            type: 'combo-list',
-            idField: 'value',
-            data: [
-                { name: '定制中', value: 'editing' },
-                { name: '测试中', value: 'testing' },
-                { name: '已发布', value: 'published' }
-            ],
-            textField: 'name',
-            valueField: 'value',
-        };
         const { pages, getPages, createPage } = usePage();
-
-        function getBageClass(item: Record<string, any>) {
-            const classObject = {
-                'bage': true,
-                'bage-testing': item.status === 'testing',
-                'bage-published': item.status === 'published',
-                'bage-editing': item.status === 'editing'
-            };
-            return classObject;
-        }
-
-        function getIconColor(item: Record<string, any>) {
-            return { '--bg': item.color };
-        }
 
         onMounted(() => {
             getPages().then((pages: Record<string, any>[]) => {
@@ -54,16 +52,10 @@ export default defineComponent({
 
 
         function openPageDesign(page: Record<string, any>) {
-            const { id } = page;
-            const code = page.id;
-            const name = page.title;
-            // const deployPath = '/platform/dev/main/web/webide-apps/index.html#/home';
-            const deployPath = name === '智慧楼宇' ? '/platform/dev/main/web/webide-apps/index.html#/home' : '/apps/platform/development-platform/ide/app-center/index.html';
-            window.top?.postMessage({
-                eventType: 'invoke',
-                method: 'openUrl',
-                params: [id, code, name, deployPath]
-            });
+            const { id,code,name } = page;
+            const designerPath = designerMap.get(page.type);
+            const designerUrl = `${designerPath}?id=${page.relativePath}`;
+            openUrl(id, code, name, designerUrl);
         }
 
         function renderTitleArea() {
@@ -76,86 +68,93 @@ export default defineComponent({
             );
         }
 
-        function onClickNewTask() {
-            currentView.value = 'cardView';
-
+        function getFunctionTabClass(functionInstance: FunctionInstance) {
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'fix': functionInstance.fix,
+                'f-app-builder-main-tab-item': true
+            } as Record<string, true>;
+            return classObject;
         }
 
-        function onClickpagesCard(payload: string) {
-            if (payload === 'cancel' || payload === 'confirm') {
-                currentView.value = 'listView';
-            }
+        function onClickFunctionTabItem(functionInstance: FunctionInstance) {
+            activeInstanceId.value = functionInstance.instanceId;
         }
 
-        function renderToolbar() {
-            return (
-                <div class="f-toolbar">
-                    <FButton onClick={onClickNewTask}>新建任务</FButton>
-                </div>
-            );
+        function getFunctionContentClass(functionInstance: FunctionInstance) {
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'f-app-builder-main-tab-content': true
+            } as Record<string, true>;
+            return classObject;
         }
 
-        function searchToolbar() {
-            return (
-
-                <div class="search-bar">
-                    <div class="search-item">
-                        <label>应用名称</label>
-                        <input type="text" placeholder="请输入" />
-                    </div>
-                    <div class="search-item">
-                        <label>所属页面流</label>
-                        <select>
-                            <option value="">请选择</option>
-                        </select>
-                    </div>
-                    <button class="filter-btn">筛选</button>
-                </div>
-
-
-            );
-        }
-
-        function renderpagesTaskList() {
+        function renderDefaultContent() {
             return <FSection class="f-utils-fill-flex-column">
+                    <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
+                        {{
+                            content: ({ item, index, selectedItem }) => {
+                                return (
+                                    <div class="f-page-card f-template-card-row">
+                                        <div class="f-page-card-header listview-item-content">
+                                            <div class="listview-item-icon f-page-icon">
+                                            </div>
+                                            <div class="listview-item-main">
+                                                <h4 class="listview-item-title">{item.name}</h4>
+                                                <h5 class="listview-item-subtitle">{item.code}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="f-page-card-content">
+                                            <p>修改人：{item.lastChangedBy}</p>
+                                            <p>修改时间：{item.lastChangedOn}</p>
+                                        </div>
+                                        <div class="f-page-card-footer f-btn-group">
+                                            <div class="btn-group f-btn-group-links">
+                                                <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openPageDesign(item)}></FButton>
+                                                <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
+                                                <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        }}
+                    </FListView>
+                </FSection>
+        }
 
-                <FListView ref={pagesListViewRef} data={pagesTasks.value}>
-                    {{
-
-                        content: ({ item, index, selectedItem }) => {
-                            return (
-                                <div class="page-list">
-                                    {item.icon}
-                                    {item.key}
-                                    {item.title}
-                                    {item.code}
-                                    {item.flow}
-
-                                </div >
-                            );
-                        }
-                    }}
-                </FListView >
-            </FSection >;
+        function renderContents() {
+            return functionInstances.value.map((functionInstance: FunctionInstance) => {
+                return <div class={getFunctionContentClass(functionInstance)}>
+                    {functionInstance.instanceId === 'home' ? renderDefaultContent() : <iframe title={functionInstance.instanceId} src={functionInstance.url}></iframe>}
+                </div>;
+            });
         }
 
         function renderPages(){
             return (
                 <div class="f-pages-list f-page f-page-is-managelist">
-                    <FPageHeader title="应用页面列表" buttons={items}></FPageHeader>
-                    <div class="f-page-main">
-                        {/* <FSection>
-                            <FDynamicForm class="f-form-layout farris-form farris-form-controls-inline">
-                                <FDynamicFormGroup id="input-group" class="col-12 col-md-4 col-xl-4 col-el-4" label="平台名称">
-                                </FDynamicFormGroup>
-                                <FDynamicFormGroup id="combo-list" class="col-12 col-md-4 col-xl-4 col-el-4" label="状态"
-                                    editor={editorOptions}>
-                                </FDynamicFormGroup>
-                                <div class="col-12 col-md-4 col-xl-4 col-el-4">
-                                    <FButton style="float:right">筛选</FButton>
-                                </div>
-                            </FDynamicForm>
-                        </FSection> */}
+                    <div class="f-app-builder-main-header">
+                        <div class="f-app-builder-main-tabs">
+                            <div class="f-app-builder-main-tabs-title">应用页面列表</div>
+                            <div class="f-app-builder-main-tabs-content">
+                                {functionInstances.value.map((tabItem: FunctionInstance) => {
+                                    return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
+                                        {tabItem.icon && <span><i class={tabItem.icon}></i></span>}
+                                        {tabItem.name && <span>{tabItem.name}</span>}
+                                        {!tabItem.fix && <div class="f-admin-main-tab-item-close" onClick={withModifiers(() => close(tabItem.instanceId), ['stop'])}>
+                                            <i class="f-icon f-icon-close"></i>
+                                        </div>}
+                                    </div>;
+                                })}
+                            </div>
+                            <div class="f-app-builder-main-tabs-toolbar">
+                                <button class="btn btn-md btn-primary">新建</button>
+                            </div>
+                            <div class="f-app-builder-main-tabs-background"></div>
+                        </div>
+                     </div>
+                     {/* <div class="f-app-builder-main-content">
                         <FSection class="f-utils-fill-flex-column">
                             <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
                                 {{
@@ -187,7 +186,10 @@ export default defineComponent({
                                 }}
                             </FListView>
                         </FSection>
-                    </div>
+                     </div> */}
+                     <div class="f-app-builder-main-content">
+                        {renderContents()}
+                     </div>
                 </div>
             );
         }
