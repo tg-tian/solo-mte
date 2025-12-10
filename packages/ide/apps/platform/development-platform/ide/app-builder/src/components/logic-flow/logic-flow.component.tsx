@@ -1,116 +1,167 @@
-import { defineComponent, onMounted, ref } from "vue";
-import { FButton, FListView, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
+import { computed, defineComponent, onMounted, ref, withModifiers } from "vue";
+import { FButton, FListView, FProgress, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { LogicFlowProps, logicFlowProps } from "./logic-flow.props";
 import { useLogicFlow } from "./composition/use-logic-flow";
+import { useFunctionInstance } from "../../composition/use-function-instance";
+import { UseConfig, FunctionInstance } from "../../composition/types";
 
 export default defineComponent({
     name: 'FAppLogicFlows',
     props: logicFlowProps,
     emits: [],
     setup(props: LogicFlowProps, context) {
-        const title = '自助咖啡服务-应用页面列表';
-        const logicFlowsListViewRef = ref();
+        // const useConfigInstance = inject('f-admin-config') as UseConfig;
+        // 初始化功能菜单实例管理服务
+        const useFunctionInstanceComposition = useFunctionInstance(null as any);
+        // const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
+        const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
+        setResidentInstance([            {
+            "functionId": "home",
+            "instanceId": "home",
+            "code": "home",
+            "name": "",
+            "url": "/platform/runtime/bcc/web/ai-flow/farris-flow-management/index.html?flowDesignerMenuID=18325584-1798-9982-ca06-447e1e54c502&funcId=8eabc611-ba6f-aeac-4cf0-4d6c49692f94",
+            "icon": "f-icon f-icon-index-face",
+            "fix": true
+        }]);
 
-        const items = [{ id: 'createLogic', text: '创建逻辑流', class: 'btn-primary', onClick: () => void 0 }];
-        const statusMap = new Map<string, string>([['testing', '测试中'], ['published', '已发布'], ['editing', '定制中']]);
-        const editorOptions = {
-            type: 'combo-list',
-            idField: 'value',
-            data: [
-                { name: '定制中', value: 'editing' },
-                { name: '测试中', value: 'testing' },
-                { name: '已发布', value: 'published' }
-            ],
-            textField: 'name',
-            valueField: 'value',
-        };
-        const { logicFlows, getLogicFlows, createLogicFlow } = useLogicFlow();
+        const title = '业务逻辑';
+        const pagesListViewRef = ref();
 
-        function getBageClass(item: Record<string, any>) {
-            const classObject = {
-                'bage': true,
-                'bage-testing': item.status === 'testing',
-                'bage-published': item.status === 'published',
-                'bage-editing': item.status === 'editing'
-            };
-            return classObject;
-        }
-
-        function getIconColor(item: Record<string, any>) {
-            return { '--bg': item.color };
-        }
+        // const { pages, getPages, createPage } = usePage();
 
         onMounted(() => {
-            getLogicFlows().then((logicFlows: Record<string, any>[]) => {
-                logicFlowsListViewRef.value.updateDataSource(logicFlows);
-            });
+            window['gspframeworkService'] = {
+                'rtf':{
+                    'func':{
+                        'openMenu':(options:Record<string, any>) => {
+                            const { funcId:id,tabId:code,tabName:name } = options;
+                            const metadataId = options.queryStringParams.get('metadataId');
+                            const targetUrl = `/platform/runtime/bcc/web/ai-flow/farris-flow-designer/index.html?metadataId=${metadataId}`;
+                            openUrl(id, code, name, targetUrl);
+                        }
+                    }
+                }
+            }
+            // getPages().then((pages: Record<string, any>[]) => {
+            //     pagesListViewRef.value.updateDataSource(pages);
+            // });
         });
 
 
-        function openLogicDesign(logicFlow: Record<string, any>) {
-            const { id } = logicFlow;
-            const code = logicFlow.id;
-            const name = logicFlow.title;
-            // const deployPath = '/platform/dev/main/web/webide-apps/index.html#/home';
-            const deployPath = '/apps/platform/development-platform/ide/flow-designer/index.html';
-            window.top?.postMessage({
-                eventType: 'invoke',
-                method: 'openUrl',
-                params: [id, code, name, deployPath]
+        // function openPageDesign(page: Record<string, any>) {
+        //     const { id,code,name } = page;
+        //     const designerPath = designerMap.get(page.type);
+        //     const designerUrl = `${designerPath}?id=${page.relativePath}`;
+        //     openUrl(id, code, name, designerUrl);
+        // }
+
+        function renderTitleArea() {
+            return (
+                <div class="f-title">
+                    <div class="f-title-logo"></div>
+                    <h4 class="f-title-text">{title}</h4>
+                    <button class="new-page-btn">新建页面</button>
+                </div>
+            );
+        }
+
+        function getFunctionTabClass(functionInstance: FunctionInstance) {
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'fix': functionInstance.fix,
+                'f-app-builder-main-tab-item': true
+            } as Record<string, true>;
+            return classObject;
+        }
+
+        function onClickFunctionTabItem(functionInstance: FunctionInstance) {
+            activeInstanceId.value = functionInstance.instanceId;
+        }
+
+        function getFunctionContentClass(functionInstance: FunctionInstance) {
+            const classObject = {
+                'active': functionInstance.instanceId === activeInstanceId.value,
+                'f-app-builder-main-tab-content': true
+            } as Record<string, true>;
+            return classObject;
+        }
+
+        // function renderDefaultContent() {
+        //     return <FSection class="f-utils-fill-flex-column">
+        //             <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
+        //                 {{
+        //                     content: ({ item, index, selectedItem }) => {
+        //                         return (
+        //                             <div class="f-page-card f-template-card-row">
+        //                                 <div class="f-page-card-header listview-item-content">
+        //                                     <div class="listview-item-icon f-page-icon">
+        //                                     </div>
+        //                                     <div class="listview-item-main">
+        //                                         <h4 class="listview-item-title">{item.name}</h4>
+        //                                         <h5 class="listview-item-subtitle">{item.code}</h5>
+        //                                     </div>
+        //                                 </div>
+        //                                 <div class="f-page-card-content">
+        //                                     <p>修改人：{item.lastChangedBy}</p>
+        //                                     <p>修改时间：{item.lastChangedOn}</p>
+        //                                 </div>
+        //                                 <div class="f-page-card-footer f-btn-group">
+        //                                     <div class="btn-group f-btn-group-links">
+        //                                         <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openPageDesign(item)}></FButton>
+        //                                         <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
+        //                                         <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
+        //                                     </div>
+        //                                 </div>
+        //                             </div>
+        //                         );
+        //                     }
+        //                 }}
+        //             </FListView>
+        //         </FSection>
+        // }
+
+        function renderContents() {
+            return functionInstances.value.map((functionInstance: FunctionInstance) => {
+                return <div class={getFunctionContentClass(functionInstance)}>
+                    {<iframe title={functionInstance.instanceId} src={functionInstance.url}></iframe>}
+                </div>;
             });
         }
 
-        return ()=>{
+        function renderPages(){
             return (
-                <div class="f-logic-flow-list f-page f-page-is-managelist">
-                    <FPageHeader title="逻辑流列表" buttons={items}></FPageHeader>
-                    <div class="f-page-main">
-                        <FSection>
-                            <FDynamicForm class="f-form-layout farris-form farris-form-controls-inline">
-                                <FDynamicFormGroup id="input-group" class="col-12 col-md-4 col-xl-4 col-el-4" label="平台名称">
-                                </FDynamicFormGroup>
-                                <FDynamicFormGroup id="combo-list" class="col-12 col-md-4 col-xl-4 col-el-4" label="状态"
-                                    editor={editorOptions}>
-                                </FDynamicFormGroup>
-                                <div class="col-12 col-md-4 col-xl-4 col-el-4">
-                                    <FButton style="float:right">筛选</FButton>
-                                </div>
-                            </FDynamicForm>
-                        </FSection>
-                        <FSection class="f-utils-fill-flex-column">
-                            <FListView ref={logicFlowsListViewRef} data={logicFlows.value} view="CardView">
-                                {{
-                                    content: ({ item, index, selectedItem }) => {
-                                        return (
-                                            <div class="f-page-card f-template-card-row">
-                                                <div class="f-page-card-header listview-item-content">
-                                                    <div class="listview-item-icon f-page-icon">
-                                                    </div>
-                                                    <div class="listview-item-main">
-                                                        <h4 class="listview-item-title">{item.name}</h4>
-                                                        <h5 class="listview-item-subtitle">{item.code}</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="f-page-card-content">
-                                                    <p>修改人：{item.lastChangedBy}</p>
-                                                    <p>修改时间：{item.lastChangedOn}</p>
-                                                </div>
-                                                <div class="f-page-card-footer f-btn-group">
-                                                    <div class="btn-group f-btn-group-links">
-                                                        <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openLogicDesign(item)}></FButton>
-                                                        <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
-                                                        <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-                                }}
-                            </FListView>
-                        </FSection>
-                    </div>
+                <div class="f-pages-list f-page f-page-is-managelist">
+                    <div class="f-app-builder-main-header">
+                        <div class="f-app-builder-main-tabs">
+                            <div class="f-app-builder-main-tabs-title">应用页面列表</div>
+                            <div class="f-app-builder-main-tabs-content">
+                                {functionInstances.value.map((tabItem: FunctionInstance) => {
+                                    return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
+                                        {tabItem.icon && <span><i class={tabItem.icon}></i></span>}
+                                        {tabItem.name && <span>{tabItem.name}</span>}
+                                        {!tabItem.fix && <div class="f-admin-main-tab-item-close" onClick={withModifiers(() => close(tabItem.instanceId), ['stop'])}>
+                                            <i class="f-icon f-icon-close"></i>
+                                        </div>}
+                                    </div>;
+                                })}
+                            </div>
+                            {/* <div class="f-app-builder-main-tabs-toolbar">
+                                <button class="btn btn-md btn-primary">新建</button>
+                            </div> */}
+                            <div class="f-app-builder-main-tabs-background"></div>
+                        </div>
+                     </div>
+                     
+                     <div class="f-app-builder-main-content">
+                        {renderContents()}
+                     </div>
                 </div>
             );
+        }
+
+        return ()=>{
+            return renderPages();
         };
     }
 });
