@@ -1,0 +1,99 @@
+.knowledge-selector-container {
+  width: 100%;
+  padding: 8px 0;
+}
+
+.knowledge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.knowledge-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.add-knowledge-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #E4E7FF;
+  color: #837DFF;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.knowledge-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: #EDF9FF;
+  border-radius: 4px;
+  transition: all 0.3s;
+  border: 1px solid #DFF4FF;
+}
+
+.knowledge-item:hover {
+  background-color: #e6f7ff;
+}
+
+.knowledge-name {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.remove-btn {
+  width: 18px;
+  height: 18px;
+  border: none;
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.remove-btn:hover {
+  color: #ff4d4f;
+}
+
+.no-knowledge {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+
+
+// 确保组件响应式布局
+@media (max-width: 768px) {
+  .knowledge-selector-container {
+    padding: 4px 0;
+  }
+
+  .knowledge-header {
+    margin-bottom: 8px;
+  }
+}

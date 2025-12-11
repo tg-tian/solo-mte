@@ -1,0 +1,53 @@
+{
+  "name": "@farris/flow-devkit",
+  "version": "0.0.3",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "vue",
+    "flow",
+    "diagram",
+    "farris"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build:lib": "node ./scripts/index.cjs build",
+    "build": "vite build",
+    "preview": "vite preview",
+    "license:check": "license-checker --production --json > licenses.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "@vue-flow/core": "^1.46.0",
+    "@farris/ui-vue": "^1.6.5-beta.7",
+    "axios": "^1.12.2",
+    "lodash-es": "^4.17.20"
+  },
+  "dependencies": {
+    "nanoid": "~5.1.5",
+    "vanilla-jsoneditor": "~3.10.0",
+    "sortablejs": "~1.15.6",
+    "tdesign-vue-next": "~1.17.1"
+  },
+  "devDependencies": {
+    "vue": "^3.5.0",
+    "@vue-flow/core": "^1.46.0",
+    "@farris/ui-vue": "^1.6.5-beta.7",
+    "axios": "^1.12.2",
+    "lodash-es": "^4.17.20",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "@vue/tsconfig": "^0.7.0",
+    "sass": "^1.91.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2",
+    "vue-tsc": "^3.0.5",
+    "@types/sortablejs": "~1.15.8"
+  },
+  "types": "./package/types/index.d.ts",
+  "typings": "./package/types/index.d.ts",
+  "module": "./package/flow-devkit.esm.js",
+  "main": "./package/flow-devkit.umd.cjs",
+  "style": "./package/flow-devkit.css"
+}

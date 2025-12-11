@@ -1,0 +1,22 @@
+.fvf-form-item-error {
+    color: rgb(255, 68, 30);
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.fvf-error-state {
+    &.fvf-value-expression-input,
+    &.input-group {
+        border-color: rgb(229, 50, 65) !important;
+    }
+}
+
+.trial-run-panel {
+    pointer-events: all;
+    height: 100%;
+    width: 450px;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0px 20px 0px rgba(3, 18, 51, 0.05);
+}

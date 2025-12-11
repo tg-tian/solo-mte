@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://farris-design.gitee.io/tool-selector.schema.json",
+  "title": "tool-selector",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a Tool Selector",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of Tool Selector component",
+      "type": "string",
+      "default": "tool-selector"
+    },
+    "nodeData": {
+      "description": "nodeData",
+      "type": "object"
+    }
+  }
+}

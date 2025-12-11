@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/fvf-branch-editor.schema.json",
+  "title": "fvf-branch-editor",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "fvf-branch-editor"
+    }
+  },
+  "required": ["id", "type"]
+}

@@ -1,0 +1,119 @@
+// toolbar.module.scss
+.tools {
+  pointer-events: none;
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 360px;
+  padding: 0 8px;
+  user-select: none;
+}
+
+.tools-wrap {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+}
+
+.minimap-container {
+  display: block;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid rgba(68, 83, 130, 0.25);
+  overflow: hidden;
+
+  & :global(.vue-flow__panel) {
+    position: relative !important;
+    margin: 0 !important;
+  }
+}
+
+.tools-section {
+  pointer-events: auto;
+  display: flex;
+  column-gap: 12px;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  background-color: #ffffff;
+  border: 1px solid rgba(68, 83, 130, 0.25);
+  border-radius: 8px;
+  box-shadow:
+    0px 2px 6px 0px rgba(0, 0, 0, 0.04),
+    0px 4px 12px 0px rgba(0, 0, 0, 0.02);
+}
+
+.tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &.active,
+  &:hover {
+    background-color: #f0f2f5;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e5e7eb;
+}
+
+.trial-run-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #00b42a;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #00a327;
+    box-shadow: 0 2px 8px rgba(0, 180, 42, 0.3);
+  }
+
+  &:active {
+    background-color: #009224;
+    transform: translateY(0);
+  }
+}
+
+.trial-run-icon {
+  margin-right: 8px;
+  font-size: 9px !important;
+}
+
+.popover_content {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  width: 400px;
+}

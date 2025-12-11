@@ -1,0 +1,68 @@
+.request-params {
+    display: block;
+    margin-top: 8px;
+
+    &__title-row {
+        display: flex;
+        align-items: center;
+        color: rgba(28, 29, 35, 0.35);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        letter-spacing: 0.12px;
+        height: 16px;
+        line-height: 16px;
+        gap: 4px;
+        padding-bottom: 8px;
+    }
+
+    &__placeholder {
+        width: 24px;
+    }
+
+    &__param {
+        display: flex;
+        align-items: flex-start;
+        padding-bottom: 4px;
+        gap: 4px;
+    }
+
+    &__input-item {
+        min-width: 0px;
+    }
+
+    &__delete-btn {
+        display: flex;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 5px;
+        user-select: none;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(87, 104, 161, 0.08);
+        }
+
+        i {
+            color: #82849A;
+        }
+    }
+
+    &__btn-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        overflow: hidden;
+        margin-top: 2px;
+    }
+
+    &__add.btn {
+        flex: 1 1 0%;
+        justify-content: center;
+        color: #2a87ff;
+        font-size: 13px;
+    }
+}

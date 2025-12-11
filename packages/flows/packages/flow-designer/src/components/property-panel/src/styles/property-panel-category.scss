@@ -1,0 +1,52 @@
+.propertyCascadeItem {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.propertyCascadeItem .card-header {
+    background-color: transparent !important;
+    padding: 4px 0px !important;
+    color: inherit !important;
+}
+
+.propertyCascadeItem .card-header .panel-item-title {
+    width: 100%;
+    position: relative;
+    font-size: inherit !important;
+}
+
+.propertyCascadeItem .card-header .panel-item-title .farris-input-wrap {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.propertyCascadeItem .form-group .col-form-label .f-icon {
+    color: #a3a3a3 !important;
+}
+
+.propertyCascadeItem .f-accordion-collapse,
+.propertyCascadeItem .f-accordion-expand {
+    right: 0;
+    left: auto !important;
+    top: 6px;
+    color: #6b94ec !important;
+    position: absolute;
+}
+
+.propertyCascadeItem .card-body {
+    padding: 3px 12px !important;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    margin: 4px 0px;
+}
+
+.propertyCascadeItem .card-body.hidden {
+    display: none;
+}
+
+.landscape {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+}

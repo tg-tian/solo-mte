@@ -1,0 +1,4 @@
+packages:
+  - "packages/*"
+  - "packages/flow-content/*"
+  - "packages/tmp-local-dependency/*"

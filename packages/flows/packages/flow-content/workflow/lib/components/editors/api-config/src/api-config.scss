@@ -1,0 +1,23 @@
+.api-config {
+    display: block;
+    margin-top: 8px;
+
+    &__request-type-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-direction: column;
+    }
+
+    &__request-type-selector {
+        width: 100%;
+        flex-shrink: 0;
+    }
+
+    &__url-input {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+    }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "@farris/flow-designer",
+  "version": "0.0.5",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "vue",
+    "flow",
+    "diagram",
+    "farris"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build:lib": "node ./scripts/index.cjs build",
+    "build": "vite build",
+    "build:vue-flow-core": "vite build --config vite.vue-flow.config.js",
+    "build:vue-flow-background": "vite build --config vite.vue-flow-background.config.js",
+    "preview": "vite preview",
+    "license:check": "license-checker --production --json > licenses.json"
+  },
+  "peerDependencies": {
+    "@farris/flow-devkit": "workspace:^",
+    "@farris/ui-vue": "^1.6.5-beta.7",
+    "@vue-flow/background": "~1.3.2",
+    "@vue-flow/core": "~1.46.2",
+    "axios": "^1.12.2",
+    "lodash-es": "^4.17.20",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@vue-flow/minimap": "~1.5.4",
+    "elkjs": "~0.11.0",
+    "marked": "^17.0.0"
+  },
+  "devDependencies": {
+    "@farris/flow-devkit": "workspace:^",
+    "@farris/ui-vue": "^1.6.5-beta.7",
+    "@types/lodash-es": "^4.17.4",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "@vue-flow/background": "~1.3.2",
+    "@vue-flow/core": "~1.46.2",
+    "@vue/tsconfig": "^0.7.0",
+    "axios": "^1.12.2",
+    "lodash-es": "^4.17.20",
+    "sass": "^1.91.0",
+    "typescript": "~5.8.3",
+    "vite-plugin-html": "~3.2.2",
+    "vue": "^3.5.0",
+    "vue-tsc": "^3.0.5"
+  },
+  "types": "./package/types/index.d.ts",
+  "typings": "./package/types/index.d.ts",
+  "module": "./package/flow-designer.esm.js",
+  "main": "./package/flow-designer.umd.cjs",
+  "style": "./package/flow-designer.css"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "modelValue": {
+      "type": "string",
+      "title": "用户提示词",
+      "description": "用户提示词内容"
+    },
+    "placeholder": {
+      "type": "string",
+      "title": "占位符文本",
+      "description": "输入框为空时显示的提示文本"
+    },
+    "title": {
+      "type": "string",
+      "title": "标题",
+      "description": "编辑器标题"
+    }
+  }
+}

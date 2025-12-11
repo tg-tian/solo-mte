@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/fvf-input-params.schema.json",
+  "title": "fvf-input-params",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "fvf-input-params"
+    },
+    "isFixedSchema": {
+      "description": "isFixedSchema",
+      "type": "boolean",
+      "default": false
+    },
+    "typeFilter": {
+      "description": "typeFilter",
+      "type": "function"
+    },
+    "paramCodeColumnTitle": {
+      "description": "paramCodeColumnTitle",
+      "type": "string"
+    },
+    "paramTypeColumnTitle": {
+      "description": "paramTypeColumnTitle",
+      "type": "string"
+    },
+    "paramValueColumnTitle": {
+      "description": "paramValueColumnTitle",
+      "type": "string"
+    },
+    "validateOptions": {
+      "description": "validateOptions",
+      "type": "object"
+    }
+  },
+  "required": ["id", "type"]
+}

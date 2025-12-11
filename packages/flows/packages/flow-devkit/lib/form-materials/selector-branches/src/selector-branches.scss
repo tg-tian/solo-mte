@@ -1,0 +1,101 @@
+.fvf-selector-branches {
+    display: block;
+
+    &__item {
+        &-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 24px;
+            position: relative;
+            padding: 0 4px;
+        }
+
+        &-case,
+        &-label {
+            font-weight: 600;
+            font-size: 12px;
+        }
+        &-case {
+            color: #676f83;
+        }
+        &-label {
+            color: #354052;
+            font-size: 14px;
+        }
+    }
+
+    &__condition-group {
+        font-size: 12px;
+        line-height: 16px;
+        color: rgba(15, 21, 40, 0.82);
+        border: 1px solid rgba(68, 83, 130, 0.25);
+        border-radius: 4px;
+        min-height: 32px;
+        padding: 4px 0;
+        background-color: #ffffff;
+    }
+
+    &__operator {
+        position: relative;
+        padding: 3px 0;
+        text-align: center;
+        font-size: 12px;
+        line-height: 16px;
+
+        &-line {
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 1px;
+            background-color: #dddddd;
+        }
+        &-text {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            padding: 0 8px;
+            color: #1c1c1d;
+            background-color: #ffffff;
+        }
+    }
+
+    &__condition {
+        display: flex;
+        align-items: center;
+        padding: 0 4px;
+
+        &-value {
+            flex: 1 1 0;
+            min-width: 0;
+            overflow: hidden;
+            border-radius: 6px;
+            background-color: #f2f4f7;
+
+            &--empty {
+                height: 26px;
+                display: flex;
+                align-items: center;
+                padding: 0 6px;
+                color: rgba(15, 21, 40, 0.82);
+                font-weight: 500;
+            }
+        }
+
+        &-operator {
+            text-align: center;
+            width: 28px;
+            user-select: none;
+            font-size: 14px;
+
+            svg {
+                outline: none;
+            }
+        }
+    }
+}

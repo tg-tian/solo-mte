@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/fvf-value-expression-input.schema.json",
+  "title": "fvf-value-expression-input",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "fvf-value-expression-input"
+    },
+    "paramType": {
+      "description": "paramType",
+      "type": "object"
+    },
+    "placeholder": {
+      "description": "placeholder",
+      "type": "string"
+    },
+    "onlyAllowVariable": {
+      "description": "onlyAllowVariable",
+      "type": "boolean",
+      "default": false
+    },
+    "onlyAllowWritableVariable": {
+      "description": "onlyAllowWritableVariable",
+      "type": "boolean",
+      "default": false
+    },
+    "onlyAllowArrayType": {
+      "description": "onlyAllowArrayType",
+      "type": "boolean",
+      "default": false
+    },
+    "typeFilter": {
+      "description": "typeFilter",
+      "type": "function"
+    },
+    "validateOptions": {
+      "description": "validateOptions",
+      "type": "object"
+    }
+  },
+  "required": ["id", "type"]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://farris-design.gitee.io/mcp-selector.schema.json",
+  "title": "mcp-selector",
+  "description": "A Farris Component for selecting MCP tools",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a MCP Selector",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of MCP Selector component",
+      "type": "string",
+      "default": "mcp-selector"
+    },
+    "nodeData": {
+      "description": "nodeData",
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>数据</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页" transform="translate(-818, -302)">
+            <g id="编组-8" transform="translate(623, 207)">
+                <g id="编组-10" transform="translate(163, 89)">
+                    <g id="编组-18备份" transform="translate(0, 6)">
+                        <g id="数据" transform="translate(32, 0)">
+                            <rect id="矩形" fill="#000000" fill-rule="nonzero" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                            <path d="M10.8480369,2.5 L13.5,5.26634788 L13.5,11.5 L5.5,11.5 L5.5,2.5 L10.8480369,2.5 Z" id="矩形" stroke="#5A5E66"></path>
+                            <path d="M11,12.2477022 L11,14 L3,14 L3,5 C3.4433376,5 4.05892541,5 4.84676343,5" id="路径" stroke="#5A5E66"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

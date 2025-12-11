@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/system-prompt-editor.schema.json",
+  "title": "system-prompt-editor",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a System Prompt Editor",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of System Prompt Editor component",
+      "type": "string",
+      "default": "system-prompt-editor"
+    },
+    "text": {
+      "description": "",
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": ["id", "type"]
+}

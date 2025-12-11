@@ -1,0 +1,78 @@
+.fvf-branch-editor {
+    display: block;
+    margin-top: 4px;
+
+    &__divider-line {
+        display: block;
+        height: 1px;
+        background-color: rgba(16, 24, 40, 0.04);
+        margin: 8px 0px;
+    }
+
+    &__add-branch {
+        width: 100%;
+        justify-content: center;
+        font-size: 13px;
+
+        &-container {
+            padding: 8px 4px;
+        }
+    }
+
+    &__else-branch {
+        padding: 8px 4px;
+
+        &-title {
+            color: #354052;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 16px;
+        }
+
+        &-desc {
+            margin-top: 4px;
+            color: #676f83;
+            line-height: 18px;
+            font-weight: 400;
+            font-size: 12px;
+        }
+    }
+
+    &__branch {
+        user-select: none;
+
+        &-header {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            color: #354052;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 16px;
+            margin-left: 4px;
+        }
+
+        &-sub-title {
+            margin-left: 8px;
+            padding: 4px 10px;
+            background-color: rgba(87, 104, 161, 0.08);
+            border-radius: 5px;
+            line-height: 16px;
+            font-weight: 500;
+        }
+    }
+
+    &__list-handle {
+        display: block;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' aria-hidden='true'%3E%3Cpath d='M9 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM9 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM11 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM15 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM15 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' fill='%23aaa'/%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: move;
+        margin-right: 4px;
+    }
+}

@@ -1,0 +1,49 @@
+.fvf-condition-row {
+    display: block;
+    background-color: rgba(200, 206, 218, 0.25);
+    border-radius: 8px;
+
+    &__value-row {
+        padding: 4px 8px;
+
+        &--right {
+            border-top: 1px solid rgba(16, 24, 40, 0.04);
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__left-value,
+    &__right-value,
+    &__operator {
+        background-color: #ffffff;
+        border-radius: 6px;
+    }
+
+    &__operator {
+        flex: 1 1 0;
+    }
+    &__right-value {
+        flex: 2 1 0;
+    }
+
+    &__divider {
+        width: 1px;
+        height: 20px;
+        background-color: rgba(16, 24, 40, 0.08);
+        margin: 0 4px;
+    }
+
+    &__empty-input {
+        display: flex;
+        align-items: center;
+        padding: 0 6px;
+        height: 26px;
+        border: 1px solid #d9dee7;
+        background-color: #f2f3f8;
+        color: rgba(55, 67, 106, 0.38);
+        border-radius: 6px;
+        cursor: not-allowed;
+        font-size: 13px;
+    }
+}
