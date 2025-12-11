@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/rpc-selector.schema.json",
+  "title": "rpc-selector",
+  "description": "A Farris Component for RPC Service Selection",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a RPC Selector",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of RPC Selector component",
+      "type": "string",
+      "default": "rpc-selector"
+    },
+    "text": {
+      "description": "",
+      "type": "string",
+      "default": ""
+    },
+    "nodeData": {
+      "description": "nodeData",
+      "type": "object"
+    }
+  },
+  "required": ["id", "type"]
+}

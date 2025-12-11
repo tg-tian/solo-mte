@@ -1,0 +1,23 @@
+.fvf-rpc-form-editor {
+    display: block;
+    margin-top: 8px;
+
+    &__param {
+        display: flex;
+        align-items: flex-start;
+        padding-bottom: 4px;
+        gap: 8px;
+    }
+
+    &__label-item {
+        min-width: 0px;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: rgba(28, 29, 35, 0.85);
+    }
+
+    &__input-item {
+        min-width: 0px;
+    }
+}

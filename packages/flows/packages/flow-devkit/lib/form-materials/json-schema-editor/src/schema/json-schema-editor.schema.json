@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/fvf-json-schema-editor.schema.json",
+  "title": "fvf-json-schema-editor",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "fvf-json-schema-editor"
+    },
+    "readonly": {
+      "description": "readonly",
+      "type": "boolean",
+      "default": false
+    },
+    "validateOptions": {
+      "description": "validateOptions",
+      "type": "object"
+    }
+  },
+  "required": ["id", "type"]
+}

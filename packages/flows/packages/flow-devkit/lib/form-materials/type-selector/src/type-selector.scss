@@ -1,0 +1,76 @@
+.fvf-type-selector {
+    &__more-type {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 100px;
+        padding: 0 10px 5px;
+        overflow: hidden;
+    }
+
+    &__modal {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 0 12px;
+        overflow: hidden;
+
+        &-header {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            height: 30px;
+            line-height: 30px;
+            width: 100%;
+            text-align: left;
+            gap: 12px;
+            min-height: 0;
+        }
+
+        &-content {
+            flex: 1 1 0;
+            display: flex;
+            gap: 12px;
+            padding-top: 10px;
+            min-height: 0;
+        }
+    }
+
+    &__array-checkbox {
+        padding-right: 0 !important;
+        margin-bottom: 0 !important;
+        margin-left: 12px;
+    }
+
+    &__provider-select {
+        width: 200px;
+    }
+
+    &__search {
+        flex: 1 1 0;
+    }
+
+    &__search-button {
+        margin-left: 5px;
+    }
+
+    &__nav-tree {
+        width: 275px;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &__type-grid {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    &__current-value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

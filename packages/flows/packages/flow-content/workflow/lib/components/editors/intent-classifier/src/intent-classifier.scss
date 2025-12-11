@@ -1,0 +1,124 @@
+.intent-classifier-editor {
+  width: 100%;
+  box-sizing: border-box;
+
+  .classifier-list {
+    .classifier-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: flex-start;
+
+      .classifier-content {
+        flex: 1;
+
+        .classifier-name-textarea {
+          width: 100%;
+          min-height: 32px;
+          max-height: 200px;
+          padding: 6px 8px;
+          font-size: 14px;
+          line-height: 20px;
+          border-radius: 4px;
+          border: 1px solid #e8e8e8;
+          resize: none;
+          outline: none;
+          box-sizing: border-box;
+          font-family: inherit;
+          background-color: #fff;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          overflow-y: auto;
+
+          // 现代CSS自适应高度（支持的浏览器）
+          field-sizing: content;
+
+          // 自定义滚动条样式
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+
+            &:hover {
+              background: #a8a8a8;
+            }
+          }
+
+          &:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+          }
+
+          &:hover {
+            border-color: #d9d9d9;
+          }
+
+          &::placeholder {
+            color: #bfbfbf;
+          }
+        }
+      }
+
+      .classifier-actions {
+        display: flex;
+        align-items: flex-start;
+        padding-top: 4px;
+
+        .remove-btn {
+          display: flex;
+          overflow: hidden;
+          justify-content: center;
+          align-items: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 5px;
+          user-select: none;
+          cursor: pointer;
+          flex-shrink: 0;
+
+          &:hover:not(.disabled) {
+            background-color: rgba(87, 104, 161, 0.08);
+          }
+
+          &.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+
+            i {
+              color: #ccc;
+            }
+          }
+
+          i {
+            color: #82849A;
+          }
+        }
+      }
+    }
+  }
+
+  .add-section {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .add-btn {
+      flex: 1 1 0%;
+      justify-content: center;
+      color: #2a87ff;
+      font-size: 13px;
+    }
+
+    .placeholder {
+      width: 24px;
+    }
+  }
+}

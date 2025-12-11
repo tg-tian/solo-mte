@@ -1,0 +1,25 @@
+.fvf-single-param-value-tag {
+    display: block;
+    overflow: hidden;
+
+    &__empty {
+        display: block;
+        font-style: normal;
+        font-size: 14px;
+        height: 26px;
+        line-height: 26px;
+        color: rgba(6, 7, 9, 0.3);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__item {
+        background-color: #f0f5fe;
+        border-radius: 4px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        overflow: hidden;
+    }
+}

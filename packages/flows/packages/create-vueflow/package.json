@@ -1,0 +1,25 @@
+{
+  "name": "@farris/create-vueflow",
+  "version": "0.0.5",
+  "description": "流程编排设计器扩展项目脚手架",
+  "main": "index.js",
+  "bin": {
+    "farris-create-vueflow": "./bin/index.js"
+  },
+  "keywords": [],
+  "files": [
+    "bin",
+    "template",
+    "package.json"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.3.1",
+    "inquirer": "^8.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0"
+  }
+}

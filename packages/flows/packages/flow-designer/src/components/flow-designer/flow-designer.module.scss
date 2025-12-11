@@ -1,0 +1,53 @@
+.flow-designer {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+
+    &.full-page {
+        min-height: 300px;
+        min-width: 1080px;
+    }
+
+    & :global(.f-page-main) {
+        position: relative;
+    }
+
+    & :global(.f-page-header) {
+        background-color: #fefeff !important;
+        box-shadow: 0px 2px 20px 0px rgba(3, 18, 51, 0.05) !important;
+        border-radius: 8px 8px 0px 0px !important;
+        position: relative !important;
+        z-index: 20 !important;
+    }
+
+    & :global(.f-page-main) {
+        box-shadow: none !important;
+        background-color: #f8fbfd !important;
+    }
+}
+
+.mask {
+    --mask-bg-rgb: 254, 254, 254;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: #fefefe;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    margin-top: -80px;
+
+    & :global(.f-loading-round) {
+        animation-duration: 0.7s;
+    }
+}

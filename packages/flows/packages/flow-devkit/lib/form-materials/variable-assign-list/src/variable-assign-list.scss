@@ -1,0 +1,53 @@
+.fvf-variable-assign-list {
+    display: block;
+
+    &__placeholder {
+        border-radius: 6px;
+        padding: 4px 5px;
+        background-color: #f0f5fd;
+        color: #676f83;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 16px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__list {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        height: 24px;
+        padding: 0 4px;
+        border-radius: 6px;
+        background-color: #f0f5fd;
+
+        &-var {
+            flex: 1 1 0;
+            overflow: hidden;
+        }
+
+        &-operator {
+            flex: 0 0 auto;
+            margin-left: 4px;
+            display: flex;
+            align-items: center;
+            line-height: 12px;
+            padding: 0 5px;
+            color: #676f83;
+            border-radius: 5px;
+            border: 1px solid rgba(16, 24, 40, 0.14);
+            height: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+    }
+}

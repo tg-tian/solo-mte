@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/request-params.schema.json",
+  "title": "request-params",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "request-params"
+    }
+  },
+  "required": ["id", "type"]
+}

@@ -1,0 +1,19 @@
+.fvf-node-field {
+    &__label {
+        align-self: center;
+        color: rgba(55, 67, 106, 0.38);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 16px;
+        margin-right: 2px;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    &__content {
+        color: rgba(15, 21, 40, 0.82);
+        font-size: 12px;
+        position: relative;
+    }
+}

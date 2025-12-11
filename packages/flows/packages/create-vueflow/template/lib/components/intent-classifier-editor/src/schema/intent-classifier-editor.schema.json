@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://farris-design.gitee.io/demo-intent-classifier-editor.schema.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "id",
+      "type": "string"
+    },
+    "type": {
+      "description": "type",
+      "type": "string",
+      "default": "demo-intent-classifier-editor"
+    }
+  },
+  "required": ["id", "type"]
+}

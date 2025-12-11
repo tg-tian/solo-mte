@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "modelValue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "分类ID",
+            "description": "分类的唯一标识符"
+          },
+          "name": {
+            "type": "string",
+            "title": "分类名称",
+            "description": "意图分类的名称",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "title": "分类描述",
+            "description": "意图分类的详细描述"
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "示例问题",
+            "description": "用于训练和测试的示例问题列表"
+          }
+        },
+        "required": ["id", "name", "examples"]
+      },
+      "title": "意图分类配置",
+      "description": "意图分类器的配置信息"
+    }
+  }
+}

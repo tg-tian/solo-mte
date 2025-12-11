@@ -1,0 +1,11 @@
+.fvf-node-wrapper {
+    display: block;
+    border-radius: 12px;
+    padding: 14px;
+    background-image: linear-gradient(180deg, #e4f2ff 0%, #f8fbfe 25%, #ffffff 100%);
+    box-shadow: 0px 0px 6px 0px rgba(134, 156, 182, 0.35);
+
+    &--selected {
+        outline: 2px solid #517af8;
+    }
+}

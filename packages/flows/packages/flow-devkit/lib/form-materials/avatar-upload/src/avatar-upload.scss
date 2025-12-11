@@ -1,0 +1,40 @@
+.fvf-avatar-upload {
+    display: block;
+    margin-top: 8px;
+
+    &__avatar-upload-wrapper {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        background: #f7f8fb;
+        border: 0.8px solid rgba(217, 222, 231, 1);
+        border-radius: 8px;
+        text-align: center;
+        line-height: 43px;
+        cursor: pointer;
+        img {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 0;
+            border-radius: 8px;
+        }
+
+        i {
+            font-size: 22px;
+            color: #a8adb8;
+        }
+
+        input {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            opacity: 0;
+            filter: "alpha(opacity=0)";
+            z-index: 11;
+            cursor: pointer;
+        }
+    }
+}

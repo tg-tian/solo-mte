@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "modelValue": {
+      "type": "array",
+      "description": "表单参数列表",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "参数标签"
+          },
+          "value": {
+            "type": "string",
+            "description": "参数值"
+          }
+        },
+        "required": ["label", "value"]
+      }
+    },
+    "readonly": {
+      "type": "boolean",
+      "description": "是否只读",
+      "default": false
+    }
+  }
+}

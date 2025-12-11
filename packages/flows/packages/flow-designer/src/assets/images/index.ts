@@ -1,0 +1,6 @@
+export { default as startIcon } from './icon-start.jpg';
+export { default as endIcon } from './icon-end.jpg';
+export { default as selectorIcon } from './icon-selector.jpg';
+export { default as loopIcon } from './icon-loop.jpg';
+export { default as variableDefIcon } from './icon-variable-def.jpg';
+export { default as variableAssignIcon } from './icon-variable-assign.jpg';

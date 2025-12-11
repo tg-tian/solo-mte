@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/model-selector.schema.json",
+  "title": "model-selector",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a Model Selector",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of Model Selector component",
+      "type": "string",
+      "default": "model-selector"
+    },
+    "text": {
+      "description": "",
+      "type": "string",
+      "default": ""
+    },
+    "nodeData": {
+      "description": "nodeData",
+      "type": "object"
+    }
+  },
+  "required": ["id", "type"]
+}

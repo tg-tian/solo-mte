@@ -1,0 +1,37 @@
+.fvf-param-tag-list {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: nowrap;
+
+    &__empty {
+        display: block;
+        font-style: normal;
+        font-size: 14px;
+        height: 26px;
+        line-height: 26px;
+        color: rgba(6, 7, 9, 0.3);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__item {
+        background-color: #f0f5fe;
+        border-radius: 4px;
+        font-size: 13px;
+        line-height: 18px;
+        padding: 4px 8px;
+        color: #2d2f33;
+        white-space: nowrap;
+
+        & + & {
+            margin-left: 6px;
+        }
+
+        &--undefined {
+            background-color: rgba(240, 174, 120, 0.3);
+            color: rgb(255, 115, 0);
+            font-weight: bold;
+        }
+    }
+}

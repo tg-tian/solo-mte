@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "modelValue": {
+      "type": "string",
+      "title": "智能体ID",
+      "description": "选中的智能体ID"
+    },
+    "nodeData": {
+      "type": "object",
+      "title": "节点数据",
+      "description": "节点数据对象"
+    }
+  },
+  "required": ["nodeData"]
+}

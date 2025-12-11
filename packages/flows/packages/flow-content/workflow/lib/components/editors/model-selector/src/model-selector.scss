@@ -1,0 +1,229 @@
+/* 模型选择器的样式 */
+.model-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 标题区域样式 - 简洁风格 */
+.model-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 30px;
+  padding: 0 2px;
+  margin-bottom: 2px;
+}
+
+.model-selector-title {
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.model-selector-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.streaming-label {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* 模型选择器主体 */
+.model-selector-body {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.model-selector-combo-list {
+  flex: 1;
+}
+
+/* 模型设置面板样式 */
+.model-settings {
+  padding: 12px 20px;
+}
+
+.settings-header {
+  margin-bottom: 20px;
+}
+
+.settings-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* 单选按钮组样式 */
+.style-radio-group {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.radio-label:hover {
+  color: #1890ff;
+}
+
+.radio-label input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1890ff;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"]:checked + span {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 滑块项目样式 */
+.slider-item {
+  margin-bottom: 12px;
+}
+
+.slider-item label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.slider-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  height: 30px;
+}
+
+.slider-min,
+.slider-max {
+  font-size: 12px;
+  color: #999;
+  width: 16px;
+  text-align: center;
+}
+
+/* 自定义滑块样式 */
+.custom-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #1890ff var(--value, 50%), #f0f0f0 var(--value, 50%));
+  outline: none;
+  -webkit-appearance: none;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+/* Webkit浏览器滑块样式 */
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1890ff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: -6px; /* 确保滑块圆心在轨道中心 */
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(24, 144, 255, 0.4);
+}
+
+/* Firefox浏览器滑块样式 */
+.custom-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1890ff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(24, 144, 255, 0.4);
+}
+
+/* Firefox滑块轨道样式 */
+.custom-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  border: none;
+  background: linear-gradient(to right, #1890ff var(--value, 50%), #f0f0f0 var(--value, 50%));
+}
+
+/* 滑块输入框样式 */
+.slider-input {
+  width: 65px;
+  padding: 6px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.slider-input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 微调样式，增强用户体验 */
+.model-settings {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 移除webkit滑块的默认轨道样式 */
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 6px;
+  background: transparent;
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.f-icon-gear {
+  cursor: pointer;
+}

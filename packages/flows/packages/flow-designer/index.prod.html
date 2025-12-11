@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/platform/common/web/@farris/style.css?version=20250922" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farris Flow Designer</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    var header = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'systemjs-importmap';
+    script.src = '/platform/runtime/common/web/runtime.common.web.manifest.json?v=' + new Date().getTime();
+    header.appendChild(script);
+  </script>
+  <script src="/platform/common/web/systemjs/6.8.1/system.js?version=20250922"></script>
+
+  <script type="text/javascript">
+    System.import("./assets/index.js?version=<%= version %>");
+  </script>
+</body>
+
+</html>

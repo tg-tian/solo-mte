@@ -1,0 +1,11 @@
+.fvf-node-content-wrapper {
+    display: block;
+    margin-top: 4px;
+
+    &--two-column {
+        display: grid;
+        gap: 6px;
+        grid-template-columns: auto minmax(0, 1fr);
+        width: 100%;
+    }
+}

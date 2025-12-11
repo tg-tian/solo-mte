@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/knowledge-selector.schema.json",
+  "title": "knowledge-selector",
+  "description": "A Farris Component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a Knowledge Selector",
+      "type": "string"
+    },
+    "type": {
+      "description": "The type string of Knowledge Selector component",
+      "type": "string",
+      "default": "knowledge-selector"
+    },
+    "text": {
+      "description": "",
+      "type": "string",
+      "default": ""
+    }
+  },
+  "required": ["id", "type"]
+}
