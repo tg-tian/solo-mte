@@ -101,8 +101,8 @@ export default defineComponent({
                     <div class="f-page-main">
                         {shouldShowWelcome.value && <FWelcome>WelCome</FWelcome>}
                         {shouldShowAppsView.value && <FApps>AppList</FApps>}
-                        {shouldShowEnv.value && <Env domainId={1} sceneId={1} />}
-                        {shouldShowDevice.value && <Device domainId={1} sceneId={1} />}
+                        {shouldShowEnv.value && <Env domainId={26} sceneId={28} />}
+                        {shouldShowDevice.value && <Device domainId={26} sceneId={28} />}
                     </div>
                 </div>
             );

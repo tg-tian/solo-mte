@@ -39,25 +39,6 @@ export interface Scene {
     };
 }
 
-// 设备
-export interface Device {
-    id: number;
-    deviceCode: string;
-    deviceName: string;
-    deviceTypeId: number;
-    deviceType?: DeviceType;//获取设备时会返回
-    sceneId: number;
-    scene?: Scene;//获取设备时会返回
-    status: number;//0-离线，1-在线，2-未激活，初始默认未激活
-    protocolType: string;// MQTT/HTTP
-    protocolConfig: ProtocolConfig;// 协议连接配置参数
-    createTime: string;
-    updateTime: string;
-    lastOnlineTime: string;
-    deviceLocation: string;
-    properties?: Record<string, any>;
-}
-
 export interface ProtocolConfig {
     type: string;// 连接的物联网平台：none/aliyun/inspur
     configs: Record<string, string>
@@ -187,4 +168,37 @@ export interface DeviceConnection {
     deviceLocation: string;
     connections: Connection[]; // 连接设备列表
     intelligent: boolean; // 是否智能设备
+}
+
+// 设备影子（Device Shadow）
+export interface DeviceShadow {
+    deviceId: string;
+    provider: string;
+    category: string;
+    deviceName?: string;
+    state: {
+        reported: Record<string, any>;
+        desired?: Record<string, any>;
+    };
+    metadata: {
+        lastUpdated: number;
+        isOnline: boolean;
+        version: number;
+    };
+}
+
+export interface Device {
+    deviceId: string;
+    provider: string;
+    category: string;
+    deviceName: string;
+    state: {
+        reported: Record<string, any>;
+        desired?: Record<string, any>;
+    };
+    metadata: {
+        lastUpdated: number;
+        isOnline: boolean;
+        version: number;
+    };
 }

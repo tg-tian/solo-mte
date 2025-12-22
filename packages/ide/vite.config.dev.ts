@@ -22,6 +22,16 @@ export default defineConfig({
                 target: "http://localhost:5200",
                 changeOrigin: true,
                 secure: false
+            },
+            "/devices": {
+                target: "http://localhost:3000",
+                changeOrigin: true,
+                secure: false
+            },
+            "/deviceShadows": {
+                target: "http://localhost:3000",
+                changeOrigin: true,
+                secure: false
             }
         }
     },

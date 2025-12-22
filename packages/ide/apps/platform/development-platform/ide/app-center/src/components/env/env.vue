@@ -313,38 +313,6 @@ const editAreaTree = async (row: Area) => {
   }
 }
 
-const handleSearch = () => {
-}
-
-const handleDelete = (row: any) => {
-  ElMessageBox.confirm(
-    `确定要删除设备 "${row.name}" 吗？`,
-    {
-      title: '警告',
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    },
-  )
-    .then(async () => {
-      try {
-        await deviceStore.deleteDevice(row.id)
-        await deviceStore.fetchDevices(sceneId.value)
-        ElMessage.success('删除成功')
-      } catch (error) {
-        ElMessage.error('删除失败')
-      }
-    })
-    .catch(() => {
-      // 用户取消操作
-    })
-}
-
-const resetSearch = () => {
-  searchForm.value.name = ''
-  searchForm.value.status = 0
-}
-
 // Get domain ID from query params
 const domainId = computed(() => {
   return props.domainId ?? null
@@ -384,22 +352,7 @@ const handleConnection = (row: DeviceConnection) => {
   editConnectionsDialogVisible.value = true
 };
 
-// 删除接入点
-const handleDeletePoint = async (row: Connection) => {
-  const sourceId = currentDevice.value.id
-  const targetId = row.id
-  console.log("sourceId", sourceId, "targetId", targetId)
-  try {
-    await deviceStore.deleteConnection(sourceId, targetId);
-    await loadDeviceConnections()
-    currentDevice.value.connections = currentDevice.value.connections.filter(
-      (item) => (item.id) !== row.id
-    );
-    ElMessage.success('删除接入点成功');
-  } catch (error) {
-    ElMessage.error('删除接入点失败');
-  }
-};
+
 
 // Rules for form validation
 const rules = {
@@ -468,23 +421,7 @@ const resetFormData = () => {
   }
 }
 
-// 过滤后的设备列表
-const filteredDevices = computed(() => {
-  if (!deviceStore.devices) return []
 
-  return deviceStore.devices.filter((device: Device) => {
-    const nameMatch = !searchForm.value.name || device.deviceName.toLowerCase().includes(searchForm.value.name.toLowerCase())
-    const statusMatch = !searchForm.value.status || device.status === searchForm.value.status
-    return nameMatch && statusMatch
-  }).map((device: Device) => {
-    return {
-      ...device,
-      createTime: device.createTime?.split('.')[0].replace('T', ' '),
-      updateTime: device.updateTime?.split('.')[0].replace('T', ' '),
-      lastOnlineTime: device.lastOnlineTime?.split('.')[0].replace('T', ' ')
-    }
-  })
-})
 
 
 
@@ -528,53 +465,8 @@ const loadSceneToForm = (scene: any) => {
   }
 }
 
-const handleEdit = (row: Device) => {
-  isEdit.value = true
-  deviceForm.value = {
-    code: row.deviceCode,
-    name: row.deviceName,
-    deviceTypeId: row.deviceTypeId? row.deviceTypeId : undefined,
-    protocolType: row.protocolType,
-    sceneId: row.sceneId,
-    deviceLocation: row.deviceLocation,
-  }
-  currentId.value = row.id
-  deviceDialogVisible.value = true
-}
 
-// 新增方法：提交设备表单
-const submitDeviceForm = async () => {
-  if (!deviceFormRef.value) return; // 确保表单引用存在
-  await deviceFormRef.value.validate(async (valid) => {
-    if (valid) {
-      // 验证设备位置是否为有效的区域
-      const validLocations = areaStore.areas.map((area) => area.name);
-      if (!validLocations.includes(deviceForm.value.deviceLocation)) {
-        ElMessage.error('设备位置无效，请从已有区域中选择');
-        return;
-      }
 
-      submitting.value = true;
-      try {
-        if (isEdit.value && currentId.value !== null) {
-          await deviceStore.updateDevice(currentId.value, { ...deviceForm.value });
-          ElMessage.success('更新设备成功');
-        } else {
-          await deviceStore.createDevice({ ...deviceForm.value });
-          ElMessage.success('创建设备成功');
-        }
-        // 刷新设备列表
-        await deviceStore.fetchDevices(sceneId.value);
-        loadDeviceConnections();
-        deviceDialogVisible.value = false;
-      } catch {
-        ElMessage.error(isEdit.value ? '更新设备失败' : '创建设备失败');
-      } finally {
-        submitting.value = false;
-      }
-    }
-  });
-};
 
 const submitAreaForm = async () => {
   console.log("areaForm", areaForm.value)
@@ -635,7 +527,6 @@ watch([() => propSceneId.value, () => mode.value, () => propDomainId.value], asy
         sceneStore.setCurrentScene(res.data)
         loadSceneToForm(res.data)
         deviceTypeList.value = await sceneStore.getSceneDeviceTypes(res.data.sceneId)
-        await deviceStore.fetchDevices(newSceneId as number)
         await areaStore.fetchAreas(newSceneId as number)
         // Initialize map after data is loaded
         nextTick(() => {
@@ -710,7 +601,6 @@ onMounted(async () => {
     navigateBack()
   }
   if (localSceneId) {
-    await deviceStore.fetchDevices(localSceneId as number)
     // 根据场景 ID 加载区域数据
     await areaStore.fetchAreas(localSceneId as number);
   } else {
@@ -725,14 +615,7 @@ onMounted(async () => {
   }
 });
 
-const loadDeviceConnections = async () => {
-  const res = await deviceStore.fetchDeviceConnections(sceneId.value)
-  deviceConnections.value = res
-}
 
-onMounted(loadDeviceConnections)
-
-watch(sceneId, loadDeviceConnections)
 
 watch(
   () => areaStore.areas,
@@ -1201,8 +1084,6 @@ const confirmAddInPoint = async () => {
     return;
   }
   try {
-    await deviceStore.addConnection(currentDevice.value.id, selectedDeviceId.value, selectedPosition.value);
-    await loadDeviceConnections()
     addInPointDialogVisible.value = false;
     ElMessage.success('添加连接设备成功');
     const updated = deviceConnections.value.find((d: any) => d.id === currentDevice.value.id);

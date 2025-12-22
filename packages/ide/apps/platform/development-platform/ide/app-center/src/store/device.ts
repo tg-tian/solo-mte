@@ -1,36 +1,51 @@
 import { defineStore } from 'pinia'
+import type { Device } from '../types/models'
 import {
-    createMockDevice,
-    updateMockDevice,
-    deleteMockDevice,
-    getDeviceById,
     getDevices,
     createDevice,
     updateDevice,
     deleteDevice,
-    getDeviceConnections,
-    deleteDeviceConnection,
-    addDeviceConnection,
 } from '../api/device'
 
 export const useDeviceStore = defineStore('device', {
     state: () => ({
-        devices: [],
+        devices: [] as Device[],
         loading: false,
-        currentDevice: null
+        currentDevice: null as Device | null,
+        ws: null as WebSocket | null
     }),
 
     actions: {
-        async fetchDevices(sceneId?: number | null) {
-            if(!sceneId){
-                this.devices = []
-                return
-            }
+        mergeDeep(target: any, source: any) {
+            if (!source) return target || {}
+            if (!target) target = {}
+            const isObj = (v: any) => v && typeof v === 'object' && !Array.isArray(v)
+            const out: any = Array.isArray(target) ? [...target] : { ...target }
+            Object.keys(source).forEach((k) => {
+                const sv = source[k]
+                const tv = out[k]
+                if (isObj(sv) && isObj(tv)) {
+                    out[k] = this.mergeDeep(tv, sv)
+                } else {
+                    out[k] = sv
+                }
+            })
+            return out
+        },
+        async fetchDevices() {
             this.loading = true
             try {
-                const res: any = await getDevices(sceneId)
+                const res: any = await getDevices()
                 if (res.data && res.status === 200) {
-                    this.devices = res.data
+                    const list = (res.data || []) as Device[]
+                    this.devices = list.map((d) => ({
+                        ...d,
+                        metadata: {
+                            lastUpdated: d?.metadata?.lastUpdated ?? Date.now(),
+                            isOnline: false,
+                            version: d?.metadata?.version ?? 1,
+                        }
+                    }))
                 }
             } catch (error) {
                 console.error('Failed to fetch devices:', error)
@@ -39,12 +54,86 @@ export const useDeviceStore = defineStore('device', {
             }
         },
 
-        async createDevice(deviceData: any) {
+        applyShadow(p: any) {
+            const id = p?.deviceId
+            if (!id) return
+            const i = this.devices.findIndex((d) => d.deviceId === id)
+            if (i === -1) return
+            const cur = this.devices[i]
+            const meta = {
+                lastUpdated: p?.metadata?.lastUpdated ?? Date.now(),
+                isOnline: p?.metadata?.isOnline ?? true,
+                version: p?.metadata?.version ?? (cur?.metadata?.version ?? 1)
+            }
+            const state = {
+                reported: this.mergeDeep(cur?.state?.reported ?? {}, p?.state?.reported ?? {}),
+                desired: this.mergeDeep(cur?.state?.desired ?? {}, p?.state?.desired ?? {})
+            }
+            this.devices[i] = {
+                ...cur,
+                provider: p?.provider ?? cur.provider,
+                category: p?.category ?? cur.category,
+                deviceName: p?.deviceName ?? cur.deviceName,
+                state,
+                metadata: meta
+            }
+        },
+
+        connectShadowStream() {
+            if (this.ws) return
+            const ws = new WebSocket('ws://localhost:3000/ws/shadow')
+            this.ws = ws
+            ws.onopen = () => { console.log('WS connected') }
+            ws.onmessage = (e: MessageEvent) => {
+                const handle = (raw: any) => {
+                    let msg = raw
+                    try { if (typeof msg === 'string') msg = JSON.parse(msg) } catch {}
+                    const p = Array.isArray(msg) ? msg[0] : msg
+                    this.applyShadow(p)
+                }
+                const data: any = e.data
+                if (data && typeof Blob !== 'undefined' && data instanceof Blob) {
+                    data.text().then((t: string) => handle(t)).catch(() => {})
+                } else {
+                    handle(data)
+                }
+            }
+            ws.onclose = () => {
+                console.log('WS closed')
+                this.devices = (this.devices || []).map((d) => ({
+                    ...d,
+                    metadata: {
+                        lastUpdated: d?.metadata?.lastUpdated ?? Date.now(),
+                        isOnline: false,
+                        version: d?.metadata?.version ?? 1
+                    }
+                }))
+                this.ws = null
+            }
+            ws.onerror = (err) => {
+                console.error('WS error', err)
+            }
+        },
+
+        disconnectShadowStream() {
+            try { this.ws?.close() } catch {}
+            this.devices = (this.devices || []).map((d) => ({
+                ...d,
+                metadata: {
+                    lastUpdated: d?.metadata?.lastUpdated ?? Date.now(),
+                    isOnline: false,
+                    version: d?.metadata?.version ?? 1
+                }
+            }))
+            this.ws = null
+        },
+
+        async createDevice(deviceData: Device) {
             try {
                 const res: any = await createDevice(deviceData)
-                if (res.data && res.data.code === 200) {
-                    await this.fetchDevices(deviceData.sceneId)
-                    return res.data.data
+                if (res.data?.ok === true) {
+                    await this.fetchDevices()
+                    return res.data
                 }
             } catch (error) {
                 console.error('Failed to create device:', error)
@@ -52,12 +141,12 @@ export const useDeviceStore = defineStore('device', {
             }
         },
 
-        async updateDevice(id: number, deviceData: any) {
+        async updateDevice(id: number | string, deviceData: Partial<Device>) {
             try {
                 const res: any = await updateDevice(id, deviceData)
-                if (res.data && res.data.code === 200) {
+                if (res.data?.ok === true) {
                     await this.fetchDevices()
-                    return res.data.data
+                    return res.data
                 }
             } catch (error) {
                 console.error('Failed to update device:', error)
@@ -65,61 +154,16 @@ export const useDeviceStore = defineStore('device', {
             }
         },
 
-        async deleteDevice(id: number) {
+        async deleteDevice(id: number | string) {
             try {
                 const res: any = await deleteDevice(id)
-                if (res.data && res.data.code === 200) {
+                if (res.data?.ok === true) {
                     await this.fetchDevices()
                     return true
                 }
             } catch (error) {
                 console.error('Failed to delete device:', error)
                 throw error
-            }
-        },
-
-
-        async fetchDeviceConnections(sceneId?: number) {
-            if(!sceneId){
-                return []
-            }
-            this.loading = true
-            try {
-                const res: any = await getDeviceConnections(sceneId)
-                if (res.data && res.status === 200) {
-                    return res.data
-                }
-            } catch (error) {
-                console.error('Failed to fetch device connections:', error)
-            } finally {
-                this.loading = false
-            }
-        },
-
-        async deleteConnection(sourceId: number, targetId: number) {
-            try {
-                const res: any = await deleteDeviceConnection(sourceId,targetId)
-                if (res.data && res.status === 200) {
-                    return true
-                }
-            } catch (error) {
-                console.error('Failed to delete connection connections:', error)
-            } finally {
-                this.loading = false
-            }
-
-        },
-
-        async addConnection(sourceId: number, targetId: number,position:string) {
-            try {
-                const res: any = await addDeviceConnection(sourceId,targetId,position)
-                if (res.data && res.status === 200) {
-                    return true
-                }
-            } catch (error) {
-                console.error('Failed to add connection connections:', error)
-            } finally {
-                this.loading = false
             }
         },
 
