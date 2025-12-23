@@ -6,16 +6,17 @@ import Env from './components/env/env.vue';
 import Device from './components/device/device.vue';
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
-import { AppConfigOptions } from "./composition/type";
-
+import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
+import { useWorkspace } from "./composition/use-workspace";
 import './style.css';
 
 export default defineComponent({
     name: 'FAAppCenter',
     setup() {
         const title = "SOLO - 场景低代码开发平台";
-        const workspace = ref('ws-Sagi-01');
-        const currentUserName = ref('Sagi');
+        const workspace = ref('');
+        const workspaceId = ref('');
+        const currentUserName = ref('');
         const currentView = ref('device');
         const navData = [
             { id: 'start', text: '开始' },
@@ -35,6 +36,14 @@ export default defineComponent({
             useAppDomainComposition.setAppDomainSourceUri(result.appDataSourceUri);
             // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
             useAppDomainComposition.generateAppDomain(result.appDataSourceUri);
+        });
+
+        const useWorkspaceComposition = useWorkspace();
+        const workspaceInitialized = useWorkspaceComposition.initialize();
+        workspaceInitialized.then((result: WorkspaceOptions) => {
+            workspace.value = result.name;
+            workspaceId.value = result.id;
+            currentUserName.value = result.creator;
         });
 
         const shouldShowWelcome = computed(() => currentView.value === 'start');
@@ -61,6 +70,8 @@ export default defineComponent({
 
         // 在依赖注入服务中应用程序域服务
         provide('f-app-center-app-domain', useAppDomainComposition);
+
+        provide('f-app-center-workspace', useWorkspaceComposition);
 
         function renderToolbar() {
             return <div class="f-header-toolbar">

@@ -1,7 +1,7 @@
 import FANavigation from '../navigation/navigation.component';
 import FANavigationCompact from '../navigation/navigation-compact.component';
 import FAContentArea from '../content-area/content-area.component';
-import { ConfigOptions, FunctionInstance, UseConfig, UseFunctionInstance } from '../../composition/types';
+import { ConfigOptions, FunctionInstance, UseConfig, UseFunctionInstance, WorkspaceOptions } from '../../composition/types';
 import { useConfig } from '../../composition/use-config';
 import { useFunctionInstance } from '../../composition/use-function-instance';
 import { useMenuData } from '../../composition/use-menu-data';
@@ -13,6 +13,7 @@ import { computed, defineComponent, inject, onMounted, provide, ref } from 'vue'
 import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from "@farris/ui-vue";
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData ,WorkAreaInstance} from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
+import { useWorkspace } from '../../composition/use-workspace';
 
 export default defineComponent({
     name: 'FAppWorkspace',
@@ -43,6 +44,16 @@ export default defineComponent({
             // useFunctionInstanceComposition.setResidentInstance(result.residentFunctions);
             // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
             useMenuDataComposition.generateFunctionMenu(result.functionSourceUri);
+        });
+
+        const useWorkspaceComposition = useWorkspace();
+        const { options } = useWorkspaceComposition;
+        const workspaceInitialized = useWorkspaceComposition.initialize();
+        workspaceInitialized.then((result: WorkspaceOptions) => {
+            options.path = result.path;
+            options.appId = result.appId;
+            options.workspaceId = result.workspaceId;
+            options.version = result.version;
         });
 
         const sideContentStyle = computed(() => {
@@ -106,12 +117,12 @@ export default defineComponent({
         // 在依赖注入服务中注册功能菜单数据服务
         provide('f-admin-menu-data', useMenuDataComposition);
 
+        provide('f-admin-workspace', useWorkspaceComposition);
 
         onMounted(() => {
             // 在依赖注入服务中注册Farris Admin主框架Html元素
             provide('f-admin-main-element', adminMainElementRef.value);
             provide('f-admin-config', config);
-
         });
 
         return () => {

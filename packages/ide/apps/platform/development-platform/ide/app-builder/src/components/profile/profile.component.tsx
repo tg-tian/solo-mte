@@ -1,6 +1,8 @@
-import { defineComponent } from "vue";
+import { defineComponent, inject } from "vue";
 import { FButton, FDynamicForm, FDynamicFormGroup, FSection } from "@farris/ui-vue";
 import { ProfileProps, profileProps } from "./profile.props";
+import { UsePreview } from './compositon/use-preview';
+import { UseWorkspace } from '../../composition/types';
 
 export default defineComponent({
     name: 'FAppProfile',
@@ -22,6 +24,7 @@ export default defineComponent({
             textField: 'name',
             valueField: 'value',
         };
+        const useWorkspaceComposition = inject('f-admin-workspace') as UseWorkspace;
 
         function renderTitleArea() {
             return (
@@ -32,10 +35,16 @@ export default defineComponent({
             );
         }
 
+        function preview(){
+            const usePreview = UsePreview();
+            usePreview.preview(useWorkspaceComposition.options);
+
+        }
+
         function renderToolbar() {
             return (
                 <div class="f-toolbar">
-                    <FButton type="secondary">预览</FButton>
+                    <FButton type="secondary" onClick={preview}>预览</FButton>
                     <FButton type="secondary">编辑代码</FButton>
                     <FButton>发布</FButton>
                 </div>

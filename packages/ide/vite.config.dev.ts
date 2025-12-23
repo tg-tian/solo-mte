@@ -30,7 +30,8 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
                 appBuilder: resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
-                appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html')
+                appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html'),
+                appPreview: resolve(__dirname, 'apps/platform/development-platform/ide/app-preview/index.html')
             }
         }
     },

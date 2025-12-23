@@ -72,3 +72,25 @@ export interface UseAppConfig {
 
     initialize: () => Promise<any>
 }
+
+export interface WorkspaceOptions {
+    id: string;
+    code: string;
+    name: string;
+    productId: string | null;
+    paas: boolean;
+    location: string;
+    activated: boolean;
+    role: string;
+    creator: string;
+    createdTime: string;
+    lastModifier: string;
+    lastModifiedTime: string;
+}
+
+export interface UseWorkspace {
+
+    options: WorkspaceOptions;
+
+    initialize: () => Promise<any>
+}
