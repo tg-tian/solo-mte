@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>构件</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#4FC2F8" offset="0%"></stop>
+            <stop stop-color="#54AFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="风格7.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-80.000000, -376.000000)">
+            <g id="构件" transform="translate(80.000000, 376.000000)">
+                <g id="编组-4备份-2" fill="url(#linearGradient-1)">
+                    <rect id="矩形备份-21" x="0" y="0" width="36" height="36" rx="7"></rect>
+                </g>
+                <path d="M12.1243204,23.6 C12.2680987,23.7269013 12.4578418,23.8029287 12.6653813,23.7999135 L16.6,23.9807065 L17,24.95377 L24.4,24.55377 L24,22.15377 L16.7571189,22.28395 C16.583538,22.5349651 16.5682131,22.9858404 16.6409597,23.6 L12.1243204,23.6 Z M12.0539097,23.5296454 L12.0539097,18.2286254 L16.6,18.7406717 L17,19.676885 L24.4,19.276885 L24,16.876885 L16.7390039,16.9992904 C16.5588471,17.219623 16.5674822,17.6335938 16.6862111,18.1 L12.0539097,18.1 L12.0539097,14.4257944 L14.0870366,14.026354 L13.6870366,11.626354 L9.82290974,12.026354 L10.2229097,14.426354 L11.8539417,14.4257939 L11.8534853,23.0000319 C11.8534853,23.2031224 11.9291843,23.3885593 12.0539097,23.5296454 Z M24,11.6 L16.6,12 L17,14.4 L24.4,14 L24,11.6 Z" id="形状结合" stroke="#FFFFFF" stroke-width="1.2"></path>
+            </g>
+        </g>
+    </g>
+</svg>

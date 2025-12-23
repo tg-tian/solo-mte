@@ -1,6 +1,6 @@
 import { defineComponent, inject, onMounted, Ref, ref, watch } from "vue";
 import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FSearchBox } from "@farris/ui-vue";
-import { AppDomain, AppModule, AppObject, UseAppDomain } from "../../composition/type";
+import { AppDomain, AppModule, AppObject, UseAppDomain, UseWorkspace } from "../../composition/type";
 import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 
 import './apps.css';
@@ -11,6 +11,8 @@ export default defineComponent({
     emits: [],
     setup() {
         const useAppDomainComposition = inject('f-app-center-app-domain') as UseAppDomain;
+        const useWorkspaceComposition = inject('f-app-center-workspace') as UseWorkspace;
+        const { options } = useWorkspaceComposition;
         const { appDomains, appDomainMap, currentAppDomain, currentAppModule, currentAppObjects, updateAppDomain } = useAppDomainComposition;
         const appListViewRef = ref();
         // const currentAppDomain = ref();
@@ -117,10 +119,9 @@ export default defineComponent({
 
         function onClickAppCard(appObject: AppObject) {
             const appPath = `/${currentAppDomain.value.code}/${currentAppModule.value.code}/${appObject.code}`;
-            // const appUri = `/platform/dev/main/web/webide/newide/index.html?path=${appPath}&boId=${appObject.id}&ws=625s7acd&version=2.0#/home`;
+            const appUri = `/apps/platform/development-platform/ide/app-builder/index.html?path=${appPath}&appId=${appObject.id}&ws=${options.id}&version=2.0#/home`;
             // todo: 参考上面的appUri格式，给下面的appUri传递path,boId,ws等参数，并且在app-builder中实现接收以上参数的逻辑，然后将接收到的参数传递给usePages。
-            const appUri = '/apps/platform/development-platform/ide/app-builder/index.html';
-
+            // const appUri = '/apps/platform/development-platform/ide/app-builder/index.html';
             window.open(appUri);
         }
 

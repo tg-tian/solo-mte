@@ -141,3 +141,17 @@ export interface UseWorkAreaInstance {
 
     setResidentInstance: (residentInstances: WorkAreaInstance[]) => void;
 }
+
+export interface WorkspaceOptions {
+    path: string;
+    appId: string;
+    workspaceId: string;
+    version: string;
+}
+
+export interface UseWorkspace {
+
+    options: WorkspaceOptions;
+
+    initialize: () => Promise<any>;
+}
