@@ -155,3 +155,6 @@ export interface UseWorkspace {
 
     initialize: () => Promise<any>;
 }
+export interface UseIde {
+    setDesignerStatus: (metadataId: string, isDirty: boolean) => void;
+}

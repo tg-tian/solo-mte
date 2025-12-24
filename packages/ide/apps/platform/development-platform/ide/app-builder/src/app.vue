@@ -1,11 +1,12 @@
 import { defineComponent } from "vue";
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, provide } from 'vue';
 import FAFrame from './components/workspace/workspace.component';
 import FAAppInfo from './components/profile/profile.component';
 import FAAppEntries from './components/menu/menu.component';
 import FAAppEnvironment from './components/variables/variables.component';
+import { useIde } from "./composition/use-ide";
 
 const currentPath = ref(window.location.hash);
 
@@ -21,6 +22,9 @@ const currentView = computed(() => {
     const routePath: string = `/${currentPath.value.slice(1)}` || '/';
     return routes[routePath] || FAFrame;
 });
+
+const useIdeComposition = useIde();
+provide('f-admin-ide', useIdeComposition);
 
 onMounted(() => {
     window.addEventListener('hashchange', () => {
