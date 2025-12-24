@@ -59,7 +59,7 @@ export default defineComponent({
         function openPageDesign(page: Record<string, any>) {
             const { id,code,name } = page;
             const designerPath = designerMap.get(page.type);
-            const designerUrl = `${designerPath}?id=${page.relativePath}`;
+            const designerUrl = `${designerPath}?id=/${page.relativePath}`;
             openUrl(id, code, name, designerUrl);
         }
 
