@@ -32,6 +32,16 @@ export default defineConfig({
                 target: "http://localhost:3000",
                 changeOrigin: true,
                 secure: false
+            },
+            "/providers": {
+                target: "http://localhost:3000",
+                changeOrigin: true,
+                secure: false
+            },
+            "/discoverDevices": {
+                target: "http://localhost:3000",
+                changeOrigin: true,
+                secure: false
             }
         }
     },

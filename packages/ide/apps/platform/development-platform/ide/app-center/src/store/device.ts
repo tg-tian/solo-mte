@@ -1,37 +1,32 @@
 import { defineStore } from 'pinia'
-import type { Device } from '../types/models'
+import type { Device, ProviderConfig } from '../types/models'
 import {
     getDevices,
     createDevice,
     updateDevice,
     deleteDevice,
+    discoverDevices,
+    sendCommand
 } from '../api/device'
+import {
+    getProviders,
+    createProvider,
+    deleteProvider,
+} from '../api/provider'
+
+
+let wsInstance: WebSocket | null = null
 
 export const useDeviceStore = defineStore('device', {
     state: () => ({
         devices: [] as Device[],
+        providers: [] as ProviderConfig[],
         loading: false,
         currentDevice: null as Device | null,
-        ws: null as WebSocket | null
+        discoveredDevices: [] as any[]
     }),
 
     actions: {
-        mergeDeep(target: any, source: any) {
-            if (!source) return target || {}
-            if (!target) target = {}
-            const isObj = (v: any) => v && typeof v === 'object' && !Array.isArray(v)
-            const out: any = Array.isArray(target) ? [...target] : { ...target }
-            Object.keys(source).forEach((k) => {
-                const sv = source[k]
-                const tv = out[k]
-                if (isObj(sv) && isObj(tv)) {
-                    out[k] = this.mergeDeep(tv, sv)
-                } else {
-                    out[k] = sv
-                }
-            })
-            return out
-        },
         async fetchDevices() {
             this.loading = true
             try {
@@ -66,7 +61,7 @@ export const useDeviceStore = defineStore('device', {
                 version: p?.metadata?.version ?? (cur?.metadata?.version ?? 1)
             }
             const state = {
-                reported: this.mergeDeep(cur?.state?.reported ?? {}, p?.state?.reported ?? {}),
+                reported:  p?.state?.reported ?? {},
                 desired: this.mergeDeep(cur?.state?.desired ?? {}, p?.state?.desired ?? {})
             }
             this.devices[i] = {
@@ -78,18 +73,48 @@ export const useDeviceStore = defineStore('device', {
                 metadata: meta
             }
         },
-
+        mergeDeep(target: any, source: any) {
+            if (!source) return target || {}
+            if (!target) target = {}
+            const isObj = (v: any) => v && typeof v === 'object' && !Array.isArray(v)
+            const out: any = Array.isArray(target) ? [...target] : { ...target }
+            Object.keys(source).forEach((k) => {
+                const sv = source[k]
+                const tv = out[k]
+                if (isObj(sv) && isObj(tv)) {
+                    out[k] = this.mergeDeep(tv, sv)
+                } else {
+                    out[k] = sv
+                }
+            })
+            return out
+        },
         connectShadowStream() {
-            if (this.ws) return
-            const ws = new WebSocket('ws://localhost:3000/ws/shadow')
-            this.ws = ws
+            if (wsInstance) return
+            const ws = new WebSocket('ws://localhost:3000/ws')
+            wsInstance = ws
             ws.onopen = () => { console.log('WS connected') }
             ws.onmessage = (e: MessageEvent) => {
                 const handle = (raw: any) => {
                     let msg = raw
                     try { if (typeof msg === 'string') msg = JSON.parse(msg) } catch {}
-                    const p = Array.isArray(msg) ? msg[0] : msg
-                    this.applyShadow(p)
+                    
+                    if (msg && msg.topic) {
+                        if (msg.topic === 'device.updated') {
+                            console.log('WS Device Updated:', msg.data)
+                            this.applyShadow(msg.data)
+                        } else if (msg.topic === 'device.discovery') {
+                            console.log('WS Device Discovery:', msg.data)
+                            this.handleDiscovery(msg.data)
+                        }
+                    } else {
+                        // Fallback for direct shadow objects
+                        const p = Array.isArray(msg) ? msg[0] : msg
+                        if (p && (p.deviceId || p.metadata)) {
+                            console.log('WS Received (Legacy):', p)
+                            this.applyShadow(p)
+                        }
+                    }
                 }
                 const data: any = e.data
                 if (data && typeof Blob !== 'undefined' && data instanceof Blob) {
@@ -108,15 +133,40 @@ export const useDeviceStore = defineStore('device', {
                         version: d?.metadata?.version ?? 1
                     }
                 }))
-                this.ws = null
+                wsInstance = null
             }
             ws.onerror = (err) => {
                 console.error('WS error', err)
             }
         },
 
+        handleDiscovery(data: any) {
+            if (data && typeof data === 'object') {
+                const idx = this.discoveredDevices.findIndex((d) => d.deviceId === data.deviceId)
+                if (idx > -1) {
+                    this.discoveredDevices[idx] = { ...this.discoveredDevices[idx], ...data }
+                } else {
+                    this.discoveredDevices.push(data)
+                }
+            }
+        },
+
+        async discoverDevices() {
+            try {
+                const res: any = await discoverDevices()
+                if (res.status === 200) {
+                    this.discoveredDevices = res.data || []
+                } else {
+                    this.discoveredDevices = []
+                }
+            } catch (error) {
+                console.error('Failed to discover devices:', error)
+                this.discoveredDevices = []
+            }
+        },
+
         disconnectShadowStream() {
-            try { this.ws?.close() } catch {}
+            try { wsInstance?.close() } catch {}
             this.devices = (this.devices || []).map((d) => ({
                 ...d,
                 metadata: {
@@ -125,7 +175,7 @@ export const useDeviceStore = defineStore('device', {
                     version: d?.metadata?.version ?? 1
                 }
             }))
-            this.ws = null
+            wsInstance = null
         },
 
         async createDevice(deviceData: Device) {
@@ -167,8 +217,57 @@ export const useDeviceStore = defineStore('device', {
             }
         },
 
+        async sendCommand(command: any) {
+            try {
+                const res: any = await sendCommand(command)
+                return res.status === 200 || res.data?.ok === true
+            } catch (error) {
+                console.error('Failed to send command:', error)
+                throw error
+            }
+        },
+
         setCurrentDevice(device: any) {
             this.currentDevice = device
+        },
+
+        async fetchProviders() {
+            try {
+                const res: any = await getProviders()
+                if (res.status === 200) {
+                    this.providers = res.data || []
+                }
+            } catch (error) {
+                console.error('Failed to fetch providers:', error)
+            }
+        },
+
+        async createProvider(data: ProviderConfig) {
+            try {
+                const res: any = await createProvider(data)
+                if (res.status === 201 || res.data?.ok === true) {
+                    await this.fetchProviders()
+                    return true
+                }
+                return false
+            } catch (error) {
+                console.error('Failed to create provider:', error)
+                throw error
+            }
+        },
+
+        async deleteProvider(provider: string) {
+            try {
+                const res: any = await deleteProvider(provider)
+                if (res.status === 200 || res.data?.ok === true) {
+                    await this.fetchProviders()
+                    return true
+                }
+                return false
+            } catch (error) {
+                console.error('Failed to delete provider:', error)
+                throw error
+            }
         }
     },
 

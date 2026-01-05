@@ -170,7 +170,6 @@ export interface DeviceConnection {
     intelligent: boolean; // 是否智能设备
 }
 
-// 设备影子（Device Shadow）
 export interface DeviceShadow {
     deviceId: string;
     provider: string;
@@ -187,18 +186,46 @@ export interface DeviceShadow {
     };
 }
 
+
 export interface Device {
-    deviceId: string;
+  deviceId: string;
+  provider: string;
+  category: string;
+  deviceName?: string;
+  metaModel?: any;
+  isAccessible: boolean;
+  state: {
+    reported: Record<string, any>;
+    desired?: Record<string, any>;
+  };
+  metadata: {
+    lastUpdated: number;
+    isOnline: boolean;
+    version: number;
+  };
+}
+
+export interface ProviderConfig {
     provider: string;
-    category: string;
-    deviceName: string;
-    state: {
-        reported: Record<string, any>;
-        desired?: Record<string, any>;
+    communication: {
+        protocol: string;
+        baseUrl: string;
+        webhook?: {
+            enabled: boolean;
+            path: string;
+        };
+        topics?: {
+            telemetry: string;
+            event?: string;
+            command?: string;
+            config?: string;
+        };
     };
-    metadata: {
-        lastUpdated: number;
-        isOnline: boolean;
-        version: number;
+    auth?: {
+        type: string;
+        ak?: string;
+        sk?: string;
+        token?: string;
+        [key: string]: any;
     };
 }

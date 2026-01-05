@@ -20,3 +20,11 @@ export function updateDevice(id: string | number, data: Partial<Device>): Promis
 export function deleteDevice(id: string | number): Promise<AxiosResponse<{ ok: boolean }>> {
   return axios.delete(`/devices/${id}`)
 }
+
+export function discoverDevices(): Promise<AxiosResponse<Device[]>> {
+  return axios.get('/discoverDevices')
+}
+
+export function sendCommand(command: any): Promise<AxiosResponse<{ ok: boolean }>> {
+  return axios.post(`/devices/command`, command)
+}

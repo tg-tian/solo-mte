@@ -24,6 +24,7 @@
           </el-form>
           <div class="device-actions">
             <el-button type="primary" @click="handleAddDevice">添加设备</el-button>
+      <el-button type="primary" @click="handleConfig">平台配置</el-button>
           </div>
         </div>
       </el-card>
@@ -38,9 +39,9 @@
                   {{ scope.row?.state?.reported?.location?.name || '' }}
                 </template>
               </el-table-column>
-              <el-table-column label="更新时间" width="150">
+              <el-table-column label="更新时间" width="180">
                 <template #default="scope">
-                  {{ scope.row?.metadata?.lastUpdated }}
+                  {{ scope.row?.metadata?.lastUpdated ? new Date(scope.row.metadata.lastUpdated).toLocaleString() : '' }}
                 </template>
               </el-table-column>
               <el-table-column label="状态" width="100">
@@ -53,7 +54,7 @@
                 <template #default="scope">
                   <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
                   <el-button type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-                  <el-button type="warning" size="small" @click="openReportDialog(scope.row)">测试</el-button>
+                  <el-button type="warning" size="small" :disabled="!scope.row?.metadata?.isOnline" @click="openReportDialog(scope.row)">测试</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -61,8 +62,7 @@
           <el-empty v-else description="暂无设备" />
     </el-card>
 
-
-    <el-dialog v-model="deviceDialogVisible" :title="isEdit ? '编辑设备' : '添加设备'" width="50%">
+    <el-dialog v-model="deviceDialogVisible" :title="isEdit ? '编辑设备' : ' '" width="50%">
       <el-form :model="deviceForm" label-width="120px" :rules="deviceRules" ref="deviceFormRef">
         <el-form-item label="设备名称" prop="deviceName">
           <el-input v-model="deviceForm.deviceName" placeholder="请输入设备名称"></el-input>
@@ -71,7 +71,7 @@
           <el-input v-model="deviceForm.category" placeholder="请输入设备类型"></el-input>
         </el-form-item>
         <el-form-item v-if="isEdit" label="设备平台">
-          <el-select v-model="deviceForm.provider" placeholder="请选择协议类型">
+          <el-select v-model="deviceForm.provider" placeholder="请选择协议类型" disabled>
             <el-option label="MQTT" value="MQTT"></el-option>
             <el-option label="HTTP" value="HTTP"></el-option>
           </el-select>
@@ -88,21 +88,79 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="reportDialogVisible" :title="reportDialogTitle" width="50%">
-      <el-descriptions v-if="Object.keys(reportProperties).length" :column="1" border>
-        <el-descriptions-item v-for="(value, key) in reportProperties" :key="key" :label="key">
-          <pre style="margin:0">{{ formatValue(value) }}</pre>
-        </el-descriptions-item>
-      </el-descriptions>
-      <el-empty v-else description="无属性" />
+    <el-dialog v-model="reportDialogVisible" :title="reportDialogTitle" width="60%">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <el-card shadow="never">
+          <el-descriptions v-if="Object.keys(reportProperties).length" :column="1" border>
+            <el-descriptions-item v-for="(value, key) in reportProperties" :key="key" :label="key">
+              <pre style="margin:0">{{ formatValue(value) }}</pre>
+            </el-descriptions-item>
+          </el-descriptions>
+          <el-empty v-else description="无属性" />
+        </el-card>
+
+        <el-card shadow="never" v-if="currentDevice?.metaModel?.actions">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <el-button 
+              v-for="(action, actionName) in currentDevice.metaModel.actions" 
+              :key="actionName" 
+              type="primary" 
+              plain
+              @click="handleAction(String(actionName), action)"
+            >
+              {{ actionName }}
+            </el-button>
+          </div>
+        </el-card>
+      </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" @click="reportDialogVisible = false">关闭</el-button>
+          <el-button @click="reportDialogVisible = false">关闭</el-button>
         </span>
       </template>
     </el-dialog>
 
-    <el-dialog v-model="selectPageVisible" title="已发现设备" width="60%">
+    <el-dialog v-model="actionDialogVisible" :title="`${currentActionName}`" width="40%">
+      <el-form :model="actionFormModel" label-width="120px">
+        <el-form-item 
+          v-for="(argDef, argName) in currentActionDef?.arguments" 
+          :key="argName" 
+          :label="String(argName)"
+          required
+        >
+          <el-input-number 
+            v-if="argDef.type === 'number'" 
+            v-model="actionFormModel[argName]" 
+            :min="argDef.min" 
+            :max="argDef.max"
+          />
+          <el-select 
+            v-else-if="argDef.type === 'enum'" 
+            v-model="actionFormModel[argName]"
+            placeholder="请选择"
+          >
+            <el-option 
+              v-for="opt in argDef.enumValues" 
+              :key="opt" 
+              :label="opt" 
+              :value="opt" 
+            />
+          </el-select>
+          <el-input 
+            v-else 
+            v-model="actionFormModel[argName]" 
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="actionDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitAction">发送</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="selectPageVisible" title="已发现设备" width="70%">
       <el-table :data="selectList" class="device-table" border v-loading="selectLoading">
         <el-table-column prop="deviceId" label="设备编码" width="180" />
         <el-table-column prop="deviceName" label="设备名称" min-width="160" />
@@ -110,14 +168,58 @@
         <el-table-column prop="provider" label="设备平台" width="120" />
         <el-table-column label="操作" width="160">
           <template #default="scope">
-            <el-button type="primary" size="small" :disabled="isInCurrentListByShadow(scope.row)" @click="addDeviceFromSelect(scope.row)">
+            <el-button type="primary" size="small" :disabled="isInCurrentListByShadow(scope.row) || scope.row.isAccessible === false" @click="addDeviceFromSelect(scope.row)">
               {{ isInCurrentListByShadow(scope.row) ? '已添加' : '添加' }}
             </el-button>
+            <el-button type="warning" size="small" @click="handleNewConfig(scope.row)">配置</el-button>
           </template>
         </el-table-column>
       </el-table>
       <template #footer>
         <el-button @click="closeSelectPage">关闭</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="providerListVisible" title="配置管理" width="70%">
+      <div style="margin-bottom: 15px;">
+        <el-button type="primary" @click="openAddProvider">新增配置</el-button>
+      </div>
+      <el-table :data="deviceStore.providers" border>
+        <el-table-column prop="provider" label="Provider ID" width="150" />
+        <el-table-column prop="communication.protocol" label="协议" width="100" />
+        <el-table-column prop="communication.baseUrl" label="Base URL" min-width="200" />
+        <el-table-column label="操作" width="100">
+          <template #default="scope">
+            <el-button type="danger" size="small" @click="handleDeleteProvider(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <template #footer>
+        <el-button @click="providerListVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="providerFormVisible" title="新增配置" width="50%">
+      <el-form :model="providerForm" label-width="120px">
+        <el-form-item label="Provider ID" required>
+          <el-input v-model="providerForm.provider" placeholder="例如: mqtt-prod"></el-input>
+        </el-form-item>
+        <el-form-item label="协议" required>
+          <el-select v-model="providerForm.communication.protocol" placeholder="选择协议">
+            <el-option label="MQTT" value="mqtt"></el-option>
+            <el-option label="HTTP" value="http"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Base URL" required>
+          <el-input v-model="providerForm.communication.baseUrl" placeholder="例如: mqtt://localhost:1883"></el-input>
+        </el-form-item>
+        <!-- 可以根据需要添加更多字段 -->
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="providerFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitProvider">保存</el-button>
+        </span>
       </template>
     </el-dialog>
 
@@ -130,15 +232,13 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount, toRefs } from 'vue
 import { useSceneStore } from '../../store/scene'
 import { useDeviceStore } from '../../store/device'
 import { getSceneById } from '../../api/scene'
-import { useDeviceShadowStore } from '../../store/deviceshadow'
-import { getDeviceShadows } from '../../api/deviceshadow'
-import type { DeviceShadow, Device } from '../../types/models'
+import type { Device, ProviderConfig } from '../../types/models'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
+import { de } from 'element-plus/es/locale'
  
 const props = defineProps<{ domainId: number ; sceneId: number }>()
 const sceneStore = useSceneStore()
 const deviceStore = useDeviceStore()
-const shadowStore = useDeviceShadowStore()
 const deviceFormRef = ref<FormInstance>()           // 新增：设备对话框表单引用
  
 
@@ -161,12 +261,24 @@ const state = reactive({
   currentId: 0,
   isEdit: false,
   selectPageVisible: false,
-  selectList: [] as DeviceShadow[],
-  selectLoading: false,
+  
+  // Provider related state
+  providerListVisible: false,
+  providerFormVisible: false,
+  providerForm: {
+      provider: '',
+      communication: {
+          protocol: 'mqtt',
+          baseUrl: ''
+      }
+  } as ProviderConfig,
 })
 
 const { submitting, searchForm, isEdit, deviceForm, currentId, deviceDialogVisible } = toRefs(state)
-const { selectPageVisible, selectList, selectLoading } = toRefs(state)
+const { selectPageVisible, providerListVisible, providerFormVisible, providerForm } = toRefs(state)
+
+const selectList = computed(() => deviceStore.discoveredDevices)
+const selectLoading = ref(false)
 
 // Get current scene ID from query params
 const sceneId = computed(() => {
@@ -181,6 +293,48 @@ const handleAddDevice = () => {
   openSelectPage()
 }
 
+// Config button handler
+const handleConfig = () => {
+    providerListVisible.value = true
+    deviceStore.fetchProviders()
+}
+
+const handleNewConfig = (row: any) => {
+  console.log('New config logic not implemented yet', row)
+}
+
+const openAddProvider = () => {
+    providerForm.value = {
+        provider: '',
+        communication: {
+            protocol: 'mqtt',
+            baseUrl: ''
+        }
+    }
+    providerFormVisible.value = true
+}
+
+const submitProvider = async () => {
+    if (!providerForm.value.provider || !providerForm.value.communication.baseUrl) {
+        ElMessage.error('请填写完整信息')
+        return
+    }
+    try {
+        await deviceStore.createProvider({ ...providerForm.value })
+        ElMessage.success('保存成功')
+        providerFormVisible.value = false
+    } catch {
+        ElMessage.error('保存失败')
+    }
+}
+
+const handleDeleteProvider = async (row: ProviderConfig) => {
+    try {
+        await ElMessageBox.confirm(`确定删除配置 ${row.provider}?`)
+        await deviceStore.deleteProvider(row.provider)
+        ElMessage.success('删除成功')
+    } catch {}
+}
 
 
 const handleSearch = () => {
@@ -237,17 +391,60 @@ const filteredDevices = computed(() => {
 
 const reportDialogVisible = ref(false)
 const reportDialogTitle = ref('设备消息上报')
-const reportProperties = ref<Record<string, any>>({})
+const currentDeviceId = ref('')
+const currentDevice = computed(() => {
+  return deviceStore.devices.find((d: Device) => d.deviceId === currentDeviceId.value) || null
+})
+const reportProperties = computed(() => {
+  return currentDevice.value?.state?.reported || {}
+})
+const actionDialogVisible = ref(false)
+const currentActionName = ref('')
+const currentActionDef = ref<any>(null)
+const actionFormModel = ref<Record<string, any>>({})
+
 const openReportDialog = (row: any) => {
-  const reported = row?.state?.reported || {}
-  reportProperties.value = reported
-  reportDialogTitle.value = `${row.deviceName} 消息上报`
+  currentDeviceId.value = row.deviceId
+  console.log('Current device for report:', currentDevice.value)
+  reportDialogTitle.value = `${row.deviceName} 设备测试`
   reportDialogVisible.value = true
 }
 const formatValue = (val: any) => {
   if (val === null || val === undefined) return ''
   if (typeof val === 'object') return JSON.stringify(val, null, 2)
   return String(val)
+}
+
+const handleAction = async (actionName: string, action: any) => {
+    if (!action.arguments || Object.keys(action.arguments).length === 0) {
+        try {
+            await deviceStore.sendCommand({deviceId: currentDevice.value!.deviceId, actionName, params: {}})
+            ElMessage.success('指令下发成功')
+        } catch {
+            ElMessage.error('指令下发失败')
+        }
+        return
+    }
+    currentActionName.value = actionName
+    currentActionDef.value = action
+    actionFormModel.value = {}
+    actionDialogVisible.value = true
+}
+
+const submitAction = async () => {
+    try {
+        await deviceStore.sendCommand(
+            {
+              deviceId: currentDevice.value!.deviceId,
+              action: currentActionName.value,
+              params: actionFormModel.value
+            }
+        )
+        ElMessage.success('指令下发成功')
+        actionDialogVisible.value = false
+    } catch {
+        ElMessage.error('指令下发失败')
+    }
 }
 
 const handleEdit = (row: any) => {
@@ -311,6 +508,7 @@ const submitDeviceForm = async () => {
           deviceId: deviceForm.value.deviceId,
           provider: deviceForm.value.provider,
           category: deviceForm.value.category,
+          isAccessible: true,
           deviceName: deviceForm.value.deviceName,
           state: { reported: deviceForm.value.state?.reported || {}, desired: deviceForm.value.state?.desired || {} },
           metadata: deviceForm.value.metadata || { lastUpdated: Date.now(), isOnline: true, version: 1 }
@@ -329,27 +527,17 @@ const submitDeviceForm = async () => {
 
 const openSelectPage = async () => {
   selectPageVisible.value = true
-  selectLoading.value = true
-  try {
-    const res: any = await getDeviceShadows()
-    let raw = res?.data
-    if (typeof raw === 'string') { try { raw = JSON.parse(raw) } catch {} }
-    const data = Array.isArray(raw) ? raw : (raw?.data || raw?.devices || [])
-    selectList.value = data
-  } finally {
-    selectLoading.value = false
-  }
 }
 
 const closeSelectPage = () => {
   selectPageVisible.value = false
 }
 
-const isInCurrentListByShadow = (row: DeviceShadow) => {
+const isInCurrentListByShadow = (row: Device) => {
   return (deviceStore.devices || []).some((d: any) => d.deviceId === row.deviceId)
 }
 
-const addDeviceFromSelect = async (row: DeviceShadow) => {
+const addDeviceFromSelect = async (row: Device) => {
   if (isInCurrentListByShadow(row)) {
     ElMessage.info('该设备已在当前列表中')
     return
@@ -361,6 +549,8 @@ const addDeviceFromSelect = async (row: DeviceShadow) => {
       provider: row.provider || 'MQTT',
       category: row.category || '',
       deviceName: row.deviceName || row.deviceId,
+      isAccessible: row.isAccessible !== false,
+      metaModel: row.metaModel || null,
       state: { reported },
       metadata: { lastUpdated: Date.now(), isOnline: !!row?.metadata?.isOnline, version: row?.metadata?.version ?? 1 }
     } as Device)
@@ -395,6 +585,7 @@ onMounted(async () => {
     }
   } catch {}
   await deviceStore.fetchDevices()
+  await deviceStore.discoverDevices()
   deviceStore.connectShadowStream()
 });
 onBeforeUnmount(() => {
