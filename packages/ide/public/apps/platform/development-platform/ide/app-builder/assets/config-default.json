@@ -1,5 +1,5 @@
 {
-    "title": "智慧矿山",
+    "title": "SOLO 场景平台",
     "emptyFunctionPage": "./assets/empty-page.html",
     "functionSourceUri": "./assets/app-builder-functions.json",
     "workAreaSourceUri": "./assets/app-builder-work-areas.json",
