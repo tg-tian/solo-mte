@@ -392,7 +392,7 @@
     {
         "id": "DomainLCDP",
         "code": "domain-platform",
-        "name": "领域",
+        "name": "领域平台",
         "parentId": "CustomizeLCDP",
         "layer": "2",
         "menuType": "",
@@ -437,7 +437,7 @@
     {
         "id": "ScenarioLCDP",
         "code": "scenario-platform",
-        "name": "场景",
+        "name": "场景平台",
         "parentId": "CustomizeLCDP",
         "layer": "2",
         "menuType": "",
@@ -451,7 +451,7 @@
     },
     {
         "id": "CustomizeScenario",
-        "code": "customizeScenario",
+        "code": "customize",
         "name": "定制场景",
         "parentId": "ScenarioLCDP",
         "layer": "3",
