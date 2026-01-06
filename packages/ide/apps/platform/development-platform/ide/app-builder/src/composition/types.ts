@@ -69,6 +69,8 @@ export interface UseFunctionInstance {
 
     open: (functionItem: FunctionItem) => void;
 
+    openFile: (path: string) => void;
+
     openUrl: (functionId: string, code: string, name: string, functionUrl: string) => void;
 
     setResidentInstance: (functions: FunctionInstance[]) => void;
@@ -145,6 +147,9 @@ export interface UseWorkAreaInstance {
 export interface WorkspaceOptions {
     path: string;
     appId: string;
+    appCode: string;
+    appName: string;
+    boId: string;
     workspaceId: string;
     version: string;
 }
@@ -154,7 +159,14 @@ export interface UseWorkspace {
     options: WorkspaceOptions;
 
     initialize: () => Promise<any>;
+
+    open: (url: string) => void;
 }
 export interface UseIde {
+
     setDesignerStatus: (metadataId: string, isDirty: boolean) => void;
+
+    getInitCommandData: (frameId: string) => any;
+
+    setInitCommandData: (frameId: string, data: any) => void;
 }

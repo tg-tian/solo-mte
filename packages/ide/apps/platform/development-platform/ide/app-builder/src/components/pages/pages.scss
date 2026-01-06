@@ -97,3 +97,20 @@
 .f-listview-hover .btn-group {
   visibility: visible;
 }
+
+.ide-create-model-handler-popover {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  
+  .popover-body{
+    max-width: fit-content;
+
+    .ide-sidebar-panels{
+      position: relative;
+      top: auto;
+      left: auto;
+    }
+  }
+
+}

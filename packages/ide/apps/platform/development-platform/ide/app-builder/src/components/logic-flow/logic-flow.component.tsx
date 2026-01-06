@@ -1,9 +1,10 @@
-import { computed, defineComponent, onMounted, ref, withModifiers } from "vue";
+import { computed, defineComponent, onMounted, ref, withModifiers, inject } from "vue";
 import { FButton, FListView, FProgress, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { LogicFlowProps, logicFlowProps } from "./logic-flow.props";
 import { useLogicFlow } from "./composition/use-logic-flow";
 import { useFunctionInstance } from "../../composition/use-function-instance";
 import { UseConfig, FunctionInstance } from "../../composition/types";
+import { UseWorkspace } from "../../composition/types";
 
 export default defineComponent({
     name: 'FAppLogicFlows',
@@ -13,14 +14,16 @@ export default defineComponent({
         // const useConfigInstance = inject('f-admin-config') as UseConfig;
         // 初始化功能菜单实例管理服务
         const useFunctionInstanceComposition = useFunctionInstance(null as any);
+        const useWorkspaceComposition = inject('f-admin-workspace') as UseWorkspace;
+        const { options } = useWorkspaceComposition;
         // const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
         const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
-        setResidentInstance([            {
+        setResidentInstance([{
             "functionId": "home",
             "instanceId": "home",
             "code": "home",
             "name": "",
-            "url": "/platform/runtime/bcc/web/ai-flow/farris-flow-management/index.html?flowDesignerMenuID=18325584-1798-9982-ca06-447e1e54c502&funcId=8eabc611-ba6f-aeac-4cf0-4d6c49692f94",
+            "url": `/platform/runtime/bcc/web/ai-flow/farris-flow-management/index.html?flowDesignerMenuID=18325584-1798-9982-ca06-447e1e54c502&funcId=8eabc611-ba6f-aeac-4cf0-4d6c49692f94&boId=${options.boId}`,
             "icon": "f-icon f-icon-index-face",
             "fix": true
         }]);
@@ -32,10 +35,10 @@ export default defineComponent({
 
         onMounted(() => {
             window['gspframeworkService'] = {
-                'rtf':{
-                    'func':{
-                        'openMenu':(options:Record<string, any>) => {
-                            const { funcId:id,tabId:code,tabName:name } = options;
+                'rtf': {
+                    'func': {
+                        'openMenu': (options: Record<string, any>) => {
+                            const { funcId: id, tabId: code, tabName: name } = options;
                             const metadataId = options.queryStringParams.get('metadataId');
                             const targetUrl = `/platform/runtime/bcc/web/ai-flow/farris-flow-designer/index.html?metadataId=${metadataId}`;
                             openUrl(id, code, name, targetUrl);
@@ -129,12 +132,12 @@ export default defineComponent({
             });
         }
 
-        function renderPages(){
+        function renderPages() {
             return (
                 <div class="f-pages-list f-page f-page-is-managelist">
                     <div class="f-app-builder-main-header">
                         <div class="f-app-builder-main-tabs">
-                            <div class="f-app-builder-main-tabs-title">应用页面列表</div>
+                            <div class="f-app-builder-main-tabs-title">业务流程</div>
                             <div class="f-app-builder-main-tabs-content">
                                 {functionInstances.value.map((tabItem: FunctionInstance) => {
                                     return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
@@ -151,16 +154,16 @@ export default defineComponent({
                             </div> */}
                             <div class="f-app-builder-main-tabs-background"></div>
                         </div>
-                     </div>
-                     
-                     <div class="f-app-builder-main-content">
+                    </div>
+
+                    <div class="f-app-builder-main-content">
                         {renderContents()}
-                     </div>
+                    </div>
                 </div>
             );
         }
 
-        return ()=>{
+        return () => {
             return renderPages();
         };
     }

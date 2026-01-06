@@ -9,7 +9,7 @@ export default defineComponent({
     props: menuProps,
     emits: [],
     setup(props: MenuProps, context) {
-        const title = '自助咖啡服务-菜单管理';
+        const title = '菜单管理';
         const menuListViewRef = ref();
         const menuTasks = ref<MenuTask[]>(mockMenuTask);
         const currentView = ref('listView');
@@ -22,7 +22,7 @@ export default defineComponent({
 
                 <div class="left-menu">
                     <h3>菜单列表</h3>
-                    <div class="menu-item" >
+                    {/* <div class="menu-item" >
                         <span>咖啡服务</span>
                         <i class="icon"></i>
                     </div >
@@ -37,7 +37,7 @@ export default defineComponent({
                     <div class="menu-item">
                         <span>会议服务</span>
                         <i class="icon" ></i>
-                    </div >
+                    </div > */}
                 </div >
 
             );
@@ -45,42 +45,42 @@ export default defineComponent({
 
         function rendermenuTaskList() {
             return <FSection class="f-utils-fill-flex-column">
-                <FListView ref={menuListViewRef} data={menuTasks.value}>
+                <FListView ref={menuListViewRef}>
                     {{
 
-                        content: ({ item, index, selectedItem }) => {
-                            return (
+                        // content: ({ item, index, selectedItem }) => {
+                        //     return (
 
-                                <div class="right-info">
-                                    <h3>菜单信息</h3>
-                                    <div class="form-item">
-                                        <label>名称</label>
-                                        {item.name}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>菜单代码</label>
-                                        {item.menuCode}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>绑定页面流</label>
-                                        <select >{item.pageFlow}
-                                            <option value="coffeeOrderPageFlow">咖啡点单页面流</option>
+                        //         <div class="right-info">
+                        //             <h3>菜单信息</h3>
+                        //             <div class="form-item">
+                        //                 <label>名称</label>
+                        //                 {item.name}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>菜单代码</label>
+                        //                 {item.menuCode}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>绑定页面流</label>
+                        //                 <select >{item.pageFlow}
+                        //                     <option value="coffeeOrderPageFlow">咖啡点单页面流</option>
 
-                                        </select>
-                                    </div>
-                                    <div class="form-item">
-                                        <label>自定义JS</label>
-                                        <textarea >{item.customJS}</textarea>
-                                        <button >打开编辑器</button>
-                                    </div>
-                                    <div class="action-bar">
-                                        <button >保存</button>
-                                        <button >关闭</button>
-                                    </div>
-                                </div>
+                        //                 </select>
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>自定义JS</label>
+                        //                 <textarea >{item.customJS}</textarea>
+                        //                 <button >打开编辑器</button>
+                        //             </div>
+                        //             <div class="action-bar">
+                        //                 <button >保存</button>
+                        //                 <button >关闭</button>
+                        //             </div>
+                        //         </div>
 
-                            );
-                        }
+                        //     );
+                        // }
                     }}
                 </FListView >
             </FSection >;
@@ -88,7 +88,7 @@ export default defineComponent({
         return () => {
             return (
                 <div class="f-page f-page-card f-page-is-mainsubcard f-app-menu">
-                     <FPageHeader title="自助咖啡服务-菜单管理" buttons={items}></FPageHeader>
+                     <FPageHeader title="菜单管理" buttons={items}></FPageHeader>
                     <div class="f-admin-main-content">
                         {searchToolbar()}
                         <div class="f-page-main">

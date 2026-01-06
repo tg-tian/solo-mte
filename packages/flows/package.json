@@ -6,7 +6,7 @@
   "scripts": {},
   "engines": {
     "node": ">=20.19",
-    "pnpm": ">=10"
+    "pnpm": ">=9"
   },
   "packageManager": "pnpm@10.15.1",
   "devDependencies": {

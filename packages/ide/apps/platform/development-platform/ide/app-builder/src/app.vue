@@ -23,9 +23,6 @@ const currentView = computed(() => {
     return routes[routePath] || FAFrame;
 });
 
-const useIdeComposition = useIde();
-provide('f-admin-ide', useIdeComposition);
-
 onMounted(() => {
     window.addEventListener('hashchange', () => {
         currentPath.value = window.location.hash;

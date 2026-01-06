@@ -6,9 +6,10 @@ import type { WorkflowItem } from '@/types/workflow';
 import { ref, onMounted } from 'vue';
 import { getWorkflowList } from '@/api/workflow';
 import { MenuUtils } from '@/utils';
+import axios from 'axios';
 
 // 侧边栏显示状态
-const sidebarVisible = ref(true);
+const sidebarVisible = ref(false);
 
 // 切换侧边栏显示状态
 const toggleSidebar = () => {
@@ -44,8 +45,6 @@ const currentSelectedNodeId = ref('');
 // 当前选中节点的的名称
 const currentSelectedNodeName = ref('');
 
-
-
 // 处理侧边栏选择变化
 const handleSelectionChange = (node: any) => {
   // 保存当前选中的节点ID
@@ -59,6 +58,22 @@ const handleSelectionChange = (node: any) => {
     console.error('获取流程列表失败:', error);
   });
 };
+
+function initialize() {
+  return new Promise((resolve, reject) => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const boId = queryParams.get('boId') || '';
+    if (boId) {
+      const resourceUri = `/api/runtime/sys/v1.0/business-objects/${boId}`;
+      axios.get(resourceUri).then((response) => {
+        const resourceData = response.data as Record<string, any>;
+        const { id, name } = resourceData;
+        handleSelectionChange(resourceData)
+        resolve(true);
+      });
+    }
+  });
+}
 
 function listenTabSwitchEvent(): void {
   const options = MenuUtils.getQueryParams();
@@ -78,39 +93,31 @@ function listenTabSwitchEvent(): void {
   MenuUtils.listenTabSwitchEvent(onTabSwitched, options);
 }
 
-onMounted(listenTabSwitchEvent);
+onMounted(() => {
+  initialize().then(() => {
+    listenTabSwitchEvent();
+  });
+});
 </script>
 
 <template>
   <div class="layout-container" :class="{ 'sidebar-hidden': !sidebarVisible }">
     <!-- 侧边栏 -->
-    <Sidebar
-      class="sidebar-container"
-      @selection-change="handleSelectionChange"
-      v-show="sidebarVisible"
-    />
+    <!-- <Sidebar class="sidebar-container" @selection-change="handleSelectionChange" v-show="sidebarVisible" /> -->
 
     <div class="right-container">
       <!-- 侧边栏切换按钮 -->
-      <div
-        class="sidebar-toggle-btn"
-        @click="toggleSidebar"
-        :class="{ 'expanded': !sidebarVisible }"
-      >
+      <!-- <div class="sidebar-toggle-btn" @click="toggleSidebar" :class="{ 'expanded': !sidebarVisible }">
         <i class="f-icon f-icon-arrow-chevron-left"></i>
-      </div>
+      </div> -->
 
       <!-- 头部 -->
-      <Header
-        class="header-container"
-        :current-selected-node-id="currentSelectedNodeId"
-        @workflow-search="handleSearch"
-        @refresh-workflows="handleRefreshWorkflows"
-        :current-selected-node-name="currentSelectedNodeName"
-      />
+      <Header class="header-container" :current-selected-node-id="currentSelectedNodeId" @workflow-search="handleSearch"
+        @refresh-workflows="handleRefreshWorkflows" :current-selected-node-name="currentSelectedNodeName" />
 
       <!-- 主内容区 -->
-      <WorkflowList class="main-content" :workflows="workflows" :search-keyword="searchKeyword" @refresh-workflows="handleRefreshWorkflows" />
+      <WorkflowList class="main-content" :workflows="workflows" :search-keyword="searchKeyword"
+        @refresh-workflows="handleRefreshWorkflows" />
     </div>
   </div>
 </template>
@@ -168,39 +175,39 @@ onMounted(listenTabSwitchEvent);
   overflow-y: auto;
 }
 
-  /* 侧边栏切换按钮样式 */
-  .sidebar-toggle-btn {
-    position: absolute;
-    left: -8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 25px;
-    border-radius: 5px;
-    border: none;
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-    transition: all 0.3s ease;
-  }
+/* 侧边栏切换按钮样式 */
+.sidebar-toggle-btn {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 25px;
+  border-radius: 5px;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
 
-  .sidebar-toggle-btn:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
+.sidebar-toggle-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-  .sidebar-toggle-btn.expanded {
-    left: 10px;
-  }
+.sidebar-toggle-btn.expanded {
+  left: 10px;
+}
 
-  .sidebar-toggle-btn.expanded i {
-    transform: rotate(180deg);
-  }
+.sidebar-toggle-btn.expanded i {
+  transform: rotate(180deg);
+}
 
-  .sidebar-toggle-btn i {
-    transition: transform 0.3s ease;
-  }
+.sidebar-toggle-btn i {
+  transition: transform 0.3s ease;
+}
 </style>

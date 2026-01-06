@@ -119,7 +119,7 @@ export default defineComponent({
 
         function onClickAppCard(appObject: AppObject) {
             const appPath = `/${currentAppDomain.value.code}/${currentAppModule.value.code}/${appObject.code}`;
-            const appUri = `/apps/platform/development-platform/ide/app-builder/index.html?path=${appPath}&appId=${appObject.id}&ws=${options.id}&version=2.0#/home`;
+            const appUri = `/apps/platform/development-platform/ide/app-builder/index.html?path=${appPath}&boId=${appObject.id}&ws=${options.id}&version=2.0#/home`;
             // todo: 参考上面的appUri格式，给下面的appUri传递path,boId,ws等参数，并且在app-builder中实现接收以上参数的逻辑，然后将接收到的参数传递给usePages。
             // const appUri = '/apps/platform/development-platform/ide/app-builder/index.html';
             window.open(appUri);

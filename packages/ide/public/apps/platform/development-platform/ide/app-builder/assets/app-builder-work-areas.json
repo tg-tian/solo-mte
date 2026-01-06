@@ -5,9 +5,9 @@
         "name": "应用信息"
     },
     {
-        "id": "logic-flow",
-        "code": "logic-flow",
-        "name": "业务流程",
+        "id": "pages",
+        "code": "pages",
+        "name": "模型设计",
         "functions": [
             {
                 "functionId": "home",
@@ -18,7 +18,8 @@
                 "icon": "f-icon f-icon-index-face",
                 "fix": true
             }
-        ]
+        ],
+        "showHeader": false
     },
     {
         "id": "devices",
@@ -37,26 +38,9 @@
         ]
     },
     {
-        "id": "pages",
-        "code": "pages",
-        "name": "页面管理",
-        "functions": [
-            {
-                "functionId": "home",
-                "instanceId": "home",
-                "code": "home",
-                "name": "",
-                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
-                "icon": "f-icon f-icon-index-face",
-                "fix": true
-            }
-        ],
-        "showHeader": false
-    },
-    {
-        "id": "page-flow",
-        "code": "page-flow",
-        "name": "页面流",
+        "id": "logic-flow",
+        "code": "logic-flow",
+        "name": "业务流程",
         "functions": [
             {
                 "functionId": "home",
