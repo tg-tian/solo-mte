@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@farris/ui-vue": "^1.6.5-beta.6",
+        "@ubml/common":"1.0.0-beta.1",
         "@monaco-editor/loader": "^1.4.0",
         "axios": "^1.12.2",
         "element-plus": "^2.9.7",

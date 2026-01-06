@@ -1,5 +1,6 @@
 import { computed, defineComponent, onMounted, ref, withModifiers, inject } from "vue";
-import { FButton, FListView, FProgress, FSection, FPopover, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
+import { FButton, FListView, FProgress, FSection, FPopover, FMessageBoxService, FNotifyService, F_NOTIFY_SERVICE_TOKEN } from "@farris/ui-vue";
+import { useMetadata } from "@ubml/common";
 import { PagesProps, pagesProps } from "./pages.props";
 import { mockPagesTasks } from './mock-data';
 import { PagesTask } from "./type";
@@ -16,6 +17,9 @@ export default defineComponent({
         // const useConfigInstance = inject('f-admin-config') as UseConfig;
         // 初始化功能菜单实例管理服务
         // const useFunctionInstanceComposition = useFunctionInstance(null as any);
+        const FMessageBoxService = inject('FMessageBoxService') as typeof FMessageBoxService;
+        const FNotifyService = inject(F_NOTIFY_SERVICE_TOKEN) as typeof FNotifyService;
+
         const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
         const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
         setResidentInstance([{
@@ -42,6 +46,7 @@ export default defineComponent({
         const pagesListViewRef = ref();
         const popoverRef = ref<any>();
         const popoverHostRef = ref<any>();
+        const popoverReferenceRef = ref<any>();
         const pagesTasks = ref<PagesTask[]>([]);
         const currentView = ref('listView');
         const shouldShowPopover = ref(false);
@@ -49,6 +54,7 @@ export default defineComponent({
         const searchInputRef = ref<HTMLInputElement | null>(null);
         const searchValue = ref('');
         const { pages, getPages, createPage, getMetadataGroup, metadataGroup, frameworkData, metadataTypeData } = usePage();
+        const { deleteMetadata, isMetadataRefed } = useMetadata();
 
         onMounted(() => {
             // getPages().then((pages: Record<string, any>[]) => {
@@ -96,6 +102,58 @@ export default defineComponent({
                 'f-app-builder-main-tab-content': true
             } as Record<string, true>;
             return classObject;
+        }
+
+        function onDeleteMetadata($event: MouseEvent, metadata: any) {
+            $event.stopPropagation();
+            const param = {
+                nodeID: metadata.id,
+                nodeName: metadata.fileName || metadata.name,
+                nodePath: metadata.fullpath || metadata.fullPath || metadata.relativePath,
+                nodeType: 'file'
+            };
+
+            // 直接调用删除方法
+            doDeleteMetadata(param);
+        }
+
+        function doDeleteMetadata(nodeInfo: any) {
+            if (nodeInfo.nodeType === 'file') {
+                FMessageBoxService.question('确认是否删除?', '', async () => {
+                    try {
+                        // 获取完整路径，如果以 / 开头则去掉第一个字符
+                        const fullPath = nodeInfo.nodePath.startsWith('/')
+                            ? nodeInfo.nodePath.substring(1)
+                            : nodeInfo.nodePath;
+
+                        // 检查元数据是否被依赖
+                        const refedResult = await isMetadataRefed(fullPath);
+
+                        // 判断是否被依赖（根据 API 返回的数据结构判断）
+                        const isRefed = refedResult?.body || refedResult?.data?.body || false;
+
+                        if (!isRefed) {
+                            // 如果没有被依赖，执行删除
+                            await deleteMetadata(fullPath, 'file');
+
+                            // 删除成功，刷新元数据列表
+                            FNotifyService.success({ message: '删除成功' });
+                            await getMetadataGroup();
+                        } else {
+                            // 如果被依赖，显示错误信息
+                            FNotifyService.warning({
+                                message: '删除失败：此元数据被其他元数据依赖，请清除依赖后重试。具体依赖情况见输出框。'
+                            });
+                        }
+                    } catch (error: any) {
+                        // 处理错误
+                        const errorMessage = error?.error?.Message || error?.message || '删除失败';
+                        FNotifyService.show({ type: 'error', message: `删除失败：${errorMessage}` });
+                    }
+                });
+            } else {
+                FNotifyService.show({ type: 'warning', message: '删除失败：此元数据被其他元数据依赖，请清除依赖后重试。具体依赖情况见输出框。' });
+            }
         }
 
         function renderDefaultContent() {
@@ -179,9 +237,7 @@ export default defineComponent({
                         <div class="name">类型</div>
                         <ul class="nav">
                             {metadataTypeData.map(item => (
-                                <li
-                                    key={item.code}
-                                    class={{ 'nav-item': true, active: item.active }}
+                                <li key={item.code} class={{ 'nav-item': true, active: item.active }}
                                 // onClick={(e: MouseEvent) => onMetadataTypeClick(e, item)}
                                 >
                                     {item.name}
@@ -226,6 +282,11 @@ export default defineComponent({
                                                     <span class="metadata-info-extend-value" title={item.lastChangedOn || ''}>
                                                         {item.lastChangedOn || '无记录'}
                                                     </span>
+                                                </div>
+                                                <div class="footer-tools mt-2 mb-1" >
+                                                    <div class="metadata-info-delete-out" onClick={(payload: MouseEvent) => onDeleteMetadata(payload, item)}>
+                                                        <span class="f-icon icon fd-i-Family fd_pc-shanchu flex-fill" ></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -291,7 +352,7 @@ export default defineComponent({
                                 })}
                             </div>
                             <div class="f-app-builder-main-tabs-toolbar">
-                                <button class="btn btn-md btn-primary" onClick={showPopover}>新建</button>
+                                <button ref={popoverReferenceRef} class="btn btn-md btn-primary" onClick={showPopover}>新建</button>
                             </div>
                             <div class="f-app-builder-main-tabs-background"></div>
                         </div>
@@ -305,6 +366,7 @@ export default defineComponent({
                         host={popoverHostRef.value}
                         z-index={1050}
                         placement={'auto'}
+                        reference={popoverReferenceRef.value}
                         onHidden={() => {
                         }}>
                         <FCreateNewModel onCreated={(payload: any) => onCreated(payload)}></FCreateNewModel>
