@@ -9,7 +9,7 @@ export default defineComponent({
     props: devicesProps,
     emits: [],
     setup(props: DevicesProps, context) {
-        const title = '自助咖啡服务-菜单管理';
+        const title = '设备管理';
         const devicesListViewRef = ref();
         const devicesTasks = ref<DevicesTask[]>(mockDevicesTasks);
         const currentView = ref('listView');
@@ -110,13 +110,12 @@ export default defineComponent({
         return () => {
             return (
                 <div class="f-page f-page-card f-page-is-mainsubcard f-app-devices">
-                    <FPageHeader title="自助咖啡服务-设备管理" buttons={items}></FPageHeader>
+                    <FPageHeader title="设备管理" buttons={items}></FPageHeader>
                     <div class="f-admin-main-content">
-                        {searchToolbar()}
+                        {/* {searchToolbar()}
                         <div class="f-page-main">
                             {shouldShowListView.value && renderdevicesTaskList()}
-
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             );

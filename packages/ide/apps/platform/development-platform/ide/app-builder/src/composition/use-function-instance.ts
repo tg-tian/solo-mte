@@ -1,11 +1,22 @@
 import { ref } from "vue";
 import { FunctionInstance, FunctionItem, UseConfig, UseFunctionInstance } from "./types";
 import { useResolveFunctionUrl } from "./use-resolve-function-url";
+import axios from "axios";
 
 export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
     const activeInstanceId = ref('');
     const functionInstances = ref<FunctionInstance[]>([]);
     const functionInstanceMap = new Map<string, FunctionInstance>();
+    const designerMap = new Map<string, string>([
+        ['Form', '/platform/common/web/farris-designer/index.html'],
+        ['GSPBusinessEntity', '/platform/dev/main/web/webide/plugins-new/be-designer/index.html'],
+        ['GSPViewModel', '/platform/dev/main/web/webide/plugins-new/vo-designer/index.html'],
+        ['ExternalApi', '/platform/dev/main/web/webide/plugins/eapi-package/index.html'],
+        ['ResourceMetadata', '/platform/dev/main/web/webide/plugins/resource-metadata-designer/index.html'],
+        ['StateMachine', '/platform/dev/main/web/webide/plugins/state-machine-designer/index.html'],
+        ['PageFlowMetadata', '/platform/dev/main/web/webide/plugins/page-flow-designer/index.html'],
+        ['DBO', '/platform/dev/main/web/webide/plugins/dbo-manager/index.html']
+    ])
     // const useResolveFunctionUrlComposition = useResolveFunctionUrl(config);
 
     /**
@@ -104,6 +115,18 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
             openNewFunctionUrl(functionId, code, name, functionUrl);
         }
     }
+    function openFile(path: string) {
+        const resourceUri = `/api/dev/main/v1.0/metadatas/load?metadataFullPath=${path}`;
+        axios.get(resourceUri).then((response) => {
+            const resourceData = response.data as Record<string, any>;
+            const { id, code, name, type } = resourceData;
+            const designerPath = designerMap.get(type);
+            if (designerPath) {
+                const url = `${designerPath}?id=${path}`;
+                openUrl(id, code, name, url);
+            }
+        });
+    }
 
     /**
      * 关闭指定标识的功能菜单实例
@@ -117,5 +140,5 @@ export function useFunctionInstance(config: UseConfig): UseFunctionInstance {
         }
     }
 
-    return { activeInstanceId, close, functionInstances, open, openUrl, setResidentInstance };
+    return { activeInstanceId, close, functionInstances, open, openFile, openUrl, setResidentInstance };
 }

@@ -14,6 +14,7 @@ import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from "@fa
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData ,WorkAreaInstance} from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
 import { useWorkspace } from '../../composition/use-workspace';
+import { useIde } from '../../composition/use-ide';
 
 export default defineComponent({
     name: 'FAppWorkspace',
@@ -37,7 +38,7 @@ export default defineComponent({
         const useMenuDataComposition = useMenuData();
         // 监听Farris Admin全局配置对象初始化完成事件
         configInitialized.then((result: ConfigOptions) => {
-            title.value = result.title;
+            // title.value = result.title;
             useWorkAreaInstanceComposition.loadWorkAreaConfiguration(result.workAreaSourceUri);
             // useWorkAreaInstanceComposition.setResidentInstance(result.residentWorkAreas);
             // 根据配置选项设置初始状态下打开的预制菜单，默认状态下为用户工作中心首页
@@ -46,14 +47,13 @@ export default defineComponent({
             useMenuDataComposition.generateFunctionMenu(result.functionSourceUri);
         });
 
-        const useWorkspaceComposition = useWorkspace();
+        const useWorkspaceComposition = useWorkspace(useFunctionInstanceComposition);
+        const useIdeComposition = useIde(useWorkspaceComposition);
+        provide('f-admin-ide', useIdeComposition);
         const { options } = useWorkspaceComposition;
         const workspaceInitialized = useWorkspaceComposition.initialize();
         workspaceInitialized.then((result: WorkspaceOptions) => {
-            options.path = result.path;
-            options.appId = result.appId;
-            options.workspaceId = result.workspaceId;
-            options.version = result.version;
+            title.value = result.appName;
         });
 
         const sideContentStyle = computed(() => {

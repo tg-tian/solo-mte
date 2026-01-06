@@ -2,10 +2,13 @@
  * 提供ide运行所需的方法，供插件使用
  */
 
+import { FModalService } from "@farris/ui-vue";
+
 export class Ide {
   private frameId: string;
   private events: Map<string, any[]>;
   private commandData: Map<string, any>;
+  private modalService: FModalService | null;
   private get isTop(): boolean {
     return window.top === window;
   }
@@ -20,21 +23,20 @@ export class Ide {
 
 
 
-  constructor(parent?: Ide) {
+  constructor(modalService: FModalService | null) {
+    this.modalService = modalService;
     this.events = new Map<string, any[]>();
     this.frameId = this.getParam('frameID');
-    if (this.isTop) {
-      this.commandData = new Map<string, any>();
-    }
+    this.commandData = new Map<string, any>();
   }
 
   /* #region  frame util */
   getParam(key: string) {
     const params = new URLSearchParams(window.location.search);
-    return unescape(params.get(key));
+    return unescape(params.get(key) || '');
   }
 
-  getInitCommandData(frameId?: string): any {
+  getInitCommandData(frameId: string): any {
     if (!this.isTop) {
       frameId = frameId || this.frameId;
       return this.parentInstance.getInitCommandData(frameId);
@@ -143,6 +145,9 @@ export class Ide {
   closeModal(id?: string) {
     if (this.parentInstance !== this) {
       this.parentInstance.closeModal(id);
+    }
+    if (this.modalService) {
+      this.modalService.close();
     }
     this.emit('panel-removed', id, 'modal');
   }

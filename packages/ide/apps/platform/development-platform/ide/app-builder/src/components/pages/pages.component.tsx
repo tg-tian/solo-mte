@@ -1,11 +1,12 @@
-import { computed, defineComponent, onMounted, ref, withModifiers } from "vue";
-import { FButton, FListView, FProgress, FSection, FPageHeader, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
+import { computed, defineComponent, onMounted, ref, withModifiers, inject } from "vue";
+import { FButton, FListView, FProgress, FSection, FPopover, FDynamicForm, FDynamicFormGroup } from "@farris/ui-vue";
 import { PagesProps, pagesProps } from "./pages.props";
 import { mockPagesTasks } from './mock-data';
 import { PagesTask } from "./type";
 import { usePage } from "./composition/use-page";
-import { useFunctionInstance } from "../../composition/use-function-instance";
-import { UseConfig, FunctionInstance } from "../../composition/types";
+// import { useFunctionInstance } from "../../composition/use-function-instance";
+import { UseConfig, FunctionInstance, UseFunctionInstance } from "../../composition/types";
+import FCreateNewModel from "./components/create-new-model/create-new-model.component";
 
 export default defineComponent({
     name: 'FAppPages',
@@ -14,10 +15,10 @@ export default defineComponent({
     setup(props: PagesProps, context) {
         // const useConfigInstance = inject('f-admin-config') as UseConfig;
         // 初始化功能菜单实例管理服务
-        const useFunctionInstanceComposition = useFunctionInstance(null as any);
-        // const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
+        // const useFunctionInstanceComposition = useFunctionInstance(null as any);
+        const useFunctionInstanceComposition = inject('f-admin-function-instance') as UseFunctionInstance;
         const { activeInstanceId, functionInstances, close, open, openUrl, setResidentInstance } = useFunctionInstanceComposition;
-        setResidentInstance([            {
+        setResidentInstance([{
             "functionId": "home",
             "instanceId": "home",
             "code": "home",
@@ -29,22 +30,25 @@ export default defineComponent({
         const designerMap = new Map<string, string>([
             ['Form', '/platform/common/web/farris-designer/index.html'],
             ['GSPBusinessEntity', '/platform/dev/main/web/webide/plugins-new/be-designer/index.html'],
-            ['GSPViewModel','/platform/dev/main/web/webide/plugins-new/vo-designer/index.html'],
-            ['ExternalApi','/platform/dev/main/web/webide/plugins/eapi-package/index.html'],
-            ['ResourceMetadata','/platform/dev/main/web/webide/plugins/resource-metadata-designer/index.html'],
-            ['StateMachine','/platform/dev/main/web/webide/plugins/state-machine-designer/index.html'],
-            ['PageFlowMetadata','/platform/dev/main/web/webide/plugins/page-flow-designer/index.html'],
-            ['DBO','/platform/dev/main/web/webide/plugins/dbo-manager/index.html']
+            ['GSPViewModel', '/platform/dev/main/web/webide/plugins-new/vo-designer/index.html'],
+            ['ExternalApi', '/platform/dev/main/web/webide/plugins/eapi-package/index.html'],
+            ['ResourceMetadata', '/platform/dev/main/web/webide/plugins/resource-metadata-designer/index.html'],
+            ['StateMachine', '/platform/dev/main/web/webide/plugins/state-machine-designer/index.html'],
+            ['PageFlowMetadata', '/platform/dev/main/web/webide/plugins/page-flow-designer/index.html'],
+            ['DBO', '/platform/dev/main/web/webide/plugins/dbo-manager/index.html']
         ])
 
         const title = '自助咖啡服务-应用页面列表';
         const pagesListViewRef = ref();
+        const popoverRef = ref<any>();
+        const popoverHostRef = ref<any>();
         const pagesTasks = ref<PagesTask[]>([]);
         const currentView = ref('listView');
+        const shouldShowPopover = ref(false);
         // 组件状态
         const searchInputRef = ref<HTMLInputElement | null>(null);
         const searchValue = ref('');
-        const { pages, getPages, createPage, getMetadataGroup, metadataGroup,frameworkData,metadataTypeData} = usePage();
+        const { pages, getPages, createPage, getMetadataGroup, metadataGroup, frameworkData, metadataTypeData } = usePage();
 
         onMounted(() => {
             // getPages().then((pages: Record<string, any>[]) => {
@@ -57,7 +61,7 @@ export default defineComponent({
 
 
         function openPageDesign(page: Record<string, any>) {
-            const { id,code,name } = page;
+            const { id, code, name } = page;
             const designerPath = designerMap.get(page.type);
             const designerUrl = `${designerPath}?id=/${page.relativePath}`;
             openUrl(id, code, name, designerUrl);
@@ -96,36 +100,36 @@ export default defineComponent({
 
         function renderDefaultContent() {
             return <FSection class="f-utils-fill-flex-column">
-                    <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
-                        {{
-                            content: ({ item, index, selectedItem }) => {
-                                return (
-                                    <div class="f-page-card f-template-card-row">
-                                        <div class="f-page-card-header listview-item-content">
-                                            <div class="listview-item-icon f-page-icon">
-                                            </div>
-                                            <div class="listview-item-main">
-                                                <h4 class="listview-item-title">{item.name}</h4>
-                                                <h5 class="listview-item-subtitle">{item.code}</h5>
-                                            </div>
+                <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
+                    {{
+                        content: ({ item, index, selectedItem }) => {
+                            return (
+                                <div class="f-page-card f-template-card-row">
+                                    <div class="f-page-card-header listview-item-content">
+                                        <div class="listview-item-icon f-page-icon">
                                         </div>
-                                        <div class="f-page-card-content">
-                                            <p>修改人：{item.lastChangedBy}</p>
-                                            <p>修改时间：{item.lastChangedOn}</p>
-                                        </div>
-                                        <div class="f-page-card-footer f-btn-group">
-                                            <div class="btn-group f-btn-group-links">
-                                                <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openPageDesign(item)}></FButton>
-                                                <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
-                                                <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
-                                            </div>
+                                        <div class="listview-item-main">
+                                            <h4 class="listview-item-title">{item.name}</h4>
+                                            <h5 class="listview-item-subtitle">{item.code}</h5>
                                         </div>
                                     </div>
-                                );
-                            }
-                        }}
-                    </FListView>
-                </FSection>
+                                    <div class="f-page-card-content">
+                                        <p>修改人：{item.lastChangedBy}</p>
+                                        <p>修改时间：{item.lastChangedOn}</p>
+                                    </div>
+                                    <div class="f-page-card-footer f-btn-group">
+                                        <div class="btn-group f-btn-group-links">
+                                            <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openPageDesign(item)}></FButton>
+                                            <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
+                                            <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
+                    }}
+                </FListView>
+            </FSection>
         }
 
         function renderHeader() {
@@ -164,7 +168,7 @@ export default defineComponent({
                                 <li
                                     key={item.code}
                                     class={{ 'nav-item': true, active: item.active }}
-                                    // onClick={(e: MouseEvent) => onFrameworkItemClick(e, item)}
+                                // onClick={(e: MouseEvent) => onFrameworkItemClick(e, item)}
                                 >
                                     {item.name}
                                 </li>
@@ -174,11 +178,11 @@ export default defineComponent({
                     <div class="d-flex flex-row category">
                         <div class="name">类型</div>
                         <ul class="nav">
-                             {metadataTypeData.map(item => (
+                            {metadataTypeData.map(item => (
                                 <li
                                     key={item.code}
                                     class={{ 'nav-item': true, active: item.active }}
-                                    // onClick={(e: MouseEvent) => onMetadataTypeClick(e, item)}
+                                // onClick={(e: MouseEvent) => onMetadataTypeClick(e, item)}
                                 >
                                     {item.name}
                                 </li>
@@ -198,7 +202,7 @@ export default defineComponent({
                             <div class="card-body pt-2 pb-1">
                                 <div class="card-deck">
                                     {metadata.items.map(item => (
-                                        <div key={item.id} class="card mb-3 metadata-item" style="min-width: 18rem;min-height: 6rem;" onClick={(e: MouseEvent) =>openPageDesign(item)}>
+                                        <div key={item.id} class="card mb-3 metadata-item" style="min-width: 18rem;min-height: 6rem;" onClick={(e: MouseEvent) => openPageDesign(item)}>
                                             <div class="card-body d-flex flex-column pb-1 pl-3 pr-3 pt-3">
                                                 <div class="metadata-info d-flex flex-row">
                                                     <div class={`ide-bo-icon d-flex mt-1 ide-metadata-${metadata.postfix.substring(1)}`}>
@@ -259,12 +263,22 @@ export default defineComponent({
             });
         }
 
-        function renderPages(){
+        function showPopover() {
+            popoverRef.value.show(popoverHostRef.value);
+        }
+
+        function onCreated(payload: any) {
+            getMetadataGroup().then((metadataGroup: Record<string, any>[]) => {
+                popoverRef.value.hide();
+            });
+        }
+
+        function renderPages() {
             return (
-                <div class="f-pages-list f-page f-page-is-managelist">
+                <div ref={popoverHostRef} class="f-pages-list f-page f-page-is-managelist">
                     <div class="f-app-builder-main-header">
                         <div class="f-app-builder-main-tabs">
-                            <div class="f-app-builder-main-tabs-title">应用页面列表</div>
+                            <div class="f-app-builder-main-tabs-title">模型设计</div>
                             <div class="f-app-builder-main-tabs-content">
                                 {functionInstances.value.map((tabItem: FunctionInstance) => {
                                     return <div class={getFunctionTabClass(tabItem)} onClick={(payload: MouseEvent) => onClickFunctionTabItem(tabItem)}>
@@ -277,52 +291,29 @@ export default defineComponent({
                                 })}
                             </div>
                             <div class="f-app-builder-main-tabs-toolbar">
-                                <button class="btn btn-md btn-primary">新建</button>
+                                <button class="btn btn-md btn-primary" onClick={showPopover}>新建</button>
                             </div>
                             <div class="f-app-builder-main-tabs-background"></div>
                         </div>
-                     </div>
-                     {/* <div class="f-app-builder-main-content">
-                        <FSection class="f-utils-fill-flex-column">
-                            <FListView ref={pagesListViewRef} data={pages.value} view="CardView">
-                                {{
-                                    content: ({ item, index, selectedItem }) => {
-                                        return (
-                                            <div class="f-page-card f-template-card-row">
-                                                <div class="f-page-card-header listview-item-content">
-                                                    <div class="listview-item-icon f-page-icon">
-                                                    </div>
-                                                    <div class="listview-item-main">
-                                                        <h4 class="listview-item-title">{item.name}</h4>
-                                                        <h5 class="listview-item-subtitle">{item.code}</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="f-page-card-content">
-                                                    <p>修改人：{item.lastChangedBy}</p>
-                                                    <p>修改时间：{item.lastChangedOn}</p>
-                                                </div>
-                                                <div class="f-page-card-footer f-btn-group">
-                                                    <div class="btn-group f-btn-group-links">
-                                                        <FButton icon="f-icon f-icon-edit-cardview" type="link" onClick={() => openPageDesign(item)}></FButton>
-                                                        <FButton icon="f-icon f-icon-yxs_copy" type="link"></FButton>
-                                                        <FButton icon="f-icon f-icon-yxs_delete" type="link"></FButton>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-                                }}
-                            </FListView>
-                        </FSection>
-                     </div> */}
-                     <div class="f-app-builder-main-content">
+                    </div>
+                    <div class="f-app-builder-main-content">
                         {renderContents()}
-                     </div>
+                    </div>
+                    <FPopover
+                        ref={popoverRef}
+                        class="ide-create-model-handler-popover"
+                        host={popoverHostRef.value}
+                        z-index={1050}
+                        placement={'auto'}
+                        onHidden={() => {
+                        }}>
+                        <FCreateNewModel onCreated={(payload: any) => onCreated(payload)}></FCreateNewModel>
+                    </FPopover>
                 </div>
             );
         }
 
-        return ()=>{
+        return () => {
             return renderPages();
         };
 

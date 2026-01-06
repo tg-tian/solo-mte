@@ -24,6 +24,10 @@
 .f-admin-navigation {
     display: flex;
     flex-direction: column;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .f-admin-navigation > .f-page-content-nav {
@@ -103,6 +107,10 @@
     background-color: white;
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .f-admin-content > .f-page::before {

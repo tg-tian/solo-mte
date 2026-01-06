@@ -15,9 +15,9 @@
         "child": null
     },
     {
-        "id": "logic-flow",
-        "code": "LogicFlow",
-        "name": "业务流程",
+        "id": "pages",
+        "code": "Pages",
+        "name": "模型设计",
         "parentId": "0",
         "layer": "1",
         "menuType": "",
@@ -45,24 +45,9 @@
         "child": null
     },
     {
-        "id": "pages",
-        "code": "Pages",
-        "name": "页面管理",
-        "parentId": "0",
-        "layer": "1",
-        "menuType": "",
-        "funcType": "1",
-        "menuPath": "",
-        "icon": "./assets/icon/SystemFoundation.svg",
-        "description": null,
-        "pinyin": null,
-        "simpinyin": null,
-        "child": null
-    },
-    {
-        "id": "page-flow",
-        "code": "PageFlow",
-        "name": "页面流管理",
+        "id": "logic-flow",
+        "code": "LogicFlow",
+        "name": "业务流程",
         "parentId": "0",
         "layer": "1",
         "menuType": "",

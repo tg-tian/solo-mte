@@ -10,7 +10,7 @@ export default defineComponent({
     emits: [],
     setup(props: VariablesProps, context) {
 
-        const title = '场景应用低代码平台开发（复旦大学物理楼）';
+        const title = '全局变量';
         const menuListViewRef = ref();
         const currentView = ref('listView');
         const variablesTask = ref<VariablesTask[]>(mockVariablesTask);
@@ -28,10 +28,10 @@ export default defineComponent({
         function searchToolbar() {
             return (
 
-                <div class="nav-menu">
-                    <h3>菜单列表</h3>
+                <div class="left-menu">
+                    <h3>变量列表</h3>
 
-                    <FListView ref={menuListViewRef} data={variablesTask.value}>
+                    <FListView ref={menuListViewRef}>
                         {{
                             content: ({ item, index, selectedItem }) => {
                                 return (
@@ -58,48 +58,47 @@ export default defineComponent({
             return <FSection class="f-utils-fill-flex-column">
                 <FListView ref={menuListViewRef}  data={variable.value}>
                     {{
+                        // content: ({ item, index, selectedItem }) => {
+                        //     return (
 
-                        content: ({ item, index, selectedItem }) => {
-                            return (
+                        //         <div class="variable-form">
 
-                                <div class="variable-form">
+                        //             <div class="form-item">
+                        //                 <label>名称</label>
+                        //                 {item.name}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>变量ID</label>
+                        //                {item.id}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>变量类型</label>
+                        //                 {item.type}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>变量描述</label>
+                        //                 {item.description}
+                        //             </div>
+                        //             <div class="form-item">
+                        //                 <label>关联设备</label>
+                        //                 <div>
+                        //                     <input placeholder="搜索设备" />
 
-                                    <div class="form-item">
-                                        <label>名称</label>
-                                        {item.name}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>变量ID</label>
-                                       {item.id}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>变量类型</label>
-                                        {item.type}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>变量描述</label>
-                                        {item.description}
-                                    </div>
-                                    <div class="form-item">
-                                        <label>关联设备</label>
-                                        <div>
-                                            <input placeholder="搜索设备" />
+                        //                 </div>
 
-                                        </div>
-
-                                        <div class="form-item">
-                                            <label>初始化</label>
+                        //                 <div class="form-item">
+                        //                     <label>初始化</label>
                                            
-                                        </div>
-                                        <div class="action-bar">
-                                            <button >保存</button>
-                                            <button >关闭</button>
-                                        </div>
-                                    </div >
-                                </div >
+                        //                 </div>
+                        //                 <div class="action-bar">
+                        //                     <button >保存</button>
+                        //                     <button >关闭</button>
+                        //                 </div>
+                        //             </div >
+                        //         </div >
 
-                            );
-                        }
+                        //     );
+                        // }
                     }}
                 </FListView >
             </FSection >;
@@ -108,7 +107,7 @@ export default defineComponent({
         return () => {
             return (
                 <div class="f-page f-page-card f-page-is-mainsubcard f-app-menu">
-                    <FPageHeader title="景应用低代码平台开发（复旦大学物理楼）" buttons={items}></FPageHeader>
+                    <FPageHeader title="全局变量" buttons={items}></FPageHeader>
                     <div class="f-admin-main-content">
                         {searchToolbar()}
                         <div class="f-page-main">
