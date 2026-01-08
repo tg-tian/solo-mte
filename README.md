@@ -52,9 +52,35 @@ ide正常启动后有两个应用地址：
 
 ## 如何在基座上开发新的功能
 
-（待补充）
+### 1. 扩展开发页面设计器
+页面设计器的代码在`/solo-mte/packages/designer`, 其代码结构可以参考`/solo-mte/packages/designer/README.md`，可以在页面设计器中扩展引用模版、智能推荐低代码组件等特性。
+增加新功能后，可以执行以下命令build项目：
+```
+pnpm --filter designer run build:system
+```
+将build后的交付物复制到inBuilder community 运行基座的`\web\platform\common\web\farris-designer`目录，刷新运行环境查看运行效果。
 
+### 2. 扩展开发代码编辑器
+代码编辑器的代码在`solo-mte/packages/code-editor`， 基于`monaco-editor`开发，可以在代码编辑器中扩展智能辅助编码特性。
+增加新功能后，可以执行以下命令build项目：
+```
+pnpm --filter designer run build
+```
+build后的代码将会以@solo/code-editor部署在本地node_modules目录，重新参考步骤1，build并部署desinger可以查看运行时效果。
 
+### 3. 扩展业务流程
+业务流程的代码在`/solo-mte/packages/flows`, 其下包括五个子项目`create-vueflow`,`flow-content`,`flow-designer`,`flow-devkit`,`flow-management`, 可以在`flow-content`子项目中扩展流程节点，在`flow-designer`中扩展智能推荐流程。
+需要分别在flows项目目录下，执行以下命令build项目：
+```
+pnpm --filter flow-content run build
+```
+```
+pnpm --filter flow-designer run build
+```
+```
+pnpm --filter flow-management run build
+```
+将build后的交付物复制到inBuilder community 运行基座的`/web/platform/runtime/bcc/web/ai-flow`目录，刷新运行环境查看运行效果。
 
 ## 部署方式
 
