@@ -1,5 +1,5 @@
 {
-    "title": "SOLO-MTE",
+    "title": "SOLO 元工具平台",
     "emptyFunctionPage": "./assets/empty-page.html",
     "functionSourceUri": "./assets/solo-functions.json",
     "workAreaSourceUri": "./assets/work-areas.json",

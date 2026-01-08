@@ -30,21 +30,6 @@
         "child": null
     },
     {
-        "id": "devices",
-        "code": "Devices",
-        "name": "设备管理",
-        "parentId": "0",
-        "layer": "1",
-        "menuType": "",
-        "funcType": "1",
-        "menuPath": "",
-        "icon": "./assets/icon/businessplatform.svg",
-        "description": "BFZT",
-        "pinyin": null,
-        "simpinyin": null,
-        "child": null
-    },
-    {
         "id": "logic-flow",
         "code": "LogicFlow",
         "name": "业务流程",

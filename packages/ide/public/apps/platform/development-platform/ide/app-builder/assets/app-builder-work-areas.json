@@ -22,22 +22,6 @@
         "showHeader": false
     },
     {
-        "id": "devices",
-        "code": "devices",
-        "name": "设备管理",
-        "functions": [
-            {
-                "functionId": "home",
-                "instanceId": "home",
-                "code": "home",
-                "name": "",
-                "url": "/apps/platform/development-platform/ide/app-builder/assets/default-home.html",
-                "icon": "f-icon f-icon-index-face",
-                "fix": true
-            }
-        ]
-    },
-    {
         "id": "logic-flow",
         "code": "logic-flow",
         "name": "业务流程",

@@ -18,8 +18,8 @@ export function usePage(): UsePage {
         { code: 'All', name: '全部', active: false },
         { code: 'GSPBusinessEntity', name: '业务实体', types: ['GSPBusinessEntity'], active: true },
         { code: 'GSPViewModel', name: '视图模型', types: ['GSPViewModel'] },
-        { code: 'Form', name: '表单', types: ['Form'], active: true },
-        { code: 'MobileForm', name: '移动表单', types: ['MobileForm'], active: true },
+        { code: 'Form', name: '页面', types: ['Form'], active: true },
+        { code: 'MobileForm', name: '移动页面', types: ['MobileForm'], active: true },
         { code: 'QueryObject', name: '查询对象', types: ['QueryObject'] },
         { code: 'HelpMetadata', name: '帮助文档', types: ['HelpMetadata'], active: true },
         { code: 'StateMachine', name: '状态机', types: ['StateMachine'] },
@@ -74,8 +74,15 @@ export function usePage(): UsePage {
         const metadataTypesUri = `/api/dev/main/v1.0/metadata-configs`;
         return new Promise<any[]>((resolve, reject) => {
             axios.get(metadataTypesUri).then((response) => {
-                const metadataTypesData = response.data as Record<string, any>[];
-                resolve(metadataTypesData);
+                const metadataTypesData = (response.data as Record<string, any>[]).map((item: Record<string, any>) => {
+                    if (item.typeCode === 'Form') {
+                        item.typeName = '页面';
+                    } else if (item.typeCode === 'MobileForm') {
+                        item.typeName = '移动页面';
+                    }
+                    return item;
+                });
+                resolve(metadataTypesData as Record<string, any>[]);
             }, (error) => {
                 resolve([]);
             });
