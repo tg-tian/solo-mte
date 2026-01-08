@@ -1,4 +1,4 @@
-import { computed, defineComponent, provide, ref } from "vue";
+import { computed, defineComponent, provide, ref, onBeforeMount } from "vue";
 import FApps from './components/apps/apps.component';
 import FWelcome from './components/welcome/welcome.component';
 import { FNav } from '@farris/ui-vue';
@@ -9,11 +9,12 @@ import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
 import { useWorkspace } from "./composition/use-workspace";
 import './style.css';
+import axios from "axios";
 
 export default defineComponent({
     name: 'FAAppCenter',
     setup() {
-        const title = "SOLO - 场景低代码开发平台";
+        const title = ref("SOLO - 场景低代码开发平台");
         const workspace = ref('');
         const workspaceId = ref('');
         const currentUserName = ref('');
@@ -54,7 +55,7 @@ export default defineComponent({
         function renderTitleArea() {
             return <div class="f-title">
                 <div class="f-title-logo"></div>
-                <h4 class="f-title-text">{title}</h4>
+                <h4 class="f-title-text">{title.value}</h4>
             </div>;
         }
 
@@ -67,6 +68,24 @@ export default defineComponent({
                 <FNav activeNavId={currentView.value} navData={navData} displayField="text" onNav={onClickNavigationItem}></FNav>
             </div>;
         }
+
+        function getScenarioInfo() {
+            const scenarioSourceUri = 'http://139.196.147.52:8080/scenes?domainId=26';
+            const queryParams = new URLSearchParams(window.location.search);
+            const scenarioId = queryParams.get('scenarioId') || '';
+
+            axios.get(scenarioSourceUri).then((response) => {
+                const scenarioData = response.data;
+                const scenarioInfo = scenarioData.find((item: any) => item.sceneId == scenarioId);
+                if (scenarioInfo) {
+                    title.value = `SOLO - ${scenarioInfo.sceneName}`;
+                }
+            });
+        }
+
+        onBeforeMount(() => {
+            getScenarioInfo();
+        });
 
         // 在依赖注入服务中应用程序域服务
         provide('f-app-center-app-domain', useAppDomainComposition);

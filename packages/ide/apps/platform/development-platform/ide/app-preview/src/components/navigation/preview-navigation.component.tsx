@@ -1,5 +1,6 @@
-import { computed, defineComponent, ref, PropType, onMounted } from 'vue';
+import { computed, defineComponent, ref, PropType, onMounted, onBeforeMount } from 'vue';
 import { FAccordion, FAccordionItem, FListView } from "@farris/ui-vue";
+import axios from "axios";
 import { MenuItem } from '../preview/preview.props';
 import { usePage } from '../../composition/use-page';
 
@@ -27,6 +28,7 @@ export default defineComponent({
     },
     emits: [],
     setup(props: PreviewNavigationProps) {
+        const title = ref('预览应用');
         const navigationPanelRef = ref();
         const navigationPanelContainerRef = ref();
         const offsetY = ref(0);
@@ -111,6 +113,21 @@ export default defineComponent({
             offsetY.value = offsetYValue;
         }
 
+        function getAppInfo() {
+            const queryParams = new URLSearchParams(window.location.search);
+            const appId = queryParams.get('appId') || '';
+            const resourceUri = `/api/runtime/sys/v1.0/business-objects/${appId}`;
+            axios.get(resourceUri).then((response) => {
+                const resourceData = response.data as Record<string, any>;
+                const { code, name } = resourceData;
+                title.value = name;
+            });
+        }
+
+        onBeforeMount(() => {
+            getAppInfo();
+        });
+
         onMounted(() => {
             if (navigationPanelRef.value) {
                 navigationPanelContainerRef.value = (navigationPanelRef.value as HTMLElement).closest('.f-admin-navigation');
@@ -122,7 +139,7 @@ export default defineComponent({
                 <div class="f-admin-navigation-content" style="display:flex;flex-direction:column;">
                     <div>
                         <div class="f-admin-navigation-logo">
-                            <span>应用预览</span>
+                            <span>{title.value}</span>
                         </div>
                     </div>
                     <div style="flex:1;overflow:hidden;">
