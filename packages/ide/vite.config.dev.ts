@@ -13,6 +13,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false
             },
+            '/api/dev/main/v1.0/lcm-log/ws': {
+                target: 'ws://localhost:5200', // 后端 WebSocket 地址
+                changeOrigin: true, // 允许跨域
+                ws: true, // 启用 WebSocket 代理
+            },
             "/platform": {
                 target: "http://localhost:5200",
                 changeOrigin: true,

@@ -64,7 +64,7 @@ pnpm --filter designer run build:system
 代码编辑器的代码在`solo-mte/packages/code-editor`， 基于`monaco-editor`开发，可以在代码编辑器中扩展智能辅助编码特性。
 增加新功能后，可以执行以下命令build项目：
 ```
-pnpm --filter designer run build
+pnpm --filter code-editor run build
 ```
 build后的代码将会以@solo/code-editor部署在本地node_modules目录，重新参考步骤1，build并部署desinger可以查看运行时效果。
 
