@@ -11,9 +11,10 @@ export default defineConfig({
                 main: resolve(__dirname, 'index.html'),
                 'apps/platform/domain-platform/customize/domain/index': resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
                 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-list/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-customize/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-customize/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-customize/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-customize/index.html')
+                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-setting/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-setting/index.html'),
+                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
+                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
+                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html')
             },
             output: {
                 assetFileNames: '[name].[hash].[ext]',
@@ -25,7 +26,8 @@ export default defineConfig({
     plugins: [vue(), vueJsx()],
     resolve: {
         alias: {
-            '@': resolve(__dirname, '../')
+            '@': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/meta-modeling-app/src'),
+            '@workbench': resolve(__dirname, '../')
         }
     }
 });
