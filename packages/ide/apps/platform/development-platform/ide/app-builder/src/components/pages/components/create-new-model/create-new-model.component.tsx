@@ -54,10 +54,10 @@ export default defineComponent({
                 dialogType: 'iframe',
                 fitContent: false,
                 showButtons: false,
-                title: WIZARD_OPTIONS['GSPBusinessEntity'].title,
-                width: WIZARD_OPTIONS['GSPBusinessEntity'].modalOptions.width,
-                height: WIZARD_OPTIONS['GSPBusinessEntity'].modalOptions.height,
-                src: `${WIZARD_OPTIONS['GSPBusinessEntity'].url}?frameID=6a1050e5-defb-4aaf-97d2-9dc8395a824b&command=${WIZARD_OPTIONS['GSPBusinessEntity'].activationCommands}`,
+                title: WIZARD_OPTIONS[type].title,
+                width: WIZARD_OPTIONS[type].modalOptions.width,
+                height: WIZARD_OPTIONS[type].modalOptions.height,
+                src: `${WIZARD_OPTIONS[type].url}?frameID=6a1050e5-defb-4aaf-97d2-9dc8395a824b&command=${WIZARD_OPTIONS[type].activationCommands}`,
                 acceptCallback: () => {
                     context.emit('submit', { type });
                 },
@@ -66,8 +66,8 @@ export default defineComponent({
                 }
             }
             setInitCommandData('6a1050e5-defb-4aaf-97d2-9dc8395a824b', {
-                mdtype: "GSPBusinessEntity",
-                type: "GSPBusinessEntity"
+                mdtype: type,
+                type: type
             } as any);
             modalService?.open(modelOptions);
         }

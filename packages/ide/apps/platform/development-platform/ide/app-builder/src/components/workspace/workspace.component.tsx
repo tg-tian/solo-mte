@@ -11,10 +11,12 @@ import { WorkspaceProps, workspaceProps } from './workspace.props';
 import innerComponentRegistry from '../component-registry';
 import { computed, defineComponent, inject, onMounted, provide, ref } from 'vue';
 import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox } from "@farris/ui-vue";
-import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData ,WorkAreaInstance} from '../../composition/types';
+import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData, WorkAreaInstance } from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
 import { useWorkspace } from '../../composition/use-workspace';
 import { useIde } from '../../composition/use-ide';
+import { useIntelligentAssistant } from '../assistant/use-intelligent-assistant';
+import { useAssistantIcon } from '../assistant/use-assistant-icon';
 
 export default defineComponent({
     name: 'FAppWorkspace',
@@ -49,6 +51,8 @@ export default defineComponent({
 
         const useWorkspaceComposition = useWorkspace(useFunctionInstanceComposition);
         const useIdeComposition = useIde(useWorkspaceComposition);
+        const useAssistantIconComposition = useAssistantIcon();
+        const useIntelligentAssistantComposition = useIntelligentAssistant();
         provide('f-admin-ide', useIdeComposition);
         const { options } = useWorkspaceComposition;
         const workspaceInitialized = useWorkspaceComposition.initialize();
@@ -120,6 +124,8 @@ export default defineComponent({
         provide('f-admin-workspace', useWorkspaceComposition);
 
         onMounted(() => {
+            useAssistantIconComposition.init();
+            useIntelligentAssistantComposition.init();
             // 在依赖注入服务中注册Farris Admin主框架Html元素
             provide('f-admin-main-element', adminMainElementRef.value);
             provide('f-admin-config', config);

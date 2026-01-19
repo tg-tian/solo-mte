@@ -34,18 +34,30 @@ export default defineComponent({
         // const { pages, getPages, createPage } = usePage();
 
         onMounted(() => {
-            window['gspframeworkService'] = {
-                'rtf': {
-                    'func': {
-                        'openMenu': (options: Record<string, any>) => {
-                            const { funcId: id, tabId: code, tabName: name } = options;
-                            const metadataId = options.queryStringParams.get('metadataId');
-                            const targetUrl = `/platform/runtime/bcc/web/ai-flow/farris-flow-designer/index.html?metadataId=${metadataId}`;
-                            openUrl(id, code, name, targetUrl);
-                        }
-                    }
-                }
-            }
+            window['gspframeworkService'] = window['gspframeworkService'] || {};
+            window['gspframeworkService']['rtf'] = window['gspframeworkService']['rtf'] || {};
+            window['gspframeworkService']['rtf']['func'] = window['gspframeworkService']['rtf']['func'] || {
+                openMenu: (options: Record<string, any>) => { return; }
+            };
+
+            window['gspframeworkService']['rtf']['func']['openMenu'] = (options: Record<string, any>) => {
+                const { funcId: id, tabId: code, tabName: name } = options;
+                const metadataId = options.queryStringParams.get('metadataId');
+                const targetUrl = `/platform/runtime/bcc/web/ai-flow/farris-flow-designer/index.html?metadataId=${metadataId}`;
+                openUrl(id, code, name, targetUrl);
+            };
+            // window['gspframeworkService'] = {
+            //     'rtf': {
+            //         'func': {
+            //             'openMenu': (options: Record<string, any>) => {
+            //                 const { funcId: id, tabId: code, tabName: name } = options;
+            //                 const metadataId = options.queryStringParams.get('metadataId');
+            //                 const targetUrl = `/platform/runtime/bcc/web/ai-flow/farris-flow-designer/index.html?metadataId=${metadataId}`;
+            //                 openUrl(id, code, name, targetUrl);
+            //             }
+            //         }
+            //     }
+            // }
             // getPages().then((pages: Record<string, any>[]) => {
             //     pagesListViewRef.value.updateDataSource(pages);
             // });
