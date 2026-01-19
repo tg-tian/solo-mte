@@ -21,8 +21,8 @@
           </template>
           <el-menu-item index="meta-devicetype-list" class="sub-menu-item">设备类型</el-menu-item>
           <el-menu-item index="meta-devicemodel-list" class="sub-menu-item">设备型号列表</el-menu-item>
-          <el-menu-item index="meta-nodetype-list" class="sub-menu-item">节点类型</el-menu-item>
-          <el-menu-item index="meta-component-list" class="sub-menu-item">组件类型</el-menu-item>
+          <el-menu-item index="meta-component-list" class="sub-menu-item">节点类型</el-menu-item>
+          <el-menu-item index="meta-nodetype-list" class="sub-menu-item">组件类型</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="1" class="nav-item">
           <template #title>
@@ -86,22 +86,22 @@ const items = ref([
   },
   {
     index: 'meta-component-list',
-    name: '组件列表',
+    name: '节点类型',
     route: '/meta/component/list'
   },
   {
     index: 'meta-component-setting',
-    name: '组件定制',
+    name: '节点定制',
     route: '/meta/component/setting'
   },
   {
     index: 'meta-nodetype-list',
-    name: '节点类型列表',
+    name: '组件类型列表',
     route: '/meta/nodetype/list'
   },
   {
     index: 'meta-nodetype-setting',
-    name: '创建节点类型',
+    name: '创建组件类型',
     route: '/meta/nodetype/setting'
   },
   {
