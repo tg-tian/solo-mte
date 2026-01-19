@@ -1,17 +1,17 @@
 <template>
   <div class="component-list-container">
     <div class="component-header">
-      <h2>组件类型</h2>
-      <el-button type="primary" @click="navigateToComponentSetting()">创建组件</el-button>
+      <h2>节点类型</h2>
+      <el-button type="primary" @click="navigateToComponentSetting()">创建节点</el-button>
     </div>
     
     <el-card class="component-search">
       <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="组件名称">
-          <el-input v-model="searchForm.name" placeholder="请输入组件名称" clearable></el-input>
+        <el-form-item label="节点名称">
+          <el-input v-model="searchForm.name" placeholder="请输入节点名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label="组件类型">
-          <el-select v-model="searchForm.type" placeholder="请选择组件类型" clearable>
+        <el-form-item label="节点类型">
+          <el-select v-model="searchForm.type" placeholder="请选择节点类型" clearable>
             <el-option label="节点" value="node"></el-option>
             <el-option label="边" value="edge"></el-option>
           </el-select>
@@ -36,8 +36,8 @@
       style="width: 100%; margin-top: 20px"
       border
     >
-      <el-table-column prop="code" label="组件编码" width="150"></el-table-column>
-      <el-table-column prop="name" label="组件名称" min-width="50"></el-table-column>
+      <el-table-column prop="code" label="节点编码" width="150"></el-table-column>
+      <el-table-column prop="name" label="节点名称" min-width="50"></el-table-column>
       <el-table-column prop="description" label="描述" min-width="100"></el-table-column>
       <el-table-column prop="type" label="类型" width="100">
         <template #default="scope">
@@ -108,7 +108,7 @@
     </el-dialog>
 
     <!-- JSON查看对话框 -->
-    <el-dialog v-model="jsonDialogVisible" title="组件JSON" width="60%">
+    <el-dialog v-model="jsonDialogVisible" title="节点JSON" width="60%">
       <pre class="json-viewer">{{ formattedComponentJson }}</pre>
       <template #footer>
         <span class="dialog-footer">
@@ -125,9 +125,6 @@ import { reactive, computed, onMounted, ref, toRefs } from 'vue'
 import { useComponentStore } from '@/store/component'
 import { Component, ComponentType, PurposeType } from '@/types/models'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 const componentStore = useComponentStore()
 
 // 状态
@@ -195,15 +192,34 @@ const resetSearch = () => {
   searchForm.value.purpose = ''
 }
 
-// 导航到组件设置页面
+// 导航到节点设置页面（在workbench中使用URL跳转）
 const navigateToComponentSetting = (component?: Component) => {
+  // 在workbench的iframe环境中，使用postMessage通知父窗口打开新URL
+  let url = '/apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-setting/index.html'
   if (component) {
-    // 编辑组件
+    // 编辑节点
     componentStore.setCurrentComponent(component)
-    router.push(`/meta/component/setting?mode=edit&componentId=${component.id}`)
+    url += `?mode=edit&componentId=${component.id}`
   } else {
-    // 创建组件
-    router.push('/meta/component/setting?mode=create')
+    // 创建节点
+    url += '?mode=create'
+  }
+  
+  // 使用workbench的postMessage机制
+  if (window.top && window.top !== window) {
+    window.top.postMessage({
+      eventType: 'invoke',
+      method: 'openUrl',
+      params: [
+        component?.id?.toString() || 'component-setting',
+        component?.code || 'component-setting',
+        component?.name || '节点设置',
+        url
+      ]
+    }, '*')
+  } else {
+    // 如果不在iframe中，直接跳转
+    window.location.href = url
   }
 }
 
@@ -234,7 +250,7 @@ const copyJson = () => {
 // 删除组件
 const handleDelete = (row: Component) => {
   ElMessageBox.confirm(
-    `确定要删除组件 "${row.name}" 吗？`,
+    `确定要删除节点 "${row.name}" 吗？`,
     '警告',
     {
       confirmButtonText: '确定',
