@@ -1,7 +1,7 @@
 import { defineComponent, watch, onBeforeUnmount, onMounted, ref, onUnmounted } from "vue";
 import { CodeEditorProps, codeEditorProps } from "./code-editor.props";
 import "./code-editor.scss";
-import { TSEditor } from "./composition/editor-core/ts/editor";
+import { TSEditor, TSHooks } from "./composition/editor-core/ts/editor";
 import { JavaEditor } from "./composition/editor-core/java/editor";
 import { HighLightEditor } from "./composition/editor-core/other/editor";
 import { highLightHooks, loadMonaco, tsHooks } from "./composition/hooks/hooks";
@@ -11,9 +11,11 @@ import { TsPackageLoaderService } from "./composition/hooks/ts-package-loader.se
 import { Events } from "./composition/editor-core/libs/enum";
 import { ChangeInfo, IClass, IMethod } from "./composition/editor-core/libs/interfaces/declaration";
 import { CodeEditor } from "./composition/editor-core/editor";
+import { CompletionConfigManager } from "./composition/ai-completion/config/completion-config";
 /** 加载并初始化monaco编辑器 */
 let loadPromise: Promise<void>;
 type DefineThemeFn = (themeName: string, themeData: IStandaloneThemeData) => void;
+
 export default defineComponent({
     name: 'FCodeEditor',
     props: codeEditorProps,
@@ -35,7 +37,7 @@ export default defineComponent({
             tsHooks.loadTSPackages = tsPackageLoader.load.bind(tsPackageLoader);
             tsHooks.getDtsManifest = tsPackageLoader.getDtsManifest.bind(tsPackageLoader);
             // 实例化各个语言的编辑器服务
-            tsEditor = new TSEditor(editorViewChild.value, tsHooks);
+            tsEditor = new TSEditor(editorViewChild.value, tsHooks as TSHooks);
             javaEditor = new JavaEditor(editorViewChild.value, highLightHooks);
             otherEditor = new HighLightEditor(editorViewChild.value, highLightHooks);
         }
@@ -248,18 +250,124 @@ export default defineComponent({
             }
             editor.position(path, className, methodName);
         }
+        /**
+         * 初始化 AI 补全功能
+         */
+        async function initAICompletion() {
+            if (!props.aiCompletion?.enabled) {
+                return;
+            }
+
+            try {
+                await loadPromise;
+                await loadPromise;
+                
+                // 等待一小段时间确保编辑器实例已创建
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                const config = CompletionConfigManager.create({
+                    endpoint: props.aiCompletion.endpoint || '',
+                    auth: props.aiCompletion.auth,
+                    projectRoot: props.aiCompletion.projectRoot || '/',
+                    enabled: true,
+                    debounceDelay: props.aiCompletion.debounceDelay,
+                    timeout: props.aiCompletion.timeout,
+                    pollingTimeout: props.aiCompletion.pollingTimeout,
+                    predictMode: props.aiCompletion.predictMode
+                });
+
+                // 验证配置
+                const validation = CompletionConfigManager.validate(config);
+                if (!validation.valid) {
+                    return;
+                }
+
+                // 为所有编辑器启用补全
+                if (tsEditor) {
+                    await tsEditor.enableAICompletion(config);
+                }
+                if (javaEditor) {
+                    await javaEditor.enableAICompletion(config);
+                }
+                if (otherEditor) {
+                    await otherEditor.enableAICompletion(config);
+                }
+            } catch (error) {
+                // 静默处理错误
+            }
+        }
+
+        /**
+         * 禁用 AI 补全功能
+         */
+        function disableAICompletion() {
+            if (tsEditor) {
+                tsEditor.disableAICompletion();
+            }
+            if (javaEditor) {
+                javaEditor.disableAICompletion();
+            }
+            if (otherEditor) {
+                otherEditor.disableAICompletion();
+            }
+        }
+
+        // 监听 aiCompletion prop 变化
+        watch(
+            () => props.aiCompletion,
+            async (newConfig, oldConfig) => {
+                // 如果从启用变为禁用，先禁用
+                if (oldConfig?.enabled && !newConfig?.enabled) {
+                    disableAICompletion();
+                    return;
+                }
+
+                // 如果启用，初始化补全功能
+                if (newConfig?.enabled) {
+                    await initAICompletion();
+                }
+            },
+            { immediate: true, deep: true }
+        );
+
         const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
             if (entries.length) {
                 handleContainerResize();
             }
         });
         onMounted(() => {
-            initMonaco();       
+            initMonaco();
             observer.observe(editorViewChild.value);
+            
+            // 初始化补全功能（如果已启用）
+            if (props.aiCompletion?.enabled) {
+                // 延迟初始化，确保编辑器实例已创建
+                if (loadPromise) {
+                    loadPromise.then(() => {
+                        setTimeout(() => {
+                            initAICompletion();
+                        }, 200);
+                    }).catch(() => {
+                        // 静默处理错误
+                    });
+                } else {
+                    setTimeout(() => {
+                        if (loadPromise) {
+                            loadPromise.then(() => {
+                                setTimeout(() => {
+                                    initAICompletion();
+                                }, 200);
+                            });
+                        }
+                    }, 500);
+                }
+            }
         });
                        
         onUnmounted(() => {
             observer.disconnect();
+            // 清理补全资源
+            disableAICompletion();
         });
         context.expose({ position, updateOptions, setTheme, open, onOutlineChanged, onChanged, handleContainerResize, addMethod, save, resolve, close });
 

@@ -28,10 +28,30 @@ export default defineConfig({
     },
     server: {
         proxy: {
+            // AI 代码补全接口代理 - 需要放在 /api 之前，优先匹配
+            "/api/predict": {
+                target: "http://192.168.1.195:12000",
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/api/, '') // 移除 /api 前缀，直接转发到 /predict
+            },
+            "/api/get_results": {
+                target: "http://192.168.1.195:12000",
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/api/, '') // 移除 /api 前缀，直接转发到 /get_results
+            },
+            // 其他 API 代理
             "/api": {
                 target: "http://localhost:5200",
                 changeOrigin: true,
                 secure: false
+            },
+            "/platform": {
+                target: "http://localhost:5200",
+                changeOrigin: true,
+                secure: false,
+                ws: true // 支持 WebSocket
             }
         },
     }

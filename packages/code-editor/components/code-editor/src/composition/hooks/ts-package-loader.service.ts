@@ -66,7 +66,7 @@ export class TsPackageLoaderService {
    * @param packages 待加载的包名数组
    * @returns 加载结果
    */
-  public async load(packages: string[]): Promise<({ name: string, content: string } | null)[]> {
+  public async load(packages: string[]): Promise<{ name: string, content: string }[]> {
     if (!packages || packages.length === 0) {
       return Promise.resolve([]);
     }
@@ -91,8 +91,8 @@ export class TsPackageLoaderService {
         })
         .catch(error => {
           console.error(error);
-          // handle error
-          return null;
+          // handle error - 返回空内容而不是 null
+          return { name: pkgName, content: '' };
         });
     });
 

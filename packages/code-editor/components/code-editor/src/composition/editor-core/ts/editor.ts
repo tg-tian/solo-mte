@@ -251,7 +251,7 @@ export class TSEditor extends CodeEditor {
     private async getNpmCompletionItems(): Promise<any[]> {
         const dtsManifest = await this.hook<DtsManifest>(HookKey.GetDtsManifest);
         const dtsImports = dtsManifest.imports || {};
-        const items = [];
+        const items: Array<{ label: string; insertText: string; kind: number }> = [];
         for (const libName in dtsImports) {
             if (libName && !!dtsImports[libName]) {
                 items.push({

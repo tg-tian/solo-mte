@@ -201,7 +201,32 @@ export abstract class CodeFile implements ICodeFile {
         }
         const _monaco = await this.editor.monacoPromise;
         const model = await this.model;
-        this.instance = _monaco.editor.create(element, { model });
+        // 配置编辑器选项，启用行内补全和 Tab 键接受补全
+        // **任务 1**：恢复 IntelliSense 配置，确保 AI 补全和 IntelliSense 可以共存
+        this.instance = _monaco.editor.create(element, { 
+            model,
+            // 启用行内补全（Inline Suggestions）
+            inlineSuggest: {
+                enabled: true
+            },
+            // 启用 Tab 键接受补全
+            tabCompletion: 'on',
+            // **任务 1.1**：恢复 quickSuggestions，启用 IntelliSense 下拉弹窗
+            // 注意：quickSuggestions 只影响下拉弹窗，不影响 AI 补全的装饰器显示
+            quickSuggestions: {
+                other: true,  // ✅ 恢复为 true，启用自动弹出下拉框
+                comments: false,
+                strings: false
+            },
+            // **任务 1.2**：恢复 suggestOnTriggerCharacters，允许触发字符自动弹出建议
+            suggestOnTriggerCharacters: true,  // ✅ 恢复为 true
+            // **任务 1.3**：恢复 wordBasedSuggestions，启用基于词语的建议
+            wordBasedSuggestions: 'matchingDocuments',  // ✅ 恢复为 'matchingDocuments'（可选：'allDocuments'）
+            // 接受建议的字符（包括 Tab）
+            acceptSuggestionOnCommitCharacter: true,
+            // 接受建议的快捷键
+            acceptSuggestionOnEnter: 'on'
+        });
         this._rendered = true;
         this.addActions();
         // 初始化后加载文件依赖的包
@@ -309,7 +334,7 @@ export abstract class CodeFile implements ICodeFile {
      * @param event 事件名称
      */
     off(event: string): EventEmitter {
-        return this.events.off(event);
+        return this.events.off(event, undefined, undefined, undefined);
     }
 
     localeData: any = {};

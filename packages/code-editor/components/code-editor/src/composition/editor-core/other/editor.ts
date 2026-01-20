@@ -6,7 +6,7 @@ import { FileConstructor } from '../libs/interfaces/editor';
 export class HighLightEditor extends CodeEditor {
 
     protected fileConstructor(): FileConstructor {
-        return CommonFile;
+        return CommonFile as any;
     }
 
     constructor(element: HTMLElement, hooks: Hooks) {

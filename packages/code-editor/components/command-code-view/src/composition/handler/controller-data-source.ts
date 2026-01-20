@@ -241,7 +241,12 @@ export class ControllerDataSource {
           resolve(null);
         })
         .catch((error) => {
-          reject(error);
+          // 如果加载失败（如 500 错误，元数据文件不存在等），不阻止后续流程
+          // 只是不设置 webcmd，允许继续加载其他文件（如 .ts 文件）
+          console.warn(`[ControllerDataSource] Failed to load webcmd metadata: ${path}/${name}`, error);
+          this.webcmd = null;
+          this.webcmdDto = null;
+          resolve(null); // 改为 resolve，不 reject，避免阻止后续流程
         });
     });
   }
@@ -258,7 +263,12 @@ export class ControllerDataSource {
           resolve(null);
         })
         .catch((error) => {
-          reject(error);
+          // 如果加载失败（如 500 错误，元数据文件不存在等），不阻止后续流程
+          // 只是不设置 webcmp，允许继续加载其他文件（如 .ts 文件）
+          console.warn(`[ControllerDataSource] Failed to load webcmp metadata: ${path}/${name}`, error);
+          this.webcmp = null;
+          this.webcmpDto = null;
+          resolve(null); // 改为 resolve，不 reject，避免阻止后续流程
         });
     });
   }

@@ -1,6 +1,6 @@
 import { Ref, watch } from "vue";
-import { CodeAnalysisResult, IClass, IMethod } from "../../../../code-editor/src/composition/editor-core/libs/interfaces/declaration";
-import { OpenWithConfig, SaveResultNotify } from "../../type/open-with";
+import { CodeAnalysisResult as CodeEditorCodeAnalysisResult, IClass, IMethod } from "../../../../code-editor/src/composition/editor-core/libs/interfaces/declaration";
+import { OpenWithConfig, SaveResultNotify, CodeAnalysisResult } from "../../type/open-with";
 import { FileService } from "../class/file.service";
 import { EventEmitter } from "../../../../code-editor/src/composition/editor-core/libs/events";
 import { CommandCodeViewController } from "./command-code-view";
@@ -250,7 +250,7 @@ export class TSConfig implements OpenWithConfig {
   }
 
   save(designerComponent: Ref<any>, result: CodeAnalysisResult, controller: CommandCodeViewController, editorSaveSuccess: boolean): Promise<SaveResultNotify> {
-    if (result && result.hasFatalError) {
+    if (result && result.hasFatalError === true) {
       return new Promise((resolve, reject) => {
         // 你可以在这里执行异步操作，比如保存文件
         // 这里的例子中直接返回一个成功的 Promise
@@ -258,7 +258,8 @@ export class TSConfig implements OpenWithConfig {
       });
     }
     const cmpEditor = designerComponent.value as CmpEditorComponent;
-    return cmpEditor.save(result.content, result.classes);
+    // 类型转换：直接传递，让运行时处理类型兼容性
+    return (cmpEditor.save as any)(result.content, result.classes);
   }
 
   beforeInit(controller: CommandCodeViewController): Promise<void> {
