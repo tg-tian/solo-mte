@@ -29,6 +29,8 @@ export default defineConfig(({ mode }) => {
             'import.meta.env.VITE_SCENE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_SCENE_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
         },
         server: {
+            host: '0.0.0.0',
+            port: 5173,
             proxy: {
                 "/api": {
                     target: envVars.VITE_BASE_PATH || "http://139.196.147.52:8080",
