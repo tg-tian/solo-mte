@@ -107,6 +107,9 @@ export const useDeviceStore = defineStore('device', {
                             console.log('WS Device Discovery:', msg.data)
                             this.handleDiscovery(msg.data)
                         }
+                        else if (msg.topic === 'device.event'){
+                            console.log('WS Device Event', msg.data)
+                        }
                     } else {
                         // Fallback for direct shadow objects
                         const p = Array.isArray(msg) ? msg[0] : msg
