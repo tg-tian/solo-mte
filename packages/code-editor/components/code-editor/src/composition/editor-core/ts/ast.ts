@@ -73,19 +73,19 @@ function findNearestComment(index: number, comments: Array<CommentBlock | Commen
     let minIndex = 0;
     let maxIndex = comments.length - 1;
     let middleIndex = 0;
-    let testItem: CommentBlock | CommentLine = null;
+    let testItem: CommentBlock | CommentLine | null = null;
     while (minIndex <= maxIndex) {
         middleIndex = Math.floor((minIndex + maxIndex) / 2);
         testItem = comments[middleIndex];
-        if (testItem.end < index) {
+        if (testItem && testItem.end !== undefined && testItem.end < index) {
             minIndex = middleIndex + 1;
-        } else if (testItem.end > index) {
+        } else if (testItem && testItem.end !== undefined && testItem.end > index) {
             maxIndex = middleIndex - 1;
         } else {
             return middleIndex;
         }
     }
-    if (testItem.end < index) {
+    if (testItem && testItem.end !== undefined && testItem.end < index) {
         return middleIndex;
     }
     return middleIndex - 1;
@@ -97,7 +97,7 @@ function findNearestComment(index: number, comments: Array<CommentBlock | Commen
  * @param comments 当前注释列表
  * @param content 整段内容
  */
-function FindComment(index: number, comments: Array<CommentBlock | CommentLine>, content: string): CommentBlock | CommentLine {
+function FindComment(index: number, comments: Array<CommentBlock | CommentLine>, content: string): CommentBlock | CommentLine | undefined {
     const COMMENT_ALREADY_USED = "COMMENT_ALREADY_USED";
     if (index === -1 || comments.length === 0) {
         return undefined;  // 类或方法的起始位置未知，无法进行注释查找
@@ -108,6 +108,9 @@ function FindComment(index: number, comments: Array<CommentBlock | CommentLine>,
     }
     const commentItem = comments[nearestIndex];
     if (commentItem[COMMENT_ALREADY_USED] === true) {
+        return undefined;
+    }
+    if (commentItem.end === undefined) {
         return undefined;
     }
     const middleString = content.substring(commentItem.end, index);
@@ -183,15 +186,15 @@ function getClassIndex(_class: ClassDeclaration): number {
         return -1;
     }
     if (!_class.decorators || _class.decorators.length === 0) {
-        return _class.start;
+        return _class.start ?? -1;
     }
     let minIdx = Number.MAX_SAFE_INTEGER;
     for (const decorator of _class.decorators) {
-        if (decorator.start < minIdx) {
+        if (decorator.start !== null && decorator.start !== undefined && decorator.start < minIdx) {
             minIdx = decorator.start;
         }
     }
-    return minIdx;
+    return minIdx === Number.MAX_SAFE_INTEGER ? (_class.start ?? -1) : minIdx;
 }
 /**
  * 类语法描述转方法模型
@@ -209,6 +212,9 @@ function ClassDeclarationToIClassDeclaration(
     const classStartIdx = getClassIndex(_class);
     const comment = FindComment(classStartIdx, comments, content);
     const context = ClassComment(comment && comment.value || "", true);
+    if (!_class.id) {
+        throw new Error("Class declaration must have an id");
+    }
     const code = {
         ...NodeFindLocation(_class.id),
         value: _class.id.name,
@@ -237,7 +243,7 @@ function ClassDeclarationToIClassDeclaration(
 export async function StructureTree(tsContent: string, errorRecovery: boolean = false): Promise<CodeAnalysisResult> {
     // 包含了所有被导出的类的标识
     const exportedNodeIds: string[] = [];
-    let ast: babelParser.ParseResult<File> = null;
+    let ast: babelParser.ParseResult<File> | null = null;
     try {
         ast = ASTParser(tsContent, errorRecovery);
 
@@ -249,13 +255,15 @@ export async function StructureTree(tsContent: string, errorRecovery: boolean = 
                 // 仅考虑类声明
                 if (exportNode.declaration && exportNode.declaration.type === ClassDeclarationType) {
                     const classNode = exportNode.declaration as ClassDeclaration;
-                    exportedNodeIds.push(classNode.id.name);
+                    if (classNode.id && classNode.id.name) {
+                        exportedNodeIds.push(classNode.id.name);
+                    }
                 }
             }
             if (item.type === "ExportNamedDeclaration") {
                 const exportNode = item as ExportNamedDeclaration;
                 for (const spec of exportNode.specifiers) {
-                    let id = null;
+                    let id: string | null = null;
                     if (spec.type === "ExportSpecifier") {
                         id = (spec as ExportSpecifier).local.name;
                     } else if (spec.type === "ExportDefaultSpecifier") {
@@ -270,7 +278,7 @@ export async function StructureTree(tsContent: string, errorRecovery: boolean = 
             }
 
             // 收集所有类声明节点
-            let newClass: ClassDeclaration = null;
+            let newClass: ClassDeclaration | null = null;
             if (item.type === ClassDeclarationType) {
                 newClass = item as ClassDeclaration;
             }
@@ -284,18 +292,22 @@ export async function StructureTree(tsContent: string, errorRecovery: boolean = 
             if (newClass) {
                 // 如果该类存在装饰器，则应该将装饰器的起始位置作为整个类的起始位置，方便插入注释
                 if (newClass.decorators && newClass.decorators.length > 0) {
-                    let firstDecorator: Decorator = null;
+                    let firstDecorator: Decorator | null = null;
                     for (const decorator of newClass.decorators) {
                         if (!firstDecorator) {
                             firstDecorator = decorator;
                             continue;
                         }
-                        if (decorator.start < firstDecorator.start) {
+                        if (decorator.start !== null && decorator.start !== undefined &&
+                            firstDecorator.start !== null && firstDecorator.start !== undefined &&
+                            decorator.start < firstDecorator.start) {
                             firstDecorator = decorator;
                         }
                     }
-                    newClass.start = firstDecorator.start;
-                    newClass.loc && firstDecorator.loc && (newClass.loc.start = firstDecorator.loc.start);
+                    if (firstDecorator) {
+                        newClass.start = firstDecorator.start ?? newClass.start;
+                        newClass.loc && firstDecorator.loc && (newClass.loc.start = firstDecorator.loc.start);
+                    }
                 }
                 list.push(newClass);
             }
@@ -316,7 +328,7 @@ export async function StructureTree(tsContent: string, errorRecovery: boolean = 
         return {
             hasFatalError: true,
             classes: [],
-            parseResult: ast
+            parseResult: ast || undefined
         };
     }
 }

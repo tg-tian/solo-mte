@@ -2,7 +2,7 @@ import { defineComponent, watch, onBeforeUnmount, onMounted, ref } from "vue";
 import { CodeEditorDesigner, codeEditorDesigner } from "./code-editor-designer.props";
 import "./code-editor-designer.scss";
 import { IEditorOptions, IGlobalEditorOptions } from "../../code-editor/src/composition/types/monaco.interface";
-import { ChangeInfo, IMethod } from "../../code-editor/src/composition/editor-core/libs/interfaces/declaration";
+import { ChangeInfo, IMethod, IClass } from "../../code-editor/src/composition/editor-core/libs/interfaces/declaration";
 import FCodeEditor from "../../code-editor/src/code-editor.component";
 export default defineComponent({
     name: 'FCodeEditorDesigner',
@@ -104,11 +104,39 @@ export default defineComponent({
             await codeEditor.value.position(path, className, methodName);
         }
         context.expose({ save, open, addMethod, resolve, close, position, onOutlineChanged, onChanged, setTheme });
+        
+        // AI 代码补全配置
+        // 使用相对路径 /api，通过 Vite 代理转发到 http://192.168.1.195:12000
+        // 这样可以避免 CORS 问题
+        const aiCompletionConfig = {
+            enabled: true,
+            endpoint: '/api', // 使用相对路径，通过代理转发
+            projectRoot: '/',
+            debounceDelay: 200,
+            timeout: 5000,
+            pollingTimeout: 15000,
+            predictMode: 'full' as const,
+            // 即使不需要认证，也要提供 auth 对象（可以为空）
+            auth: {
+                token: undefined,
+                uuid: undefined,
+                machineId: undefined,
+                userName: undefined
+            }
+        };
+        
+        console.log('[AI Completion] FCodeEditorDesigner: aiCompletionConfig:', aiCompletionConfig);
+        
         return () => {
+            console.log('[AI Completion] FCodeEditorDesigner render, passing config:', aiCompletionConfig);
             return <div class="code-editor--wrapper" >
                 <div class="code-editor--content">
                     <div class="code-editor--main">
-                        <FCodeEditor ref={codeEditor} class="code-editor--monaco"></FCodeEditor>
+                        <FCodeEditor 
+                            ref={codeEditor} 
+                            class="code-editor--monaco"
+                            aiCompletion={aiCompletionConfig}
+                        ></FCodeEditor>
                     </div>
                 </div>
             </div>;

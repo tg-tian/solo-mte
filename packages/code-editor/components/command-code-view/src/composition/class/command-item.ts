@@ -1,6 +1,6 @@
 import { BranchCommandItem } from "./branch";
 import { BranchCollectionCommandItem } from "./branch-collection";
-import { MetadataConverter } from "./metadata-converter";
+import { MetadataConverter } from "../../type/metadata-converter";
 import { WebCommand } from "./web-command";
 
 /**
@@ -19,10 +19,10 @@ export abstract class CommandItem implements MetadataConverter {
   Code: string='';
   Name: string='';
   itemId: string='';
-  itemType: CommandItemType;
+  itemType!: CommandItemType;
   itemName: string='';
 
-  parent: WebCommand | BranchCollectionCommandItem | BranchCommandItem;
+  parent!: WebCommand | BranchCollectionCommandItem | BranchCommandItem;
 
   abstract input(metadata :any): void;
   abstract output(): any;

@@ -68,3 +68,60 @@
         stroke-dashoffset: -120px
     }
 }
+
+/* AI 代码补全灰色预览文本样式 */
+/* 使用更具体的选择器确保样式生效 */
+
+/* 新版本 Monaco：直接使用 inlineClassName */
+/* 旧版本 Monaco：使用 afterContentClassName + 手动插入的 span */
+.monaco-editor .ai-suggestion-preview,
+.monaco-editor .view-line .ai-suggestion-preview,
+.monaco-editor .view-line span.ai-suggestion-preview,
+.monaco-editor .view-line .ai-suggestion-preview,
+.monaco-editor span.ai-suggestion-preview {
+    color: #6e7681 !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+    background-color: transparent !important;
+    display: inline !important;
+    visibility: visible !important;
+    pointer-events: none !important; /* 防止干扰用户输入 */
+    user-select: none !important; /* 防止被选中 */
+}
+
+/* 确保装饰器内容可见 */
+.monaco-editor .view-line .inline-decoration,
+.monaco-editor .view-line .monaco-decoration {
+    color: #6e7681 !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+}
+
+/* 针对 after 装饰器的特殊样式 */
+.monaco-editor .view-line .inline-decoration.after,
+.monaco-editor .view-line .monaco-decoration.after {
+    color: #6e7681 !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+}
+
+/* 旧版本 Monaco：使用 ::after 伪元素（如果使用 afterContentClassName） */
+.monaco-editor .view-line[data-ai-suggestion]::after {
+    content: attr(data-ai-suggestion);
+    color: #6e7681 !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+    display: inline !important;
+    visibility: visible !important;
+}
+
+/* 通用：确保所有可能的装饰器元素都可见 */
+.monaco-editor .view-line *[class*="suggestion"],
+.monaco-editor .view-line *[class*="preview"],
+.monaco-editor .view-line *[class*="ai"] {
+    color: #6e7681 !important;
+    opacity: 0.6 !important;
+    font-style: italic !important;
+    display: inline !important;
+    visibility: visible !important;
+}

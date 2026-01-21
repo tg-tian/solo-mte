@@ -4,6 +4,9 @@ import { EventEmitter } from "./libs/events";
 import { Events, Languages, HookKey, LanguageSuffixMap } from "./libs/enum";
 import { FileConstructor } from "./libs/interfaces/editor";
 import { DesignElementLocaleHandler } from "../utils/locale";
+import { MonacoCompletionProvider } from "../ai-completion/adapter/monaco-completion-provider";
+import { MonacoDecorationProvider } from "../ai-completion/adapter/monaco-decoration-provider";
+import { CompletionConfig } from "../ai-completion/config/completion-config";
 
 export interface Hooks {
     loadMonaco(): Promise<any>;
@@ -20,6 +23,10 @@ export abstract class CodeEditor implements ICodeEditor {
 
     /** 事件订阅 */
     protected events: EventEmitter;
+
+    /** AI 补全提供者（使用装饰器方案） */
+    private decorationProviders: Map<string, MonacoDecorationProvider> = new Map();
+    private aiCompletionConfig: CompletionConfig | null = null;
 
     /** 获取工程目录下的文件实例列表 */
     protected files: { [key: string]: ICodeFile } = {};
@@ -64,6 +71,20 @@ export abstract class CodeEditor implements ICodeEditor {
         this.files[path].on(Events.OutlineChanged, (...args: any[]) => {
             this.events.emit(Events.OutlineChanged, path, ...args);
         }, 0);
+        
+        // 如果 AI 补全已启用，在文件渲染后创建 decoration provider
+        if (this.aiCompletionConfig && this.aiCompletionConfig.enabled) {
+            // 监听文件初始化完成事件
+            this.files[path].on(Events.Initialized, async () => {
+                // 延迟检查，确保文件已完全渲染
+                setTimeout(async () => {
+                    if (this.files[path].rendered && this.files[path].instance) {
+                        await this.createDecorationProviderForFile(path, this.files[path]);
+                    }
+                }, 200);
+            }, 0);
+        }
+        
         return this.files[path];
     }
 
@@ -157,6 +178,18 @@ export abstract class CodeEditor implements ICodeEditor {
     }
 
     /**
+     * 清理资源（包括补全提供者）
+     */
+    async dispose(): Promise<void> {
+        this.disableAICompletion();
+        // 清理其他资源
+        Object.values(this.files).forEach(file => {
+            file.dispose(true).catch(console.error);
+        });
+        this.files = {};
+    }
+
+    /**
      * 类新增方法
      * @param file 文件路径
      * @param method 方法结构描述
@@ -219,8 +252,8 @@ export abstract class CodeEditor implements ICodeEditor {
      * 取消事件订阅
      * @param event 事件名称
      */
-    off(event: string,) {
-        return this.events.off(event);
+    off(event: string) {
+        return this.events.off(event, undefined, undefined, undefined);
     }
 
     /**
@@ -266,6 +299,76 @@ export abstract class CodeEditor implements ICodeEditor {
             throw new Error(msg || `当前文件"${file}"在系统中未创建`);
         }
         model.error(markers);
+    }
+
+    /**
+     * 启用 AI 代码补全（使用装饰器方案）
+     * @param config 补全配置
+     */
+    async enableAICompletion(config: CompletionConfig): Promise<void> {
+        if (!config.enabled) {
+            return;
+        }
+
+        // 保存配置
+        this.aiCompletionConfig = config;
+
+        // 为所有已打开的文件创建 decoration provider
+        for (const [path, file] of Object.entries(this.files)) {
+            if (file.instance && file.rendered) {
+                await this.createDecorationProviderForFile(path, file);
+            }
+        }
+    }
+
+    /**
+     * 为指定文件创建 decoration provider
+     */
+    private async createDecorationProviderForFile(path: string, file: ICodeFile): Promise<void> {
+        if (this.decorationProviders.has(path)) {
+            // 如果已存在，先清理
+            const existing = this.decorationProviders.get(path);
+            if (existing) {
+                existing.dispose();
+            }
+        }
+
+        if (!file.instance || !this.aiCompletionConfig) {
+            return;
+        }
+
+        try {
+            // file.model 是 Promise，直接传递给 MonacoDecorationProvider
+            // 使用类型断言，因为 model 在 CodeFile 中定义但不在 ICodeFile 接口中
+            const fileWithModel = file as any;
+            const provider = new MonacoDecorationProvider(
+                this.aiCompletionConfig,
+                file.instance,
+                fileWithModel.model
+            );
+            this.decorationProviders.set(path, provider);
+            
+            // 启动轮询
+            await provider.startPolling();
+        } catch (error) {
+            // 静默处理错误
+        }
+    }
+
+    /**
+     * 禁用 AI 代码补全
+     */
+    disableAICompletion(): void {
+        // 清理所有 decoration providers
+        this.decorationProviders.forEach((provider) => {
+            try {
+                provider.dispose();
+            } catch (error) {
+                // 静默处理错误
+            }
+        });
+        this.decorationProviders.clear();
+        this.aiCompletionConfig = null;
     }
 
     localeData: any = {};

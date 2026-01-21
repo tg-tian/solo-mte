@@ -34,7 +34,9 @@ export class TSFile extends CodeFile implements ICodeFile {
      */
     protected async analysis(): Promise<ChangeAnalysisResult> {
         const data = await super.analysis();
-        this.loadResources(data.parseResult);
+        if (data.parseResult) {
+            this.loadResources(data.parseResult);
+        }
         return data;
     }
 
@@ -53,7 +55,7 @@ export class TSFile extends CodeFile implements ICodeFile {
         if (typeof startColumn === 'number') {
             basicColumnIdx = startColumn;
         }
-        let paramComment = method.params.map((param: IParam) =>
+        let paramComment = (method.params || []).map((param: IParam) =>
             ' '.repeat(basicColumnIdx) + ` * @param ${param.code} ${param.description || ''}`
         ).join('\n');
         if (paramComment) {
@@ -77,7 +79,7 @@ export class TSFile extends CodeFile implements ICodeFile {
     protected async methodToString(method: IMethod): Promise<string> {
         const model = await this.model;
         if (!model) {
-            return null;
+            return '';
         }
         const basicColumnIdx = model.getOptions && model.getOptions().indentSize || 4;
         const builder = new StringBuilder();
@@ -85,7 +87,7 @@ export class TSFile extends CodeFile implements ICodeFile {
         const params = (method.params || []).map((param: IParam) => {
             return `${param.code}: ${param.type}`;
         }).join(",");
-        builder.append(`${this.methodComment(method, null, basicColumnIdx)}`);
+        builder.append(`${this.methodComment(method, undefined, basicColumnIdx)}`);
         builder.append(' '.repeat(basicColumnIdx) + `${prefix}${method.code}(${params}): ${method.type || "void"} {\n`);
         builder.append(' '.repeat(basicColumnIdx) + `${' '.repeat(basicColumnIdx)}\n`);
         builder.append(' '.repeat(basicColumnIdx) + `}\n`);

@@ -8,6 +8,9 @@ export interface SaveResult {
   tip?: string;
 }
 
+/** 保存回调函数类型 */
+export type SaveCallback = () => Promise<SaveResult>;
+
 /**
  * 外层通知事件
  */
