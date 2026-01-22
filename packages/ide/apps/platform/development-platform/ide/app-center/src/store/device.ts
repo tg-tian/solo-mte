@@ -91,7 +91,9 @@ export const useDeviceStore = defineStore('device', {
         },
         connectShadowStream() {
             if (wsInstance) return
-            const ws = new WebSocket('ws://localhost:3000/ws')
+            //const url = 'ws://localhost:3000/ws';
+            const url = 'ws://139.196.239.110:3000/ws';
+            const ws = new WebSocket(url)
             wsInstance = ws
             ws.onopen = () => { console.log('WS connected') }
             ws.onmessage = (e: MessageEvent) => {
