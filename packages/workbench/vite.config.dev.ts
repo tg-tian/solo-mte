@@ -33,10 +33,15 @@ export default defineConfig(({ mode }) => {
             port: 5173,
             proxy: {
                 "/api": {
-                    target: envVars.VITE_BASE_PATH || "http://139.196.147.52:8080",
+                    target: "http://localhost:5200",
+                    changeOrigin: true,
+                    secure: false
+                },
+                "/meta": {
+                    target:  "http://139.196.147.52:8080",
                     changeOrigin: true,
                     secure: false,
-                    rewrite: (path) => path.replace(/^\/api/, '')
+                    // rewrite: (path) => path.replace(/^\/api/, '')
                 },
             "/apps/platform/development-platform": {
                 target: "http://localhost:5174",
@@ -60,6 +65,7 @@ export default defineConfig(({ mode }) => {
                 input: {
                     main: resolve(__dirname, 'index.html'),
                     domain: resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
+                    'meta-modeling-app': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/meta-modeling-app/index.html'),
                     'device-type-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-list/index.html'),
                     'device-type-setting': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-setting/index.html'),
                     'device-model-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
