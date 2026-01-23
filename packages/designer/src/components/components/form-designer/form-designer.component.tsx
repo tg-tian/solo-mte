@@ -15,6 +15,7 @@ import { UseFormCommandService } from "../../../components/types/command";
 import { useFormValidation } from "../../composition/use-form-validation";
 import { DesignerMode } from "../../types/designer-context";
 import { resolveFormModulePropertyConfig } from "../../../components/types/form-property-config";
+import FTemplateBox from '../template-box/template-box.component';
 
 export default defineComponent({
     name: 'FFormDesigner',
@@ -291,7 +292,7 @@ export default defineComponent({
         return () => {
             return (
                 <FSplitter class="f-designer-page-content f-designer-canvas">
-                    <FSplitterPane class="f-designer-page-content-nav" width={300} position="left" resizable={true} minWidth={250}>
+                    <FSplitterPane class="f-designer-page-content-nav" width={330} position="left" resizable={true} minWidth={330}>
                         <div class="f-utils-fill-flex-column">
                             <FTabs tabType='pills' justify-content='center' fill={fillTabs.value} customClass="f-designer-left-area">
                                 <FTabPage id="outline" title="大纲">
@@ -302,6 +303,9 @@ export default defineComponent({
                                 </FTabPage>
                                 <FTabPage id="entity" title="实体">
                                     <FEntityTreeView ref={entityTreeRef} data={props.schema} dragula={dragulaCompostion.value} onEntityUpdated={onEntityUpdated}></FEntityTreeView>
+                                </FTabPage>
+                                <FTabPage id="template" title="模板">
+                                    <FTemplateBox dragula={dragulaCompostion.value}  ></FTemplateBox>
                                 </FTabPage>
                             </FTabs>
                         </div>
