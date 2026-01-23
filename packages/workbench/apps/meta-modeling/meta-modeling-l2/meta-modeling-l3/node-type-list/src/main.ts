@@ -3,6 +3,7 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import router from '../../meta-modeling-app/src/router';
 import NodeTypeList from '../../meta-modeling-app/src/views/meta/NodeTypeList/index.vue';
 import '../../meta-modeling-app/src/assets/style.css';
 
@@ -11,6 +12,7 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia);
+app.use(router);  // ✅ 添加 Vue Router
 app.use(ElementPlus);
 
 app.mount('#app');

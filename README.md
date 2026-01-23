@@ -4,9 +4,9 @@
 
 SOLO运行基座（目前是[inBuilder社区版](https://ibc.inspures.com/inbuilder/community/download/index.html)）不在本代码仓中，需要各单位各自下载安装部署，并针对本单位的工作内容先行集成、测试。在本地集成调试成功后，再上传本仓更新。
 
-项目集成组将获取本仓代码等各种制品，在集成服务器（IP稍后公布）上进行集成，并形成基线。如集成中出现新的问题，需要各单位进一步调试并修正代码、重新上传，等待后续集成。
+项目集成组将获取本仓代码等各种制品，在集成服务器（IP：139.196.239.110）上进行集成，并形成基线。如集成中出现新的问题，需要各单位进一步调试并修正代码、重新上传，等待后续集成。
 
-集成服务器上的内容，将定期发布到正式演示服务器（IP也稍后公布）上。
+集成服务器上的内容，将定期发布到正式演示服务器（IP稍后公布）上。
 
 
 
@@ -42,13 +42,18 @@ package下其他目录的作用将另行说明。项目也可在package下用pnp
 
 ### 4、运行框架基座
 
-在开发环境命令行下到workbench或者ide下使用npm run dev可分别启动元级定义能力模块或低代码开发能力基座模块。
+在开发环境命令行下，在solo-mte下运行：
+```
+pnpm --filter workbench run dev
+pnpm --filter ide run dev 
+```
+分别启动元工具环境和低代码开发能力基座。
 workbench正常启动后访问Local:   http://localhost:5173/ 即可查看网页界面。
 ide正常启动后有两个应用地址：
-- 应用中心（相当于场景平台的首页）访问 http://localhost:5173/apps/platform/development-platform/ide/app-center/index.html
-- 应用构造工具（相当于场景平台中开发单个应用时的开发环境）访问 http://localhost:5173/apps/platform/development-platform/ide/app-builder/index.html
+- 应用中心（相当于场景平台的首页）访问 http://localhost:5174/apps/platform/development-platform/ide/app-center/index.html
+- 应用构造工具（相当于场景平台中开发单个应用时的开发环境）访问 http://localhost:5174/apps/platform/development-platform/ide/app-builder/index.html
 
-如果启动时出现依赖包缺失，则手工npm install缺失的包应能修复。
+如果启动时出现依赖包缺失，则手工pnpm install缺失的包应能修复。
 
 ## 如何在基座上开发新的功能
 

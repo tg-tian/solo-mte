@@ -65,58 +65,47 @@ export interface ProtocolConfig {
 //设备类型
 export interface DeviceType {
     id: number;
-    code: string;
-    name: string;
-    description: string;
-    createTime: string;
-    updateTime: string;
-    domainIds?: Array<number>,
-    model: Model
+    modelName: string;
+    provider?: string;
+    category: string;
+    createTime?: string;
+    updateTime?: string;
+    model: BaseDeviceModel;
+    domainIds?: Array<number>;
 }
 
-//设备型号
-export interface DeviceModel {
-    id: number;
-    code: string;
-    name: string;
-    deviceTypeId: number;
-    deviceType?: DeviceType; //获取设备型号时会返回
-    mapper: Record<string, any>; // mapper配置
-    description: string;
-    createTime: string;
-    updateTime: string;
+export interface PropertyDefinition {
+    type: "string" | "number" | "boolean" | "enum" | "object" | "array";
+    unit?: string;
+    readOnly?: boolean;
+    min?: number;
+    max?: number;
+    enumValues?: string[];
+    description?: string;
 }
 
-export interface Model {
-    properties: Array<Property>
-    services: Array<Service>
-    events: Array<Event>
+export interface ActionDefinition {
+    arguments: Record<string, PropertyDefinition>;
+    description?: string;
 }
 
-export interface Property {
-    identify: string;//属性标识符
-    name: string;//属性名称
-    accessMode?: string;//属性读写类型
-    dataType: DataType;//属性数据类型
+export interface EventDefinition {
+    fields: Record<string, PropertyDefinition>;
+    level: "info" | "warning" | "error";
+    description?: string;
 }
 
-export interface DataType {
-    type: string;//类型：int\float\bool\string
-    specs: Record<string, any>;//对象，int&float类型包括min\max\step属性，bool类型包括0\1，string类型包括length
-}
-
-export interface Service {
-    identify: string;//服务标识符
-    name: string;//服务名称
-    inputData: Array<Property>;//输入参数
-    outputData: Array<Property>;//输出参数
-}
-
-export interface Event {
-    identify: string;//事件标识符
-    name: string;//事件名称
-    type: string;//事件类型：信息info、告警warning、故障error
-    outputData: Array<Property>;//输出参数，指事件的返回值类型
+export interface BaseDeviceModel {
+    modelName: string;
+    provider?: string;
+    category: string;
+    properties: Record<string, PropertyDefinition>;
+    actions: Record<string, ActionDefinition>;
+    events: Record<string, EventDefinition>;
+    extensions?: {
+        rawModel?: any;
+        extraMeta?: any;
+    }
 }
 
 export interface User {
@@ -130,39 +119,50 @@ export interface User {
 
 // Component types
 export enum ComponentType {
-  Node = 'node',
-  Edge = 'edge'
+    Node = 'node',
+    Edge = 'edge'
 }
 
 // Purpose types
 export enum PurposeType {
-  BusinessFlow = 'businessFlow',
-  InterfaceFlow = 'interfaceFlow',
-  DeviceLogic = 'deviceLogic'
+    BusinessFlow = 'businessFlow',
+    InterfaceFlow = 'interfaceFlow',
+    DeviceLogic = 'deviceLogic'
 }
 
 // Constraint interface
 export interface Constraint {
-  quantity: number;
-  type: string;
+    quantity: number;
+    type: string;
+}
+
+// Input parameter interface
+export interface InputParam {
+    name: string;
+    type: string;
 }
 
 // Component interface
 export interface Component {
-  id?: number;
-  code: string;
-  name: string;
-  description: string;
-  type: ComponentType; // 'node' or 'edge'
-  purpose: PurposeType; // 'businessFlow', 'interfaceFlow', or 'deviceLogic'
-  createTime?: string;
-  updateTime?: string;
-  // For Node type
-  inputConstraint: Constraint;
-  outputConstraint: Constraint;
-  // For Edge type
-  startConstraint: Constraint;
-  endConstraint: Constraint;
+    id?: number;
+    code: string;
+    name: string;
+    description: string;
+    type: string; // 'start', 'end', 'process', 'condition', 'device'
+    purpose: PurposeType; // 'businessFlow', 'interfaceFlow', or 'deviceLogic'
+    createTime?: string;
+    updateTime?: string;
+    // 入口参数列表
+    inputs?: InputParam[];
+    // 出口类型
+    outputType?: string;
+    // 属性定义
+    properties?: Record<string, PropertyDefinition>;
+    // 旧字段保留向后兼容 (可选)
+    inputConstraint?: Constraint;
+    outputConstraint?: Constraint;
+    startConstraint?: Constraint;
+    endConstraint?: Constraint;
 }
 
 // area interface
@@ -200,3 +200,20 @@ export interface DeviceConnection {
     connections: Connection[]; // 连接设备列表
     intelligent: boolean; // 是否智能设备
 }
+
+export interface DeviceLibrary {
+    id?: number;
+    provider: string; // 设备厂商
+    deviceTypeId?: number; // 设备类型ID
+    deviceTypeName: string; // 设备类型名称
+    deviceModel: string; // 设备型号
+    deviceName?: string; // 设备名称
+    deviceMapperPath?: string; // 设备Mapper路径
+    propertyMap?: Record<string, string>; // 属性映射规则
+    actionMap?: Record<string, string>; // 操作实现映射
+    createTime?: string;
+    updateTime?: string;
+}
+
+// 保持向前兼容，如果 UI 仍然称其为 DeviceModel
+export type DeviceModel = DeviceLibrary;

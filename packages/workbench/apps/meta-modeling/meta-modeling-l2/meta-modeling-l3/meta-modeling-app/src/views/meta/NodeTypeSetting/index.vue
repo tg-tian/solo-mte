@@ -1,28 +1,44 @@
 <template>
   <div class="nodetype-setting">
-    <div class="nodetype-header">
-      <h2>{{ isEditMode ? '编辑节点类型——'+ nodeTypeForm.name : '创建节点类型' }}</h2>
+    <div class="page-header">
+      <div class="page-title-group">
+        <h2 class="page-main-title">{{ isEditMode ? '编辑节点类型' : '创建节点类型' }}</h2>
+        <p v-if="isEditMode" class="page-sub-title">{{ nodeTypeForm.name || '节点类型详情' }}</p>
+        <p v-else class="page-sub-title">定义新的拓扑节点类型及其相关的业务属性</p>
+      </div>
       <div class="header-actions">
         <el-button @click="navigateBack">返回列表</el-button>
         <el-button type="primary" @click="submitForm" :loading="submitting">保存</el-button>
       </div>
     </div>
 
-    <!-- 基本信息表单 - 提到最上面 -->
-    <el-card class="basic-info-card">
+    <!-- 基本信息表单 -->
+    <el-card class="setting-card" shadow="never">
+      <template #header>
+        <div class="card-header">
+          <el-icon><InfoFilled /></el-icon>
+          <span>基础配置</span>
+        </div>
+      </template>
       <el-form 
         :model="nodeTypeForm" 
         :rules="basicRules"
         ref="nodeTypeFormRef"
-        label-width="120px">
-        <el-form-item label="节点类型编码" prop="code">
-          <el-input v-model="nodeTypeForm.code" placeholder="请输入节点类型编码"></el-input>
-        </el-form-item>
-        <el-form-item label="节点类型名称" prop="name">
-          <el-input v-model="nodeTypeForm.name" placeholder="请输入节点类型名称"></el-input>
-        </el-form-item>
+        label-position="top">
+        <el-row :gutter="32">
+          <el-col :span="12">
+            <el-form-item label="节点类型编码" prop="code">
+              <el-input v-model="nodeTypeForm.code" placeholder="例如：sensor_node" :disabled="isEditMode"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="节点类型名称" prop="name">
+              <el-input v-model="nodeTypeForm.name" placeholder="例如：传感器节点"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="节点类型描述" prop="description">
-          <el-input type="textarea" :rows="3" v-model="nodeTypeForm.description" placeholder="请输入节点类型描述"></el-input>
+          <el-input type="textarea" :rows="3" v-model="nodeTypeForm.description" placeholder="请输入节点类型的功能描述、适用场景等信息"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -31,6 +47,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch, toRefs } from 'vue'
+import { InfoFilled } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -112,13 +129,6 @@ const submitForm = async () => {
 const loadNodeTypeData = async (id: number) => {
   try {
     // TODO: 从API获取节点类型数据
-    // const res: any = await getNodeTypeById(id)
-    // if (res.data) {
-    //   const nodeType = res.data
-    //   nodeTypeForm.value.code = nodeType.code || ''
-    //   nodeTypeForm.value.name = nodeType.name || ''
-    //   nodeTypeForm.value.description = nodeType.description || ''
-    // }
   } catch (error) {
     console.error('加载节点类型数据失败:', error)
     ElMessage.error('加载节点类型数据失败')
@@ -141,34 +151,28 @@ watch([() => route.query.nodeTypeId, () => route.query.mode], async ([newId, new
 onMounted(async () => {
   if (isEditMode.value && nodeTypeId.value) {
     await loadNodeTypeData(nodeTypeId.value)
-  } else {
-    nodeTypeForm.value = {
-      code: '',
-      name: '',
-      description: ''
-    }
   }
 })
 </script>
 
 <style scoped>
 .nodetype-setting {
-  padding: 20px;
-}
-
-.nodetype-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  width: 100%;
 }
 
 .header-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
-.basic-info-card {
+.setting-card {
   margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
 }
 </style>
