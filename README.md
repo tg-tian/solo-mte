@@ -42,13 +42,18 @@ package下其他目录的作用将另行说明。项目也可在package下用pnp
 
 ### 4、运行框架基座
 
-在开发环境命令行下到workbench或者ide下使用npm run dev可分别启动元级定义能力模块或低代码开发能力基座模块。
+在开发环境命令行下，在solo-mte下运行：
+```
+pnpm --filter workbench run dev
+pnpm --filter ide run dev 
+```
+分别启动元工具环境和低代码开发能力基座。
 workbench正常启动后访问Local:   http://localhost:5173/ 即可查看网页界面。
 ide正常启动后有两个应用地址：
-- 应用中心（相当于场景平台的首页）访问 http://localhost:5173/apps/platform/development-platform/ide/app-center/index.html
-- 应用构造工具（相当于场景平台中开发单个应用时的开发环境）访问 http://localhost:5173/apps/platform/development-platform/ide/app-builder/index.html
+- 应用中心（相当于场景平台的首页）访问 http://localhost:5174/apps/platform/development-platform/ide/app-center/index.html
+- 应用构造工具（相当于场景平台中开发单个应用时的开发环境）访问 http://localhost:5174/apps/platform/development-platform/ide/app-builder/index.html
 
-如果启动时出现依赖包缺失，则手工npm install缺失的包应能修复。
+如果启动时出现依赖包缺失，则手工pnpm install缺失的包应能修复。
 
 ## 如何在基座上开发新的功能
 
