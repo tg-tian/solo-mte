@@ -5,8 +5,8 @@ import type { InputParam } from '../types';
 
 export interface ChatFlowRequest {
   flowId: string;
-  userInput: string;
-  userFiles: string[];
+  // userInput: string;
+  // userFiles: string[];
   inputs: object;
   conversationId: null;
   nodeId: null;
@@ -52,14 +52,14 @@ async function processSSELine(
           if (jsonData && jsonData.output && typeof jsonData.output.text === 'string') {
             textContent = jsonData.output.text;
             if (jsonData.output.finish_reason === 'stop' || jsonData.output.finish_reason === 'eos') {
-              isComplete = true;
+                            isComplete = true;
             }
           }
           // 备用格式: {"text": "...", "finish_reason": "..."}
           else if (jsonData && typeof jsonData.text === 'string') {
             textContent = jsonData.text;
             if (jsonData.finish_reason === 'stop' || jsonData.finish_reason === 'eos') {
-              isComplete = true;
+                            isComplete = true;
             }
           }
           // 其他可能格式
@@ -75,21 +75,24 @@ async function processSSELine(
 
           // 处理文本内容
           if (textContent !== null && textContent !== undefined) {
-            // 如果是对话结束标志（即使文本为空）
-            if (isComplete && completed && !completed.value) {
-              completed.value = true;
-              onComplete?.();
-              resolve?.();
-              return;
-            }
-
-            // 处理空字符串但不是结束标志的情况
+            // 处理空字符串
             if (textContent === '') {
               return;
             }
 
             // 发送文本内容（逐字显示效果）
             onMessage?.(textContent);
+
+            // 如果是对话结束标志
+            if (isComplete && completed && !completed.value) {
+                            completed.value = true;
+              onComplete?.();
+              resolve?.();
+              return;
+            } else if (isComplete) {
+              // 如果已经完成过，直接返回
+                            return;
+            }
           }
         } catch (error) {
           console.error('解析SSE数据失败:', error, '原始数据:', value);
@@ -205,6 +208,9 @@ export function useChatflowApi() {
     }).filter(param => param !== null); // 过滤掉null值
   }
 
+  // 全局中止控制器，用于停止当前的SSE连接
+  let globalAbortController: AbortController | null = null;
+
   // 调用对话流API
   function callChatflowAPI(
     userInput: string,
@@ -219,15 +225,21 @@ export function useChatflowApi() {
 
     const requestData: ChatFlowRequest = {
       flowId,
-      userInput,
-      userFiles,
-      inputs,
       conversationId: null,
-      nodeId: null
+      nodeId: null,
+      inputs:{
+        ...inputs,
+        USER_INPUT: userInput,
+        USER_FILES: userFiles,
+      }
     };
 
   
     return new Promise((resolve, reject) => {
+      // 创建新的中止控制器
+      globalAbortController = new AbortController();
+      const signal = globalAbortController.signal;
+
       // 首先尝试使用fetch API处理流式响应，因为它对SSE支持更好
       try {
         const token = localStorage.getItem('token');
@@ -242,7 +254,8 @@ export function useChatflowApi() {
         fetch('/api/runtime/sys/v1.0/ai/chatflows/draft/run', {
           method: 'POST',
           headers,
-          body: JSON.stringify(requestData)
+          body: JSON.stringify(requestData),
+          signal
         })
         .then(response => {
           const contentType = response.headers.get('content-type') || '';
@@ -259,10 +272,21 @@ export function useChatflowApi() {
 
             const processStream = async () => {
               try {
-                let completed = false;
+                const completed = { value: false };
                 while (true) {
+                  // 检查是否被中止
+                  if (signal.aborted) {
+                    resolve();
+                    return;
+                  }
+
                   const { done, value } = await reader.read();
                   if (done) {
+                                        // 流结束时，如果没有收到完成标志，也需要调用完成回调
+                    if (!completed.value) {
+                      completed.value = true;
+                      onComplete?.();
+                    }
                     resolve();
                     break;
                   }
@@ -280,14 +304,23 @@ export function useChatflowApi() {
                       continue;
                     }
 
-                    await processSSELine(line, onMessage, onComplete, onError, resolve, { value: completed });
+                    await processSSELine(line, onMessage, onComplete, onError, resolve, completed);
                   }
                 }
               } catch (error) {
+                // 如果是中止错误，不调用onError，这是正常的用户停止行为
+                if (signal.aborted || error.name === 'AbortError') {
+                  resolve();
+                  return;
+                }
                 console.error('流处理错误:', error);
                 const errorMessage = getChatflowErrorMessage(error);
-                onError?.(new Error(errorMessage));
-                reject(new Error(errorMessage));
+                if (errorMessage) {
+                  onError?.(new Error(errorMessage));
+                  reject(new Error(errorMessage));
+                } else {
+                  reject();
+                }
               }
             };
 
@@ -316,6 +349,12 @@ export function useChatflowApi() {
           }
         })
         .catch(error => {
+          // 如果是中止错误，不调用onError，这是正常的用户停止行为
+          if (signal.aborted || error.name === 'AbortError') {
+            resolve();
+            return;
+          }
+
           console.error('fetch请求失败，回退到axios:', error);
           // 如果fetch失败，回退到原来的axios方式
           fallbackToAxios(requestData, onMessage, onComplete, onError, resolve, reject);
@@ -335,7 +374,8 @@ export function useChatflowApi() {
     onComplete?: () => void,
     onError?: (error: Error) => void,
     resolve?: (value: void) => void,
-    reject?: (reason?: any) => void
+    reject?: (reason?: any) => void,
+    abortSignal?: AbortSignal
   ) {
     // 使用post发送请求，处理流式输出
     try {
@@ -359,10 +399,21 @@ export function useChatflowApi() {
 
           const processStream = async () => {
             try {
+              let completed = false;
               while (true) {
+                // 检查是否被中止
+                if (signal.aborted) {
+                  resolve?.();
+                  return;
+                }
+
                 const { done, value } = await reader.read();
                 if (done) {
-                  onComplete?.();
+                  // 流结束时，如果没有收到完成标志，也需要调用完成回调
+                  if (!completed) {
+                    completed = true;
+                    onComplete?.();
+                  }
                   resolve?.();
                   break;
                 }
@@ -380,14 +431,22 @@ export function useChatflowApi() {
                     continue;
                   }
 
-                  await processSSELine(line, onMessage, onComplete, onError, resolve, { value: false });
+                  await processSSELine(line, onMessage, onComplete, onError, resolve, completed);
                 }
               }
             } catch (error) {
-              console.error('流处理错误:', error);
+              // 如果是中止错误，不调用onError
+              if (signal.aborted || error.name === 'AbortError') {
+                resolve?.();
+                return;
+              }
               const errorMessage = getChatflowErrorMessage(error);
-              onError?.(new Error(errorMessage));
-              reject?.(new Error(errorMessage));
+              if (errorMessage) {
+                onError?.(new Error(errorMessage));
+                reject?.(new Error(errorMessage));
+              } else {
+                reject?.();
+              }
             }
           };
 
@@ -403,14 +462,30 @@ export function useChatflowApi() {
               if (line.trim() === '') {
                 continue;
               }
+
+              // 检查是否被中止
+              if (signal.aborted) {
+                resolve?.();
+                return;
+              }
+
               try {
-                await processSSELine(line, onMessage, onComplete, onError, resolve, { value: false });
+                await processSSELine(line, onMessage, onComplete, onError, resolve, completed);
               } catch (error) {
+                // 如果是中止错误，不调用onError
+                if (signal.aborted || error.name === 'AbortError') {
+                  resolve?.();
+                  return;
+                }
                 console.error('处理SSE行时出错:', error);
               }
             }
-            onComplete?.();
-            resolve?.();
+
+            // 最终检查是否被中止
+            if (!signal.aborted) {
+              onComplete?.();
+              resolve?.();
+            }
           } else if (response.data && typeof response.data === 'object') {
             // 如果响应是对象，尝试直接解析
 
@@ -434,6 +509,12 @@ export function useChatflowApi() {
               textContent = response.data.content;
             } else if (response.data.message !== undefined) {
               textContent = response.data.message;
+            }
+
+            // 检查是否被中止
+            if (signal.aborted) {
+              resolve?.();
+              return;
             }
 
             if (textContent) {
@@ -467,12 +548,21 @@ export function useChatflowApi() {
     } catch (error) {
       console.error('对话流API调用失败:', error);
       const errorMessage = getChatflowErrorMessage(error);
-      onError?.(new Error(errorMessage));
-      reject?.(new Error(errorMessage));
+      if (errorMessage) {
+        onError?.(new Error(errorMessage));
+        reject?.(new Error(errorMessage));
+      } else {
+        reject?.();
+      }
     }
   }
 
   function getChatflowErrorMessage(error: any): string {
+    // 如果是中止错误，返回空字符串或特殊标识，避免显示错误消息
+    if (error && (error.name === 'AbortError' || error.message?.includes('BodyStreamBuffer was aborted'))) {
+      return '';
+    }
+
     let errorMessage = '网络错误或服务器无响应';
 
     if (error && typeof error === 'object') {
@@ -487,9 +577,18 @@ export function useChatflowApi() {
     return `对话流API调用失败：${errorMessage}`;
   }
 
+  // 停止当前的对话流连接
+  function stopChatflowAPI(): void {
+    if (globalAbortController) {
+      globalAbortController.abort();
+      globalAbortController = null;
+    }
+  }
+
   return {
     callChatflowAPI,
     getWorkflowId,
-    convertInputParamsToInputs
+    convertInputParamsToInputs,
+    stopChatflowAPI
   };
 }

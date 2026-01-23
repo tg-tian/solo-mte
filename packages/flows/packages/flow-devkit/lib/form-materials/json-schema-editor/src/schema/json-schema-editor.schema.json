@@ -22,6 +22,26 @@
     "validateOptions": {
       "description": "validateOptions",
       "type": "object"
+    },
+    "hideAddSubLevelButton": {
+      "description": "hideAddSubLevelButton",
+      "type": "boolean",
+      "default": false
+    },
+    "hideDetailExpandButton": {
+      "description": "hideDetailExpandButton",
+      "type": "boolean",
+      "default": false
+    },
+    "canEditName": {
+      "description": "canEditName",
+      "type": "boolean",
+      "default": false
+    },
+    "canEditInputHelp": {
+      "description": "canEditInputHelp",
+      "type": "boolean",
+      "default": false
     }
   },
   "required": ["id", "type"]

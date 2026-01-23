@@ -21,7 +21,7 @@
     },
     "typeFilter": {
       "description": "typeFilter",
-      "type": "function"
+      "type": "object"
     },
     "paramCodeColumnTitle": {
       "description": "paramCodeColumnTitle",

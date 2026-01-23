@@ -1,18 +1,26 @@
+@mixin node-field-empty() {
+    display: block;
+    font-style: normal;
+    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+    color: rgba(6, 7, 9, 0.3);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fvf-node-field-empty {
+    @include node-field-empty();
+}
+
 .fvf-param-tag-list {
     display: flex;
     overflow: hidden;
     flex-wrap: nowrap;
 
     &__empty {
-        display: block;
-        font-style: normal;
-        font-size: 14px;
-        height: 26px;
-        line-height: 26px;
-        color: rgba(6, 7, 9, 0.3);
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        @include node-field-empty();
     }
 
     &__item {

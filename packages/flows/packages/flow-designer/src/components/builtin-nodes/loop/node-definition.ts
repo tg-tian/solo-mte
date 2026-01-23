@@ -1,6 +1,6 @@
 import { markRaw } from 'vue';
-import type { NodeDefinition, Parameter, TypeRefer } from '@farris/flow-devkit';
-import { BasicTypeRefer, BuiltinNodeType, ValidateUtils } from '@farris/flow-devkit';
+import type { NodeDefinition, Parameter, TypeRefer, JsonSchema } from '@farris/flow-devkit';
+import { BasicTypeRefer, BuiltinNodeType, ValidateUtils, ValueExpressUtils } from '@farris/flow-devkit';
 import { loopIcon } from '@flow-designer/assets/images';
 import SubFlowNode from './node.component.vue';
 import { NodeProperty } from './property-config';
@@ -12,7 +12,7 @@ export const LOOP_NODE: NodeDefinition = {
         description: '根据循环数组，循环执行一段逻辑',
         icon: loopIcon,
         isSubFlowContainer: true,
-        debuggable: false,  // @todo 单节点调试功能暂不支持识别`inputParams`之外的输入参数，后续需要支持通过回调方法自定义输入参数
+        debuggable: false,
         ports: [
             {
                 id: 'input',
@@ -46,12 +46,25 @@ export const LOOP_NODE: NodeDefinition = {
             writable: false,
         };
         const itemCode = nodeData.iterableVariable || 'item';
-        const itemType = (nodeData.iterableExprType as TypeRefer)?.genericTypes?.[0];
+        let itemType: TypeRefer | undefined = undefined;
+        let itemSchema: JsonSchema | undefined = undefined;
+        if (ValueExpressUtils.isNodeVariableExpr(nodeData.iterableExpr)) {
+            const valueExpressType = ValueExpressUtils.unwrapValueExpressType(
+                ValueExpressUtils.getValueExpressType(nodeData.iterableExpr, nodeData)
+            );
+            if (valueExpressType) {
+                itemType = valueExpressType.type;
+                itemSchema = valueExpressType.schema;
+            }
+        } else {
+            itemType = (nodeData.iterableExprType as TypeRefer)?.genericTypes?.[0];
+        }
         const item = {
             id: `${nodeData.id}_item`,
             code: itemCode,
             name: `${itemCode} (in items)`,
             type: itemType,
+            schema: itemSchema,
             writable: false,
         } as Parameter;
         return [item, index, ...nodeData.outputParams];

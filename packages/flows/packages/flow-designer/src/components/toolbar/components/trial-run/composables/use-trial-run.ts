@@ -10,9 +10,10 @@ export function useTrialRun() {
     activeTab,
     runResult,
     inputParams,
+    startNodeData,
     updateParamValue,
     checkRequiredParams,
-    setActiveTab
+    setActiveTab,
   } = useInputParams();
 
   const notifyService = useNotify();
@@ -83,6 +84,7 @@ export function useTrialRun() {
     activeTab,
     runResult,
     inputParams,
+    startNodeData,
 
     // 方法
     updateParamValue,
@@ -91,6 +93,6 @@ export function useTrialRun() {
     setActiveTab,
 
     // 工具方法
-    checkRequiredParams
+    checkRequiredParams,
   };
 }

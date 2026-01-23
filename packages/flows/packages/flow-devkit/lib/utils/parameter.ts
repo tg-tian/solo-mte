@@ -15,7 +15,7 @@ export class ParameterUtils {
         return ids;
     }
 
-    private static isSame(typeA: TypeRefer, typeB: TypeRefer): boolean {
+    public static isSame(typeA: TypeRefer, typeB: TypeRefer): boolean {
         if (!typeA || !typeB) {
             return false;
         }
@@ -44,5 +44,15 @@ export class ParameterUtils {
             }
         }
         return undefined;
+    }
+
+    /** 是否数组类型 */
+    public static isArray(typeRefer?: TypeRefer): boolean {
+        return !!typeRefer && typeRefer.source === 'default' && typeRefer.typeId === 'list';
+    }
+
+    /** 是否空类型 */
+    public static isVoid(typeRefer?: TypeRefer): boolean {
+        return !!typeRefer && typeRefer.source === 'default' && typeRefer.typeId === 'void';
     }
 }

@@ -70,7 +70,7 @@ export default defineComponent({
       emitChange([...params.value]);
     }
 
-    function onUpdateParamValue(param: Parameter, newValue: ValueExpress, newType: TypeRefer): void {
+    function onUpdateParamValue(param: Parameter, newValue: ValueExpress, newType?: TypeRefer): void {
       // 检查参数是否可编辑
       if (param.readOnly === true) {
         return;

@@ -1,19 +1,32 @@
 <template>
   <div class="param-item">
-    <label class="param-label">
-      {{ param.label }}
+    <label :class="['param-label', paramDescription && 'param-label--desc']">
       <span v-if="param.required" class="required-mark">*</span>
-      <span class="param-type">{{ param.type.toUpperCase() }}</span>
+      <span class="param-name" :title="paramName">{{ paramName }}</span>
+      <span class="param-type" :title="paramTypeName">{{ paramTypeCode }}</span>
     </label>
 
-    <!-- 字符串输入 -->
+    <div class="param-desc" v-if="paramDescription" :title="paramDescription">{{ paramDescription }}</div>
+
+    <!-- 字符串输入/文本框 -->
     <input
-      v-if="param.type === 'string'"
+      v-if="param.type === 'string' && selectOptions.length === 0"
       :value="param.value"
       @input="updateValue(($event.target as HTMLInputElement).value)"
       type="text"
       class="string-input"
-      :placeholder="`请输入${param.label}`"
+      :placeholder="`请输入${paramName}`"
+    />
+
+    <!-- 字符串输入/下拉列表 -->
+    <TSelect
+      v-else-if="param.type === 'string' && selectOptions.length > 0"
+      class="fvf-trial-param-select"
+      :value="param.value"
+      :options="selectOptions"
+      :clearable="true"
+      size="medium"
+      @change="updateValue"
     />
 
     <!-- 数字输入 -->
@@ -23,7 +36,7 @@
       @input="updateValue(Number(($event.target as HTMLInputElement).value))"
       type="number"
       class="number-input"
-      :placeholder="`请输入${param.label}`"
+      :placeholder="`请输入${paramName}`"
     />
 
     <!-- 布尔值输入 -->
@@ -72,6 +85,16 @@
 import type { InputParam } from './types';
 import FileUpload from './file-upload.vue';
 import JsonEditor from './json-editor.vue';
+import {
+  useTypeDetails,
+  TSelect,
+  ParameterUtils,
+  BasicTypeRefer,
+  InputHelpKind,
+  type EnumInputHelp,
+  type TdOptionProps,
+  type TypeRefer,
+} from '@farris/flow-devkit';
 import { computed } from 'vue';
 
 interface Props {
@@ -83,10 +106,63 @@ interface Emits {
   (e: 'update', index: number, value: any): void;
 }
 
+const {
+  getTypeCode,
+  getTypeName,
+} = useTypeDetails();
+
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-console.log('param', props.param);
-// const isFileID = computed(() => props.param.type === 'fileID' || (props.param.type === 'array' && props.param.type === 'fileID'));
+
+const paramTypeRefer = computed<TypeRefer | undefined>(() => props.param?.raw?.type);
+const defaultTypeCode = computed<string>(() => props.param.type.toUpperCase());
+
+const paramTypeCode = computed<string>(() => {
+  if (paramTypeRefer.value) {
+    return getTypeCode(paramTypeRefer.value);
+  }
+  return defaultTypeCode.value;
+});
+
+const paramTypeName = computed<string>(() => {
+  if (paramTypeRefer.value) {
+    return getTypeName(paramTypeRefer.value);
+  }
+  return defaultTypeCode.value;
+});
+
+const paramName = computed<string>(() => {
+  const param = props.param;
+  const rawParam = param.raw;
+  const displayName = (rawParam?.name || '').trim();
+  if (displayName) {
+    return displayName;
+  }
+  return rawParam?.code || param.label;
+});
+
+const paramDescription = computed<string>(() => {
+  return (props.param?.raw?.description || '').trim();
+});
+
+const selectOptions = computed<TdOptionProps[]>(() => {
+  const param = props.param.raw;
+  const type = param?.type;
+  if (!ParameterUtils.isSame(type, BasicTypeRefer.StringType) || !param) {
+    return [];
+  }
+  const inputHelp = param.inputHelp as (EnumInputHelp | undefined);
+  if (inputHelp?.kind !== InputHelpKind.enum) {
+    return [];
+  }
+  const enumItems = inputHelp.items || [];
+  return enumItems.map((item) => {
+    if (!item) {
+      return;
+    }
+    return { label: item.key, value: item.value };
+  }).filter(item => !!item);
+});
 
 function updateValue(value: any) {
   emit('update', props.index, value);
@@ -104,7 +180,7 @@ function updateValue(value: any) {
 
     .required-mark {
       color: #ff4d4f;
-      margin-left: 2px;
+      margin-right: 2px;
     }
 
     .param-type {
@@ -116,6 +192,27 @@ function updateValue(value: any) {
       margin-left: 8px;
       font-weight: 400;
     }
+
+    .param-name {
+      font-weight: 600;
+      color: rgb(53, 64, 82);
+    }
+
+    &--desc {
+      margin-bottom: 4px;
+    }
+  }
+
+  .param-desc {
+    color: rgba(32, 41, 69, 0.62);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
   }
 
   .string-input,
@@ -168,6 +265,18 @@ function updateValue(value: any) {
         color: #333333;
         font-weight: 400;
       }
+    }
+  }
+}
+
+.fvf-trial-param-select {
+  :deep(.t-input) {
+    border-color: #d9d9d9;
+    height: 34px;
+
+    &.t-input--focused {
+      border-color: #5b89fe;
+      box-shadow: 0 0 0 2px rgba(91, 137, 254, 0.1);
     }
   }
 }

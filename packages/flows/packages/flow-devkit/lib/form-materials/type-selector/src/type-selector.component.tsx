@@ -87,6 +87,9 @@ export default defineComponent({
         }}
         panelBottomContent={renderPanelBottomContent}
         valueDisplay={renderCurrentValue}
+        {...{
+          title: currentValueName.value,
+        }}
         onChange={onChange}
       ></TSelect>
     );

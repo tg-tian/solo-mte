@@ -1,0 +1,7 @@
+.fvf-device-selector {
+    &__current-value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

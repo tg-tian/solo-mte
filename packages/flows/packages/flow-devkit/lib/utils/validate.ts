@@ -6,8 +6,9 @@ import type {
     ParamValueValidateOptions,
     AssignValueExpr,
     SelectorBranch,
+    JsonSchema,
 } from '@farris/flow-devkit/types';
-import { CompareOperator } from '@farris/flow-devkit/types';
+import { CompareOperator, JsonSchemaBasicType } from '@farris/flow-devkit/types';
 import { ValueExpressUtils } from './value-express';
 import { ParamValidateUtils } from './param-validate';
 
@@ -42,6 +43,27 @@ export class ValidateUtils {
         return { isValid: !!errors.length, errors };
     }
 
+    private static validateJsonSchema(schema?: JsonSchema, options?: ParamValidateOptions): string[] {
+        if (!schema) {
+            return [];
+        }
+        if (schema.type === JsonSchemaBasicType.Array) {
+            return this.validateJsonSchema(schema.items);
+        }
+        if (schema.type === JsonSchemaBasicType.Object && Array.isArray(schema.properties)) {
+            const errors: string[] = [];
+            const allCodes = schema.properties.map((property) => property.code);
+            const getAllCodes = () => allCodes;
+            schema.properties.forEach((property) => {
+                const codeError = ParamValidateUtils.validateCode(property.code, { ...options, getAllCodes });
+                codeError && errors.push(codeError);
+                errors.push(...this.validateJsonSchema(property, options));
+            });
+            return errors;
+        }
+        return [];
+    }
+
     /**
      * 校验一个参数列表
      * @param params  参数列表
@@ -50,13 +72,20 @@ export class ValidateUtils {
      */
     public static validateParameters(params: Parameter[], options?: ParamValidateOptions): NodeValidationDetails {
         const allCodes = params.map(param => param.code);
+        const allNames = params.map(param => (param.name || '').trim() || param.code);
         const getAllCodes = () => allCodes;
-        options = { ...options, getAllCodes };
         let messages: string[] = [];
-
         (params ?? []).forEach((param) => {
-            const codeError = ParamValidateUtils.validateCode(param.code, options);
+            const codeError = ParamValidateUtils.validateCode(param.code, { ...options, getAllCodes });
             codeError && messages.push(codeError);
+            messages.push(...this.validateJsonSchema(param.schema, options));
+            const name = (param.name || '').trim();
+            if (name) {
+                const sames = allNames.filter((item) => item === name);
+                if (sames.length > 1) {
+                    messages.push(`显示名称不可重复`);
+                }
+            }
         });
         (params ?? []).forEach((param) => {
             const valueError = ParamValidateUtils.validateValue(param.valueExpr, options);

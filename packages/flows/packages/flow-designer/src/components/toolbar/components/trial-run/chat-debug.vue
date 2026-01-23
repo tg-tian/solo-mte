@@ -28,6 +28,24 @@
 
     <!-- 输入区域 -->
     <div class="input-area">
+      <!-- 用户输入字段配置区域 -->
+      <div v-if="inputParams && inputParams.length > 0" class="user-input-config">
+        <div class="config-header" @click="toggleUserInputSection">
+          <i class="f-icon f-icon-saturation config-icon"></i>
+          <span class="config-title">对话流入参配置</span>
+          <i
+            class="f-icon config-toggle-icon"
+            :class="showUserInputFields ? 'f-legend-collapse' : 'f-legend-show'"
+          ></i>
+        </div>
+        <div v-show="showUserInputFields" class="config-content">
+          <param-list
+            :input-params="inputParams"
+            @update-param="updateParamValue"
+          />
+        </div>
+      </div>
+
       <!-- 已上传文件列表 -->
       <div v-if="uploadedFiles.length > 0" class="uploaded-files">
         <div class="files-header">
@@ -93,8 +111,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from 'vue';
-import { useNotify } from '@farris/flow-devkit';
+import { useNotify, type NodeData } from '@farris/flow-devkit';
 import ChatMessage from './chat-message/chat-message.component.vue';
+import ParamList from './param-list.vue';
 import {
   uploadFile,
   isFileTypeAllowed,
@@ -107,7 +126,6 @@ import {
 } from './file-upload-utils';
 import { useChatflowApi } from './composables/use-chatflow-api';
 import { useWorkflowApi } from './composables/use-workflow-api';
-import { useInputParams } from './composables/use-input-params';
 import { SSEDataProcessor, SSEDataUtils } from './composables/sse-data-processor';
 import type { GspDocMetadata, InputParam} from './types';
 import type { ChatMessage as EnhancedChatMessage, ChatConfig } from './composables/chat-debug.types';
@@ -120,6 +138,7 @@ interface ChatMessage extends EnhancedChatMessage {
 // 定义组件属性
 interface Props {
   inputParams?: InputParam[];
+  startNodeData?: NodeData;
 }
 
 // 使用属性
@@ -134,9 +153,8 @@ const emit = defineEmits<{
 const notifyService = useNotify();
 
 // 初始化对话流API和工作流API
-const { callChatflowAPI } = useChatflowApi();
+const { callChatflowAPI, stopChatflowAPI } = useChatflowApi();
 const { saveWorkflow } = useWorkflowApi();
-const inputParamsComposable = useInputParams();
 
 // 聊天配置
 const chatConfig: ChatConfig = {
@@ -170,6 +188,21 @@ const uploadedFiles = ref<Array<{
   type: string;
 }>>([]); // 保存上传文件的详细信息
 
+// 用户输入字段相关状态
+const showUserInputFields = ref(true); // 默认展开用户输入字段
+
+// 切换用户输入字段显示状态
+function toggleUserInputSection() {
+  showUserInputFields.value = !showUserInputFields.value;
+}
+
+// 更新输入参数值的函数
+function updateParamValue(index: number, value: any) {
+  if (props.inputParams && props.inputParams[index]) {
+    props.inputParams[index].value = value;
+  }
+}
+
 // 保存流程
 async function saveFlowBeforeChat(assistantMessage: ChatMessage): Promise<boolean> {
   try {
@@ -184,7 +217,7 @@ async function saveFlowBeforeChat(assistantMessage: ChatMessage): Promise<boolea
       throw new Error('流程保存失败');
     }
 
-    assistantMessage.content = '流程保存成功，正在调用对话流...';
+    assistantMessage.content = '';
     return true;
   } catch (error) {
     console.error('保存流程失败:', error);
@@ -194,6 +227,9 @@ async function saveFlowBeforeChat(assistantMessage: ChatMessage): Promise<boolea
 
 // 处理消息停止生成
 function handleStopGeneration() {
+  // 停止SSE连接
+  stopChatflowAPI();
+
   // 停止所有打字机效果
   // @ts-ignore
   for (const [messageId, timer] of sseProcessor.getAllMessages()) {
@@ -202,8 +238,33 @@ function handleStopGeneration() {
     }
   }
 
+  // 将所有正在思考的消息的isThinking状态置为false
+  messages.value.forEach((message, index) => {
+    if (message.isThinking || message.canShowStopButton) {
+      // 直接修改消息对象的属性
+      message.isThinking = false;
+      message.canShowStopButton = false;
+
+      // 如果有content2，确保所有segment都标记为完成
+      if (message.content2 && Array.isArray(message.content2)) {
+        message.content2.forEach(segment => {
+          segment.finish = true;
+        });
+      }
+
+      // 强制触发响应式更新
+      messages.value[index] = { ...message };
+    }
+  });
+
   isLoading.value = false;
   notifyService.info('已停止生成回复');
+
+  // 清除超时定时器
+  if (loadingTimer.value) {
+    clearTimeout(loadingTimer.value);
+    loadingTimer.value = null;
+  }
 }
 
 // 通用复制函数，支持生产环境兼容性
@@ -468,21 +529,20 @@ async function sendToChatFlow(content: string) {
   messages.value.push(assistantMessage);
 
   try {
-    // 第一步：保存流程
     await saveFlowBeforeChat(assistantMessage);
 
-    // 第二步：获取USER_FILES参数值并构建inputs
+    // 获取USER_FILES参数值并构建inputs
     let userFilesParam: string[] = [];
 
     // 从start节点获取USER_FILES参数值
-    const startNodeInfo = inputParamsComposable.getStartNodeInfo();
+    const startNodeInfo = props.startNodeData;
     if (startNodeInfo?.inputParams) {
       const userFilesParamConfig = startNodeInfo.inputParams.find((param: any) => param.code === 'USER_FILES');
       if (userFilesParamConfig?.value) {
         // 如果USER_FILES有值，使用它；否则使用uploadedFileIds
         if (Array.isArray(userFilesParamConfig.value)) {
           userFilesParam = userFilesParamConfig.value.map((file: any) =>
-            file.metadataId || file.id || file
+            file.metadataId
           ).filter(Boolean);
         } else if (typeof userFilesParamConfig.value === 'string') {
           userFilesParam = [userFilesParamConfig.value];
@@ -496,9 +556,12 @@ async function sendToChatFlow(content: string) {
     }
 
     const inputs = props.inputParams
-      .filter(param => param.name !== 'USER_INPUT' && param.name !== 'USER_FILES')
       .reduce((acc: any, param) => {
-        acc[param.name] = param.value;
+        if(param.type === 'fileID'){
+          acc[param.name] = param.multiple? param.value.map((file: any) => file.metadataId).filter(Boolean) : param.value.metadataId;
+        } else {
+          acc[param.name] = param.value;
+        }
         return acc;
       }, {} as object);
 
@@ -511,7 +574,7 @@ async function sendToChatFlow(content: string) {
       content,                    // userInput: 用户输入的内容
       userFilesParam,             // userFiles: 从USER_FILES参数或上传文件获取的文件ID数组
       inputs,                     // inputs: 用户输入字段的值
-      // 简化的SSE消息处理回调
+      // onMessage: 接收到文本内容时的回调
       (textContent: string) => {
         if (textContent && textContent.trim()) {
           // 确保textContent是字符串，防止对象混入
@@ -545,13 +608,22 @@ async function sendToChatFlow(content: string) {
           // 强制触发响应式更新
           const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
           if (messageIndex !== -1) {
-            messages.value[messageIndex] = { ...assistantMessage };
+            // 创建新的消息对象确保响应式更新，包括content2的变化
+            const updatedMessage = {
+              ...assistantMessage,
+              content2: assistantMessage.content2 ? [...assistantMessage.content2] : undefined
+            };
+            // 保留原有的canShowStopButton状态
+            if (assistantMessage.canShowStopButton !== undefined) {
+              updatedMessage.canShowStopButton = assistantMessage.canShowStopButton;
+            }
+            messages.value[messageIndex] = updatedMessage;
           }
 
           scrollToBottom();
         }
       },
-      // 完成回调
+      // onComplete: 当接收到finish_reason为stop时的回调
       () => {
         assistantMessage.isThinking = false;
         assistantMessage.isComplete = true;
@@ -566,10 +638,17 @@ async function sendToChatFlow(content: string) {
             contentType: 'text'
           }];
         } else if (assistantMessage.content2 && assistantMessage.content2.length > 0) {
-          // 标记content2中的内容为完成状态
+          // 标记content2中的内容为完成状态，确保光标消失
           assistantMessage.content2.forEach((segment) => {
             segment.finish = true;
           });
+        } else {
+          // 如果没有content2，创建一个以确保光标消失
+          assistantMessage.content2 = [{
+            text: assistantMessage.content || '',
+            finish: true,
+            contentType: 'text'
+          }];
         }
 
         // 清除超时定时器
@@ -582,13 +661,36 @@ async function sendToChatFlow(content: string) {
         // 强制触发响应式更新
         const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
         if (messageIndex !== -1) {
-          messages.value[messageIndex] = { ...assistantMessage };
+          // 创建新的消息对象以确保响应式更新
+          const updatedMessage = {
+            ...assistantMessage,
+            content2: assistantMessage.content2 ? [...assistantMessage.content2] : undefined
+          };
+          messages.value[messageIndex] = updatedMessage;
         }
 
         scrollToBottom();
       },
-      // 错误回调
+      // onError: 错误回调
       (error: Error) => {
+        // 如果是AbortError（用户主动停止），不显示错误消息
+        if (error.message?.includes('BodyStreamBuffer was aborted') || error.name === 'AbortError') {
+          // 用户主动停止，静默处理
+          assistantMessage.isThinking = false;
+          assistantMessage.isComplete = false;
+          assistantMessage.canShowStopButton = false;
+          isLoading.value = false;
+
+          // 强制触发响应式更新
+          const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
+          if (messageIndex !== -1) {
+            messages.value[messageIndex] = { ...assistantMessage };
+          }
+
+          scrollToBottom();
+          return;
+        }
+
         assistantMessage.isThinking = false;
         assistantMessage.isComplete = true;
         assistantMessage.canShowStopButton = false;
@@ -606,6 +708,12 @@ async function sendToChatFlow(content: string) {
         }
         isLoading.value = false;
 
+        // 强制触发响应式更新
+        const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
+        if (messageIndex !== -1) {
+          messages.value[messageIndex] = { ...assistantMessage };
+        }
+
         // 显示错误通知
         notifyService.error(`对话流调用失败：${error.message}`);
         scrollToBottom();
@@ -615,19 +723,37 @@ async function sendToChatFlow(content: string) {
   } catch (error) {
     console.error('对话流调用失败:', error);
 
+    // 如果是AbortError（用户主动停止），不显示错误消息
+    const errorMessage = error instanceof Error ? error.message : '未知错误';
+    if (errorMessage.includes('BodyStreamBuffer was aborted') || (error instanceof Error && error.name === 'AbortError')) {
+      // 用户主动停止，静默处理
+      assistantMessage.isThinking = false;
+      assistantMessage.canShowStopButton = false;
+      isLoading.value = false;
+
+      // 强制触发响应式更新
+      const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
+      if (messageIndex !== -1) {
+        messages.value[messageIndex] = { ...assistantMessage };
+      }
+
+      scrollToBottom();
+      return;
+    }
+
     // 更新助手消息为错误状态
     assistantMessage.isThinking = false;
     assistantMessage.isComplete = true;
     assistantMessage.canShowStopButton = false;
-    assistantMessage.content = `对话流调用失败：${error instanceof Error ? error.message : '未知错误'}`;
+    assistantMessage.content = `对话流调用失败：${errorMessage}`;
     assistantMessage.content2 = [{
-      text: `对话流调用失败：${error instanceof Error ? error.message : '未知错误'}`,
+      text: `对话流调用失败：${errorMessage}`,
       finish: true,
       contentType: 'text'
     }];
 
     // 显示错误通知
-    notifyService.error(`对话流调用失败：${error instanceof Error ? error.message : '未知错误'}`);
+    notifyService.error(`对话流调用失败：${errorMessage}`);
 
     // 清除超时定时器
     if (loadingTimer.value) {
@@ -635,6 +761,12 @@ async function sendToChatFlow(content: string) {
       loadingTimer.value = null;
     }
     isLoading.value = false;
+
+    // 强制触发响应式更新
+    const messageIndex = messages.value.findIndex(m => m.id === assistantMessage.id);
+    if (messageIndex !== -1) {
+      messages.value[messageIndex] = { ...assistantMessage };
+    }
   }
 }
 
@@ -642,10 +774,7 @@ async function sendToChatFlow(content: string) {
 function scrollToBottom() {
   nextTick(() => {
     if (chatContainer.value) {
-      // 获取输入框的高度，为滚动添加额外空间
-      const inputArea = document.querySelector('.input-area');
-      const inputHeight = inputArea ? (inputArea as HTMLElement).offsetHeight + 20 : 100;
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight + inputHeight;
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     }
   });
 }
@@ -688,10 +817,10 @@ onMounted(() => {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    padding-bottom: 120px; // 为输入框预留足够空间
+    padding-bottom: 16px;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 88px); // 减去输入框高度
+    min-height: 200px; // 确保至少有一些对话空间
 
     .empty-state {
       flex: 1;
@@ -784,15 +913,70 @@ onMounted(() => {
   }
 
   .input-area {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    flex: none;
     background: white;
     border-top: 1px solid #e8e8e8;
     padding: 16px;
-    z-index: 10;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); // 添加顶部阴影
+    overflow-y: auto;
+    max-height: 50vh; // 最大高度为视口高度的50%
+    display: flex;
+    flex-direction: column;
+
+    .user-input-config {
+      margin-bottom: 12px;
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .config-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e8e8e8;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: #e8f4ff;
+        }
+
+        .config-icon {
+          font-size: 14px;
+          color: #5b89fe;
+        }
+
+        .config-title {
+          flex: 1;
+          font-size: 13px;
+          font-weight: 500;
+          color: #333;
+        }
+
+        .config-toggle-icon {
+          font-size: 12px;
+          color: #666;
+          transition: transform 0.3s ease, color 0.2s ease;
+          transform-origin: center;
+
+          &:hover {
+            color: #5b89fe;
+          }
+        }
+      }
+
+      .config-content {
+        padding: 12px;
+        background: white;
+        overflow-y: auto;
+      }
+    }
 
     .uploaded-files {
       margin-bottom: 12px;

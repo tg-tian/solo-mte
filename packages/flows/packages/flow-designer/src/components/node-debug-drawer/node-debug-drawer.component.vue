@@ -334,7 +334,7 @@ onUnmounted(() => {
   .tab-item {
     flex: 1;
     text-align: center;
-    padding: 0 14px 7px 14px;
+    padding: 4px 14px 3px 14px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 400;

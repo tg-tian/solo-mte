@@ -102,7 +102,7 @@ export function useWorkflowApi() {
   // 调用规则流API
   async function callRuleflowAPI(params: InputParam[]): Promise<string> {
     // 构建请求参数：args只包含值的数组（排除USER_INPUT和USER_FILES）
-    const args = getArgs(params);
+    const args = Object.values(getArgs(params));
 
     // 获取工作流ID - 从URL参数或默认值
     const workflowId = getWorkflowId();
@@ -155,7 +155,7 @@ export function useWorkflowApi() {
 
     const requestData = {
       flowId: workflowId,
-      args:  args
+      inputs:  args
     };
 
     try {
@@ -171,7 +171,7 @@ export function useWorkflowApi() {
 
         // 如果API返回对象格式，尝试提取结果字段
         if (typeof result === 'object') {
-          const output = result.result.output.content
+          const output = result.outputs
 
           if (typeof output === 'string') {
             return output;

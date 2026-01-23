@@ -6,6 +6,8 @@ import { AvatarUpload } from './avatar-upload';
 import { BranchEditor } from './branch-editor';
 import { ValueExpressionInput, useValueExpression } from './value-expression-input';
 import { VariableAssignEditor } from './variable-assign-editor';
+import { MethodInvokeExpress } from './method-invoke-express';
+import { DeviceSelector } from './device-selector';
 
 /**
  * @description
@@ -19,6 +21,8 @@ registerCustomComponents([
     BranchEditor,
     ValueExpressionInput,
     VariableAssignEditor,
+    MethodInvokeExpress,
+    DeviceSelector,
 ]);
 
 export {
@@ -29,12 +33,15 @@ export {
     BranchEditor,
     ValueExpressionInput,
     VariableAssignEditor,
+    MethodInvokeExpress,
+    DeviceSelector,
 
     useValueExpression,
 };
 
 export * from './node-wrapper';
 export * from './type-selector';
+export * from './basic-type-selector';
 export * from './param-tag-list';
 export * from './node-content-wrapper';
 export * from './node-field';
@@ -43,3 +50,4 @@ export * from './condition-editor';
 export * from './selector-branches';
 export * from './single-param-value-tag';
 export * from './variable-assign-list';
+export * from './enum-input-help';

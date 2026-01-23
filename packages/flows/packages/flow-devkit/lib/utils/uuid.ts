@@ -14,7 +14,8 @@ export const shortid = (
   const genId = customAlphabet(alphabet, length);
   return `${prefix}${genId()}`;
 };
-// 生成UUID,将中划线替换为下划线
+
+// 生成UUID，将中划线替换为下划线
 export const uuid = () => nanoid().replace(/-/g, '_');
 
 export const id = shortid;

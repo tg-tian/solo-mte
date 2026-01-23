@@ -3,6 +3,8 @@ import { createPropsResolver } from '@farris/ui-vue';
 import jsonSchemaEditorSchema from './schema/json-schema-editor.schema.json';
 import type { Parameter, ParamValidateOptions } from '@farris/flow-devkit/types';
 
+export const COMPONENT_NAME = 'FvfJsonSchemaEditor';
+
 export const jsonSchemaEditorProps = {
 
     /** 绑定值，参数列表 */
@@ -13,6 +15,18 @@ export const jsonSchemaEditorProps = {
 
     /** 校验选项 */
     validateOptions: { type: Object as PropType<ParamValidateOptions> },
+
+    /** 不显示`新增子项`按钮 */
+    hideAddSubLevelButton: { type: Boolean, default: false },
+
+    /** 不显示`展开详情`按钮 */
+    hideDetailExpandButton: { type: Boolean, default: false },
+
+    /** 是否编辑`显示名称`字段 */
+    canEditName: { type: Boolean, default: false },
+
+    /** 是否编辑`输入帮助设置`相关的字段 */
+    canEditInputHelp: { type: Boolean, default: false },
 };
 
 export type JsonSchemaEditorProps = ExtractPropTypes<typeof jsonSchemaEditorProps>;

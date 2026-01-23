@@ -3,48 +3,44 @@ import { valueExpressionInputProps, VALUE_EXPRESSION_INPUT_NAME } from './value-
 import { useBem, ParamValidateUtils } from '@farris/flow-devkit/utils';
 import { useModal } from './composition/use-modal';
 import { useValueExpression } from './composition/use-value-expression';
-import type { ValueExpress } from '@farris/flow-devkit/types';
-import type { GetValueResult } from './composition/types';
+import type { ValueExpress, ValueExpressionResult } from '@farris/flow-devkit/types';
 
 import './value-expression-input.scss';
 
 /**
- * 解析 modelValue，支持字符串反序列化和对象格式
+ * 支持字符串反序列化和对象格式
  */
 function parseModelValue(modelValue: ValueExpress | string | undefined): ValueExpress | undefined {
-    if (!modelValue) {
-        return undefined;
-    }
-
-    // 如果已经是对象格式，直接返回
-    if (typeof modelValue === 'object' && modelValue !== null) {
-        return modelValue;
-    }
-
-    // 如果是字符串格式，尝试反序列化
-    if (typeof modelValue === 'string') {
-        try {
-            const parsed = JSON.parse(modelValue);
-            // 确保解析后的对象有 kind 属性
-            if (parsed && typeof parsed === 'object' && parsed.kind) {
-                return parsed;
-            }
-            console.warn('ValueExpressionInput: Invalid serialized ValueExpress format', modelValue);
-            return undefined;
-        } catch (error) {
-            console.warn('ValueExpressionInput: Failed to parse modelValue as JSON', modelValue, error);
-            return undefined;
-        }
-    }
-
+  if (!modelValue) {
     return undefined;
+  }
+  // 如果已经是对象格式，直接返回
+  if (typeof modelValue === 'object' && modelValue !== null) {
+    return modelValue;
+  }
+  // 如果是字符串格式，尝试反序列化
+  if (typeof modelValue === 'string') {
+    try {
+      const parsed = JSON.parse(modelValue);
+      // 确保解析后的对象有 kind 属性
+      if (parsed && typeof parsed === 'object' && parsed.kind) {
+        return parsed;
+      }
+      console.warn('ValueExpressionInput: Invalid serialized ValueExpress format', modelValue);
+      return undefined;
+    } catch (error) {
+      console.warn('ValueExpressionInput: Failed to parse modelValue as JSON', modelValue, error);
+      return undefined;
+    }
+  }
+  return undefined;
 }
 
 export default defineComponent({
   name: VALUE_EXPRESSION_INPUT_NAME,
   props: valueExpressionInputProps,
   emits: {
-    'update:modelValue': (_express: ValueExpress, _: ValueExpress, _result: GetValueResult) => {
+    'update:modelValue': (_express: ValueExpress, _: ValueExpress, _result: ValueExpressionResult) => {
       return true;
     }
   },

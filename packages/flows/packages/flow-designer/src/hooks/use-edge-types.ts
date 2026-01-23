@@ -3,7 +3,7 @@ import { type EdgeProps } from '@vue-flow/core';
 import { CommonEdge } from '@farris/flow-devkit';
 
 const edgeTypes = reactive<Record<string, Component<EdgeProps>>>({
-    common: markRaw(CommonEdge),
+    common: markRaw(CommonEdge as any),
 });
 
 export function useEdgeTypes() {

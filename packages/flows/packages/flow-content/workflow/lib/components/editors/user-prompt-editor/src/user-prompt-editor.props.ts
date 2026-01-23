@@ -17,6 +17,10 @@ export const userPromptEditorProps = {
   title: {
     type: String,
     default: '用户提示词'
+  },
+  isRequired: {
+    type: Boolean,
+    default: false
   }
 } as const;
 

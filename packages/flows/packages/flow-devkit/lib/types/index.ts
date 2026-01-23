@@ -8,3 +8,7 @@ export * from './selector';
 export * from './builtin-node-type';
 export * from './type';
 export * from './validate';
+export * from './json-schema';
+export * from './input-help';
+export * from './common';
+export * from './device';

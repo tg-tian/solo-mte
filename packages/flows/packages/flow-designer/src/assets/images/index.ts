@@ -4,3 +4,5 @@ export { default as selectorIcon } from './icon-selector.jpg';
 export { default as loopIcon } from './icon-loop.jpg';
 export { default as variableDefIcon } from './icon-variable-def.jpg';
 export { default as variableAssignIcon } from './icon-variable-assign.jpg';
+export { default as methodInvokeIcon } from './method-invoke.jpg';
+export { default as defaultIcon } from './icon-default.jpg';

@@ -17,6 +17,9 @@ export default defineComponent({
 });
     const isFullscreen = ref(false);
 
+    // 计算是否显示错误提示
+    const showError = computed(() => props.isRequired && !modelValue.value);
+
 
     /**
      * 处理全屏按钮点击
@@ -60,6 +63,13 @@ export default defineComponent({
             lineBreak={false}
             onUpdate:modelValue={(value: string) => modelValue.value = value}
           ></f-textarea>
+
+          {/* 必填提示 */}
+          {showError.value && (
+            <div class="user-prompt-editor-error-tip" title="用户提示词不能为空">
+              用户提示词不能为空
+            </div>
+          )}
         </div>
 
         {/* 全屏弹窗，只在全屏时显示 */}

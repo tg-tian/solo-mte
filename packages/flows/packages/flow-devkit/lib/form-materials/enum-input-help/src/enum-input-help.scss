@@ -1,0 +1,108 @@
+.fvf-enum-input-help {
+    display: block;
+
+    &__add {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        gap: 6px;
+        padding: 0 12px;
+        border-radius: 8px;
+        height: 26px;
+        font-size: 12px;
+        border: 1px solid #e8ebf2;
+        color: #354052;
+        background-color: #ffffff;
+        margin-top: 4px;
+
+        .f-icon {
+            font-size: 14px;
+        }
+
+        &:hover {
+            color: #2a87ff;
+            border-color: #529dff;
+        }
+        &:active {
+            color: #0e6ded;
+            border-color: #0e6ded;
+        }
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        border: 1px solid rgba(16, 24, 40, 0.08);
+        border-radius: 8px;
+
+        &-handle {
+            flex: 0 0 auto;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 7px;
+            padding-right: 3px;
+            width: 26px !important;
+            height: 100% !important;
+            font-size: 16px !important;
+            cursor: grab;
+            user-select: none;
+        }
+
+        &-input {
+            flex: 1 1 0;
+            min-width: 0;
+            color: #354052;
+            line-height: 26px;
+            height: 26px;
+            font-size: 12px;
+            padding-left: 6px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            border-left: 1px solid;
+            border-right: 1px solid;
+            border-color: rgba(16, 24, 40, 0.16);
+        }
+
+        &-input + &-input {
+            border-left: none;
+        }
+
+        &-delete {
+            flex: 0 0 auto;
+            min-width: 0;
+            width: 22px;
+            height: 22px;
+            margin: 0 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            color: #82849a;
+
+            &:hover,
+            &:active {
+                color: #d92d20;
+            }
+        }
+
+        &--focus {
+            border-color: #6388ff;
+        }
+
+        &--danger {
+            background-color: #fef3f2;
+            border-color: #fda29b;
+        }
+
+        & + & {
+            margin-top: 4px;
+        }
+    }
+}

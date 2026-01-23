@@ -8,6 +8,7 @@ import type {
 import { type NodeVariables, useTypeDetails } from '@farris/flow-devkit/composition';
 import { VARIABLE_NAME_REGEX, NODE_VARIABLES_KEY } from '@farris/flow-devkit/constants';
 import { ValueExpressUtils } from './value-express';
+import { JsonSchemaUtils } from './json-schema';
 
 export class ParamValidateUtils {
 
@@ -29,6 +30,63 @@ export class ParamValidateUtils {
             return `${fieldName}不可重复`;
         }
         return undefined;
+    }
+
+    private static isSame(arrayA?: any[], arrayB?: any[]): boolean {
+        if (!arrayA && !arrayB) {
+            return true;
+        }
+        if (!arrayA || !arrayB) {
+            return false;
+        }
+        for (let i = 0; i < arrayA.length; i++) {
+            if (arrayA[i] !== arrayB[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static isNodeVariableFieldsValid(value: NodeVariableExpr, param?: Parameter): {
+        isFieldsValid: boolean;
+        fields: string[];
+    } {
+        const fields = value?.fields || [];
+        if (!fields.length) {
+            return { isFieldsValid: true, fields };
+        }
+        if (!param) {
+            return { isFieldsValid: false, fields };
+        }
+        if (!JsonSchemaUtils.mayHasJsonSchema(param.type)) {
+            const { hasNestedFieldPath } = useTypeDetails();
+            const isFieldsValid = hasNestedFieldPath(param.type, fields);
+            return { isFieldsValid, fields };
+        }
+        const fieldIds = value.fieldIds || [];
+        const schema = param.schema!;
+        // 通过ID路径查找当前的编号路径
+        const fieldCodes = JsonSchemaUtils.getCodePathByIdPath(schema, fieldIds);
+        let isValid: boolean = false;
+        if (fieldCodes.length) {
+            // 成功根据ID路径查询到编号路径，更新编号路径
+            if (this.isSame(value.fields, fieldCodes) === false) {  // 避免无限递归更新
+                value.fields = fieldCodes;
+            }
+            isValid = true;
+        } else {
+            // 试图根据编号路径重新确定ID路径
+            const newIdPath = JsonSchemaUtils.getIdPathByCodePath(schema, fields);
+            if (newIdPath.length) {
+                // 重新跟踪成功，更新ID路径
+                value.fieldIds = newIdPath;
+                isValid = true;
+            }
+        }
+        return {
+            isFieldsValid: isValid,
+            fields: fieldCodes.length > 0 ? fieldCodes : fields,
+        };
     }
 
     public static validateValue(value?: ValueExpress, options?: ParamValueValidateOptions): string | undefined {
@@ -55,8 +113,7 @@ export class ParamValidateUtils {
         }
         const targetNode = nodeVariables.node;
         const targetParam = this.getTargetParameter(value, nodeVariables.params || []);
-        const { hasNestedFieldPath } = useTypeDetails();
-        const isFieldsValid = hasNestedFieldPath(targetParam?.type, value.fields);
+        const { isFieldsValid } = this.isNodeVariableFieldsValid(value, targetParam);
         const isDefined = !!targetNode && !!targetParam && isFieldsValid;
         if (!isDefined) {
             return nodeVariableUndefinedTip;
@@ -64,16 +121,7 @@ export class ParamValidateUtils {
         return undefined;
     }
 
-    private static getTargetParameter(express: NodeVariableExpr, params: Parameter[]): Parameter | undefined {
-        const targetById = params.find((item) => {
-            return item.id === express.variableId && item.id && item.code;
-        });
-        if (targetById) {
-            return targetById;
-        }
-        const targetByCode = params.find((item) => {
-            return item.code === express.variable && item.code;
-        });
-        return targetByCode;
+    public static getTargetParameter(express: NodeVariableExpr, params: Parameter[]): Parameter | undefined {
+        return ValueExpressUtils.getTargetParameter(express, params);
     }
 }

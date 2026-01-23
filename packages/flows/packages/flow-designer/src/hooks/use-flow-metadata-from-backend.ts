@@ -93,7 +93,14 @@ export function useFlowMetadataFromBackend(flowDesignerProps?: FlowDesignerProps
             console.error(errorTip);
             return false;
         }
-        const data = JSON.parse(JSON.stringify(newFlowMetadata));
+        let data = JSON.parse(JSON.stringify(newFlowMetadata));
+        const beforeSaveMetadata = flowRegistry.value?.beforeSaveMetadata;
+        if (typeof beforeSaveMetadata === 'function') {
+            data = beforeSaveMetadata(data);
+            if (!data) {
+                return false;
+            }
+        }
         const result = await FlowApi.saveFlowMetadata(data);
         const isSuccess = result?.success ?? false;
         if (!silent) {

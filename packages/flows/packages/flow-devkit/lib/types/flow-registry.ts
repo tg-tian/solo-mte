@@ -89,6 +89,10 @@ export interface FlowRegistry {
     edges?: Record<string, Component<EdgeProps>>;
     /** 获取流程的属性面板配置 */
     getPropertyPanelConfig?: (flowExtensionData: JsonNode) => PropertyPanelConfig;
+    /** 流程属性面板默认宽度，单位`px`，默认`300` */
+    flowPropertyPanelDefaultWidth?: number;
+    /** 节点属性面板默认宽度，单位`px`，默认`450` */
+    nodePropertyPanelDefaultWidth?: number;
     /**
      * 初始化流程数据
      * @description
@@ -106,4 +110,11 @@ export interface FlowRegistry {
      * @description 每次打开设计器时都会调用本方法，设计器会等待本方法执行完毕后再显示画布，你可以通过本方法提前加载一些必要的数据
      */
     onDesignerOpen?: (flowMetadata: FlowMetadata) => Promise<void>;
+    /**
+     * 保存元数据前回调
+     * @description 用于在保存元数据前对元数据进行自定义修改，如果返回`undefined`则放弃保存
+     * @param flowMetadata 流程元数据
+     * @returns 经过修改后的流程元数据
+     */
+    beforeSaveMetadata?: (flowMetadata: FlowMetadata) => FlowMetadata | undefined;
 }

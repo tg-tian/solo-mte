@@ -13,7 +13,7 @@ export const END_NODE: NodeDefinition = {
         icon: endIcon,
         isEndNode: true,
         deletable: true,
-        canCopy: true,
+        canCopy: false,
         canRename: true,
         ports: [
             {

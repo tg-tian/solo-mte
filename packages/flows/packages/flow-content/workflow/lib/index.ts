@@ -118,6 +118,7 @@ export const FLOW_REGISTRY: FlowRegistry = {
       BuiltinNodeType.Loop,
       BuiltinNodeType.VariableDef,
       BuiltinNodeType.VariableAssign,
+      BuiltinNodeType.MethodInvoke,
       BuiltinNodeType.End,
     ],
   }],

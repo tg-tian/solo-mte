@@ -5,6 +5,8 @@ import type { PropertyCategory, PropertyPanelConfig } from '@farris/flow-devkit'
 
 import css from '../flow-view.module.scss';
 
+const PROPERTY_PANEL_DEFAULT_WIDTH = 300;
+
 export function useFlowPropertyPanel() {
 
     const flowRegistry = inject(FLOW_REGISTRY_KEY);
@@ -67,7 +69,7 @@ export function useFlowPropertyPanel() {
         return panelShowMode.value === 'panel';
     });
 
-    const leftPanelWidth = ref<number>(300);
+    const leftPanelWidth = ref<number>(PROPERTY_PANEL_DEFAULT_WIDTH);
 
     const leftPanelStyle = computed<CSSProperties>(() => ({
         display: shouldShowPropertyPanel.value ? undefined : 'none',
@@ -79,7 +81,21 @@ export function useFlowPropertyPanel() {
         categories: {},
     };
 
+    function setPanelWidth(newValue: number): void {
+        leftPanelWidth.value = newValue;
+    }
+
+    function updatePanelWidth(): void {
+        const defaultWidth = flowRegistry?.value?.flowPropertyPanelDefaultWidth;
+        if (typeof defaultWidth === 'number' && defaultWidth > 0) {
+            setPanelWidth(defaultWidth);
+            return;
+        }
+        setPanelWidth(PROPERTY_PANEL_DEFAULT_WIDTH);
+    }
+
     function updatePropertyPanel(forceUpdate = true): void {
+        updatePanelWidth();
         const propertyConfig = getPropertyPanelConfig.value?.(propertyData.value) || defaultPropertyPanelConfig;
         propertyConfig.type = 'object';
         propertyConfig.categories = Object.assign({ _basic_: defaultPropertyCategory }, propertyConfig.categories);
