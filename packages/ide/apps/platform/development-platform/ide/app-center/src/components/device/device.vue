@@ -234,7 +234,6 @@ import { useDeviceStore } from '../../store/device'
 import { getSceneById } from '../../api/scene'
 import type { Device, ProviderConfig } from '../../types/models'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
-import { de } from 'element-plus/es/locale'
  
 const props = defineProps<{ domainId: number ; sceneId: number }>()
 const sceneStore = useSceneStore()
