@@ -91,6 +91,7 @@ export interface ActionDefinition {
 
 export interface EventDefinition {
     fields: Record<string, PropertyDefinition>;
+    outputs?: Record<string, PropertyDefinition>;
     level: "info" | "warning" | "error";
     description?: string;
 }
@@ -154,7 +155,9 @@ export interface Component {
     updateTime?: string;
     // 入口参数列表
     inputs?: InputParam[];
-    // 出口类型
+    // 出口参数列表
+    outputs?: Array<{ type: string }>;
+    // 出口类型 (旧字段，向后兼容)
     outputType?: string;
     // 属性定义
     properties?: Record<string, PropertyDefinition>;

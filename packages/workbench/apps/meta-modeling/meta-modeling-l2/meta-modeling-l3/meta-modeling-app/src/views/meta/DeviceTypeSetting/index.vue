@@ -58,11 +58,6 @@
             <el-table :data="propertyList" border style="width: 100%;" header-align="center">
               <el-table-column prop="identify" label="标识符" min-width="120" show-overflow-tooltip></el-table-column>
               <el-table-column prop="description" label="名称/描述" min-width="150" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="readOnly" label="只读" width="80" align="center">
-                <template #default="scope">
-                  <el-tag :type="scope.row.readOnly ? 'info' : 'success'" size="small">{{ scope.row.readOnly ? '是' : '否' }}</el-tag>
-                </template>
-              </el-table-column>
               <el-table-column prop="type" label="数据类型" width="100" align="center">
                 <template #default="scope">
                   <el-tag size="small" effect="plain">{{ getDataTypeLabel(scope.row.type) }}</el-tag>
@@ -153,9 +148,14 @@
                 </template>
               </el-table-column>
               <el-table-column prop="description" label="名称/描述" min-width="200" show-overflow-tooltip></el-table-column>
-              <el-table-column label="字段" width="120" align="center">
+              <el-table-column label="输入参数" width="120" align="center">
                 <template #default="scope">
-                  <el-tag size="small" type="info">{{ Object.keys(scope.row.fields || {}).length }} 个字段</el-tag>
+                  <el-tag size="small" type="info">{{ Object.keys(scope.row.fields || {}).length }} 个</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="输出参数" width="120" align="center">
+                <template #default="scope">
+                  <el-tag size="small" type="success">{{ Object.keys(scope.row.outputs || {}).length }} 个</el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="150" align="center" fixed="right">
@@ -341,11 +341,11 @@
 
         <div class="dialog-section">
           <div class="section-header">
-            <span class="section-title">事件字段 (Fields)</span>
-            <el-button type="primary" size="small" :icon="Plus" @click="addParam('field')">新增字段</el-button>
+            <span class="section-title">输入参数 (Input Fields)</span>
+            <el-button type="primary" size="small" :icon="Plus" @click="addParam('field')">新增输入参数</el-button>
           </div>
           <el-table :data="fieldList" border style="width: 100%; margin-top: 12px">
-            <el-table-column prop="identify" label="字段标识" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="identify" label="参数标识" width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="description" label="描述" min-width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="type" label="数据类型" width="100" align="center">
               <template #default="scope">
@@ -361,7 +361,32 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-empty v-if="fieldList.length === 0" :image-size="60" description="暂无字段"></el-empty>
+          <el-empty v-if="fieldList.length === 0" :image-size="60" description="暂无输入参数"></el-empty>
+        </div>
+
+        <div class="dialog-section">
+          <div class="section-header">
+            <span class="section-title">输出参数 (Output Fields)</span>
+            <el-button type="primary" size="small" :icon="Plus" @click="addParam('output')">新增输出参数</el-button>
+          </div>
+          <el-table :data="outputList" border style="width: 100%; margin-top: 12px">
+            <el-table-column prop="identify" label="参数标识" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="description" label="描述" min-width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="type" label="数据类型" width="100" align="center">
+              <template #default="scope">
+                <el-tag size="small" effect="plain">{{ getDataTypeLabel(scope.row.type) }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="120" align="center" fixed="right">
+              <template #default="scope">
+                <div class="table-ops">
+                  <el-button type="primary" :icon="Edit" link @click="editParam('output', scope.row.identify)">编辑</el-button>
+                  <el-button type="danger" :icon="Delete" link @click="removeParam('output', scope.row.identify)">删除</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-empty v-if="outputList.length === 0" :image-size="60" description="暂无输出参数"></el-empty>
         </div>
       </el-form>
       <template #footer>
@@ -574,7 +599,8 @@ const state = reactive({
     identify: '',
     description: '',
     level: 'info' as 'info' | 'warning' | 'error',
-    fields: {} as Record<string, PropertyDefinition>
+    fields: {} as Record<string, PropertyDefinition>,
+    outputs: {} as Record<string, PropertyDefinition>
   },
   paramForm: {
     identify: '',
@@ -599,7 +625,7 @@ const state = reactive({
   editingActionKey: '',
   editingEventKey: '',
   editingParamKey: '',
-  editingParamType: '' as 'argument' | 'field',
+  editingParamType: '' as 'argument' | 'field' | 'output',
   currentDeviceTypeId: null as number | null
 })
 
@@ -641,6 +667,13 @@ const argumentList = computed(() => {
 
 const fieldList = computed(() => {
   return Object.entries(eventForm.value.fields || {}).map(([key, value]) => ({
+    identify: key,
+    ...value
+  }))
+})
+
+const outputList = computed(() => {
+  return Object.entries(eventForm.value.outputs || {}).map(([key, value]) => ({
     identify: key,
     ...value
   }))
@@ -818,7 +851,8 @@ const initEventForm = () => {
     identify: '',
     description: '',
     level: 'info',
-    fields: {}
+    fields: {},
+    outputs: {}
   }
 }
 
@@ -1068,15 +1102,23 @@ const submitEventForm = async () => {
 }
 
 // 参数/字段相关方法
-const addParam = (type: 'argument' | 'field') => {
+const addParam = (type: 'argument' | 'field' | 'output') => {
   initParamForm()
   isParamEdit.value = false
   editingParamType.value = type
   paramDialogVisible.value = true
 }
 
-const editParam = (type: 'argument' | 'field', key: string) => {
-  const targetMap = type === 'argument' ? actionForm.value.arguments : eventForm.value.fields
+const editParam = (type: 'argument' | 'field' | 'output', key: string) => {
+  let targetMap: Record<string, PropertyDefinition>
+  if (type === 'argument') {
+    targetMap = actionForm.value.arguments
+  } else if (type === 'field') {
+    targetMap = eventForm.value.fields
+  } else {
+    targetMap = eventForm.value.outputs
+  }
+  
   const param = targetMap[key]
   if (param) {
     paramForm.value = { identify: key, ...JSON.parse(JSON.stringify(param)) }
@@ -1087,11 +1129,13 @@ const editParam = (type: 'argument' | 'field', key: string) => {
   }
 }
 
-const removeParam = (type: 'argument' | 'field', key: string) => {
+const removeParam = (type: 'argument' | 'field' | 'output', key: string) => {
   if (type === 'argument') {
     delete actionForm.value.arguments[key]
-  } else {
+  } else if (type === 'field') {
     delete eventForm.value.fields[key]
+  } else {
+    delete eventForm.value.outputs[key]
   }
 }
 
@@ -1100,7 +1144,15 @@ const submitParamForm = async () => {
   await paramFormRef.value.validate((valid: boolean) => {
     if (valid) {
       const { identify, ...data } = paramForm.value
-      const targetMap = editingParamType.value === 'argument' ? actionForm.value.arguments : eventForm.value.fields
+      let targetMap: Record<string, PropertyDefinition>
+      
+      if (editingParamType.value === 'argument') {
+        targetMap = actionForm.value.arguments
+      } else if (editingParamType.value === 'field') {
+        targetMap = eventForm.value.fields
+      } else {
+        targetMap = eventForm.value.outputs
+      }
       
       if (isParamEdit.value && editingParamKey.value !== identify) {
         delete targetMap[editingParamKey.value]

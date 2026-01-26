@@ -211,11 +211,6 @@
                     <el-tag size="small" effect="plain">{{ getDataTypeLabel(scope.row.type) }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column prop="readOnly" label="只读" width="80" align="center">
-                  <template #default="scope">
-                    <el-tag :type="scope.row.readOnly ? 'info' : 'success'" size="small">{{ scope.row.readOnly ? '是' : '否' }}</el-tag>
-                  </template>
-                </el-table-column>
                 <el-table-column prop="unit" label="单位" width="80" align="center"></el-table-column>
                 <el-table-column label="操作" width="150" align="center" fixed="right">
                   <template #default="scope">

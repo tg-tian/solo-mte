@@ -85,11 +85,6 @@
                 <el-tag size="small" effect="plain">{{ getDataTypeLabel(scope.row.type) }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="readOnly" label="只读" width="80" align="center">
-              <template #default="scope">
-                <el-tag :type="scope.row.readOnly ? 'info' : 'success'" size="small">{{ scope.row.readOnly ? '是' : '否' }}</el-tag>
-              </template>
-            </el-table-column>
             <el-table-column prop="unit" label="单位" width="80" align="center"></el-table-column>
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template #default="scope">
@@ -378,7 +373,9 @@ const addInputParam = () => {
 
 // 删除入口参数
 const removeInputParam = (index: number) => {
-  componentForm.value.inputs.splice(index, 1)
+  if (componentForm.value.inputs) {
+    componentForm.value.inputs.splice(index, 1)
+  }
 }
 
 // 添加出口参数
@@ -391,7 +388,9 @@ const addOutputParam = () => {
 
 // 删除出口参数
 const removeOutputParam = (index: number) => {
-  componentForm.value.outputs.splice(index, 1)
+  if (componentForm.value.outputs) {
+    componentForm.value.outputs.splice(index, 1)
+  }
 }
 
 // Copy JSON
