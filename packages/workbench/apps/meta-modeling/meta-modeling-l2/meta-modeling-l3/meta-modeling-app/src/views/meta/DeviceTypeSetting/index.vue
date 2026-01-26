@@ -1147,10 +1147,20 @@ const submitParamForm = async () => {
       let targetMap: Record<string, PropertyDefinition>
       
       if (editingParamType.value === 'argument') {
+        if (!actionForm.value.arguments) {
+          actionForm.value.arguments = {}
+        }
         targetMap = actionForm.value.arguments
       } else if (editingParamType.value === 'field') {
+        if (!eventForm.value.fields) {
+          eventForm.value.fields = {}
+        }
         targetMap = eventForm.value.fields
       } else {
+        // 确保 outputs 字段存在
+        if (!eventForm.value.outputs) {
+          eventForm.value.outputs = {}
+        }
         targetMap = eventForm.value.outputs
       }
       
