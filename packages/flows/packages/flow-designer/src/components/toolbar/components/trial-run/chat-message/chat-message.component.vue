@@ -112,7 +112,7 @@
           <button
             v-if="message.canShowStopButton"
             class="action-btn stop-btn"
-            @click="$emit('stop-generation')"
+            @click="handleStopGeneration"
             title="停止生成"
           >
             <i class="f-icon f-icon-stop"></i>
@@ -156,6 +156,12 @@ interface Emits {
   (e: 'copy', content: string): void;
   (e: 'open-menu', menuInfo: any): void;
 }
+
+// 在组件中直接处理事件，避免Vue的错误边界处理
+// 事件处理函数
+const handleStopGeneration = () => {
+  emit('stop-generation');
+};
 
 const props = withDefaults(defineProps<Props>(), {
   config: () => ({

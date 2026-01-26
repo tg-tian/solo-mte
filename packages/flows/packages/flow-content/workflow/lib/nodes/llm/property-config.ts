@@ -70,6 +70,7 @@ export class NodeProperty extends BaseControlProperty {
                     editor: {
                         type: 'user-prompt-editor',
                         placeholder: '请输入用户提示词，可以使用{{}}引用输入变量',
+                        isRequired: true
                     },
                 }
             }
@@ -81,6 +82,7 @@ export class NodeProperty extends BaseControlProperty {
                     type: "array",
                     editor: {
                         type: 'fvf-json-schema-editor',
+                        readonly: true,
                     }
                 }
             }

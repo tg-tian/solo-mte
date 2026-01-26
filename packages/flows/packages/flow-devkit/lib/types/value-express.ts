@@ -29,7 +29,7 @@ export interface NodeVariableExpr extends ValueExpress {
      */
     variable: string;
     /**
-     * 字段路径
+     * 字段编号路径
      * @description 如果希望选择一个`Object`类型的变量的子字段，需要通过`fields`表明字段的路径
      */
     fields?: string[];
@@ -39,6 +39,12 @@ export interface NodeVariableExpr extends ValueExpress {
      * @description 后端不存储，仅前端内部使用，与`Parameter.id`对应
      */
     variableId?: string;
+
+    /**
+     * 字段ID路径
+     * @description 后端不存储，仅前端内部使用，与`JsonSchema.id`对应
+     */
+    fieldIds?: string[];
 }
 
 /** 系统变量值表达式 */

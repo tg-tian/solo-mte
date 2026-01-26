@@ -94,7 +94,7 @@ export function useNodeDebug() {
           } else {
             return null;
           }
-        } else if (param.type === 'object' || param.type === 'array') {
+        } else if (param.type === 'object' || param.type.includes('array')) {
           if (param.value && param.value.trim()) {
             try {
               paramValue = JSON.parse(param.value);

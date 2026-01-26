@@ -13,6 +13,7 @@ const BasicTypeReferID = {
     NumberArrayType: 'NumberArrayType',
     ObjectArrayType: 'ObjectArrayType',
     FileArrayType: 'FileArrayType',
+    ArrayType: 'ArrayType',
 } as const;
 
 export type BasicTypeReferID = keyof typeof BasicTypeReferID;
@@ -125,5 +126,12 @@ export const BasicTypeRefer: Record<BasicTypeReferID, TypeRefer> = {
             typeCode: 'File',
             typeName: 'File',
         }]
+    },
+    [BasicTypeReferID.ArrayType]: {
+        source: 'default',
+        typeId: 'list',
+        typeCode: 'Array',
+        typeName: 'Array',
+        genericTypes: []
     }
 };

@@ -16,6 +16,11 @@
       "type": "string",
       "title": "标题",
       "description": "编辑器标题"
+    },
+    "isRequired": {
+      "type": "boolean",
+      "title": "是否必填",
+      "description": "是否必填"
     }
   }
 }

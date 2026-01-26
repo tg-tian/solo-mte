@@ -34,42 +34,7 @@ export const MOCK_FLOW_METADATA: FlowMetadata = {
         inputPorts: [],
         outputPorts: [],
         graphMeta: {
-            position: { x: 80, y: 150 },
-        },
-        extension: {},
-    }, {
-        id: 'llm',
-        kind: 'LLMClient',
-        code: 'llm',
-        name: '大模型',
-        description: '',
-        inputParams: [{
-            code: 'question',
-            type: {
-                source: 'default',
-                typeId: 'string',
-                typeCode: 'String',
-                typeName: 'String',
-            },
-            valueExpr: {
-                kind: 'nodeVariable',
-                nodeCode: 'start',
-                variable: 'keyword',
-            },
-        }],
-        outputParams: [{
-            code: 'result',
-            type: {
-                source: 'default',
-                typeId: 'string',
-                typeCode: 'String',
-                typeName: 'String',
-            },
-        }],
-        inputPorts: [],
-        outputPorts: [],
-        graphMeta: {
-            position: { x: 450, y: 150 },
+            position: { x: 0, y: 0 },
         },
         extension: {},
     }, {
@@ -79,34 +44,16 @@ export const MOCK_FLOW_METADATA: FlowMetadata = {
         name: '结束',
         description: '',
         inputParams: [],
-        outputParams: [{
-            code: 'outline',
-            type: {
-                source: 'default',
-                typeId: 'string',
-                typeCode: 'String',
-                typeName: 'String',
-            },
-            valueExpr: {
-                kind: 'nodeVariable',
-                nodeCode: 'llm',
-                variable: 'result',
-            },
-        }],
+        outputParams: [],
         inputPorts: [],
         outputPorts: [],
         graphMeta: {
-            position: { x: 850, y: 150 },
+            position: { x: 1000, y: 0 },
         },
         extension: {},
     }],
     edges: [{
         sourceNodeId: 'start',
-        targetNodeId: 'llm',
-        sourcePort: 'output',
-        targetPort: 'input',
-    }, {
-        sourceNodeId: 'llm',
         targetNodeId: 'end',
         sourcePort: 'output',
         targetPort: 'input',

@@ -1,4 +1,46 @@
 .fvf-json-schema-editor {
+    .t-tree__line {
+        height: auto !important;
+        top: -16px;
+
+        &::before {
+            height: 100% !important;
+        }
+
+        &--leaf::before {
+            width: 28px !important;
+        }
+    }
+
+    .t-tree__item {
+        .t-tree__icon.t-folder-icon {
+            & {
+                align-self: flex-end;
+                bottom: 13px;
+            }
+        }
+
+        .t-tree__label {
+            padding: 0;
+            margin-left: 0;
+            cursor: default;
+            &::selection {
+                background-color: #5d59ca;
+                color: #ffffff;
+            }
+        }
+    }
+}
+
+.fvf-json-schema-editor:not(.fvf-json-schema-editor--could-collapse) {
+    .t-tree__item {
+        .t-tree__icon.t-folder-icon:empty {
+            display: none;
+        }
+    }
+}
+
+.fvf-json-schema-editor {
     display: block;
     margin-top: 8px;
 
@@ -16,34 +58,63 @@
         padding-bottom: 8px;
     }
 
-    &__placeholder {
-        width: 24px;
+    &__btn-placeholder {
+        width: 26px;
     }
 
     &__param {
         display: flex;
-        align-items: flex-start;
-        padding-bottom: 4px;
-        gap: 4px;
+        flex-direction: column;
+        border-radius: 9px;
+        padding: 4px;
+        margin-bottom: 4px;
+
+        &-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        &-details {
+            width: 100%;
+        }
+
+        &--details {
+            background-color: rgba(200, 206, 218, 0.18);
+        }
     }
 
     &__input-item {
         min-width: 0px;
     }
 
-    &__delete-btn {
+    &__field {
+        &-label {
+            margin-top: 8px;
+            margin-bottom: 4px;
+            line-height: 16px;
+            font-size: 12px;
+            color: rgba(32, 41, 69, 0.62);
+            font-weight: 400;
+        }
+    }
+
+    &__tool-btn {
         display: flex;
         overflow: hidden;
         justify-content: center;
         align-items: center;
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
         border-radius: 5px;
         user-select: none;
         cursor: pointer;
 
         &:hover {
             background-color: rgba(87, 104, 161, 0.08);
+        }
+        &.active {
+            background-color: rgba(87, 104, 161, 0.12);
         }
 
         i {
@@ -57,6 +128,7 @@
         gap: 4px;
         overflow: hidden;
         margin-top: 2px;
+        margin-left: 4px;
     }
 
     &__add.btn {
@@ -64,5 +136,17 @@
         justify-content: center;
         color: #2a87ff;
         font-size: 13px;
+    }
+}
+
+.app-font {
+    &-16 {
+        font-size: 16px !important;
+    }
+    &-15 {
+        font-size: 15px !important;
+    }
+    &-14 {
+        font-size: 14px !important;
     }
 }

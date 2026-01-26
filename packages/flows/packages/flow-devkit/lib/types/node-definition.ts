@@ -149,6 +149,9 @@ export interface NodeMetadata {
 
   /** 连接点配置 */
   ports: NodePortConfig[];
+
+  /** 自定义配置信息 */
+  extensionConfig?: any;
 }
 
 /**
@@ -272,17 +275,24 @@ type GetOutputParams = (nodeData: NodeData) => Parameter[];
 export interface NodeDefinition {
   /** 节点元数据 */
   metadata: NodeMetadata;
+
   /** 节点渲染组件 */
   component: Component<NodeProps>;
+
   /** 校验节点数据 */
   validator?: (data: NodeData) => NodeValidationResult;
+
   /**
    * 初始化节点数据
    * @description 在新建节点时将调用本方法初始化节点数据
    */
   initialData?: () => Partial<NodeData>;
+
   /** 获取节点属性面板配置 */
   getPropertyPanelConfig?: (nodeData: NodeData, node: FlowNodeInstance) => PropertyPanelConfig;
+
+  /** 属性面板默认宽度，单位`px`，优先级高于`FlowRegistry.nodePropertyPanelDefaultWidth` */
+  propertyPanelDefaultWidth?: number;
 
   /**
    * 获取供后续节点引用的参数列表

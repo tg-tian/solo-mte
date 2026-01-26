@@ -113,7 +113,7 @@ export class SSEDataProcessor {
       timestamp: Date.now(),
       isThinking: false,
       isComplete: false,
-      canShowStopButton: true,
+      canShowStopButton: true, // 初始状态：显示停止按钮
       reqId: request_id,
       qsnId: questionId,
       reasoningContent: [],

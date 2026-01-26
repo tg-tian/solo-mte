@@ -30,6 +30,10 @@ export default defineComponent({
         // };
 
         const addClassifier = () => {
+            // 限制最多只能添加5个分类器
+            if ((props.modelValue || []).length >= 5) {
+                return;
+            }
             const timestamp = Date.now();
             const randomId = Math.random().toString(36).substr(2, 9);
             const newClassifier: IntentClass = {
@@ -89,6 +93,8 @@ export default defineComponent({
                         icon="f-icon-add"
                         onClick={addClassifier}
                         class="add-btn"
+                        disabled={(props.modelValue || []).length >= 5}
+                        title={(props.modelValue || []).length >= 5 ? '最多只能添加5个分类器' : '新增分类器'}
                     >
                         新增
                     </f-button>

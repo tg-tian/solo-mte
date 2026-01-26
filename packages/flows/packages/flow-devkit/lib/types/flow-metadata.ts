@@ -1,5 +1,7 @@
 import type { SizeSchema } from './node-definition';
 import type { TypeRefer } from './type';
+import type { JsonSchema } from './json-schema';
+import type { InputHelp } from './input-help';
 import type { EdgeComponent, Styles } from '@vue-flow/core';
 
 /** 流程元数据 */
@@ -103,8 +105,8 @@ export interface Parameter {
      */
     code: string;
     /**
-     * 参数名称
-     * @description 后端不存储`name`字段，仅前端内部使用
+     * 显示名称
+     * @description 在`试运行`面板中，如果`显示名称`非空则显示`显示名称`，否则显示`参数编号`
      */
     name?: string;
     /** 参数描述 */
@@ -113,6 +115,8 @@ export interface Parameter {
     type: TypeRefer;
     /** 参数值 */
     valueExpr?: ValueExpress;
+    /** @deprecated 本字段无效，请使用`valueExpr`字段 */
+    value?: any;
     /** 是否必填 */
     required?: boolean;
     /**
@@ -130,6 +134,9 @@ export interface Parameter {
      * @description 当`type`为`Object`或`Array<Object>`时，通过本字段描述`Object`的结构
      */
     schema?: JsonSchema;
+
+    /** 输入帮助设置 */
+    inputHelp?: InputHelp;
 }
 
 export type JsonNode = Record<string, any>;
@@ -149,7 +156,14 @@ export interface ValueExpress {
     [key: string]: any;
 }
 
-export type JsonSchema = any;  // 待定
+/**
+ * 值表达式的类型
+ * @description 根据值表达式`ValueExpress`推断得到的类型信息
+ */
+export interface ValueExpressType {
+    type: TypeRefer;
+    schema?: JsonSchema;
+}
 
 /** 节点的画布信息 */
 export interface NodeGraphMeta {

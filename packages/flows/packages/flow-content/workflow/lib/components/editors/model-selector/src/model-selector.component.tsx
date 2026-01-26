@@ -22,7 +22,7 @@ export default defineComponent({
 
     // 当前选中的值
     const modelValue = ref(props.modelValue);
-    const modelId = ref(props.modelValue.modelId);
+    const modelId = computed(() => props.modelValue.modelId);
     const nodeData = computed(() => props.nodeData);
 
     /**
@@ -52,13 +52,13 @@ export default defineComponent({
       const modelInfo = comboData.value.find((item) => item.modelId === newValue);
       console.log('modelInfo', modelInfo);
       // 保留现有的 modelInfo 属性，只更新模型相关属性
-      modelValue.value = {
+      const newModelValue = {
         ...modelValue.value,
         modelId: modelInfo?.modelId,
         modelName: modelInfo?.modelName,
-      }
+      };
 
-      emit('update:modelValue', modelValue.value);
+      emit('update:modelValue', newModelValue);
     }
 
     onMounted(() => {
@@ -131,6 +131,13 @@ export default defineComponent({
           onTopPInputChange={topPInputChange}
         />
       </div>
+
+      {/* 为空提示 - 在整个组件下方 */}
+      {!modelId.value && (
+        <div class="model-selector-empty-tip" title="请选择一个模型以继续">
+          请选择一个模型以继续
+        </div>
+      )}
       </div>
     );
   },

@@ -42,6 +42,7 @@ export function useModal(
   const treeGridComponentInstance = ref<any>();
   const dataGridRef = ref<any>();
   const agentFilterValue = ref('');
+  let agentDataTotal = 0;
 
   function closeModal(): void {
     if (modalInstance.value) {
@@ -75,19 +76,21 @@ export function useModal(
    * 智能体名称筛选处理
    */
   const onAgentFilterChange = (value: string) => {
+
     agentFilterValue.value = value;
+
     if (!value || value.trim() === '') {
-      filteredAgentData.value = [...agentData.value];
+      fetchAgentList(currentTagId.value, '');
     } else {
       const filterValue = value.toLowerCase().trim();
-      filteredAgentData.value = agentData.value.filter((item: any) =>
-        item.agentName && item.agentName.toLowerCase().includes(filterValue)
-      );
+       pagination.value = {
+        ...pagination.value,
+        index: 1
+      };
+      fetchAgentList(currentTagId.value, filterValue);
     }
-
     // 更新表格数据源并清除选中状态
     if (dataGridRef.value) {
-      dataGridRef.value.updateDataSource(filteredAgentData.value);
       dataGridRef.value.clearSelection?.(); // 清除表格的选中状态
     }
 
@@ -202,6 +205,11 @@ export function useModal(
     // 清空筛选框和选中状态
     agentFilterValue.value = '';
     selectedData.value = [];
+    // 更新分页配置
+    pagination.value = {
+      ...pagination.value,
+      index: 1
+    };
 
     // 获取该分类下的智能体列表
     fetchAgentList(tagId);
@@ -211,27 +219,63 @@ export function useModal(
   const currentTagId = ref<string | null>(null);
 
   /**
+   * 获取当前语言
+   */
+  const getCurrentLang = () => {
+    const langKey = localStorage.getItem('languageCode');
+    if(langKey === 'zh-CHS') return 'cafMlcchs';
+    if(langKey === 'en') return 'cafMlcen';
+    if(langKey === 'zh-CHT') return 'cafMlccht';
+    return 'cafMlcchs';
+  }
+
+  /**
    * 获取智能体列表
    */
-  const fetchAgentList = async (tagId: string | null) => {
+  const fetchAgentList = async (tagId: string | null, agentName: string | null = null) => {
     try {
       const requestData: any = {
         startDateTime: "",
         endDateTime: "",
         orderCondition: "createdOn",
         orderType: "desc",
-        tagId: tagId
+        tagId: tagId,
+        agentName: agentName,
+        page: pagination.value.index - 1,
+        pageSize: pagination.value.size
       };
 
       const res = await post('/runtime/sys/v1.0/aiAgentBuilder/authFilter/agent', requestData);
-
-      if (!res || !Array.isArray(res)) {
+      if (!res) {
         agentData.value = [];
         return;
       }
 
+      // 更新分页配置
+      pagination.value = {
+        ...pagination.value,
+        total: res.pagination.totalCount
+      };
+
+      agentDataTotal = res.pagination.totalCount;
+
+
       // 只展示canEdit为false的智能体
-      agentData.value = res.filter((agent: any) => agent.canEdit === false);
+      // agentData.value = res.resultList.filter((agent: any) => agent.canEdit === false).map((agent: any) => {
+      //   const currentLang = getCurrentLang();
+      //   return {
+      //     ...agent,
+      //     agentName: agent.agentNameI18n?.[currentLang] || ''
+      //   };
+      // });
+      agentData.value = res.resultList.map((agent: any) => {
+        const currentLang = getCurrentLang();
+        return {
+          ...agent,
+          agentName: agent.agentNameI18n?.[currentLang] || '',
+          disabled: agent.canEdit
+        };
+      });
 
       // 应用筛选
       if (!agentFilterValue.value || agentFilterValue.value.trim() === '') {

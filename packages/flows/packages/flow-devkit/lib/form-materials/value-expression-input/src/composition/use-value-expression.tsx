@@ -1,10 +1,10 @@
 import type { Ref } from 'vue';
-import type { ValueExpress, NodeVariableExpr, SystemVariableExpr, Parameter, MethodInvokeExpr } from '@farris/flow-devkit/types';
+import type { ValueExpress, NodeVariableExpr, SystemVariableExpr, MethodInvokeExpr } from '@farris/flow-devkit/types';
 import { ValueExpressKind } from '@farris/flow-devkit/types';
-import { useBem } from '@farris/flow-devkit/utils';
+import { useBem, ParamValidateUtils } from '@farris/flow-devkit/utils';
 import { getNodeVariables, useFlow } from '@farris/flow-devkit/composition';
 import { VALUE_EXPRESSION_INPUT_NAME } from '../value-expression-input.props';
-import { useTypeDetails, type NodeVariables } from '@farris/flow-devkit/composition';
+import { type NodeVariables } from '@farris/flow-devkit/composition';
 import { useMethodTypes } from '@farris/flow-devkit/hooks';
 
 interface RenderOptions {
@@ -22,21 +22,7 @@ export function useValueExpression(options?: RenderOptions) {
   const { bem } = useBem(VALUE_EXPRESSION_INPUT_NAME);
   const nodeVarsList = options?.nodeVariables ? options.nodeVariables : getNodeVariables();
   const useFlowComposition = useFlow();
-  const { hasNestedFieldPath } = useTypeDetails();
   const { mergedMethodTypes } = useMethodTypes();
-
-  function getTargetParameter(express: NodeVariableExpr, params: Parameter[]): Parameter | undefined {
-    const targetById = params.find((item) => {
-      return item.id === express.variableId && item.id && item.code;
-    });
-    if (targetById) {
-      return targetById;
-    }
-    const targetByCode = params.find((item) => {
-      return item.code === express.variable && item.code;
-    });
-    return targetByCode;
-  }
 
   function getNodeNameByNodeCode(nodeCode: string): string {
     const node = useFlowComposition?.getNodeByCode?.(nodeCode);
@@ -52,6 +38,7 @@ export function useValueExpression(options?: RenderOptions) {
     nodeName?: string;
     nodeIcon?: string;
     paramCode?: string;
+    fieldCodes?: string[];
   } {
     const nodeCode = express.nodeCode;
     const nodeVariables = nodeVarsList.value.find(
@@ -62,29 +49,30 @@ export function useValueExpression(options?: RenderOptions) {
       return { isDefined: false, nodeName, paramCode: express.variable };
     }
     const targetNode = nodeVariables.node;
-    const targetParam = getTargetParameter(express, nodeVariables.params || []);
-    const isFieldsValid = hasNestedFieldPath(targetParam?.type, express.fields);
+    const targetParam = ParamValidateUtils.getTargetParameter(express, nodeVariables.params || []);
+    const { isFieldsValid, fields } = ParamValidateUtils.isNodeVariableFieldsValid(express, targetParam);
     const isDefined = !!targetNode && !!targetParam && isFieldsValid;
     if (!isDefined) {
       const nodeName = getNodeNameByNodeCode(nodeCode);
-      return { isDefined, nodeName, paramCode: express.variable };
+      return { isDefined, nodeName, paramCode: express.variable, fieldCodes: fields };
     }
     const nodeName = targetNode.data.name || targetNode.metadata.label || '';
     const nodeIcon = targetNode.metadata.icon || '';
     const paramCode = targetParam.code || '';
-    return { isDefined, nodeName, nodeIcon, paramCode };
+    return { isDefined, nodeName, nodeIcon, paramCode, fieldCodes: fields };
   }
 
-  function getFieldsText(express: NodeVariableExpr): string {
-    if (!express || !express.fields || !express.fields.length) {
+  function getFieldsText(express: NodeVariableExpr, fields?: string[]): string {
+    const fieldCodes = fields || express?.fields;
+    if (!fieldCodes || !fieldCodes.length) {
       return '';
     }
-    return `.${express.fields.join('.')}`;
+    return `.${fieldCodes.join('.')}`;
   }
 
   function renderNodeVariable(express: NodeVariableExpr) {
-    const fields = getFieldsText(express);
-    const { isDefined, nodeName, nodeIcon, paramCode } = getNodeVariableInfo(express);
+    const { isDefined, nodeName, nodeIcon, paramCode, fieldCodes } = getNodeVariableInfo(express);
+    const fields = getFieldsText(express, fieldCodes);
     const undefinedText = '未定义';
 
     if (!isDefined && (!nodeName || !paramCode)) {

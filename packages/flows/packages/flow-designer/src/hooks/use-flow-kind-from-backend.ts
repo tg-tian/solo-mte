@@ -26,6 +26,7 @@ import { useCanvasMask } from './use-canvas-mask';
 import type { FlowDesignerProps } from '@flow-designer/components/flow-designer';
 import type { UseFlowKind } from './types';
 import { useEdgeTypes } from './use-edge-types';
+import { useDeviceNodes } from './use-device-nodes';
 
 declare const System: any;
 
@@ -55,6 +56,7 @@ export function useFlowKindFromBackend(flowDesignerProps?: FlowDesignerProps): U
     const canvasMask = useCanvasMask();
     const notifyService = useNotify();
     const { registerCustomEdges } = useEdgeTypes();
+    const { registerDeviceNodes } = useDeviceNodes();
 
     function getNodeCategories() {
         return currentNodeCategories;
@@ -282,10 +284,16 @@ export function useFlowKindFromBackend(flowDesignerProps?: FlowDesignerProps): U
         allNodeCategories.value = generateNodePanelCategories(allFlowNodeGroups.value);
     }
 
+    function appendNodePanelCategories(categories: NodePanelCategory[]): void {
+        currentNodeCategories.value.push(...categories);
+    }
+
     async function initFlowContent(flowType: string, flowMetadata: FlowMetadata): Promise<boolean> {
         registerNodes(BUILTIN_NODES);
         if (mockFlowRegistry) {
             handleMockFlowRegistry(mockFlowRegistry);
+            const newNodePanelCategories = await registerDeviceNodes();
+            appendNodePanelCategories(newNodePanelCategories);
             return true;
         }
         const isRegistryInfoLoaded = await loadAllRegistryInfo(flowType);
@@ -294,6 +302,8 @@ export function useFlowKindFromBackend(flowDesignerProps?: FlowDesignerProps): U
         }
         await loadOtherFlowContents(flowMetadata);
         updateNodeCategories();
+        const newNodePanelCategories = await registerDeviceNodes();
+        appendNodePanelCategories(newNodePanelCategories);
         return true;
     }
 

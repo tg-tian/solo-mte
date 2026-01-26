@@ -1,7 +1,7 @@
 import { markRaw } from 'vue';
 import type { NodeDefinition } from '@farris/flow-devkit';
 import { agentIcon } from '@/assets';
-import { BasicTypeRefer, BuiltinNodeType } from '@farris/flow-devkit';
+import { BasicTypeRefer, BuiltinNodeType, ValidateUtils } from '@farris/flow-devkit';
 import NodeComponent from './node.component.vue';
 import { NodeProperty } from './property-config';
 import { CustomNodeType } from '@/types/node-type';
@@ -50,4 +50,11 @@ export const AGENT_NODE: NodeDefinition = {
         return config.getPropertyConfig(nodeData);
     },
     afterEdgeAddOrRemove: createStreamingOutputChecker(),
+        validator: (nodeData) => {
+        return ValidateUtils.mergeNodeValidationResult(
+            ValidateUtils.validateParameters(nodeData.inputParams, {
+                nodeData,
+            }),
+        );
+    },
 };

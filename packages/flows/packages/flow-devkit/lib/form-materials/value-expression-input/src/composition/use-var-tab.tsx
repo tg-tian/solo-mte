@@ -1,12 +1,11 @@
 import { computed, ref, watch } from 'vue';
 import { type VisualDataCell } from '@farris/ui-vue';
 import { VALUE_EXPRESSION_INPUT_NAME, type ValueExpressionInputProps } from '../value-expression-input.props';
-import type { FlowNodeInstance, Parameter, TypeField, TypeRefer } from '@farris/flow-devkit/types';
-import { ValueExpressUtils } from '@farris/flow-devkit/utils';
+import type { FlowNodeInstance, Parameter, TypeField, TypeRefer, JsonSchema, ValueExpressionResult } from '@farris/flow-devkit/types';
+import { ValueExpressUtils, JsonSchemaUtils } from '@farris/flow-devkit/utils';
 import { useBem } from '@farris/flow-devkit/utils';
 import { getNodeVariables, getWritableNodeVariables } from '@farris/flow-devkit/composition';
 import { useTypeDetails } from '@farris/flow-devkit/composition';
-import type { GetValueResult } from './types';
 
 interface TreeNodeData {
   /** 所属节点 */
@@ -14,10 +13,16 @@ interface TreeNodeData {
   /** 所属参数 */
   param?: Parameter;
   /** 字段路径 */
-  fields?: TypeField[];
+  fieldPath?: TypeField[];
   /** 目标字段 */
   field?: TypeField;
+  /** schema路径 */
+  schemaPath?: JsonSchema[];
+  /** schema字段 */
+  schema?: JsonSchema;
 }
+
+type TreeNodeDataType = 'Parameter' | 'TypeField' | 'Schema';
 
 interface TreeNode {
   id: string;
@@ -28,10 +33,8 @@ interface TreeNode {
 }
 
 export function useVarTab(props: ValueExpressionInputProps) {
-  const onlyAllowArrayType = props.onlyAllowArrayType;
-  const typeFilter = props.typeFilter;
-
   const { bem } = useBem(VALUE_EXPRESSION_INPUT_NAME);
+
   const nodeVariables = props.nodeVariables ? props.nodeVariables : getNodeVariables();
   const writableNodeVariables = props.writableNodeVariables ? props.writableNodeVariables : getWritableNodeVariables();
   const nodeVarsList = computed(() => props.onlyAllowWritableVariable ? writableNodeVariables.value : nodeVariables.value);
@@ -41,77 +44,169 @@ export function useVarTab(props: ValueExpressionInputProps) {
     getTypeCode,
     getTypeName,
     isListType,
+    getListDepth,
     getListItemType,
     loadType,
+    wrapTypeWithArray,
   } = useTypeDetails();
 
   const selectedTreeNode = ref<TreeNode>();
 
-  function generateChildNodes(
+  function getTypeRefer(data: Parameter | TypeField | JsonSchema): TypeRefer | undefined {
+    if ('type' in data && typeof data.type === 'object') {
+      return data.type;
+    }
+    return JsonSchemaUtils.getTypeRefer(data);
+  }
+
+  function createParameterTreeNode(
     parentId: string,
-    data: Parameter | TypeField,
-    dataType: 'Parameter' | 'TypeField',
     node: FlowNodeInstance,
     param: Parameter,
-    fieldPath: TypeField[] = [],
+  ): TreeNode {
+    return {
+      id: `${parentId}_param_${param.id || param.code}`,
+      data: {
+        node,
+        param,
+      },
+      parent: parentId,
+      collapse: true,
+    };
+  }
+
+  function createTypeFieldTreeNode(
+    parentId: string,
+    node: FlowNodeInstance,
+    param: Parameter,
+    field: TypeField,
+    fieldPath: TypeField[],
+  ): TreeNode {
+    return {
+      id: `${parentId}_field_${field.code}`,
+      data: {
+        node,
+        param,
+        fieldPath,
+        field,
+      },
+      parent: parentId,
+      collapse: true,
+    };
+  }
+
+  function createJsonSchemaTreeNode(
+    parentId: string,
+    node: FlowNodeInstance,
+    param: Parameter,
+    schema: JsonSchema,
+    schemaPath: JsonSchema[],
+  ): TreeNode | undefined {
+    if (!schema || !schema.code) {
+      return undefined;
+    }
+    return {
+      id: `${parentId}_schema_${schema.id || schema.code}`,
+      data: {
+        node,
+        param,
+        schemaPath,
+        schema,
+      },
+      parent: parentId,
+      collapse: false,
+    };
+  }
+
+  function isTypeValid(
+    data: Parameter | TypeField | JsonSchema,
+    param: Parameter,
+    path: TypeField[] | JsonSchema[],
+  ): boolean {
+    const typeRefer = getTypeRefer(data);
+    if (typeof props.typeFilter === 'function' && typeRefer) {
+      const result = props.typeFilter(typeRefer);
+      if (!result) {
+        return false;
+      }
+    }
+    if (props.onlyAllowArrayType) {
+      const hasListType = [param, ...path].some((item) => {
+        const itemTypeRefer = getTypeRefer(item);
+        return isListType(itemTypeRefer);
+      });
+      if (!hasListType) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function generateChildNodes(
+    parentId: string,
+    data: Parameter | TypeField | JsonSchema,
+    dataType: TreeNodeDataType,
+    node: FlowNodeInstance,
+    param: Parameter,
+    path: TypeField[] | JsonSchema[] = [],
   ): TreeNode[] {
     const nodes: TreeNode[] = [];
-    const typeRefer = 'type' in data ? data.type : undefined;
+    const typeRefer = getTypeRefer(data);
     const currentType = typeRefer ? fullTypeID2Type.get(getFullTypeID(typeRefer)) : undefined;
 
     let currentNode: TreeNode;
     if (dataType === 'Parameter') {
-      const paramData = data as Parameter;
-      currentNode = {
-        id: `${parentId}_param_${paramData.id || paramData.code}`,
-        data: {
-          node,
-          param: paramData,
-          fields: undefined,
-          field: undefined,
-        },
-        parent: parentId,
-        collapse: true,
-      };
+      currentNode = createParameterTreeNode(parentId, node, param);
+    } else if (dataType === 'TypeField') {
+      currentNode = createTypeFieldTreeNode(parentId, node, param, data as TypeField, path as TypeField[]);
     } else {
-      const fieldData = data as TypeField;
-      currentNode = {
-        id: `${parentId}_field_${fieldData.code}`,
-        data: {
-          node,
-          param,
-          fields: fieldPath,
-          field: fieldData,
-        },
-        parent: parentId,
-        collapse: true,
-      };
+      currentNode = createJsonSchemaTreeNode(parentId, node, param, data as JsonSchema, path as JsonSchema[])!;
+    }
+    if (!currentNode) {
+      return [];
     }
 
-    const isValid = (() => {
-      if (typeof typeFilter === 'function' && typeRefer) {
-        return typeFilter(typeRefer);
-      }
-      if (onlyAllowArrayType) {
-        return !!typeRefer && isListType(typeRefer);
-      }
-      return true;
-    })();
+    const isValid = isTypeValid(data, param, path);
+    if (!isValid) {
+      currentNode.disabled = true;
+    }
 
     const childNodes: TreeNode[] = [];
-    const targetType = isListType(typeRefer) ? getListItemType(typeRefer) : currentType;
-    const childFields = targetType?.fields || [];
-    childFields.forEach((field) => {
-      const children = generateChildNodes(
-        currentNode.id,
-        field,
-        'TypeField',
-        node,
-        param,
-        [...fieldPath, field],
-      );
-      childNodes.push(...children);
-    });
+    if (dataType !== 'Schema') {
+      const targetType = isListType(typeRefer) ? getListItemType(typeRefer) : currentType;
+      const childFields = targetType?.fields || [];
+      childFields.forEach((field) => {
+        const children = generateChildNodes(
+          currentNode.id,
+          field,
+          'TypeField',
+          node,
+          param,
+          [...(path as TypeField[]), field],
+        );
+        childNodes.push(...children);
+      });
+    }
+    if (dataType === 'Parameter' || dataType === 'Schema') {
+      const currentSchema = dataType === 'Schema' ? data as JsonSchema : param.schema;
+      const objectProperties = JsonSchemaUtils.getObjectProperties(currentSchema);
+      if (Array.isArray(objectProperties)) {
+        objectProperties.forEach((property) => {
+          const children = generateChildNodes(
+            currentNode.id,
+            property,
+            'Schema',
+            node,
+            param,
+            [...(path as JsonSchema[]), property],
+          );
+          childNodes.push(...children);
+          if (children.length) {
+            currentNode.collapse = false;
+          }
+        });
+      }
+    }
 
     if (isValid || childNodes.length > 0) {
       nodes.push(currentNode);
@@ -163,7 +258,7 @@ export function useVarTab(props: ValueExpressionInputProps) {
           data: {
             node,
             param: undefined,
-            fields: undefined,
+            fieldPath: undefined,
             field: undefined,
           },
           parent: '',
@@ -202,12 +297,34 @@ export function useVarTab(props: ValueExpressionInputProps) {
     );
   }
 
-  function renderParamRow(data: TreeNodeData) {
+  function getNodeTitle(data: TreeNodeData): string {
     const param = data.param!;
-    const field = data.field;
-    const nodeTitle = field ? field.code : (param.name || param.code);
-    const nodeSubTitle = field ? field.name : '';
-    const typeRefer = field ? field.type : param.type;
+    if (data.schema) {
+      return data.schema.code;
+    }
+    if (data.field) {
+      return data.field.code;
+    }
+    return (param.name || '').trim() || param.code;
+  }
+
+  function getNodeSubTitle(data: TreeNodeData): string | undefined {
+    if (data.field) {
+      return data.field.name;
+    }
+  }
+
+  function getNodeTypeRefer(data: TreeNodeData): TypeRefer | undefined {
+    if (data.schema) {
+      return JsonSchemaUtils.getTypeRefer(data.schema);
+    }
+    return data.field ? data.field.type : data.param!.type;
+  }
+
+  function renderParamRow(data: TreeNodeData) {
+    const nodeTitle = getNodeTitle(data);
+    const nodeSubTitle = getNodeSubTitle(data);
+    const typeRefer = getNodeTypeRefer(data);
     const typeCode = getTypeCode(typeRefer);
     const typeName = getTypeName(typeRefer);
     return (
@@ -258,50 +375,33 @@ export function useVarTab(props: ValueExpressionInputProps) {
     );
   }
 
-  function wrapTypeWithArray(itemType: TypeRefer, count: number): TypeRefer {
-    let wrappedType = itemType;
-    while (count > 0) {
-      --count;
-      wrappedType = {
-        source: 'default',
-        typeId: 'list',
-        typeCode: `Array<${wrappedType.typeCode || wrappedType.typeId}>`,
-        typeName: `Array<${wrappedType.typeName || wrappedType.typeCode || wrappedType.typeId}>`,
-        genericTypes: [wrappedType],
-      };
+  function getNewType(nodeData: TreeNodeData): TypeRefer {
+    const { param, fieldPath, schemaPath } = nodeData;
+    if (!fieldPath && !schemaPath) {
+      return param!.type;
     }
-    return wrappedType;
-  }
-
-  function getNewType(param: Parameter, fields?: TypeField[]): TypeRefer {
-    if (!fields || !fields.length) {
-      return param.type;
-    }
-    const itemType = fields[fields.length - 1].type;
-    const parentTypes = [
-      param.type,
-      ...fields.slice(0, -1).map(field => field.type),
-    ];
+    const pathTypes = (fieldPath || schemaPath)!.map((item) => getTypeRefer(item)).filter(type => !!type);
+    const itemType = pathTypes[pathTypes.length - 1];
+    const parentTypes = [param!.type, ...pathTypes.slice(0, -1)];
     let listParentCount = 0;
     parentTypes.forEach(parentType => {
-      if (isListType(parentType)) {
-        ++listParentCount;
-      }
+      listParentCount += getListDepth(parentType);
     });
     return wrapTypeWithArray(itemType, listParentCount);
   }
 
-  function getNodeVariableExpr(): GetValueResult | string {
+  function getNodeVariableExpr(): ValueExpressionResult {
     if (!selectedTreeNode.value || !selectedTreeNode.value.data.param) {
-      return '请选择一个节点变量';
+      return { errorTip: '请选择一个节点变量' };
     }
     const data = selectedTreeNode.value.data;
     const param = data.param!;
     const node = data.node!;
-    const fields = (data.fields || []).map(field => (field.code || ''));
-    const type = getNewType(param, data.fields);
+    const fields = (data.fieldPath || data.schemaPath || []).map(field => (field.code || ''));
+    const fieldIds = (data.schemaPath || []).map(field => (field.id || ''));
+    const type = getNewType(data);
     return {
-      express: ValueExpressUtils.createNodeVariableExpr(param, node, fields),
+      express: ValueExpressUtils.createNodeVariableExpr(param, node, fields, fieldIds),
       type,
     };
   }

@@ -7,17 +7,22 @@ import { resolve } from 'path';
 export default defineConfig({
     plugins: [vue(), vueJsx()],
     server: {
-        // proxy: {
-        //     "/api": {
-        //         target: "http://localhost:5200",
-        //         changeOrigin: true,
-        //         secure: false
-        //     }
-        // }
+        proxy: {
+            "/api": {
+                target: "http://localhost:5200",
+                changeOrigin: true,
+                secure: false
+            },
+            "/platform": {
+                target: "http://localhost:5200",
+                changeOrigin: true,
+                secure: false
+            }
+        }
     },
     resolve: {
         alias: {
-            '@farris/ui-vue': resolve(__dirname, '../ui-vue'),
+            '@farris/ui-vue': resolve(__dirname, './node_modules/@farris/ui-vue'),
             '@farris/code-editor-vue': resolve(__dirname, '../code-editor')
         }
     }

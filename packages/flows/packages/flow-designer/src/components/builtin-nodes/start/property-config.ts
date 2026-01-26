@@ -24,6 +24,8 @@ export class NodeProperty extends BaseControlProperty {
                     type: "array",
                     editor: {
                         type: 'fvf-json-schema-editor',
+                        canEditName: true,
+                        canEditInputHelp: true,
                     }
                 }
             }

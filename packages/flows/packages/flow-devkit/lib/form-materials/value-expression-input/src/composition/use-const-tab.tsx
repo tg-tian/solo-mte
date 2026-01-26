@@ -7,12 +7,12 @@ import type {
   NumberConstExpr,
   BoolConstExpr,
   StringsConstExpr,
+  ValueExpressionResult,
 } from '@farris/flow-devkit/types';
 import { ValueExpressKind, BasicTypeRefer } from '@farris/flow-devkit/types';
 import { ValueExpressUtils, ParameterUtils } from '@farris/flow-devkit/utils';
 import { useBem } from '@farris/flow-devkit/utils';
 import { JsonEditor } from '../components';
-import type { GetValueResult } from './types';
 
 export function useConstTab(props: ValueExpressionInputProps) {
   const onlyAllowArrayType = props.onlyAllowArrayType;
@@ -49,7 +49,7 @@ export function useConstTab(props: ValueExpressionInputProps) {
     },
   }
 
-  function getConstExpr(): GetValueResult | string {
+  function getConstExpr(): ValueExpressionResult {
     switch (inputType.value) {
       case 'string':
         return {
@@ -82,7 +82,7 @@ export function useConstTab(props: ValueExpressionInputProps) {
         type: BasicTypeRefer.StringArrayType,
       };
     } catch {
-      return '请输入合法的字符串集合';
+      return { errorTip: '请输入合法的字符串集合' };
     }
   }
 

@@ -123,10 +123,26 @@ export function useTypeDetails() {
         return isArray(typeRefer) || isCollection(typeRefer) || isIterable(typeRefer);
     }
 
+    /**
+     * 计算列表的层数
+     * @description 如果是二维列表则返回`2`，如果是三维列表则返回`3`，计算到第一个非列表元素为止
+     * @param typeRefer 类型
+     * @returns 列表的层数
+     */
+    function getListDepth(typeRefer?: TypeRefer, count = 0): number {
+        if (!typeRefer || !isListType(typeRefer)) {
+            return count;
+        }
+        return getListDepth(typeRefer.genericTypes?.[0], count + 1);
+    }
+
     function getListItemType(typeRefer?: TypeRefer): Type | undefined {
         const itemTypeRefer = typeRefer?.genericTypes?.[0];
         if (!itemTypeRefer) {
             return undefined;
+        }
+        if (isListType(itemTypeRefer)) {
+            return getListItemType(itemTypeRefer);
         }
         return fullTypeID2Type.get(getFullTypeID(itemTypeRefer));
     }
@@ -209,6 +225,21 @@ export function useTypeDetails() {
         return _getTypeName(typeRefer);
     }
 
+    function wrapTypeWithArray(itemType: TypeRefer, count: number): TypeRefer {
+        let wrappedType = itemType;
+        while (count > 0) {
+            --count;
+            wrappedType = {
+                source: 'default',
+                typeId: 'list',
+                typeCode: `Array<${wrappedType.typeCode || wrappedType.typeId}>`,
+                typeName: `Array<${wrappedType.typeName || wrappedType.typeCode || wrappedType.typeId}>`,
+                genericTypes: [wrappedType],
+            };
+        }
+        return wrappedType;
+    }
+
     function hasNestedFieldPath(typeRefer?: TypeRefer, fields?: string[]): boolean {
         if (!fields || !fields.length) {
             return true;
@@ -235,6 +266,31 @@ export function useTypeDetails() {
             : true;
     }
 
+    function getFieldTypeRefer(typeRefer?: TypeRefer, fields?: string[], listDepth = 0): TypeRefer | undefined {
+        if (!typeRefer) {
+            return undefined;
+        }
+        if (!fields || !fields.length) {
+            return wrapTypeWithArray(typeRefer, listDepth);
+        }
+        const currentType = isListType(typeRefer)
+            ? getListItemType(typeRefer)
+            : fullTypeID2Type.get(getFullTypeID(typeRefer));
+        if (!currentType) {
+            return undefined;
+        }
+        const listDepthAdder = getListDepth(typeRefer);
+        const currentFieldName = fields[0];
+        const remainingFields = fields.slice(1);
+        const matchedField = currentType.fields?.find(
+            (field) => field.code === currentFieldName
+        );
+        if (!matchedField) {
+            return undefined;
+        }
+        return getFieldTypeRefer(matchedField.type, remainingFields, listDepth + listDepthAdder);
+    }
+
     return {
         fullTypeID2Type,
         getFullTypeID,
@@ -248,8 +304,11 @@ export function useTypeDetails() {
         isCollection,
         isIterable,
         isListType,
+        getListDepth,
         getListItemType,
         getListItemTypeRefer,
         hasNestedFieldPath,
+        wrapTypeWithArray,
+        getFieldTypeRefer,
     };
 }

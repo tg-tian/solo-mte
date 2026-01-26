@@ -4,6 +4,9 @@ import { SELECTOR_NODE } from './selector';
 import { LOOP_NODE } from './loop';
 import { VARIABLE_DEF_NODE } from './variable-def';
 import { VARIABLE_ASSIGN_NODE } from './variable-assign';
+import { METHOD_INVOKE_NODE } from './method-invoke';
+import { DEVICE_CALL_NODE } from './device-call';
+import { DEVICE_EVENT_LISTEN_NODE } from './device-event-listen';
 
 export const BUILTIN_NODES = [
     START_NODE,
@@ -12,4 +15,11 @@ export const BUILTIN_NODES = [
     LOOP_NODE,
     VARIABLE_DEF_NODE,
     VARIABLE_ASSIGN_NODE,
+    METHOD_INVOKE_NODE,
+    DEVICE_EVENT_LISTEN_NODE,
 ];
+
+export {
+    DEVICE_CALL_NODE,
+    DEVICE_EVENT_LISTEN_NODE,
+};

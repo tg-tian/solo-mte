@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useTrialRun } from './composables/use-trial-run';
-import { TPopup } from '@farris/flow-devkit';
 import ParamList from './param-list.vue';
 import RunResult from './run-result.vue';
 import ChatDebug from './chat-debug.vue';
@@ -22,15 +21,13 @@ const {
   activeTab,
   runResult,
   inputParams,
+  startNodeData,
   updateParamValue,
   runWorkflow,
 } = useTrialRun();
 
 // 当前调试模式
 const debugMode = ref<'param' | 'chat'>('param');
-
-// 用户输入字段相关状态
-const showUserInputFields = ref(false);
 
 const isChatFlow = computed(() => {
   return props.flowType === 'chatflow';
@@ -40,20 +37,10 @@ const isChatFlow = computed(() => {
 onMounted(() => {
   if (isChatFlow.value) {
     debugMode.value = 'chat';
-    // 检查是否需要显示用户输入字段
-    checkAndShowUserInputFields();
   } else {
     debugMode.value = 'param';
   }
 });
-
-// 检查并显示用户输入字段
-function checkAndShowUserInputFields() {
-  // 如果有输入参数，显示用户输入字段
-  if (inputParams.value.length > 0) {
-    showUserInputFields.value = true;
-  }
-}
 
 
 // 定义组件事件
@@ -69,39 +56,6 @@ defineEmits<{
         <h3 class="panel-title">
           {{ isChatFlow ? '对话流调试' : '试运行' }}
         </h3>
-        <!-- 用户输入字段按钮 -->
-        <TPopup
-          v-if="isChatFlow && inputParams.length > 0"
-          trigger="click"
-          placement="bottom"
-          overlayInnerClassName="user-input-popup"
-          :z-index="9999"
-        >
-          <button
-            class="user-input-btn"
-            title="用户输入字段"
-          >
-            <i class="f-icon f-icon-saturation"></i>
-          </button>
-          <template #content>
-            <div style="width: 320px; min-width: 320px;">
-              <div class="popup-header">
-                <h3>用户输入字段</h3>
-                <button class="popup-close">
-                  <i class="f-icon f-icon-close"></i>
-                </button>
-              </div>
-
-              <div class="popup-content">
-                <param-list
-                  :input-params="inputParams"
-                  @update-param="updateParamValue"
-                />
-              </div>
-
-            </div>
-          </template>
-        </TPopup>
       </div>
       <button class="close-btn" @click="$emit('close')">
         <i class="f-icon f-icon-close"></i>
@@ -110,7 +64,7 @@ defineEmits<{
 
     <!-- 对话流调试模式 -->
     <div v-if="isChatFlow && debugMode === 'chat'" class="chat-debug-mode">
-      <chat-debug :input-params="inputParams" />
+      <chat-debug :input-params="inputParams" :start-node-data="startNodeData" />
     </div>
 
     <!-- 参数调试模式（传统试运行） -->
@@ -238,30 +192,7 @@ defineEmits<{
       }
     }
 
-    .user-input-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: #f0f0f0;
-      color: #666;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      outline: none;
-
-      &:hover {
-        background: #e0e0e0;
-        color: #5b89fe;
-      }
-
-      i {
-        font-size: 14px;
-      }
-    }
-
+  
     .log-link {
       color: #1890ff;
       cursor: pointer;
@@ -304,7 +235,7 @@ defineEmits<{
     overflow: visible;
 
     .tab-item {
-      padding: 0 14px 7px 14px;
+      padding: 4px 14px 3px 14px;
       cursor: pointer;
       font-size: 14px;
       font-weight: 400;
@@ -676,93 +607,6 @@ defineEmits<{
   }
 }
 
-.user-input-popup {
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(82, 100, 154, 0.13);
-  background: white;
-  padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-
-  .popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e8e8e8;
-
-    h3 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    .popup-close {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: none;
-      color: #999;
-      cursor: pointer;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: #f5f5f5;
-        color: #666;
-      }
-
-      i {
-        font-size: 14px;
-      }
-    }
-  }
-
-  .popup-content {
-    .input-field {
-      margin-bottom: 16px;
-
-      .field-label {
-        display: block;
-        font-size: 14px;
-        color: #666;
-        font-weight: 500;
-        margin-bottom: 6px;
-
-        .required-mark {
-          color: #ff4d4f;
-          margin-left: 4px;
-        }
-      }
-
-      .field-input {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #d9d9d9;
-        border-radius: 6px;
-        font-size: 14px;
-        color: #333;
-        background: white;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-        &::placeholder {
-          color: #999;
-        }
-
-        &:focus {
-          outline: none;
-          border-color: #5b89fe;
-          box-shadow: 0 0 0 2px rgba(91, 137, 254, 0.2);
-        }
-      }
-    }
-  }
-}
 
 @keyframes spin {
   from { transform: rotate(0deg); }

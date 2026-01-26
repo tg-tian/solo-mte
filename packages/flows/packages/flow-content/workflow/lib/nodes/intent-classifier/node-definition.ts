@@ -1,7 +1,7 @@
 import { markRaw } from 'vue';
 import type { NodeDefinition } from '@farris/flow-devkit';
 import { intentClassifierIcon } from '@/assets';
-import { BasicTypeRefer, uuid } from '@farris/flow-devkit';
+import { BasicTypeRefer, uuid, ValidateUtils } from '@farris/flow-devkit';
 import NodeComponent from './node.component.vue';
 import { NodeProperty } from './property-config';
 import { CustomNodeType } from '@/types/node-type';
@@ -30,6 +30,11 @@ export const INTENT_CLASSIFIER_NODE: NodeDefinition = {
         const class2Id = `class_${timestamp}_${random2}`;
 
         return {
+            modelInfo: {
+                modelId: '',
+                modelName: '',
+            },
+            inputParams: [],
             intentions: [
                 {
                     categoryId: class1Id,
@@ -60,4 +65,26 @@ export const INTENT_CLASSIFIER_NODE: NodeDefinition = {
         return config.getPropertyConfig(nodeData);
     },
     afterEdgeAddOrRemove: createStreamingOutputChecker(),
+    validator: (nodeData) => {
+        // 验证模型选择是否必填
+        let modelValidation = { isValid: true, errors: [] as Array<{message: string}> };
+
+        if (!nodeData.modelInfo?.modelId || nodeData.modelInfo.modelId.trim() === '') {
+            modelValidation = {
+                isValid: false,
+                errors: [{ message: '模型选择不能为空' }]
+            };
+        }
+
+        return ValidateUtils.mergeNodeValidationResult(
+            modelValidation,
+            ValidateUtils.validateParameters(nodeData.inputParams, {
+                nodeData,
+                allowValueEmpty: false,
+            }),
+            ValidateUtils.validateParameters(nodeData.outputParams, {
+                nodeData,
+            }),
+        );
+    },
 };

@@ -1,3 +1,5 @@
+import type { Parameter } from '@farris/flow-devkit';
+
 // 参数输入类型
 export type ParamType = 'string' | 'number' | 'boolean' | 'fileID' | 'object' | 'array';
 
@@ -10,7 +12,10 @@ export interface InputParam {
   required?: boolean;
   description?: string;
   jsonError?: string;
-  multiple?: boolean; // 是否支持多文件
+  /** 是否支持多文件 */
+  multiple?: boolean;
+  /** 原始参数 */
+  raw?: Parameter;
 }
 
 // 文件信息

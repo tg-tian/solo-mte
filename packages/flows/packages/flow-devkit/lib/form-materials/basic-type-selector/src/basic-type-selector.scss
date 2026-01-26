@@ -1,0 +1,7 @@
+.fvf-basic-type-selector {
+    &__current-value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

@@ -1,11 +1,11 @@
-import { computed, ref, watch, provide, type CSSProperties, defineComponent, type PropType, type Ref } from 'vue';
+import { computed, ref, watch, provide, inject, type CSSProperties, defineComponent, type PropType, type Ref } from 'vue';
 import { FlowPropertyPanel, type PanelShowMode } from '@flow-designer/components/property-panel';
 import { useVueFlow, type GraphNode } from '@vue-flow/core';
 import { nodeRegistry, PROPERTY_PANEL_KEY, provideNodeVariables } from '@farris/flow-devkit';
 import type { NodeDefinition, NodeMetadata, FlowNodeInstance, NodeData } from '@farris/flow-devkit';
 import { NODE_RENDER_SCENE_KEY, USE_NODE_ID_KEY, USE_NODE_DATA_KEY } from '@farris/flow-devkit';
 import type { UseNodePropertyPanel } from './types';
-import { useFloatPanelLayout } from '@flow-designer/hooks';
+import { useFloatPanelLayout, FLOW_REGISTRY_KEY } from '@flow-designer/hooks';
 
 import styles from '../flow-view.module.scss';
 
@@ -38,6 +38,8 @@ const NodeContextProvider = defineComponent({
     },
 });
 
+const PROPERTY_PANEL_DEFAULT_WIDTH = 450;
+
 export function useNodePropertyPanel(): UseNodePropertyPanel {
 
     const {
@@ -45,6 +47,7 @@ export function useNodePropertyPanel(): UseNodePropertyPanel {
         nodes: allNodes,
         onNodeClick,
     } = useVueFlow();
+    const flowRegistry = inject(FLOW_REGISTRY_KEY);
 
     const isShow = ref(true);
     const propertyPanelInstance = ref();
@@ -94,7 +97,28 @@ export function useNodePropertyPanel(): UseNodePropertyPanel {
         return typeof getPropertyPanelConfig === 'function';
     });
 
+    const rightPanelWidth = ref<number>(PROPERTY_PANEL_DEFAULT_WIDTH);
+
+    function setPanelWidth(newValue: number): void {
+        rightPanelWidth.value = newValue;
+    }
+
+    function updatePanelWidth(): void {
+        const nodeLevelDefaultWidth = selectedNodeDefinition.value?.propertyPanelDefaultWidth;
+        if (typeof nodeLevelDefaultWidth === 'number' && nodeLevelDefaultWidth > 0) {
+            setPanelWidth(nodeLevelDefaultWidth);
+            return;
+        }
+        const flowLevelDefaultWidth = flowRegistry?.value?.nodePropertyPanelDefaultWidth;
+        if (typeof flowLevelDefaultWidth === 'number' && flowLevelDefaultWidth > 0) {
+            setPanelWidth(flowLevelDefaultWidth);
+            return;
+        }
+        setPanelWidth(PROPERTY_PANEL_DEFAULT_WIDTH);
+    }
+
     function updatePropertyPanel(forceUpdate = true): void {
+        updatePanelWidth();
         const nodeId = selectedNode.value?.id;
         const nodeData = selectedNode.value?.data;
         const getPropertyPanelConfig = selectedNodeDefinition.value?.getPropertyPanelConfig;
@@ -137,8 +161,6 @@ export function useNodePropertyPanel(): UseNodePropertyPanel {
     const isShowPanel = computed<boolean>(() => {
         return panelShowMode.value === 'panel';
     });
-
-    const rightPanelWidth = ref<number>(450);
 
     const PANEL_ID = 'NodePropertyPanel';
     const { currentRightFloatPanelId } = useFloatPanelLayout();

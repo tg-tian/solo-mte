@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
       assetsDir: "assets",
       minify: "esbuild",
       manifest: false,
-      copyPublicDir: false,
+      copyPublicDir: true,
       assetsInlineLimit: 0,
       chunkSizeWarningLimit: 10000,
       rollupOptions: {

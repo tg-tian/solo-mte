@@ -1,12 +1,11 @@
 import { inject, ref, type SetupContext } from 'vue';
 import { F_MODAL_SERVICE_TOKEN } from '@farris/ui-vue';
-import { type ValueExpress, ValueExpressKind } from '@farris/flow-devkit/types';
+import { type ValueExpress, type ValueExpressionResult, ValueExpressKind } from '@farris/flow-devkit/types';
 import { type ValueExpressionInputProps, VALUE_EXPRESSION_INPUT_NAME } from '../value-expression-input.props';
 import { useBem } from '@farris/flow-devkit/utils';
 import { useVarTab } from './use-var-tab';
 import { useConstTab } from './use-const-tab';
 import { useMethodInvokeTab } from './use-method-invoke-tab';
-import type { GetValueResult } from './types';
 import { useTypeDetails, useNotify } from '@farris/flow-devkit/composition';
 
 export function useModal(
@@ -38,7 +37,6 @@ export function useModal(
   } = useConstTab(props);
   const {
     renderMethodInvokeTab,
-    initMethodInvokeTab,
     updateMethodInvokeTab,
     getMethodInvokeExpr,
   } = useMethodInvokeTab(props);
@@ -72,15 +70,17 @@ export function useModal(
 
   const { loadType } = useTypeDetails();
 
-  function updateValueAndCloseModal(result: GetValueResult): void {
+  function updateValueAndCloseModal(result: ValueExpressionResult): void {
     const { express, type } = result;
-    loadType(type);
+    if (type) {
+      loadType(type);
+    }
     context.emit('update:modelValue', express, express, result);
     closeModal();
   }
 
   function acceptCallback() {
-    let getNewValue: () => (GetValueResult | string);
+    let getNewValue: () => ValueExpressionResult;
     switch (activeTabId.value) {
       case TAB_NODE_VARIABLE: {
         getNewValue = getNodeVariableExpr;
@@ -95,8 +95,8 @@ export function useModal(
       }
     }
     const result = getNewValue();
-    if (typeof result === 'string') {
-      notifyService.warning(result);
+    if (result.errorTip && typeof result.errorTip === 'string') {
+      notifyService.warning(result.errorTip);
       return;
     }
     updateValueAndCloseModal(result);
@@ -162,7 +162,6 @@ export function useModal(
 
   function beforeOpenModal(): void {
     updateTabData();
-    initMethodInvokeTab();
   }
 
   function openModal() {

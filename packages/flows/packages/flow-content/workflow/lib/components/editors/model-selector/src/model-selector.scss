@@ -45,6 +45,15 @@
   flex: 1;
 }
 
+/* 空提示样式 - 参考input-params的form-item-error样式 */
+.model-selector-empty-tip {
+  color: rgb(255, 68, 30);
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 8px;
+  font-weight: 400;
+}
+
 /* 模型设置面板样式 */
 .model-settings {
   padding: 12px 20px;

@@ -14,7 +14,7 @@ import { computed } from 'vue';
 import { BaseEdge, getBezierPath, type EdgeProps } from '@vue-flow/core';
 import CommonMarker from './common-marker.vue';
 
-const props = defineProps<EdgeProps>();
+const props = defineProps<Partial<EdgeProps>>();
 const path = computed(() => getBezierPath(props as any));
 
 const markerId = computed(() => `${props.id}-marker`);

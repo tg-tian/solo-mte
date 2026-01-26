@@ -6,10 +6,12 @@ import type {
     Parameter,
     NodeVariableExpr,
     EdgeGraphMeta,
+    JsonSchema,
 } from '@farris/flow-devkit';
 import {
     uuid,
     nodeRegistry,
+    JsonSchemaUtils,
     NODE_OUTPUT_PARAMS_KEY,
     NODE_OUTPUT_PARAMS_FOR_CHILD_NODES_KEY,
     NODE_VALIDATION_DETAILS_KEY,
@@ -73,6 +75,21 @@ export function useVueFlowDataConverter() {
         recurse(data);
     }
 
+    function ensureJsonSchemaHaveId(schema?: JsonSchema): void {
+        if (!schema) {
+            return;
+        }
+        if (!schema.id) {
+            schema.id = uuid();
+        }
+        if (schema.items) {
+            ensureJsonSchemaHaveId(schema.items);
+        }
+        if (Array.isArray(schema.properties)) {
+            schema.properties.forEach(property => ensureJsonSchemaHaveId(property));
+        }
+    }
+
     /**
      * 保证参数具有唯一ID
      * @description 后端仅存储参数的编号，不存储id，由于编号可编辑不方便作为标识，所以前端额外维护id字段
@@ -80,7 +97,10 @@ export function useVueFlowDataConverter() {
      */
     function ensureAllParamsHaveIds(params: Parameter[]): void {
         params.forEach(param => {
-            param.id = uuid();
+            if (!param.id) {
+                param.id = uuid();
+            }
+            ensureJsonSchemaHaveId(param.schema);
         });
     }
 
@@ -93,7 +113,8 @@ export function useVueFlowDataConverter() {
                 return;
             }
             const paramCode2Param = new Map<string, Parameter>();
-            const outputParams = NodeUtils.getOutputParams(node);
+            const outputParams = NodeUtils.getAllOutputParams(node);
+            ensureAllParamsHaveIds(outputParams);
             outputParams.forEach(param => {
                 const paramCode = useParamId ? param.id : param.code;
                 if (!paramCode) {
@@ -104,6 +125,34 @@ export function useVueFlowDataConverter() {
             resultMap.set(nodeCode, paramCode2Param);
         });
         return resultMap;
+    }
+
+    function syncParamId(valueExpr: NodeVariableExpr, param?: Parameter): void {
+        if (!valueExpr || !param) {
+            return;
+        }
+        valueExpr.variableId = param.id;
+        if (valueExpr.fields && valueExpr.fields.length) {
+            valueExpr.fieldIds = JsonSchemaUtils.getIdPathByCodePath(param.schema, valueExpr.fields);
+            if (!valueExpr.fieldIds.length) {
+                valueExpr.fieldIds = undefined;
+            }
+        } else {
+            valueExpr.fieldIds = undefined;
+        }
+    }
+
+    function syncParamCodeById(valueExpr: NodeVariableExpr, param?: Parameter): void {
+        if (!valueExpr || !param) {
+            return;
+        }
+        valueExpr.variable = param.code || '';
+        if (valueExpr.fieldIds && valueExpr.fieldIds.length) {
+            const codes = JsonSchemaUtils.getCodePathByIdPath(param.schema, valueExpr.fieldIds);
+            if (codes.length) {
+                valueExpr.fields = codes;
+            }
+        }
     }
 
     function validAllNodeParams(nodes: Node[]): void {
@@ -119,9 +168,7 @@ export function useVueFlowDataConverter() {
                 return;
             }
             const param = paramCode2Param.get(valueExpr.variable);
-            if (param) {
-                valueExpr.variableId = param.id;
-            }
+            syncParamId(valueExpr, param);
         };
         nodes.forEach(node => {
             processAllNodeVariableExpr(node.data, handleNodeVariableExpr);
@@ -136,9 +183,7 @@ export function useVueFlowDataConverter() {
                 return;
             }
             const param = paramId2Param.get(valueExpr.variableId);
-            if (param && param.code) {
-                valueExpr.variable = param.code;
-            }
+            syncParamCodeById(valueExpr, param);
         };
         nodes.forEach(node => {
             processAllNodeVariableExpr(node.data, handleNodeVariableExpr);
