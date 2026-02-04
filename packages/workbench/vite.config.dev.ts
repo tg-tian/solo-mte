@@ -23,7 +23,6 @@ export default defineConfig(({ mode }) => {
         plugins: [vue(), vueJsx()],
         define: {
             'import.meta.env.VITE_BASE_PATH': JSON.stringify(envVars.VITE_BASE_PATH || 'http://139.196.147.52:8080'),
-            'import.meta.env.VITE_BASE_API': JSON.stringify(envVars.VITE_BASE_API || '/api'),
             'import.meta.env.VITE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_TEMPLATE_PATH || 'https://lctemplates.gitlink.org.cn'),
             'import.meta.env.VITE_DOMAIN_TEMPLATE_PATH': JSON.stringify(envVars.VITE_DOMAIN_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
             'import.meta.env.VITE_SCENE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_SCENE_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
@@ -37,27 +36,21 @@ export default defineConfig(({ mode }) => {
                     changeOrigin: true,
                     secure: false
                 },
-                "/meta": {
-                    target:  "http://139.196.147.52:8080",
+                "/apps/platform/development-platform": {
+                    target: "http://localhost:5174",
                     changeOrigin: true,
-                    secure: false,
-                    // rewrite: (path) => path.replace(/^\/api/, '')
+                    secure: false
                 },
-            "/apps/platform/development-platform": {
-                target: "http://localhost:5174",
-                changeOrigin: true,
-                secure: false
-            },
-            "/platform": {
-                target: "http://localhost:5200",
-                changeOrigin: true,
-                secure: false
-            },
-            "/runtime": {
-                target: "http://localhost:5200",
-                changeOrigin: true,
-                secure: false
-            }
+                "/platform": {
+                    target: "http://localhost:5200",
+                    changeOrigin: true,
+                    secure: false
+                },
+                "/runtime": {
+                    target: "http://localhost:5200",
+                    changeOrigin: true,
+                    secure: false
+                }
         }
         },
         build: {

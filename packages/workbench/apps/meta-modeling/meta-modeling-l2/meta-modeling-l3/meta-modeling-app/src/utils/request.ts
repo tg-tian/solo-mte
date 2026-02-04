@@ -1,5 +1,4 @@
 import axios from 'axios' // 引入axios
-import { ElMessage } from 'element-plus'
 import { getToken } from './auth'
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_PATH as string,
