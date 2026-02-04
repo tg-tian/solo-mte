@@ -11,6 +11,7 @@ export default defineComponent({
         const { domains, getDomains, createDomain } = useDomain();
         const items = [{ id: 'createDomain', text: '创建领域', class: 'btn-primary', onClick: () => createDomain() }];
         const statusMap = new Map<string, string>([['0', '测试中'], ['1', '已发布'], ['2', '定制中']]);
+        const metaFront = import.meta.env.VITE_META_FRONT || 'http://localhost:2400';
         const editorOptions = {
             type: 'combo-list',
             idField: 'value',
@@ -48,7 +49,7 @@ export default defineComponent({
             const id = domain.domainId;
             const code = domain.domainCode;
             const name = domain.domainName;
-            domain.url = "http://139.196.147.52:2400/#/meta/domain/setting?mode=edit&domainId=" + id;
+            domain.url = `${metaFront}/#/meta/domain/setting?mode=edit&domainId=${id}`;
             // 使用domain中的url字段，如果为空则使用默认路径
             let deployPath = domain.url && domain.url.trim() ? domain.url.trim() : '/apps/platform/development-platform/ide/app-center/index.html';
             // 移除可能存在的引号
@@ -65,7 +66,7 @@ export default defineComponent({
             const id = domain.domainId;
             const code = domain.domainCode;
             const name = domain.domainName;
-            domain.url = "http://139.196.147.52:2400/#/domain/scene/list?domainId=" + id;
+            domain.url = `${metaFront}/#/domain/scene/list?domainId=${id}`;
             // 使用domain中的url字段，如果为空则使用默认路径
             let deployPath = domain.url && domain.url.trim() ? domain.url.trim() : '/apps/platform/development-platform/ide/app-center/index.html';
             // 移除可能存在的引号

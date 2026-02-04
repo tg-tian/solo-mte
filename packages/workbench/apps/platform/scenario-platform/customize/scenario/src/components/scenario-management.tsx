@@ -11,6 +11,8 @@ export default defineComponent({
         const { scenarios, getScenarios, createScenario } = useScenario();
         const items = [{ id: 'createScenario', text: '创建场景', class: 'btn-primary', onClick: () => createScenario() }];
         const statusMap = new Map<string, string>([['0', '测试中'], ['1', '已发布'], ['2', '定制中']]);
+        const metaFront = import.meta.env.VITE_META_FRONT || 'http://localhost:2400';
+        const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
         const editorOptions = {
             type: 'combo-list',
             idField: 'value',
@@ -48,7 +50,8 @@ export default defineComponent({
             const id = scenario.sceneId;
             const code = scenario.sceneCode;
             const name = scenario.sceneName;
-            //scenario.url = "http://139.196.147.52:2400/#/meta/scenario/setting?mode=edit&scenarioId=" + id;
+            console.log('editScenarioPlatform scenario:', scenario);
+            scenario.url = `${metaFront}/#/domain/scene/setting?mode=edit&sceneId=${id}`;
             // 使用scenario中的url字段，如果为空则使用默认路径
             let deployPath = scenario.url && scenario.url.trim() ? scenario.url.trim() : '/apps/platform/development-platform/ide/app-center/index.html';
             // 移除可能存在的引号
@@ -66,7 +69,7 @@ export default defineComponent({
             const code = scenario.sceneCode;
             const name = scenario.sceneName;
             //TODO: 临时解决方案，后续需要从scenario中获取url
-            scenario.url = "http://localhost:5174/apps/platform/development-platform/ide/app-center/index.html";
+            scenario.url = `${appCenterPath}/apps/platform/development-platform/ide/app-center/index.html`;
             // 使用scenario中的url字段，如果为空则使用默认路径
             let deployPath = scenario.url && scenario.url.trim() ? scenario.url.trim() : '/apps/platform/development-platform/ide/app-center/index.html';
             // 移除可能存在的引号

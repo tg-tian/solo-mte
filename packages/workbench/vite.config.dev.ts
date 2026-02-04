@@ -23,6 +23,8 @@ export default defineConfig(({ mode }) => {
         plugins: [vue(), vueJsx()],
         define: {
             'import.meta.env.VITE_BASE_PATH': JSON.stringify(envVars.VITE_BASE_PATH || 'http://139.196.147.52:8080'),
+            'import.meta.env.VITE_META_FRONT': JSON.stringify(envVars.VITE_META_FRONT || 'http://localhost:2400'),
+            'import.meta.env.VITE_APP_CENTER_PATH': JSON.stringify(envVars.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174'),
             'import.meta.env.VITE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_TEMPLATE_PATH || 'https://lctemplates.gitlink.org.cn'),
             'import.meta.env.VITE_DOMAIN_TEMPLATE_PATH': JSON.stringify(envVars.VITE_DOMAIN_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
             'import.meta.env.VITE_SCENE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_SCENE_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
