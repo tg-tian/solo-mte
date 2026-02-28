@@ -33,6 +33,7 @@ export interface DeviceEvent {
 export interface DeviceCategory {
     category: string;
     modelName: string;
+    icon?: string;
     actions: Record<string, DeviceAction>;
     events: Record<string, DeviceEvent>;
 }

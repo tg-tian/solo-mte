@@ -15,7 +15,7 @@ export enum BuiltinNodeType {
     MethodInvoke = 'methodInvoke',
 
     /** 设备调用节点 */
-    DeviceCall = 'deviceCall',
+    DeviceCall = 'device',
     /** 设备事件监听节点 */
     DeviceEventListen = 'deviceEventListen',
 }

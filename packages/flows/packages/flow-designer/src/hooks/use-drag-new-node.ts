@@ -1,5 +1,6 @@
 import { useVueFlow, type Node, type GraphNode, type Rect, type XYPosition } from '@vue-flow/core';
 import { reactive, watch, provide, inject, toRefs, type Ref, ref } from 'vue';
+import { cloneDeep } from 'lodash-es';
 import { type FNotifyService, F_NOTIFY_SERVICE_TOKEN } from '@farris/ui-vue';
 import {
     nodeRegistry,
@@ -9,6 +10,7 @@ import {
     type NodeData,
     type NodeMetadata,
 } from '@farris/flow-devkit';
+import type { NodePanelItem } from '@flow-designer/types';
 import { usePosition } from './use-position';
 import { useFlowKind } from '@flow-designer/hooks';
 
@@ -16,7 +18,7 @@ export type UseDragNewNode = {
     draggedType: Ref<string | null>;
     isDragOver: Ref<boolean>;
     isDragging: Ref<boolean>;
-    onDragStart: (event: DragEvent, type: string) => void;
+    onDragStart: (event: DragEvent, type: string, nodePanelItem: NodePanelItem) => void;
     onDrag: (event: DragEvent) => void;
     onDragLeave: () => void;
     onDragOver: (event: DragEvent) => void;
@@ -46,6 +48,7 @@ export function useDragNewNode(): UseDragNewNode {
         dragOffsetX: 0,
         dragOffsetY: 0,
         draggedType: null as string | null,
+        nodePanelItem: null as NodePanelItem | null,
         isDragOver: false,
         isDragging: false,
     });
@@ -109,7 +112,7 @@ export function useDragNewNode(): UseDragNewNode {
         intersectedContainerNodeId.value = '';
     }
 
-    function onDragStart(event: DragEvent, type: string) {
+    function onDragStart(event: DragEvent, type: string, nodePanelItem: NodePanelItem) {
         const draggedEl = event.currentTarget as HTMLElement;
         if (!draggedEl) {
             return;
@@ -124,6 +127,7 @@ export function useDragNewNode(): UseDragNewNode {
         state.dragOffsetX = event.clientX - draggedElementRect.left;
         state.dragOffsetY = event.clientY - draggedElementRect.top;
         state.draggedType = type;
+        state.nodePanelItem = nodePanelItem;
         state.isDragging = true;
     }
 
@@ -155,6 +159,7 @@ export function useDragNewNode(): UseDragNewNode {
         state.isDragging = false;
         state.isDragOver = false;
         state.draggedType = null;
+        state.nodePanelItem = null;
         clearNodeIntersection();
     }
 
@@ -169,7 +174,7 @@ export function useDragNewNode(): UseDragNewNode {
     }
 
     function getNewName(nodeMetadata?: NodeMetadata): string {
-        const baseName = nodeMetadata?.label || '未命名';
+        const baseName = state.nodePanelItem?.initialData?.data?.name || nodeMetadata?.label || '未命名';
         if (!hasSameName(baseName)) {
             return baseName;
         }
@@ -256,6 +261,14 @@ export function useDragNewNode(): UseDragNewNode {
         return level;
     }
 
+    function mergeObject(target: any, source: any): void {
+        if (!source || typeof source !== 'object') {
+            source = {};
+        }
+        source = cloneDeep(source);
+        Object.assign(target, source);
+    }
+
     async function onDrop(event: DragEvent): Promise<void> {
         if (!state.draggedType) {
             return;
@@ -286,6 +299,7 @@ export function useDragNewNode(): UseDragNewNode {
             parentNode,
             data: {},
         };
+        mergeObject(newNode, state.nodePanelItem?.initialData);
         initNewNode(newNode);
         newNodes.push(newNode);
 

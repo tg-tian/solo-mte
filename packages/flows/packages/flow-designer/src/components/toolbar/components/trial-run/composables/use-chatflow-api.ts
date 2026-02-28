@@ -1,5 +1,5 @@
 import { inject } from 'vue';
-import { post } from '@/api/request';
+import { post } from '@flow-designer/api/request';
 import { FLOW_METADATA_KEY } from '@flow-designer/hooks';
 import type { InputParam } from '../types';
 

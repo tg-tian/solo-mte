@@ -52,7 +52,7 @@ export default defineComponent({
                 <div class={styles['node-card']}
                     key={node.type}
                     draggable={true}
-                    onDragstart={(evt) => onDragStart(evt, node.type)}
+                    onDragstart={(evt) => onDragStart(evt, node.type, node)}
                     onDrag={onDrag}
                     onClick={onNodeItemClick}
                     title={node.description || ''}

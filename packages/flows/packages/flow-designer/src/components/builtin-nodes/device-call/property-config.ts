@@ -11,7 +11,7 @@ import {
 export class NodeProperty extends BaseControlProperty {
 
     public getPropertyConfig(nodeData: NodeData) {
-        const category = nodeData.kind;
+        const category = nodeData.deviceCategory;
         const { deviceCategoriesWithAction } = useDeviceInfo();
         const deviceCategory: DeviceCategory = deviceCategoriesWithAction.value.find((device: DeviceCategory) => {
             return device.category === category;

@@ -98,7 +98,7 @@ export function useDeviceInfo() {
             console.error(`[设备列表加载失败] ${modelName}`, error);
             return undefined;
         });
-        if (!deviceListResponse) {
+        if (!deviceListResponse || !Array.isArray(deviceListResponse.data)) {
             return [];
         }
         const deviceList = deviceListResponse.data || [];

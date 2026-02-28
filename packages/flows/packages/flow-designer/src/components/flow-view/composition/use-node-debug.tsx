@@ -1,5 +1,5 @@
 import { ref, inject } from 'vue';
-import { post } from '@/api/request';
+import { post } from '@flow-designer/api/request';
 import { FLOW_METADATA_KEY } from '@flow-designer/hooks';
 import { useWorkflowApi } from '../../toolbar/components/trial-run/composables/use-workflow-api';
 import { provideNodeDebug, useNotify, type NodeDebugHandler } from '@farris/flow-devkit';

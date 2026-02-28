@@ -61,7 +61,11 @@ export default defineComponent({
       return canDebug.value; // 显示debug按钮
     });
 
-    const icon = computed<string>(() => nodeMetadata.value?.icon || '');
+    const icon = computed<string>(() => {
+      const nodeDefinition = nodeRegistry.get(nodeType.value);
+      const getNodeIconUrl = nodeDefinition?.getNodeIconUrl;
+      return getNodeIconUrl?.(nodeData.value) || nodeMetadata.value?.icon || '';
+    });
 
     const namePlaceholder = '节点';
     const descPlaceholder = '请在这里编辑节点描述...';

@@ -27,7 +27,7 @@ const {
   deviceCategories,
 } = useDeviceInfo();
 
-const deviceType = props.type;
+const deviceType = props.data.deviceCategory;
 const deviceInfo: DeviceCategory = deviceCategories.value.find((device: DeviceCategory) => {
   return deviceType === device.category;
 });

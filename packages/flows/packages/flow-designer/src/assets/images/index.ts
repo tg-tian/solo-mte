@@ -6,3 +6,4 @@ export { default as variableDefIcon } from './icon-variable-def.jpg';
 export { default as variableAssignIcon } from './icon-variable-assign.jpg';
 export { default as methodInvokeIcon } from './method-invoke.jpg';
 export { default as defaultIcon } from './icon-default.jpg';
+export { default as deviceEventIcon } from './icon-device-event.png';

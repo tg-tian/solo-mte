@@ -14,6 +14,8 @@ export interface NodePanelItem {
     description?: string;
     /** 节点的注册信息 */
     raw?: FlowNodeInfo;
+    /** 节点初始化数据 */
+    initialData?: any;
 }
 
 /**
