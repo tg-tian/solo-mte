@@ -16,7 +16,7 @@ const OUT_DIR = fileURLToPath(new URL(`${DIST_DIR}${DEPLOY_PATH}/${FLOW_TYPE}`, 
 export default defineConfig(({ mode }) => {
 
   const env = loadEnv(mode, process.cwd());
-  const apiTarget = env.VITE_API_TARGET || 'http://10.110.87.184:5400';
+  const apiTarget = env.VITE_API_TARGET || 'http://10.110.87.184:5500';
 
   return {
     plugins: [

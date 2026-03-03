@@ -16,25 +16,19 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import type { NodeProps, DeviceCategory, DeviceInstance } from '@farris/flow-devkit';
+import type { NodeProps, DeviceInstance } from '@farris/flow-devkit';
 import { NodeWrapper, NodeContentWrapper, NodeField, ParamTagList, useDeviceInfo } from '@farris/flow-devkit';
 
 const props = defineProps<NodeProps>();
 
 const {
-  getDeviceListByModelName,
-  deviceName2DeviceList,
-  deviceCategories,
+  getDeviceListByCategory,
+  deviceCategory2DeviceInstanceList,
 } = useDeviceInfo();
 
-const deviceType = props.data.deviceCategory;
-const deviceInfo: DeviceCategory = deviceCategories.value.find((device: DeviceCategory) => {
-  return deviceType === device.category;
-});
-const modelName = deviceInfo?.modelName;
-
 const deviceName = computed<string>(() => {
-  const deviceList: DeviceInstance[] = deviceName2DeviceList.get(modelName) || [];
+  const deviceCategory = props.data.deviceCategory;
+  const deviceList: DeviceInstance[] = deviceCategory2DeviceInstanceList.get(deviceCategory) || [];
   const targetDevice = deviceList.find((device) => {
     return device.deviceId === props.data.deviceId;
   });
@@ -42,8 +36,9 @@ const deviceName = computed<string>(() => {
 });
 
 onMounted(() => {
-  if (modelName) {
-    getDeviceListByModelName(modelName);
+  const deviceCategory = props.data.deviceCategory;
+  if (deviceCategory) {
+    getDeviceListByCategory(deviceCategory);
   }
 });
 </script>
