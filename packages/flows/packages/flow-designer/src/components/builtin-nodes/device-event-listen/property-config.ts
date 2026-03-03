@@ -3,7 +3,7 @@ import {
     useDeviceInfo,
     DeviceUtils,
     type NodeData,
-    type DeviceCategory,
+    type DeviceModel,
     type Parameter,
     type FvComboListData,
 } from '@farris/flow-devkit';
@@ -12,12 +12,12 @@ export class NodeProperty extends BaseControlProperty {
 
     public getPropertyConfig(nodeData: NodeData) {
         const { deviceCategoriesWithEvent } = useDeviceInfo();
-        const deviceCategoryData: FvComboListData = deviceCategoriesWithEvent.value.map((device: DeviceCategory) => ({
+        const deviceCategoryData: FvComboListData = deviceCategoriesWithEvent.value.map((device: DeviceModel) => ({
             name: device.modelName,
-            value: device.category,
+            value: device.modelId,
         }));
-        const currentDeviceCategory: DeviceCategory = deviceCategoriesWithEvent.value.find((device: DeviceCategory) => {
-            return device.category === nodeData.deviceCategory;
+        const currentDeviceCategory: DeviceModel = deviceCategoriesWithEvent.value.find((device: DeviceModel) => {
+            return device.modelId === nodeData.deviceModelId;
         });
 
         const deviceEventData: FvComboListData = Object.keys(currentDeviceCategory?.events || []).map((eventCode) => ({
@@ -43,7 +43,7 @@ export class NodeProperty extends BaseControlProperty {
             title: '设备事件',
             description: 'Device Event',
             properties: {
-                deviceCategory: {
+                deviceModelId: {
                     title: '设备类型',
                     type: 'enum',
                     refreshPanelAfterChanged: true,
@@ -67,12 +67,12 @@ export class NodeProperty extends BaseControlProperty {
             },
             setPropertyRelates(changeObject) {
                 // 如果`设备类型`更新，需要清空`设备事件`字段
-                if (changeObject?.propertyID === 'deviceCategory') {
+                if (changeObject?.propertyID === 'deviceModelId') {
                     nodeData.deviceEvent = undefined;
                 }
                 // `设备事件`变更时，需要更新事件参数列表
-                const currentDeviceCategory: DeviceCategory = deviceCategoriesWithEvent.value.find((device: DeviceCategory) => {
-                    return device.category === nodeData.deviceCategory;
+                const currentDeviceCategory: DeviceModel = deviceCategoriesWithEvent.value.find((device: DeviceModel) => {
+                    return device.modelId === nodeData.deviceModelId;
                 });
                 const eventArgs = currentDeviceCategory?.events?.[nodeData.deviceEvent]?.fields;
                 if (!eventArgs) {

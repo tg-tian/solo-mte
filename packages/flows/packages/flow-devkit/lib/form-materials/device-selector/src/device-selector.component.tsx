@@ -20,10 +20,10 @@ export default defineComponent({
     } = useDeviceInfo();
 
     const selectOptions = computed<TdOptionProps[]>(() => {
-      if (!props.category) {
+      if (!props.modelId) {
         return [];
       }
-      const deviceList = deviceCategory2DeviceInstanceList.get(props.category) || [];
+      const deviceList = deviceCategory2DeviceInstanceList.get(props.modelId) || [];
       return deviceList.map((device) => ({
         value: device.deviceId,
         label: device.deviceName,
@@ -31,10 +31,10 @@ export default defineComponent({
     });
 
     watch([
-      () => props.category
+      () => props.modelId
     ], () => {
-      if (props.category) {
-        getDeviceListByCategory(props.category);
+      if (props.modelId) {
+        getDeviceListByCategory(props.modelId);
       }
     }, { immediate: true });
 

@@ -1,5 +1,5 @@
 import { markRaw } from 'vue';
-import type { NodeDefinition, DeviceCategory } from '@farris/flow-devkit';
+import type { NodeDefinition, DeviceModel } from '@farris/flow-devkit';
 import { BuiltinNodeType, useDeviceInfo } from '@farris/flow-devkit';
 import { defaultIcon } from '@flow-designer/assets/images';
 import DeviceCallComponent from './node.component.vue';
@@ -30,10 +30,10 @@ export const DEVICE_CALL_NODE: NodeDefinition = {
         return config.getPropertyConfig(nodeData);
     },
     getNodeIconUrl: (nodeData) => {
-        const deviceType = nodeData.deviceCategory;
+        const deviceModelId = nodeData.deviceModelId;
         const { deviceCategories } = useDeviceInfo();
-        const deviceCategory: DeviceCategory = deviceCategories.value.find((device: DeviceCategory) => {
-            return device.category === deviceType;
+        const deviceCategory: DeviceModel = deviceCategories.value.find((device: DeviceModel) => {
+            return device.modelId === deviceModelId;
         });
         return deviceCategory?.icon || '';
     },

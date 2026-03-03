@@ -1,0 +1,61 @@
+{
+  "modelId": "coffeeMaker",
+  "modelName": "咖啡机",
+  "icon": "./device-assets/coffee-maker.png",
+  "category": "coffer",
+  "provider": null,
+  "properties": {},
+  "actions": {
+    "makeCoffee": {
+      "arguments": {
+        "coffee_type": {
+          "type": "enum",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": ["Americano", "Latte", "Espresso", "Cappuccino"],
+          "description": "咖啡种类"
+        }
+      },
+      "description": "制作咖啡"
+    }
+  },
+  "events": {
+    "coffeeComplete": {
+      "fields": {
+        "duration": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "制作时长"
+        },
+        "start_time": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "开始时间"
+        },
+        "coffee_type": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "咖啡类型"
+        }
+      },
+      "outputs": null,
+      "level": "info",
+      "description": "咖啡制作完成"
+    }
+  },
+  "extensions": null
+}

@@ -34,7 +34,7 @@ export function useDeviceNodes() {
                 description: '',
                 initialData: {
                     data: {
-                        deviceCategory: device.category,
+                        deviceModelId: device.modelId,
                         name: device.modelName,
                         description: '',
                     },

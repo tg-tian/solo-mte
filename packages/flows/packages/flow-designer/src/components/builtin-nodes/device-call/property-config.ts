@@ -3,7 +3,7 @@ import {
     useDeviceInfo,
     DeviceUtils,
     type NodeData,
-    type DeviceCategory,
+    type DeviceModel,
     type Parameter,
     type FvComboListData,
 } from '@farris/flow-devkit';
@@ -11,10 +11,10 @@ import {
 export class NodeProperty extends BaseControlProperty {
 
     public getPropertyConfig(nodeData: NodeData) {
-        const category = nodeData.deviceCategory;
+        const deviceModelId = nodeData.deviceModelId;
         const { deviceCategoriesWithAction } = useDeviceInfo();
-        const deviceCategory: DeviceCategory = deviceCategoriesWithAction.value.find((device: DeviceCategory) => {
-            return device.category === category;
+        const deviceCategory: DeviceModel = deviceCategoriesWithAction.value.find((device: DeviceModel) => {
+            return device.modelId === deviceModelId;
         });
         const actions: FvComboListData = Object.keys(deviceCategory?.actions || {}).map((actionCode) => ({
             name: actionCode, value: actionCode,
@@ -43,7 +43,7 @@ export class NodeProperty extends BaseControlProperty {
                     type: 'string',
                     editor: {
                         type: "fvf-device-selector",
-                        category,
+                        modelId: deviceModelId,
                         modelName: deviceCategory?.modelName,
                     },
                 },

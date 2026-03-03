@@ -1,18 +1,18 @@
 import { ref, computed, reactive } from 'vue';
-import type { DeviceCategory, DeviceInstance } from '@farris/flow-devkit/types';
+import type { DeviceModel, DeviceInstance } from '@farris/flow-devkit/types';
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 
-let deviceCategoriesPromise: Promise<DeviceCategory[]> | undefined;
-const deviceCategories = ref<DeviceCategory[]>([]);
+let deviceCategoriesPromise: Promise<DeviceModel[]> | undefined;
+const deviceCategories = ref<DeviceModel[]>([]);
 
-const deviceCategoriesWithAction = computed<DeviceCategory[]>(() => {
+const deviceCategoriesWithAction = computed<DeviceModel[]>(() => {
     return deviceCategories.value.filter((device) => {
         const actions = device?.actions;
         return !!actions && typeof actions === 'object' && Object.keys(actions).length > 0;
     });
 });
-const deviceCategoriesWithEvent = computed<DeviceCategory[]>(() => {
+const deviceCategoriesWithEvent = computed<DeviceModel[]>(() => {
     return deviceCategories.value.filter((device) => {
         const events = device?.events;
         return !!events && typeof events === 'object' && Object.keys(events).length > 0;
@@ -28,7 +28,7 @@ export function useDeviceInfo() {
         return true;
     }
 
-    async function loadDeviceCategories(): Promise<DeviceCategory[]> {
+    async function loadDeviceCategories(): Promise<DeviceModel[]> {
         const baseDevicePath = './flow-contents/device/';
         const manifestUrl = `${baseDevicePath}manifest.json`;
 
@@ -73,7 +73,7 @@ export function useDeviceInfo() {
         }
     }
 
-    async function getDeviceCategories(): Promise<DeviceCategory[]> {
+    async function getDeviceCategories(): Promise<DeviceModel[]> {
         if (deviceCategoriesPromise) {
             return deviceCategoriesPromise;
         }

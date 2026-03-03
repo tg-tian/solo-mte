@@ -9,7 +9,7 @@ export const deviceSelectorProps = {
     modelValue: { type: String, default: '' },
 
     /** 设备类型 */
-    category: { type: String, default: '' },
+    modelId: { type: String, default: '' },
 
     /** 设备类型名称 */
     modelName: { type: String, default: '' },

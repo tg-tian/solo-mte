@@ -1,8 +1,9 @@
 {
+  "modelId": "AC",
   "modelName": "空调",
-  "provider": null,
-  "category": "AC",
   "icon": "./device-assets/ac.png",
+  "category": "ac",
+  "provider": null,
   "properties": {},
   "actions": {
     "setMode": {

@@ -1,4 +1,5 @@
 import type { Parameter } from './flow-metadata';
+import { BuiltinNodeType } from './builtin-node-type';
 
 /** 参数类型 */
 export type DeviceParameterType = 'string' | 'number' | 'boolean' | 'enum' | 'object' | 'array';
@@ -29,9 +30,9 @@ export interface DeviceEvent {
     description?: string;
 }
 
-/** 设备类型 */
-export interface DeviceCategory {
-    category: string;
+/** 设备模型 */
+export interface DeviceModel {
+    modelId: string;
     modelName: string;
     icon?: string;
     actions: Record<string, DeviceAction>;
@@ -46,9 +47,11 @@ export interface DeviceInstance {
 
 /** 设备调用节点 */
 export interface DeviceCallNode {
-    /** 节点类型，与设备元模型中的`category`字段对应 */
-    kind: string;
+    /** 节点类型 */
+    kind: BuiltinNodeType.DeviceCall;
 
+    /** 设备类型 */
+    deviceModelId: string;
     /** 指定设备的ID */
     deviceId: string;
     /** 要执行的设备操作 */
@@ -60,10 +63,10 @@ export interface DeviceCallNode {
 /** 设备事件监听节点 */
 export interface DeviceEventListenNode {
     /** 节点类型 */
-    kind: 'deviceEventListen';
+    kind: BuiltinNodeType.DeviceEventListen;
 
-    /** 设备类型，与设备元模型中的`category`字段对应 */
-    deviceCategory: string;
+    /** 设备类型 */
+    deviceModelId: string;
     /** 设备事件名 */
     deviceEvent: string;
     /** 事件参数 */

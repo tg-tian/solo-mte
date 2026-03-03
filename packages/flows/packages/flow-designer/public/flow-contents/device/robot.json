@@ -1,8 +1,9 @@
 {
+  "modelId": "robot",
   "modelName": "机器人",
-  "provider": null,
-  "category": "robot",
   "icon": "./device-assets/robot.png",
+  "category": "robot",
+  "provider": null,
   "properties": {},
   "actions": {
     "wakeUp": {

@@ -27,7 +27,7 @@ const {
 } = useDeviceInfo();
 
 const deviceName = computed<string>(() => {
-  const deviceCategory = props.data.deviceCategory;
+  const deviceCategory = props.data.deviceModelId;
   const deviceList: DeviceInstance[] = deviceCategory2DeviceInstanceList.get(deviceCategory) || [];
   const targetDevice = deviceList.find((device) => {
     return device.deviceId === props.data.deviceId;
@@ -36,7 +36,7 @@ const deviceName = computed<string>(() => {
 });
 
 onMounted(() => {
-  const deviceCategory = props.data.deviceCategory;
+  const deviceCategory = props.data.deviceModelId;
   if (deviceCategory) {
     getDeviceListByCategory(deviceCategory);
   }
