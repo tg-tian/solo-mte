@@ -14,5 +14,6 @@ export * from './utils/param-validate';
 export * from './utils/validate';
 export * from './utils/json-schema';
 export * from './utils/device';
+export * from './utils/debug-parameter';
 export * from './hooks/use-method-types';
 export * from './hooks/use-device-info';

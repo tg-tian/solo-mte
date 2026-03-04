@@ -6,7 +6,7 @@
   "scripts": {},
   "engines": {
     "node": ">=20.19",
-    "pnpm": ">=9"
+    "pnpm": ">=10"
   },
   "packageManager": "pnpm@10.15.1",
   "devDependencies": {
@@ -27,5 +27,8 @@
     "vite-plugin-libcss": "^1.1.2",
     "vite-svg-loader": "^5.1.0",
     "vue-tsc": "^3.0.5"
+  },
+  "dependencies": {
+    "vanilla-jsoneditor": "3.10.0"
   }
 }

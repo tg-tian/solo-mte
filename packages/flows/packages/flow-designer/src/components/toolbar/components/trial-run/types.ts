@@ -1,22 +1,10 @@
-import type { Parameter } from '@farris/flow-devkit';
+import type { DebugParam, DebugParamType } from '@farris/flow-devkit';
 
 // 参数输入类型
-export type ParamType = 'string' | 'number' | 'boolean' | 'fileID' | 'object' | 'array';
+export type ParamType = DebugParamType;
 
 // 输入参数定义
-export interface InputParam {
-  name: string;
-  label: string;
-  type: ParamType;
-  value: any;
-  required?: boolean;
-  description?: string;
-  jsonError?: string;
-  /** 是否支持多文件 */
-  multiple?: boolean;
-  /** 原始参数 */
-  raw?: Parameter;
-}
+export type InputParam = DebugParam;
 
 // 文件信息
 export interface FileInfo {

@@ -7,4 +7,5 @@ export * from './param-validate';
 export * from './validate';
 export * from './json-schema';
 export * from './input-help';
+export * from './debug-parameter';
 export * from './device';

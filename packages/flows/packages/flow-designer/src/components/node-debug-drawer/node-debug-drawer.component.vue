@@ -39,12 +39,12 @@
                   <label class="param-label">
                     {{ param.label }}
                     <span v-if="param.required" class="required-mark">*</span>
-                    <span class="param-type">{{ param.typeObj?.typeName || param.typeObj?.typeCode || param.type || 'String' }}</span>
+                    <span class="param-type">{{ param.raw?.type?.typeName || param.raw?.type?.typeCode || param.type || 'String' }}</span>
                   </label>
 
                   <!-- 字符串输入 -->
                   <input
-                    v-if="param.typeObj?.typeCode === 'String' || param.type === 'string'"
+                    v-if="param.type === 'string'"
                     v-model="param.value"
                     type="text"
                     class="string-input"
@@ -53,7 +53,7 @@
 
                   <!-- 数字输入 -->
                   <input
-                    v-else-if="param.typeObj?.typeCode === 'Number' || param.type === 'number'"
+                    v-else-if="param.type === 'number'"
                     v-model.number="param.value"
                     type="number"
                     class="number-input"
@@ -61,7 +61,7 @@
                   />
 
                   <!-- 布尔值输入 -->
-                  <div v-else-if="param.typeObj?.typeCode === 'Boolean' || param.type === 'boolean'" class="boolean-input-wrapper">
+                  <div v-else-if="param.type === 'boolean'" class="boolean-input-wrapper">
                     <label class="boolean-checkbox">
                       <input v-model="param.value" type="checkbox" />
                       <span class="checkbox-label">{{ param.value ? '是' : '否' }}</span>
@@ -70,7 +70,7 @@
 
                   <!-- JSON对象输入 -->
                   <textarea
-                    v-else-if="param.typeObj?.typeCode === 'Object' || param.type === 'object'"
+                    v-else-if="param.type === 'object'"
                     v-model="param.value"
                     class="json-input"
                     :placeholder="'请输入JSON对象，如：{&quot;key&quot;: &quot;value&quot;}'"
@@ -79,14 +79,15 @@
 
                   <!-- 文件输入 -->
                   <file-upload
-                    v-else-if="param.typeObj?.typeCode === 'File' || param.type === 'file'"
+                    v-else-if="param.type === 'fileID'"
                     :value="param.value"
+                    :multiple="param.type === 'fileID' && param.multiple"
                     @update="param.value = $event"
                   />
 
                   <!-- 数组输入 -->
                   <textarea
-                    v-else-if="(param.typeObj?.typeCode && param.typeObj.typeCode.startsWith('Array')) || param.type === 'array'"
+                    v-else-if="param.type === 'array'"
                     v-model="param.value"
                     class="json-input"
                     :placeholder="'请输入JSON数组，如：[{&quot;key&quot;: &quot;value&quot;}]'"
@@ -126,7 +127,7 @@
       </div>
 
       <div class="drawer-footer">
-        <button class="debug-btn" @click="handleDebug" :disabled="inputParams.length === 0 || isDebugRunning">
+        <button class="debug-btn" @click="handleDebug" :disabled="isDebugRunning">
           <i v-if="!isDebugRunning" class="f-icon f-icon-play btn-icon"></i>
           <i v-else class="f-icon f-icon-loading btn-icon loading-icon"></i>
           <span>{{ isDebugRunning ? '调试中...' : '开始调试' }}</span>
@@ -138,7 +139,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useNotify } from '@farris/flow-devkit';
+import { useNotify, type DebugParam } from '@farris/flow-devkit';
 import { useValidate } from '@flow-designer/hooks';
 import FileUpload from '../toolbar/components/trial-run/file-upload.vue';
 
@@ -147,7 +148,7 @@ interface Props {
   nodeId: string;
   nodeType: string;
   nodeName: string;
-  inputParams: any[];
+  inputParams: DebugParam[];
   debugResult?: string;
   isDebugRunning?: boolean;
 }

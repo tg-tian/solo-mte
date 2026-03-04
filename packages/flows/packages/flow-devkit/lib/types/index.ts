@@ -11,4 +11,5 @@ export * from './validate';
 export * from './json-schema';
 export * from './input-help';
 export * from './common';
+export * from './debug';
 export * from './device';

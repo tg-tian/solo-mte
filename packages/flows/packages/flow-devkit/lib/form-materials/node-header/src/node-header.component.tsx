@@ -1,8 +1,8 @@
 import { defineComponent, computed, ref, nextTick, inject } from 'vue';
 import { nodeHeaderProps } from './node-header.props';
-import { PROPERTY_PANEL_KEY, type NodeMetadata, type Parameter } from '@farris/flow-devkit/types';
+import { PROPERTY_PANEL_KEY, type NodeMetadata, type Parameter, type DebugParam } from '@farris/flow-devkit/types';
 import { nodeRegistry, useNodeRenderScene, useFlow } from '@farris/flow-devkit/composition';
-import { useBem } from '@farris/flow-devkit/utils';
+import { useBem, DebugParameterUtils } from '@farris/flow-devkit/utils';
 import { TPopup } from '@farris/flow-devkit/third-party';
 import { useNodeDebug } from '@farris/flow-devkit/composition';
 
@@ -160,20 +160,24 @@ export default defineComponent({
       }
 
       // 转换 Parameter[] 为 InputParam[] 格式
-      const convertToInputParams = (parameters: Parameter[]): any[] => {
+      const convertToInputParams = (parameters: Parameter[]): DebugParam[] => {
         if (!parameters || !Array.isArray(parameters)) {
           return [];
         }
 
-        return parameters.map((param, index) => ({
-          name: param.code || `参数${index}`,
-          label: param.code || `参数${index}`,
-          type: param.type?.typeCode?.toLowerCase() || 'string',
-          value: (param as any).value || '',
-          required: param.required || false,
-          description: param.description || '',
-          typeObj: param.type,  // 保存原始类型对象供调试弹窗使用
-        }));
+        return parameters.map((param, index) => {
+          const { type, multiple } = DebugParameterUtils.getDebugParamTypeInfo(param.type);
+          return {
+            name: param.code || `参数${index}`,
+            label: param.code || `参数${index}`,
+            type,
+            multiple,
+            value: param.value || '',
+            required: param.required || false,
+            description: param.description || '',
+            raw: param,
+          };
+        });
       };
 
       // 调试时默认使用 input-params 的值作为输入参数

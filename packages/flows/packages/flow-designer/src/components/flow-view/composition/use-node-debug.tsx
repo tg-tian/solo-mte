@@ -2,7 +2,7 @@ import { ref, inject } from 'vue';
 import { post } from '@flow-designer/api/request';
 import { FLOW_METADATA_KEY } from '@flow-designer/hooks';
 import { useWorkflowApi } from '../../toolbar/components/trial-run/composables/use-workflow-api';
-import { provideNodeDebug, useNotify, type NodeDebugHandler } from '@farris/flow-devkit';
+import { provideNodeDebug, useNotify, type NodeDebugHandler, type DebugParam } from '@farris/flow-devkit';
 import { useValidate } from '@flow-designer/hooks';
 import { NodeDebugDrawer } from '@flow-designer/components/node-debug-drawer';
 
@@ -82,17 +82,35 @@ export function useNodeDebug() {
       }
 
       // 构建请求参数：参考试运行的参数处理逻辑
-      const args = params.map((param: any) => {
+      const args = params.map((param: DebugParam) => {
         let paramValue: any;
 
         // 根据参数类型处理值
         if (param.type === 'fileID') {
-          if (!param.value) return null;
-          const fileInfo = param.value as any;
-          if (fileInfo && fileInfo.metadataId) {
-            paramValue = fileInfo.metadataId;
-          } else {
+          if (!param.value) {
             return null;
+          }
+          if (param.multiple) {
+            const fileInfos = param.value as any[];
+            if (Array.isArray(fileInfos) && fileInfos.length > 0) {
+              const fileIds = fileInfos
+                .filter(file => file && file.metadataId)
+                .map(file => file.metadataId);
+              if (fileIds.length > 0) {
+                paramValue = fileIds;
+              } else {
+                return null;
+              }
+            } else {
+              return null;
+            }
+          } else {
+            const fileInfo = param.value as any;
+            if (fileInfo && fileInfo.metadataId) {
+              paramValue = fileInfo.metadataId;
+            } else {
+              return null;
+            }
           }
         } else if (param.type === 'object' || param.type.includes('array')) {
           if (param.value && param.value.trim()) {
@@ -112,12 +130,12 @@ export function useNodeDebug() {
         }
 
         return paramValue;
-      }).filter((param: any) => param !== null);
+      });
 
       const requestData = {
         id: workflowId,
         nodeId: nodeId,
-        args: args
+        args: args,
       };
 
       // 更新调试状态为"正在调试"
