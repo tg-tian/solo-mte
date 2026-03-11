@@ -144,6 +144,7 @@ export default defineComponent({
               placeholder={'输入或引用参数值'}
               typeFilter={props.typeFilter}
               class={valueError ? 'fvf-error-state' : undefined}
+              inputHelp={param.inputHelp}
               onUpdate:modelValue={(newValue, _, { type }) => onUpdateParamValue(param, newValue, type)}
             ></ValueExpressionInput>
             {renderErrorTip(valueError)}
