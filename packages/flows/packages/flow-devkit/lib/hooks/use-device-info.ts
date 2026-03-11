@@ -43,7 +43,7 @@ export function useDeviceInfo() {
                 return [];
             }
             const deviceRequestPromises = deviceNames.map(async (deviceName) => {
-                const deviceFileUrl = `${baseDevicePath}${deviceName}.json`;
+                const deviceFileUrl = `${baseDevicePath}${deviceName}.json?v=${(new Date()).getTime()}`;
                 try {
                     const deviceResponse = await axios.get<any>(deviceFileUrl, {
                         timeout: 20 * 1000,
