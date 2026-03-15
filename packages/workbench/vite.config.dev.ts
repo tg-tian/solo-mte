@@ -9,26 +9,9 @@ import dotenv from 'dotenv';
 export default defineConfig(({ mode }) => {
     // 加载环境变量
     const env = loadEnv(mode, process.cwd(), '');
-    
-    // 尝试从.env.development文件加载
-    const envFile = resolve(__dirname, '.env.development');
-    let envVars = env;
-    if (fs.existsSync(envFile)) {
-        const envContent = fs.readFileSync(envFile, 'utf-8');
-        const parsed = dotenv.parse(envContent);
-        envVars = { ...env, ...parsed };
-    }
-    
+
     return {
         plugins: [vue(), vueJsx()],
-        define: {
-            'import.meta.env.VITE_BASE_PATH': JSON.stringify(envVars.VITE_BASE_PATH || 'http://139.196.147.52:8080'),
-            'import.meta.env.VITE_META_FRONT': JSON.stringify(envVars.VITE_META_FRONT || 'http://localhost:2400'),
-            'import.meta.env.VITE_APP_CENTER_PATH': JSON.stringify(envVars.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174'),
-            'import.meta.env.VITE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_TEMPLATE_PATH || 'https://lctemplates.gitlink.org.cn'),
-            'import.meta.env.VITE_DOMAIN_TEMPLATE_PATH': JSON.stringify(envVars.VITE_DOMAIN_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
-            'import.meta.env.VITE_SCENE_TEMPLATE_PATH': JSON.stringify(envVars.VITE_SCENE_TEMPLATE_PATH || 'https://registerapi.3as.cn'),
-        },
         server: {
             host: '0.0.0.0',
             port: 5173,
