@@ -3,16 +3,13 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-import router from './router';
-import App from './App.vue';
-import './assets/style.css';
+import DeviceList from './views/DeviceList.vue';
 
-const app = createApp(App);
+const app = createApp(DeviceList);
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia);
-app.use(router);
 app.use(ElementPlus);
 
 app.mount('#app');

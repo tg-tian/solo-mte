@@ -22,7 +22,7 @@
         "paths": {
             "@farris/ui-vue": ["../../node_modules/@farris/ui-vue"],
             "@farris/admin": ["./src"],
-            "@/*": ["./apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/meta-modeling-app/src/*"]
+            "@/*": ["./apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/shared/src/*"]
         }
     },
     "include": [

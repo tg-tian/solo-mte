@@ -93,6 +93,7 @@ export const useDeviceStore = defineStore('device', {
             if (wsInstance) return
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
             const url = `${protocol}//${window.location.host}/ws`
+            console.log('Connecting WS to', url)
             const ws = new WebSocket(url)
             wsInstance = ws
             ws.onopen = () => { console.log('WS connected') }
@@ -103,7 +104,7 @@ export const useDeviceStore = defineStore('device', {
                     
                     if (msg && msg.topic) {
                         if (msg.topic === 'device.updated') {
-                            console.log('WS Device Updated:', msg.data)
+                            //console.log('WS Device Updated:', msg.data)
                             this.applyShadow(msg.data)
                         } else if (msg.topic === 'device.discovery') {
                             console.log('WS Device Discovery:', msg.data)

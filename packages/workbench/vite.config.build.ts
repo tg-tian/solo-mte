@@ -6,16 +6,15 @@ import { resolve } from 'path';
 export default defineConfig({
     base: './',
     build: {
-        rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'index.html'),
-                'apps/platform/domain-platform/customize/domain/index': resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-list/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-setting/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-type-setting/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
-                'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html')
-            },
+            rollupOptions: {
+                input: {
+                    main: resolve(__dirname, 'index.html'),
+                    'apps/platform/domain-platform/customize/domain/index': resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
+                    'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
+                    'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html'),
+                    // 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
+                    'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html')
+                },
             output: {
                 assetFileNames: '[name].[hash].[ext]',
                 chunkFileNames: '[name].[hash].js',
@@ -26,7 +25,7 @@ export default defineConfig({
     plugins: [vue(), vueJsx()],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/meta-modeling-app/src'),
+            '@': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/shared/src'),
             '@workbench': resolve(__dirname, '../')
         }
     }
