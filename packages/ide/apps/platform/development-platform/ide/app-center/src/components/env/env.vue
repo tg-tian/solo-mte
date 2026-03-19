@@ -108,7 +108,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, watch, toRefs, nextTick } from 'vue'
 import { useSceneStore } from '../../store/scene'
-import { useDomainStore } from '../../store/domain'
 import { useDeviceStore } from '../../store/device'
 import { useAreaStore } from '../../store/area'
 import { useSceneTemplateStore } from "../../store/sceneTemplate";
@@ -123,7 +122,6 @@ const props = defineProps<{ domainId: number ; sceneId: number }>()
 
 
 const sceneStore = useSceneStore()
-const domainStore = useDomainStore()
 const deviceStore = useDeviceStore()
 const areaStore = useAreaStore()
 const sceneTemplateStore = useSceneTemplateStore()
@@ -318,10 +316,6 @@ const domainId = computed(() => {
   return props.domainId ?? null
 })
 
-// Get current domain
-const currentDomain = computed(() => {
-  return domainStore.currentDomain
-})
 
 const filteredDeviceConnections = computed(() => {
   console.log("deviceConnections", deviceConnections.value)
@@ -705,23 +699,7 @@ const publishForm = async () => {
   })
 }
 
-const saveTemplate = async () => {
-  if (!sceneFormRef.value) return
-  await sceneFormRef.value.validate(async (valid) => {
-    if (valid) {
-      try {
-        const res = await sceneTemplateStore.saveSceneTemplate(
-          sceneStore.currentScene,
-          deviceStore.devices,
-        )
-        ElMessage.success('保存模版成功')
-      } catch (error) {
-        console.error('保存模版失败:', error)
-        ElMessage.error('保存模版失败')
-      }
-    }
-  })
-}
+
 
 const publishScene = () => {
   if (sceneForm.value.url) {

@@ -110,29 +110,6 @@ export enum PurposeType {
   DeviceLogic = 'deviceLogic'
 }
 
-// Constraint interface
-export interface Constraint {
-  quantity: number;
-  type: string;
-}
-
-// Component interface
-export interface Component {
-  id?: number;
-  code: string;
-  name: string;
-  description: string;
-  type: ComponentType; // 'node' or 'edge'
-  purpose: PurposeType; // 'businessFlow', 'interfaceFlow', or 'deviceLogic'
-  createTime?: string;
-  updateTime?: string;
-  // For Node type
-  inputConstraint: Constraint;
-  outputConstraint: Constraint;
-  // For Edge type
-  startConstraint: Constraint;
-  endConstraint: Constraint;
-}
 
 // area interface
 export interface Area {

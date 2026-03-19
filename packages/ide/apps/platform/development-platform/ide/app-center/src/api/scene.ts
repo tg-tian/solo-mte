@@ -1,6 +1,5 @@
 import request from '../utils/request'
 import { mockScenes } from './mock'
-import scenePlatformRequest from "../utils/scenePlatformRequest";
 
 // 实际环境下的API接口
 export function getScenes(domainId?: number) {
@@ -77,13 +76,7 @@ export function getSceneDeviceTypes(sceneId: number) {
     })
 }
 
-export function setScenePlatform(data: any){
-    return scenePlatformRequest({
-        url:"/api/v1/specification/create",
-        method:'post',
-        data: data
-    })
-}
+
 
 
 // Mock API functions for development without backend
