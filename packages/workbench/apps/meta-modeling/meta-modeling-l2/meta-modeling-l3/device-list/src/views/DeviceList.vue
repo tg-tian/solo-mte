@@ -19,15 +19,8 @@
             <el-option label="浪潮 IOT" value="inspire_iot" />
           </el-select>
         </el-form-item>
-        <el-form-item label="设备模型">
-          <el-select v-model="searchForm.deviceTypeName" placeholder="选择模型" clearable filterable style="width: 200px">
-            <el-option
-              v-for="item in deviceModelStore.deviceModels"
-              :key="item.id"
-              :label="item.modelName"
-              :value="item.modelName"
-            />
-          </el-select>
+        <el-form-item label="设备名称">
+          <el-input v-model="searchForm.deviceName" placeholder="请输入设备名称" clearable style="width: 200px" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">查询</el-button>
@@ -43,6 +36,16 @@
       class="premium-table"
       :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
     >
+      <el-table-column prop="deviceId" label="设备ID" min-width="150" align="center">
+        <template #default="{ row }">
+          <el-tag size="small" effect="plain">{{ row.deviceId }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="deviceName" label="设备名称" min-width="150">
+        <template #default="{ row }">
+          <span class="model-name-text">{{ row.deviceName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="provider" label="供应商" width="120" align="center">
         <template #default="{ row }">
           <el-tag :type="row.provider === 'mqtt' ? 'success' : 'warning'" size="small" effect="light">
@@ -50,11 +53,9 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="deviceTypeName" label="设备模型" min-width="150" align="center" />
-      <el-table-column prop="deviceModel" label="设备型号" min-width="150" align="center" />
-      <el-table-column prop="deviceName" label="设备名称" min-width="150">
+      <el-table-column label="设备模型" min-width="150" align="center">
         <template #default="{ row }">
-          <span class="model-name-text">{{ row.deviceName }}</span>
+          {{ getModelName(row.modelId) }}
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" min-width="180" align="center" />
@@ -62,7 +63,7 @@
       <el-table-column label="操作" width="200" fixed="right" align="center">
         <template #default="{ row }">
           <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-          <el-button link type="primary" @click="viewMapper(row)">查看驱动</el-button>
+          <el-button link type="success" @click="viewMapper(row)">查看驱动</el-button>
           <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -105,9 +106,9 @@
               <el-option label="浪潮 IOT" value="inspire_iot" />
             </el-select>
           </el-form-item>
-          <el-form-item label="设备模型" prop="deviceTypeId">
+          <el-form-item label="设备模型" prop="modelId">
             <el-select 
-              v-model="form.deviceTypeId" 
+              v-model="form.modelId" 
               placeholder="请选择设备模型" 
               style="width: 100%"
               filterable
@@ -117,15 +118,15 @@
                 v-for="item in deviceModelStore.deviceModels"
                 :key="item.id"
                 :label="item.modelName"
-                :value="item.id"
+                :value="item.modelId"
               />
             </el-select>
           </el-form-item>
         </div>
 
         <div class="form-grid">
-          <el-form-item label="设备型号" prop="deviceModel">
-            <el-input v-model="form.deviceModel" placeholder="请输入设备型号" @input="handleModelInput" />
+          <el-form-item label="设备ID" prop="deviceId">
+            <el-input v-model="form.deviceId" placeholder="请输入设备ID (例如: SN123456)" @input="handleModelInput" />
           </el-form-item>
           <el-form-item label="设备名称" prop="deviceName">
             <el-input v-model="form.deviceName" placeholder="请输入设备名称" />
@@ -155,8 +156,8 @@
             <div v-for="(value, key) in form.actionMap" :key="key" class="mapping-item-vertical">
               <div class="mapping-item-header">
                 <span class="platform-prop">{{ key }}</span>
-                <span class="prop-desc" v-if="deviceModelStore.deviceModels.find(t => t.id === form.deviceTypeId)?.model?.actions[key]?.description">
-                  ({{ deviceModelStore.deviceModels.find(t => t.id === form.deviceTypeId)?.model?.actions[key]?.description }})
+                <span class="prop-desc" v-if="deviceModelStore.deviceModels.find(t => t.modelId === form.modelId)?.model?.actions[key]?.description">
+                  ({{ deviceModelStore.deviceModels.find(t => t.modelId === form.modelId)?.model?.actions[key]?.description }})
                 </span>
               </div>
               <div class="editor-wrapper">
@@ -232,7 +233,7 @@ const searchForm = reactive({
   current: 1,
   size: 10,
   provider: '',
-  deviceTypeName: ''
+  deviceName: ''
 })
 
 const formattedRecords = computed(() => {
@@ -243,6 +244,11 @@ const formattedRecords = computed(() => {
   }))
 })
 
+const getModelName = (modelId: string) => {
+  const model = deviceModelStore.deviceModels.find((item: any) => item.modelId === modelId)
+  return model ? model.modelName : modelId
+}
+
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const submitting = ref(false)
@@ -251,9 +257,8 @@ const formRef = ref<FormInstance>()
 const form = reactive({
   id: undefined as number | undefined,
   provider: '',
-  deviceTypeId: undefined as number | undefined,
-  deviceTypeName: '',
-  deviceModel: '',
+  modelId: '',
+  deviceId: '',
   deviceName: '',
   deviceMapperPath: undefined as string | undefined,
   propertyMap: {} as Record<string, string>,
@@ -262,8 +267,8 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
     provider: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-    deviceTypeId: [{ required: true, message: '请选择设备模型', trigger: 'change' }],
-    deviceModel: [{ required: true, message: '请输入设备型号', trigger: 'blur' }]
+    modelId: [{ required: true, message: '请选择设备模型', trigger: 'change' }],
+    deviceId: [{ required: true, message: '请输入设备ID', trigger: 'blur' }]
   })
 
 onMounted(async () => {
@@ -277,7 +282,7 @@ const handleSearch = () => {
 
 const resetSearch = () => {
   searchForm.provider = ''
-  searchForm.deviceTypeName = ''
+  searchForm.deviceName = ''
   searchForm.current = 1
   handleSearch()
 }
@@ -287,9 +292,8 @@ const handleCreate = () => {
   Object.assign(form, {
     id: undefined,
     provider: 'mqtt',
-    deviceTypeId: undefined,
-    deviceTypeName: '',
-    deviceModel: '',
+    modelId: '',
+    deviceId: '',
     deviceName: '',
     deviceMapperPath: undefined,
     propertyMap: {},
@@ -304,9 +308,8 @@ const handleEdit = (row: any) => {
   // 确保所有字段都被正确复制，特别是id
   form.id = row.id
   form.provider = row.provider
-  form.deviceTypeId = row.deviceTypeId
-  form.deviceTypeName = row.deviceTypeName
-  form.deviceModel = row.deviceModel
+  form.modelId = row.modelId
+  form.deviceId = row.deviceId
   form.deviceName = row.deviceName
   form.deviceMapperPath = row.deviceMapperPath
   form.propertyMap = row.propertyMap ? { ...row.propertyMap } : {}
@@ -315,10 +318,10 @@ const handleEdit = (row: any) => {
   dialogVisible.value = true
 }
 
-const handleDeviceTypeChange = (id: number) => {
-  const selectedType = deviceModelStore.deviceModels.find((t: any) => t.id === id)
+const handleDeviceTypeChange = (modelId: string) => {
+  const selectedType = deviceModelStore.deviceModels.find((t: any) => t.modelId === modelId)
   if (selectedType) {
-    form.deviceTypeName = selectedType.modelName
+    // form.deviceTypeName = selectedType.modelName // No longer needed
     // 初始化属性映射为 1:1
     const mapping = {} as Record<string, string>
     if (selectedType.model && selectedType.model.properties) {
@@ -340,7 +343,7 @@ const handleDeviceTypeChange = (id: number) => {
 }
 
 const handleModelInput = (val: string) => {
-  // 默认将设备型号字段带出到设备名称 (如果名称为空或与之前型号一致)
+  // 默认将设备ID字段带出到设备名称 (如果名称为空或与之前ID一致)
   if (!form.deviceName || form.deviceName === '') {
     form.deviceName = val
   }
@@ -376,7 +379,7 @@ const submitForm = async () => {
 }
 
 const handleDelete = (row: any) => {
-  ElMessageBox.confirm(`确定要删除设备${row.deviceModel} 吗?`, '警告', {
+  ElMessageBox.confirm(`确定要删除设备${row.deviceName || row.deviceId} 吗?`, '警告', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
@@ -395,8 +398,7 @@ const viewMapper = async (row: any) => {
   try {
     const res: any = await getMapperContent({
       provider: row.provider,
-      deviceTypeName: row.deviceTypeName,
-      deviceModel: row.deviceModel
+      deviceId: row.deviceId
     })
     mapperContent.value = res.data?.content
     mapperVisible.value = true
@@ -670,13 +672,13 @@ const copyMapperContent = () => {
 }
 
 
-.search-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
+:deep(.el-table__header) {
   font-weight: 600;
-  color: #303133;
+}
+
+:deep(.el-button--link) {
+  padding: 4px 8px;
+  font-size: 14px;
 }
 
 :deep(.el-table__row) {

@@ -47,9 +47,8 @@ export interface DeviceModel {
 export interface Device {
     id?: number;
     provider: string; // 设备厂商
-    deviceTypeId?: number; // 设备类型ID
-    deviceTypeName: string; // 设备类型名称
-    deviceModel: string; // 设备型号
+    modelId: string; // 设备模型ID (对应 DeviceModel.modelId)
+    deviceId: string; // 设备ID (唯一标识)
     deviceName?: string; // 设备名称
     deviceMapperPath?: string; // 设备Mapper路径
     propertyMap?: Record<string, string>; // 属性映射规则

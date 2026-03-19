@@ -2,7 +2,7 @@ import request from '../utils/request'
 
 export function getDevicePage(params: any) {
     return request({
-        url: '/device-library/page',
+        url: '/device/page',
         method: 'get',
         params
     })
@@ -10,21 +10,21 @@ export function getDevicePage(params: any) {
 
 export function getDeviceList() {
     return request({
-        url: '/device-library/list',
+        url: '/device/list',
         method: 'get'
     })
 }
 
 export function getDeviceById(id: number) {
     return request({
-        url: `/device-library/${id}`,
+        url: `/device/${id}`,
         method: 'get'
     })
 }
 
 export function saveDevice(data: any) {
     return request({
-        url: '/device-library',
+        url: '/device',
         method: 'post',
         data
     })
@@ -32,7 +32,7 @@ export function saveDevice(data: any) {
 
 export function updateDevice(data: any) {
     return request({
-        url: '/device-library',
+        url: '/device',
         method: 'put',
         data
     })
@@ -40,14 +40,14 @@ export function updateDevice(data: any) {
 
 export function deleteDevice(id: number) {
     return request({
-        url: `/device-library/${id}`,
+        url: `/device/${id}`,
         method: 'delete'
     })
 }
 
 export function getMapperContent(params: any) {
     return request({
-        url: '/device-library/mapper',
+        url: '/device/mapper',
         method: 'get',
         params
     })
