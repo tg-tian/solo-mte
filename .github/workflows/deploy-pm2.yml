@@ -23,4 +23,4 @@ jobs:
             git pull 
             if [ -s "$HOME/.nvm/nvm.sh" ]; then . "$HOME/.nvm/nvm.sh"; fi
             export PATH="$PATH:/usr/local/bin:/usr/bin:/bin"
-            pm2 startOrReload ecosystem.config.js --update-env
+            pm2 startOrReload ecosystem.config.js
