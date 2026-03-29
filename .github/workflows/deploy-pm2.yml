@@ -5,6 +5,9 @@ on:
     branches:
       - ide
       - workbench
+    paths:
+      - 'ide/**'
+      - 'workbench/**'
   workflow_dispatch:
 
 jobs:
