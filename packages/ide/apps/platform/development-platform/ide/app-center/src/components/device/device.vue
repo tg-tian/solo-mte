@@ -1,8 +1,5 @@
 <template>
   <div class="scene-setting-container">
-    <div class="scene-header">
-      <h2>{{ sceneName }} </h2>
-    </div>
     <el-card class="setting-content">
       <el-card class="device-search">
         <div class="device-search-row">
@@ -595,7 +592,6 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .scene-setting-container {
-  padding: 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
