@@ -3,8 +3,8 @@ module.exports = {
     {
       name: 'solo-ide',
       cwd: '/root/solo-mte/packages/ide',
-      script: 'npm',
-      args: 'run dev',
+      script: 'node_modules/vite/bin/vite.js',
+      args: '--config ./vite.config.dev.ts',
       instances: 1,
       autorestart: true,
       watch: false,
