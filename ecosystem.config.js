@@ -20,7 +20,7 @@ module.exports = {
     {
       name: 'solo-workbench',
       cwd: '/root/solo-mte/packages/workbench',
-      script: 'node_modules/.bin/vite',
+      script: 'node_modules/vite/bin/vite.js',
       args: '--config ./vite.config.dev.ts',
       instances: 1,
       autorestart: true,
