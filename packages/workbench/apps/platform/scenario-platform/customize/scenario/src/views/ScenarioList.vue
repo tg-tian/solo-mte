@@ -1,10 +1,8 @@
 <template>
-  <div class="f-page f-page-is-managelist domain-page">
+  <div class="f-page f-page-is-managelist scenario-page">
     <div class="page-header">
-      <div class="page-title-group">
-        <h2 class="page-title">领域列表</h2>
-      </div>
-      <el-button type="primary" class="btn-primary" @click="handleCreate">创建领域</el-button>
+      <h2 class="page-title">场景列表</h2>
+      <el-button type="primary" class="btn-primary" @click="handleCreate">创建场景</el-button>
     </div>
 
     <el-card shadow="never" class="search-card">
@@ -14,7 +12,8 @@
         </el-form-item>
         <el-form-item label="状态" class="search-item">
           <el-select v-model="searchStatus" placeholder="全部" clearable style="width: 160px">
-            <el-option label="开发中" value="0" />
+            <el-option label="定制中" value="2" />
+            <el-option label="测试中" value="0" />
             <el-option label="已发布" value="1" />
           </el-select>
         </el-form-item>
@@ -24,27 +23,27 @@
       </el-form>
     </el-card>
 
-    <div class="domain-list" v-loading="store.loading">
-      <div v-for="item in filteredDomains" :key="item.domainId" class="f-domain-card f-template-card-row">
-        <div class="f-domain-card-header listview-item-content">
+    <div class="scenario-list" v-loading="store.loading">
+      <div v-for="item in filteredScenarios" :key="item.sceneId" class="f-scenario-card f-template-card-row">
+        <div class="f-scenario-card-header listview-item-content">
           <div class="listview-item-icon">
             <i class="f-icon f-icon-engineering"></i>
           </div>
           <div class="listview-item-main">
-            <h4 class="listview-item-title">{{ item.domainName }}</h4>
-            <h5 class="listview-item-subtitle">{{ item.domainCode }}</h5>
+            <h4 class="listview-item-title">{{ item.sceneName }}</h4>
+            <h5 class="listview-item-subtitle">{{ item.sceneCode }}</h5>
             <span :class="getBadgeClass(item.status)">{{ statusText(item.status) }}</span>
           </div>
         </div>
-        <div class="f-domain-card-content">
-          <p>{{ item.domainDescription }}</p>
+        <div class="f-scenario-card-content">
+          <p>{{ item.sceneDescription }}</p>
         </div>
-        <div class="f-domain-card-footer">
+        <div class="f-scenario-card-footer">
           <div class="btn-group f-btn-group-links">
-            <el-button text class="icon-btn" @click="openDomainPlatform(item)">
+            <el-button text class="icon-btn" @click="editScenarioPlatform(item)">
               <i class="f-icon f-icon-edit-cardview"></i>
             </el-button>
-            <el-button text class="icon-btn" @click="openDomainScen(item)">
+            <el-button text class="icon-btn" @click="openScenarioPlatform(item)">
               <i class="f-icon f-icon-share"></i>
             </el-button>
             <el-button text class="icon-btn icon-btn-disabled">
@@ -60,58 +59,60 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useDomainStore } from '../store/domain';
-import type { DomainRecord } from '../types/models';
+import { useScenarioStore } from '../store/scenario';
+import type { ScenarioRecord } from '../types/models';
 
-const store = useDomainStore();
+const store = useScenarioStore();
 const searchName = ref('');
 const searchStatus = ref('');
 const metaFront = import.meta.env.VITE_META_FRONT || 'http://localhost:2400';
+const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
 
-const filteredDomains = computed(() => {
-  return store.domains.filter((item) => {
-    const nameMatched = !searchName.value || item.domainName.includes(searchName.value);
+const filteredScenarios = computed(() => {
+  return store.scenarios.filter((item) => {
+    const nameMatched = !searchName.value || item.sceneName.includes(searchName.value);
     const statusMatched = !searchStatus.value || item.status === searchStatus.value;
     return nameMatched && statusMatched;
   });
 });
 
 function statusText(status: string) {
+  if (status === '0') {
+    return '测试中';
+  }
   if (status === '1') {
     return '已发布';
   }
-  return '开发中';
+  return '定制中';
 }
 
 function getBadgeClass(status: string) {
   return {
     bage: true,
-    'bage-developing': status !== '1',
-    'bage-published': status === '1'
+    'bage-testing': status === '0',
+    'bage-published': status === '1',
+    'bage-editing': status === '2'
   };
 }
 
-function openUrl(domain: DomainRecord, path: string) {
-  const deployPath = path.replace(/[`'"]/g, '');
+function editScenarioPlatform(scenario: ScenarioRecord) {
+  const deployPath = `${metaFront}/#/domain/scene/setting?mode=edit&sceneId=${scenario.sceneId}`.replace(/[`'"]/g, '');
   window.top?.postMessage({
     eventType: 'invoke',
     method: 'openUrl',
-    params: [domain.domainId, domain.domainCode, domain.domainName, deployPath]
+    params: [scenario.sceneId, scenario.sceneCode, scenario.sceneName, deployPath]
   });
 }
 
-function openDomainPlatform(domain: DomainRecord) {
-  const path = `${metaFront}/#/meta/domain/setting?mode=edit&domainId=${domain.domainId}`;
-  openUrl(domain, path);
-}
-
-function openDomainScen(domain: DomainRecord) {
-  const path = `${metaFront}/#/domain/scene/list?domainId=${domain.domainId}`;
-  openUrl(domain, path);
+function openScenarioPlatform(scenario: ScenarioRecord) {
+  const deployPath = `${appCenterPath}/apps/platform/development-platform/ide/app-center/index.html`.replace(/[`'"]/g, '');
+  const url = new URL(deployPath, window.location.origin);
+  url.searchParams.append('scenarioId', scenario.sceneId);
+  window.open(url.toString(), '_blank', 'noopener,noreferrer');
 }
 
 function handleCreate() {
-  ElMessage.info('创建领域功能待实现');
+  ElMessage.info('创建场景功能待实现');
 }
 
 function resetSearch() {
@@ -120,12 +121,12 @@ function resetSearch() {
 }
 
 onMounted(() => {
-  store.fetchDomains();
+  store.fetchScenarios();
 });
 </script>
 
 <style scoped>
-.domain-page {
+.scenario-page {
   min-height: 100%;
   padding: 16px 20px;
 }
@@ -135,11 +136,6 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-}
-
-.page-title-group {
-  display: flex;
-  align-items: center;
 }
 
 .page-title {
@@ -168,13 +164,13 @@ onMounted(() => {
   margin: 0 0 0 auto;
 }
 
-.domain-list {
+.scenario-list {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
 }
 
-.f-domain-card {
+.f-scenario-card {
   background-image: url('/assets/images/card-background.png');
   background-size: cover;
   border-radius: 10px;
@@ -186,15 +182,15 @@ onMounted(() => {
   width: 280px;
 }
 
-.f-domain-card:hover {
+.f-scenario-card:hover {
   box-shadow: 0 4px 14px rgba(20, 35, 90, 0.16);
 }
 
-.f-domain-card-header.listview-item-content {
+.f-scenario-card-header.listview-item-content {
   display: flex;
 }
 
-.f-domain-card-header .listview-item-icon {
+.f-scenario-card-header .listview-item-icon {
   border-radius: 21px;
   display: flex;
   height: 42px;
@@ -203,13 +199,13 @@ onMounted(() => {
   background-image: linear-gradient(-51deg, #78b5ff 0%, #4d98ff 50%);
 }
 
-.f-domain-card-header .listview-item-icon > i {
+.f-scenario-card-header .listview-item-icon > i {
   margin: auto;
   color: #fff;
   font-size: 22px;
 }
 
-.f-domain-card-header .listview-item-title {
+.f-scenario-card-header .listview-item-title {
   margin-bottom: 0;
   color: rgba(0, 0, 0, 0.85);
   font-size: 15px;
@@ -218,14 +214,14 @@ onMounted(() => {
   line-height: 1.4rem;
 }
 
-.f-domain-card-header .listview-item-subtitle {
+.f-scenario-card-header .listview-item-subtitle {
   margin-bottom: 0;
   color: #7a8dae;
   font-size: 13px;
   font-weight: 400;
 }
 
-.f-domain-card-header .bage {
+.f-scenario-card-header .bage {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -238,19 +234,25 @@ onMounted(() => {
   line-height: 18px;
 }
 
-.f-domain-card-header .bage-developing {
+.f-scenario-card-header .bage-testing {
   background: #eef5ff;
   border: 1px solid rgba(56, 143, 255, 0.8);
   color: #388fff;
 }
 
-.f-domain-card-header .bage-published {
+.f-scenario-card-header .bage-published {
   background: #fff4e5;
   border: 1px solid rgba(255, 152, 0, 0.8);
   color: #ff9800;
 }
 
-.f-domain-card-content p {
+.f-scenario-card-header .bage-editing {
+  background: #f0f9f2;
+  border: 1px solid rgba(51, 186, 143, 1);
+  color: #33ba8f;
+}
+
+.f-scenario-card-content p {
   margin: 0;
   color: #7a8dae;
   font-size: 13px;
@@ -262,17 +264,17 @@ onMounted(() => {
   white-space: nowrap;
 }
 
-.f-domain-card-footer {
+.f-scenario-card-footer {
   display: flex;
   justify-content: flex-end;
   margin-top: 14px;
 }
 
-.f-domain-card-footer .btn-group {
+.f-scenario-card-footer .btn-group {
   visibility: hidden;
 }
 
-.f-domain-card:hover .btn-group {
+.f-scenario-card:hover .btn-group {
   visibility: visible;
 }
 

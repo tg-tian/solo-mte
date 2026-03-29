@@ -5,13 +5,19 @@ import type { DomainRecord } from '../types/models';
 const domainSourceUri = 'http://139.196.147.52:8080/domains';
 
 const statusMap: Record<string, string> = {
+  '0': '0',
+  '1': '1',
+  '2': '0',
   testing: '0',
   published: '1',
-  editing: '2'
+  editing: '0',
+  developing: '0',
+  development: '0'
 };
 
 function normalizeDomain(domain: Record<string, any>): DomainRecord {
-  const status = domain.status in statusMap ? statusMap[domain.status] : `${domain.status ?? '2'}`;
+  const rawStatus = `${domain.status ?? ''}`.trim().toLowerCase();
+  const status = rawStatus in statusMap ? statusMap[rawStatus] : '0';
   return {
     domainId: `${domain.domainId ?? domain.id ?? ''}`,
     domainName: domain.domainName ?? domain.title ?? '',

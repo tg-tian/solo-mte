@@ -9,3 +9,16 @@
    - 状态筛选与名称筛选；
    - 点击“领域建模”与“场景设计”后通过 window.top.postMessage 打开目标地址。
 6. 数据读取保持“远端优先 + 本地兜底”，本地仍复用 src/assets/domains.json，确保后端不可用时页面正常展示原有领域信息。
+7. 本次 UI 修正的关键不是单纯换组件，而是恢复原有视觉体系依赖：
+   - 在 domain/index.html 恢复 /assets/farris-all.css 与 /assets/icon/iconfont.css；
+   - 根节点恢复 class="solo-admin"，让全局管理后台样式生效。
+8. 领域页面视觉已按场景页面风格对齐，核心样式策略：
+   - 卡片使用 card-background.png、同款圆角与阴影层级；
+   - 状态标签使用与场景页一致的 testing/published/editing 三态颜色；
+   - 卡片底部操作按钮默认隐藏，hover 后显示，保持交互一致性。
+9. 结构上保持“新架构 + 旧视觉”的组合思路：
+   - 架构继续使用 Vue + ElementPlus + Pinia 的模块化组织；
+   - 视觉语义复用原 Farris class 体系（f-page、f-template-card-row、f-icon 等）。
+10. 对后续改造的经验：
+   - UI 迁移优先保留设计系统入口（全局 css、iconfont、容器 class）；
+   - 再做组件层替换，否则容易出现“功能正常但风格丢失”的问题。

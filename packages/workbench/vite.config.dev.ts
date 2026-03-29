@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => {
                 input: {
                     main: resolve(__dirname, 'index.html'),
                     domain: resolve(__dirname, 'apps/platform/domain-platform/customize/domain/index.html'),
+                    scenario: resolve(__dirname, 'apps/platform/scenario-platform/customize/scenario/index.html'),
                     'device-model-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
                     'device-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html'),
                     // 'node-type-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
