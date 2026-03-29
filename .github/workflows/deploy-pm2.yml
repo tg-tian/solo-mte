@@ -1,13 +1,7 @@
 name: Deploy PM2
 
 on:
-  push:
-    branches:
-      - ide
-      - workbench
-    paths:
-      - 'ide/**'
-      - 'workbench/**'
+  push: {}
   workflow_dispatch:
 
 jobs:
