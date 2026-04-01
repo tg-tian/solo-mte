@@ -7,13 +7,17 @@
 
     <el-card shadow="never" class="search-card">
       <el-form :inline="true" class="search-form">
-        <el-form-item label="平台名称" class="search-item">
-          <el-input v-model="searchName" placeholder="请输入平台名称" clearable style="width: 240px" />
+        <el-form-item label="场景名称" class="search-item">
+          <el-input v-model="searchName" placeholder="请输入场景名称" clearable style="width: 240px" />
+        </el-form-item>
+        <el-form-item label="领域" class="search-item">
+          <el-select v-model="searchDomainId" placeholder="全部" clearable style="width: 220px">
+            <el-option v-for="domain in domains" :key="domain.domainId" :label="domain.domainName" :value="domain.domainId" />
+          </el-select>
         </el-form-item>
         <el-form-item label="状态" class="search-item">
           <el-select v-model="searchStatus" placeholder="全部" clearable style="width: 160px">
-            <el-option label="定制中" value="2" />
-            <el-option label="测试中" value="0" />
+            <el-option label="开发中" value="0" />
             <el-option label="已发布" value="1" />
           </el-select>
         </el-form-item>
@@ -40,88 +44,296 @@
         </div>
         <div class="f-scenario-card-footer">
           <div class="btn-group f-btn-group-links">
-            <el-button text class="icon-btn" @click="editScenarioPlatform(item)">
-              <i class="f-icon f-icon-edit-cardview"></i>
+            <el-button text class="icon-btn" @click="openScenarioDetail(item)">
+              <el-icon><Edit /></el-icon>
+            </el-button>
+            <el-button text class="icon-btn" :loading="publishingSceneId === item.sceneId" @click="togglePublish(item)">
+              <el-icon v-if="isPublished(item.status)"><RefreshLeft /></el-icon>
+              <el-icon v-else><Promotion /></el-icon>
             </el-button>
             <el-button text class="icon-btn" @click="openScenarioPlatform(item)">
-              <i class="f-icon f-icon-share"></i>
-            </el-button>
-            <el-button text class="icon-btn icon-btn-disabled">
-              <i class="f-icon f-icon-yxs_delete"></i>
+              <el-icon><Link /></el-icon>
             </el-button>
           </div>
         </div>
       </div>
     </div>
+
+    <el-dialog v-model="createDialogVisible" title="创建场景" width="620px" destroy-on-close>
+      <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="88px">
+        <el-form-item label="场景名称" prop="name">
+          <el-input v-model="createForm.name" maxlength="50" show-word-limit />
+        </el-form-item>
+        <el-form-item label="场景编码" prop="code">
+          <el-input v-model="createForm.code" maxlength="50" show-word-limit />
+        </el-form-item>
+        <el-form-item label="所属领域" prop="domainId">
+          <el-select v-model="createForm.domainId" style="width: 100%" placeholder="请选择领域">
+            <el-option v-for="item in domains" :key="item.domainId" :label="item.domainName" :value="item.domainId" />
+          </el-select>
+        </el-form-item>
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item label="经度" prop="longitude">
+              <el-input-number v-model="createForm.longitude" :precision="6" :step="0.0001" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="纬度" prop="latitude">
+              <el-input-number v-model="createForm.latitude" :precision="6" :step="0.0001" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="图片地址" prop="imageUrl">
+          <el-input v-model="createForm.imageUrl" maxlength="255" />
+        </el-form-item>
+        <el-form-item label="访问地址" prop="url">
+          <el-input v-model="createForm.url" maxlength="255" />
+        </el-form-item>
+        <el-form-item label="场景描述" prop="description">
+          <el-input v-model="createForm.description" type="textarea" :rows="3" maxlength="200" show-word-limit />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="createDialogVisible = false">取消</el-button>
+        <el-button type="primary" :loading="createSubmitting" @click="submitCreate">创建</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      v-model="detailDrawerVisible"
+      fullscreen
+      destroy-on-close
+      :show-close="false"
+      class="scenario-detail-dialog"
+    >
+      <ScenarioDetail
+        v-if="activeScenario"
+        :scenario="activeScenario"
+        :domains="domains"
+        :saving="editSubmitting"
+        @save="saveScenarioDetail"
+        @cancel="detailDrawerVisible = false"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
+import { Edit, Link, Promotion, RefreshLeft } from '@element-plus/icons-vue';
+import { createScenario, getDomainOptions, getScenarioList, publishScenario, updateScenario } from '../api/scenario';
 import { useScenarioStore } from '../store/scenario';
-import type { ScenarioRecord } from '../types/models';
+import type { DomainOption, ScenarioRecord } from '../types/models';
+import ScenarioDetail from './ScenarioDetail.vue';
 
 const store = useScenarioStore();
 const searchName = ref('');
+const searchDomainId = ref('');
 const searchStatus = ref('');
-const metaFront = import.meta.env.VITE_META_FRONT || 'http://localhost:2400';
+const domains = ref<DomainOption[]>([]);
+const activeScenario = ref<ScenarioRecord | null>(null);
+const detailDrawerVisible = ref(false);
+const publishingSceneId = ref('');
+const editSubmitting = ref(false);
+const createDialogVisible = ref(false);
+const createSubmitting = ref(false);
+const createFormRef = ref<FormInstance>();
+const createForm = ref({
+  code: '',
+  name: '',
+  description: '',
+  status: '0' as '0' | '1',
+  url: '',
+  domainId: '',
+  longitude: null as number | null,
+  latitude: null as number | null,
+  imageUrl: ''
+});
+const createRules: FormRules = {
+  name: [{ required: true, message: '请输入场景名称', trigger: 'blur' }],
+  code: [
+    { required: true, message: '请输入场景编码', trigger: 'blur' },
+    { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: '场景编码需字母开头，仅支持字母数字下划线', trigger: 'blur' }
+  ],
+  domainId: [{ required: true, message: '请选择领域', trigger: 'change' }]
+};
+
 const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
 
 const filteredScenarios = computed(() => {
   return store.scenarios.filter((item) => {
     const nameMatched = !searchName.value || item.sceneName.includes(searchName.value);
+    const domainMatched = !searchDomainId.value || item.domainId === searchDomainId.value;
     const statusMatched = !searchStatus.value || item.status === searchStatus.value;
-    return nameMatched && statusMatched;
+    return nameMatched && domainMatched && statusMatched;
   });
 });
 
-function statusText(status: string) {
-  if (status === '0') {
-    return '测试中';
+async function refreshScenarios() {
+  store.loading = true;
+  try {
+    store.scenarios = await getScenarioList(searchDomainId.value || undefined);
+  } finally {
+    store.loading = false;
   }
-  if (status === '1') {
+}
+
+async function refreshDomains() {
+  domains.value = await getDomainOptions();
+}
+
+function statusText(status: string) {
+  if (isPublished(status)) {
     return '已发布';
   }
-  return '定制中';
+  return '开发中';
 }
 
 function getBadgeClass(status: string) {
   return {
     bage: true,
-    'bage-testing': status === '0',
-    'bage-published': status === '1',
-    'bage-editing': status === '2'
+    'bage-testing': !isPublished(status),
+    'bage-published': isPublished(status)
   };
 }
 
-function editScenarioPlatform(scenario: ScenarioRecord) {
-  const deployPath = `${metaFront}/#/domain/scene/setting?mode=edit&sceneId=${scenario.sceneId}`.replace(/[`'"]/g, '');
-  window.top?.postMessage({
-    eventType: 'invoke',
-    method: 'openUrl',
-    params: [scenario.sceneId, scenario.sceneCode, scenario.sceneName, deployPath]
-  });
+function isPublished(status: string) {
+  return `${status ?? ''}`.trim() === '1';
+}
+
+function openScenarioDetail(scenario: ScenarioRecord) {
+  activeScenario.value = scenario;
+  detailDrawerVisible.value = true;
 }
 
 function openScenarioPlatform(scenario: ScenarioRecord) {
-  const deployPath = `${appCenterPath}/apps/platform/development-platform/ide/app-center/index.html`.replace(/[`'"]/g, '');
+  if (isPublished(scenario.status) && scenario.url) {
+    window.open(scenario.url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  const deployPath = `${appCenterPath}/apps/platform/development-platform/ide/app-center/index.html`.replace(/[ `'"]/g, '');
   const url = new URL(deployPath, window.location.origin);
   url.searchParams.append('scenarioId', scenario.sceneId);
   window.open(url.toString(), '_blank', 'noopener,noreferrer');
 }
 
 function handleCreate() {
-  ElMessage.info('创建场景功能待实现');
+  createForm.value = {
+    code: '',
+    name: '',
+    description: '',
+    status: '0',
+    url: '',
+    domainId: searchDomainId.value || domains.value[0]?.domainId || '',
+    longitude: null,
+    latitude: null,
+    imageUrl: ''
+  };
+  createDialogVisible.value = true;
+}
+
+async function submitCreate() {
+  if (!createFormRef.value) {
+    return;
+  }
+  const valid = await createFormRef.value.validate().catch(() => false);
+  if (!valid) {
+    return;
+  }
+  createSubmitting.value = true;
+  try {
+    await createScenario({
+      code: createForm.value.code.trim(),
+      name: createForm.value.name.trim(),
+      description: createForm.value.description.trim(),
+      status: createForm.value.status,
+      url: createForm.value.url.trim(),
+      domainId: Number(createForm.value.domainId),
+      location:
+        createForm.value.longitude !== null && createForm.value.latitude !== null
+          ? { lng: createForm.value.longitude, lat: createForm.value.latitude }
+          : null,
+      imageUrl: createForm.value.imageUrl.trim()
+    });
+    createDialogVisible.value = false;
+    ElMessage.success('创建成功');
+    await refreshScenarios();
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data || '创建失败');
+  } finally {
+    createSubmitting.value = false;
+  }
+}
+
+async function togglePublish(scene: ScenarioRecord) {
+  const nextStatus = isPublished(scene.status) ? '0' : '1';
+  publishingSceneId.value = scene.sceneId;
+  try {
+    await publishScenario({
+      sceneId: Number(scene.sceneId),
+      status: nextStatus,
+      url: scene.url || ''
+    });
+    ElMessage.success(nextStatus === '1' ? '发布成功' : '已取消发布');
+    await refreshScenarios();
+    if (activeScenario.value?.sceneId === scene.sceneId) {
+      activeScenario.value = store.scenarios.find((item) => item.sceneId === scene.sceneId) || null;
+    }
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data || '操作失败');
+  } finally {
+    publishingSceneId.value = '';
+  }
+}
+
+async function saveScenarioDetail(payload: ScenarioRecord) {
+  editSubmitting.value = true;
+  try {
+    const currentStatus = activeScenario.value ? (isPublished(activeScenario.value.status) ? '1' : '0') : '0';
+    await updateScenario(payload.sceneId, {
+      code: payload.sceneCode,
+      name: payload.sceneName,
+      description: payload.sceneDescription || '',
+      status: currentStatus,
+      url: payload.url || '',
+      domainId: Number(payload.domainId),
+      location:
+        payload.longitude !== null && payload.longitude !== undefined && payload.latitude !== null && payload.latitude !== undefined
+          ? { lng: Number(payload.longitude), lat: Number(payload.latitude) }
+          : null,
+      imageUrl: payload.imageUrl || ''
+    });
+    if (currentStatus === '1') {
+      await publishScenario({
+        sceneId: Number(payload.sceneId),
+        status: '1',
+        url: payload.url || ''
+      });
+    }
+    ElMessage.success('保存成功');
+    await refreshScenarios();
+    activeScenario.value = store.scenarios.find((item) => item.sceneId === payload.sceneId) || null;
+    detailDrawerVisible.value = false;
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data || '保存失败');
+  } finally {
+    editSubmitting.value = false;
+  }
 }
 
 function resetSearch() {
   searchName.value = '';
+  searchDomainId.value = '';
   searchStatus.value = '';
+  refreshScenarios();
 }
 
 onMounted(() => {
-  store.fetchScenarios();
+  refreshDomains();
+  refreshScenarios();
 });
 </script>
 
@@ -246,12 +458,6 @@ onMounted(() => {
   color: #ff9800;
 }
 
-.f-scenario-card-header .bage-editing {
-  background: #f0f9f2;
-  border: 1px solid rgba(51, 186, 143, 1);
-  color: #33ba8f;
-}
-
 .f-scenario-card-content p {
   margin: 0;
   color: #7a8dae;
@@ -281,9 +487,5 @@ onMounted(() => {
 .icon-btn {
   font-size: 16px;
   color: #4d98ff;
-}
-
-.icon-btn-disabled {
-  color: #b6c2d5;
 }
 </style>

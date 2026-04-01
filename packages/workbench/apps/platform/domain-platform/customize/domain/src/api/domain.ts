@@ -4,6 +4,31 @@ import type { DomainRecord } from '../types/models';
 
 const domainSourceUri = 'http://139.196.147.52:8080/domains';
 
+export interface CreateDomainPayload {
+  code: string;
+  name: string;
+  description: string;
+  status?: '0' | '1';
+}
+
+export interface PublishDomainPayload {
+  domainId: string;
+  status: '0' | '1';
+  url?: string;
+}
+
+export interface UpdateDomainPayload {
+  code: string;
+  name: string;
+  description: string;
+  status: '0' | '1';
+  url?: string;
+  codeEditor?: string;
+  modelEditor?: string;
+  baseFramework?: string;
+  dslStandard?: string;
+}
+
 const statusMap: Record<string, string> = {
   '0': '0',
   '1': '1',
@@ -40,4 +65,16 @@ export async function getDomainList() {
   } catch (error) {
     return getLocalDomains();
   }
+}
+
+export async function createDomain(payload: CreateDomainPayload) {
+  return request.post(domainSourceUri, payload);
+}
+
+export async function publishDomain(payload: PublishDomainPayload) {
+  return request.post(`${domainSourceUri}/publish`, payload);
+}
+
+export async function updateDomain(domainId: string, payload: UpdateDomainPayload) {
+  return request.put(`${domainSourceUri}/${domainId}`, payload);
 }
