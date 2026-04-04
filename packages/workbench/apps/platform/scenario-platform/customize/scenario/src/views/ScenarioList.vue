@@ -1,5 +1,18 @@
 <template>
-  <div class="f-page f-page-is-managelist scenario-page">
+  <div class="scenario-root">
+    <div v-if="standaloneEditMode" class="scenario-edit-standalone" v-loading="standaloneLoading">
+      <ScenarioDetail
+        v-if="activeScenario"
+        :scenario="activeScenario"
+        :domains="domains"
+        :saving="editSubmitting"
+        @save="saveScenarioDetail"
+        @cancel="handleScenarioDetailCancel"
+      />
+      <el-empty v-else description="未找到场景信息" />
+    </div>
+
+    <div v-else class="f-page f-page-is-managelist scenario-page">
     <div class="page-header">
       <h2 class="page-title">场景列表</h2>
       <el-button type="primary" class="btn-primary" @click="handleCreate">创建场景</el-button>
@@ -44,14 +57,10 @@
         </div>
         <div class="f-scenario-card-footer">
           <div class="btn-group f-btn-group-links">
-            <el-button text class="icon-btn" @click="openScenarioDetail(item)">
-              <el-icon><Edit /></el-icon>
+            <el-button text class="icon-btn" @click="openScenarioEdit(item)" title="编辑">
+              <i class="f-icon f-icon-edit-cardview"></i>
             </el-button>
-            <el-button text class="icon-btn" :loading="publishingSceneId === item.sceneId" @click="togglePublish(item)">
-              <el-icon v-if="isPublished(item.status)"><RefreshLeft /></el-icon>
-              <el-icon v-else><Promotion /></el-icon>
-            </el-button>
-            <el-button text class="icon-btn" @click="openScenarioPlatform(item)">
+            <el-button text class="icon-btn" @click="openScenarioPlatform(item)" title="进入场景">
               <el-icon><Link /></el-icon>
             </el-button>
           </div>
@@ -113,9 +122,10 @@
         :domains="domains"
         :saving="editSubmitting"
         @save="saveScenarioDetail"
-        @cancel="detailDrawerVisible = false"
+        @cancel="handleScenarioDetailCancel"
       />
     </el-dialog>
+  </div>
   </div>
 </template>
 
@@ -123,7 +133,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
-import { Edit, Link, Promotion, RefreshLeft } from '@element-plus/icons-vue';
+import { Link } from '@element-plus/icons-vue';
 import { createScenario, getDomainOptions, getScenarioList, publishScenario, updateScenario } from '../api/scenario';
 import { useScenarioStore } from '../store/scenario';
 import type { DomainOption, ScenarioRecord } from '../types/models';
@@ -136,11 +146,13 @@ const searchStatus = ref('');
 const domains = ref<DomainOption[]>([]);
 const activeScenario = ref<ScenarioRecord | null>(null);
 const detailDrawerVisible = ref(false);
-const publishingSceneId = ref('');
 const editSubmitting = ref(false);
 const createDialogVisible = ref(false);
 const createSubmitting = ref(false);
 const createFormRef = ref<FormInstance>();
+const standaloneEditMode = ref(false);
+const standaloneSceneId = ref('');
+const standaloneLoading = ref(false);
 const createForm = ref({
   code: '',
   name: '',
@@ -204,7 +216,34 @@ function isPublished(status: string) {
   return `${status ?? ''}`.trim() === '1';
 }
 
-function openScenarioDetail(scenario: ScenarioRecord) {
+function openUrl(scenario: ScenarioRecord, path: string) {
+  const deployPath = path.replace(/[`'"]/g, '');
+  if (window.top && window.top !== window) {
+    window.top.postMessage({
+      eventType: 'invoke',
+      method: 'openUrl',
+      params: [scenario.sceneId, scenario.sceneCode, scenario.sceneName, deployPath]
+    });
+    return;
+  }
+  window.open(deployPath, '_blank', 'noopener,noreferrer');
+}
+
+function buildScenarioEditPath(sceneId: string) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('mode', 'edit');
+  url.searchParams.set('sceneId', sceneId);
+  return url.toString();
+}
+
+function openScenarioEdit(scenario: ScenarioRecord) {
+  const path = buildScenarioEditPath(scenario.sceneId);
+  openUrl(scenario, path);
+}
+
+function openScenarioSubDomain(scenario: ScenarioRecord) {
   activeScenario.value = scenario;
   detailDrawerVisible.value = true;
 }
@@ -268,36 +307,15 @@ async function submitCreate() {
   }
 }
 
-async function togglePublish(scene: ScenarioRecord) {
-  const nextStatus = isPublished(scene.status) ? '0' : '1';
-  publishingSceneId.value = scene.sceneId;
-  try {
-    await publishScenario({
-      sceneId: Number(scene.sceneId),
-      status: nextStatus,
-      url: scene.url || ''
-    });
-    ElMessage.success(nextStatus === '1' ? '发布成功' : '已取消发布');
-    await refreshScenarios();
-    if (activeScenario.value?.sceneId === scene.sceneId) {
-      activeScenario.value = store.scenarios.find((item) => item.sceneId === scene.sceneId) || null;
-    }
-  } catch (error: any) {
-    ElMessage.error(error?.response?.data || '操作失败');
-  } finally {
-    publishingSceneId.value = '';
-  }
-}
-
 async function saveScenarioDetail(payload: ScenarioRecord) {
   editSubmitting.value = true;
   try {
-    const currentStatus = activeScenario.value ? (isPublished(activeScenario.value.status) ? '1' : '0') : '0';
+    const targetStatus = payload.status === '1' ? '1' : '0';
     await updateScenario(payload.sceneId, {
       code: payload.sceneCode,
       name: payload.sceneName,
       description: payload.sceneDescription || '',
-      status: currentStatus,
+      status: targetStatus,
       url: payload.url || '',
       domainId: Number(payload.domainId),
       location:
@@ -306,22 +324,46 @@ async function saveScenarioDetail(payload: ScenarioRecord) {
           : null,
       imageUrl: payload.imageUrl || ''
     });
-    if (currentStatus === '1') {
-      await publishScenario({
-        sceneId: Number(payload.sceneId),
-        status: '1',
-        url: payload.url || ''
-      });
-    }
     ElMessage.success('保存成功');
     await refreshScenarios();
     activeScenario.value = store.scenarios.find((item) => item.sceneId === payload.sceneId) || null;
-    detailDrawerVisible.value = false;
+    if (!standaloneEditMode.value) {
+      detailDrawerVisible.value = false;
+    }
   } catch (error: any) {
     ElMessage.error(error?.response?.data || '保存失败');
   } finally {
     editSubmitting.value = false;
   }
+}
+
+function handleScenarioDetailCancel() {
+  if (standaloneEditMode.value) {
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.hash = '';
+    window.location.href = url.toString();
+    return;
+  }
+  detailDrawerVisible.value = false;
+}
+
+async function initializePage() {
+  const search = new URLSearchParams(window.location.search);
+  standaloneEditMode.value = search.get('mode') === 'edit';
+  standaloneSceneId.value = search.get('sceneId') || '';
+  await refreshDomains();
+  if (standaloneEditMode.value) {
+    standaloneLoading.value = true;
+    try {
+      await refreshScenarios();
+      activeScenario.value = store.scenarios.find((item) => item.sceneId === standaloneSceneId.value) || null;
+    } finally {
+      standaloneLoading.value = false;
+    }
+    return;
+  }
+  await refreshScenarios();
 }
 
 function resetSearch() {
@@ -332,12 +374,19 @@ function resetSearch() {
 }
 
 onMounted(() => {
-  refreshDomains();
-  refreshScenarios();
+  initializePage();
 });
 </script>
 
 <style scoped>
+.scenario-root {
+  min-height: 100%;
+}
+
+.scenario-edit-standalone {
+  min-height: 100%;
+}
+
 .scenario-page {
   min-height: 100%;
   padding: 16px 20px;

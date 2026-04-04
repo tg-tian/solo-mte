@@ -71,6 +71,8 @@ export default defineComponent({
                     if (invokeMethod === 'openUrl') {
                         const [functionId, code, name, url] = messageEvent.params;
                         openUrl(functionId, code, name, url);
+                    } else if (invokeMethod === 'closeUrl') {
+                        close(activeInstanceId.value);
                     }
                 }
             });

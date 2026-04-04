@@ -1,203 +1,355 @@
 <template>
-  <div class="domain-detail-page">
-    <div class="detail-header">
-      <div class="header-main">
-        <h2>{{ domain.domainName }}</h2>
-        <p>{{ domain.domainDescription || '暂无领域描述' }}</p>
+  <div class="domain-setting-container">
+    <div class="page-header">
+      <div class="page-title-group">
+        <h2 class="page-main-title">{{ isEditMode ? '编辑领域' : '创建领域' }}</h2>
+        <p v-if="isEditMode" class="page-sub-title">{{ domainForm.name || '领域详情' }}</p>
       </div>
-      <el-tag :type="form.status === '1' ? 'warning' : 'primary'" effect="light">
-        {{ form.status === '1' ? '已发布' : '开发中' }}
-      </el-tag>
+      <div class="header-actions">
+        <el-button @click="navigateBack">返回列表</el-button>
+        <el-button
+          v-if="isEditMode"
+          :type="domainForm.status === '1' ? 'warning' : 'success'"
+          plain
+          @click="handlePublish"
+        >
+          {{ domainForm.status === '1' ? '取消发布' : '发布领域' }}
+        </el-button>
+        <el-button type="primary" @click="submitForm" :loading="submitting">
+          {{ isEditMode ? '保存更改' : '立即创建' }}
+        </el-button>
+      </div>
     </div>
 
-    <div class="summary-grid">
-      <el-card shadow="hover" class="summary-card">
-        <div class="summary-title">领域编码</div>
-        <div class="summary-value">{{ domain.domainCode }}</div>
-      </el-card>
-      <el-card shadow="hover" class="summary-card">
-        <div class="summary-title">领域编号</div>
-        <div class="summary-value">{{ domain.domainId }}</div>
-      </el-card>
-      <el-card shadow="hover" class="summary-card">
-        <div class="summary-title">当前状态</div>
-        <div class="summary-value">{{ form.status === '1' ? '已发布' : '开发中' }}</div>
-      </el-card>
+    <div class="setting-content">
+      <el-tabs v-model="activeTab">
+        <el-tab-pane label="基本信息" name="basic">
+          <el-form :model="domainForm" :rules="rules" ref="domainFormRef" label-position="top">
+            <el-row :gutter="24">
+              <el-col :span="8">
+                <el-form-item label="领域编码" prop="code">
+                  <el-input v-model="domainForm.code" :disabled="isEditMode" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="领域名称" prop="name">
+                  <el-input v-model="domainForm.name" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="DSL 标准" prop="dslStandard">
+                  <el-select v-model="domainForm.dslStandard" style="width: 100%">
+                    <el-option label="默认不限" value="default" />
+                    <el-option label="UBML" value="UBML" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item label="领域详情描述" prop="description">
+              <el-input v-model="domainForm.description" type="textarea" :rows="3" />
+            </el-form-item>
+            <el-row :gutter="24">
+              <el-col :span="8">
+                <el-form-item label="代码编辑器" prop="codeEditor">
+                  <el-select v-model="domainForm.codeEditor" style="width: 100%">
+                    <el-option label="Monaco Editor" value="Monaco Editor" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="模型编辑器" prop="modelEditor">
+                  <el-select v-model="domainForm.modelEditor" style="width: 100%">
+                    <el-option label="GoJS / G6" value="GoJS / G6" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="后端运行框架" prop="baseFramework">
+                  <el-select v-model="domainForm.baseFramework" style="width: 100%">
+                    <el-option label="Spring Boot" value="springboot" />
+                    <el-option label="Node.js" value="nodejs" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-tab-pane>
+
+        <el-tab-pane label="模型模板组" name="template" v-if="isEditMode || isFromTemplate">
+          <DomainTemplate :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+        </el-tab-pane>
+
+        <el-tab-pane label="设备模型库" name="model" v-if="isEditMode || isFromTemplate">
+          <DomainDeviceType :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+        </el-tab-pane>
+
+        <el-tab-pane label="领域组件" name="component" v-if="isEditMode || isFromTemplate">
+          <DomainComponent :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+        </el-tab-pane>
+      </el-tabs>
     </div>
 
-    <el-card shadow="never" class="detail-card">
-      <template #header>
-        <div class="card-header">领域编辑</div>
+    <!-- Publish Dialog -->
+    <el-dialog
+      v-model="publishDialogVisible"
+      :title="domainForm.status === '1' ? '取消发布领域' : '发布领域至平台'"
+      width="500px"
+      class="premium-dialog"
+    >
+      <p class="dialog-tip">{{ domainForm.status === '1' ? '确认要取消发布该领域吗？' : '确认要发布该领域并下载配置吗？' }}</p>
+      <template #footer>
+        <el-button @click="publishDialogVisible = false">暂不处理</el-button>
+        <el-button type="primary" @click="confirmPublish">确认</el-button>
       </template>
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="88px">
-        <el-row :gutter="16">
-          <el-col :span="12">
-            <el-form-item label="领域名称" prop="domainName">
-              <el-input v-model="form.domainName" maxlength="50" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="领域编码" prop="domainCode">
-              <el-input v-model="form.domainCode" maxlength="50" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="16">
-          <el-col :span="24">
-            <el-form-item label="访问地址" prop="url">
-              <el-input v-model="form.url" maxlength="200" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="说明" prop="domainDescription">
-          <el-input v-model="form.domainDescription" type="textarea" :rows="5" maxlength="300" show-word-limit />
-        </el-form-item>
-      </el-form>
-      <div class="detail-actions">
-        <el-button @click="$emit('cancel')">取消</el-button>
-        <el-button type="primary" :loading="saving" @click="submit">保存</el-button>
-      </div>
-    </el-card>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
-import type { FormInstance, FormRules } from 'element-plus';
-import type { DomainRecord } from '../types/models';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import DomainTemplate from './domain-detail/DomainTemplate.vue';
+import DomainDeviceType from './domain-detail/DomainDeviceType.vue';
+import DomainComponent from './domain-detail/DomainComponent.vue';
+import { useDomainStore } from '../store/domain';
+import { useDomainComponentTemplateStore } from '../store/domainComponentTemplate';
+import { useDomainTemplateStore } from '../store/domainTemplate';
+import { useDeviceTypeStore } from '../store/deviceType';
+import { useComponentStore } from '../store/component';
+import { downloadDomain } from '../api/domain';
+import type { DomainFormData } from '../types/models';
 
 const props = defineProps<{
-  domain: DomainRecord;
-  saving?: boolean;
+  mode: string;
+  domainId?: string;
+  domainName?: string;
+  domainCode?: string;
 }>();
 
 const emit = defineEmits<{
-  save: [payload: DomainRecord];
-  cancel: [];
+  back: [];
 }>();
 
-const formRef = ref<FormInstance>();
-const form = reactive<DomainRecord>({
-  domainId: '',
-  domainName: '',
-  domainCode: '',
-  domainDescription: '',
+const domainStore = useDomainStore();
+const domainTemplateStore = useDomainTemplateStore();
+const domainComponentTemplateStore = useDomainComponentTemplateStore();
+const deviceTypeStore = useDeviceTypeStore();
+const componentStore = useComponentStore();
+
+const activeTab = ref('basic');
+const submitting = ref(false);
+const publishDialogVisible = ref(false);
+const domainFormRef = ref<FormInstance>();
+const domainForm = reactive<DomainFormData>({
+  code: '',
+  name: '',
+  description: '',
   status: '0',
-  url: ''
+  codeEditor: 'Monaco Editor',
+  modelEditor: 'GoJS / G6',
+  baseFramework: 'springboot',
+  dslStandard: 'default',
+  url: '',
+  domainTemplateId: null
 });
 
 const rules: FormRules = {
-  domainName: [{ required: true, message: '请输入领域名称', trigger: 'blur' }],
-  domainCode: [
-    { required: true, message: '请输入领域编码', trigger: 'blur' },
-    { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: '领域编码需字母开头，仅支持字母数字下划线', trigger: 'blur' }
-  ]
+  code: [{ required: true, message: '请输入编码', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+  description: [{ required: true, message: '请输入描述', trigger: 'blur' }]
 };
 
+const isEditMode = computed(() => props.mode === 'edit');
+const isFromTemplate = computed(() => props.mode === 'template');
+const domainIdValue = computed(() => {
+  const id = Number(props.domainId || 0);
+  return Number.isNaN(id) || id <= 0 ? null : id;
+});
+
 watch(
-  () => props.domain,
-  (domain) => {
-    form.domainId = domain.domainId;
-    form.domainName = domain.domainName;
-    form.domainCode = domain.domainCode;
-    form.domainDescription = domain.domainDescription || '';
-    form.status = `${domain.status ?? '0'}`.trim() === '1' ? '1' : '0';
-    form.url = domain.url || '';
+  () => [props.mode, props.domainId, props.domainCode, props.domainName],
+  async () => {
+    await initForm();
   },
   { immediate: true }
 );
 
-async function submit() {
-  if (!formRef.value) {
+onMounted(async () => {
+  await initForm();
+});
+
+function resetFormData() {
+  Object.assign(domainForm, {
+    code: props.domainCode || '',
+    name: props.domainName || '',
+    description: '',
+    status: '0',
+    codeEditor: 'Monaco Editor',
+    modelEditor: 'GoJS / G6',
+    baseFramework: 'springboot',
+    dslStandard: 'default',
+    url: '',
+    domainTemplateId: null
+  });
+  domainComponentTemplateStore.setTemplates([]);
+  deviceTypeStore.setDeviceTypes([]);
+  componentStore.setComponents([]);
+}
+
+async function initForm() {
+  if (!isEditMode.value || !domainIdValue.value) {
+    resetFormData();
     return;
   }
-  const valid = await formRef.value.validate().catch(() => false);
-  if (!valid) {
+  const data = await domainStore.fetchDomainById(domainIdValue.value);
+  if (!data) {
     return;
   }
-  emit('save', {
-    domainId: form.domainId,
-    domainName: form.domainName.trim(),
-    domainCode: form.domainCode.trim(),
-    domainDescription: form.domainDescription.trim(),
-    status: form.status,
-    url: (form.url ?? '').trim()
+  Object.assign(domainForm, {
+    code: data.domainCode || '',
+    name: data.domainName || '',
+    description: data.domainDescription || '',
+    status: data.status || '0',
+    codeEditor: data.codeEditor || 'Monaco Editor',
+    modelEditor: data.modelEditor || 'GoJS / G6',
+    baseFramework: data.framework || 'springboot',
+    dslStandard: data.dsl || 'default',
+    url: data.url || '',
+    domainTemplateId: data.domainTemplateId || null
   });
 }
+
+function navigateBack() {
+  if (window.top && window.top !== window) {
+    window.top.postMessage({
+      eventType: 'invoke',
+      method: 'closeUrl',
+      params: []
+    });
+  } else {
+    emit('back');
+  }
+}
+
+async function submitForm() {
+  if (!domainFormRef.value) {
+    return;
+  }
+  await domainFormRef.value.validate(async (valid) => {
+    if (!valid) {
+      return;
+    }
+    submitting.value = true;
+    try {
+      if (isEditMode.value && domainIdValue.value) {
+        await domainStore.updateDomain(domainIdValue.value, domainForm);
+        ElMessage.success('更新领域成功');
+      } else if (isFromTemplate.value) {
+        await domainStore.createDomainFromTemplate(
+          domainForm,
+          domainComponentTemplateStore.templates,
+          deviceTypeStore.deviceTypes,
+          componentStore.components
+        );
+        ElMessage.success('从模板创建成功');
+      } else {
+        await domainStore.createDomain(domainForm);
+        ElMessage.success('新建领域成功');
+      }
+      emit('back');
+    } catch (_error) {
+      ElMessage.error('操作失败');
+    } finally {
+      submitting.value = false;
+    }
+  });
+}
+
+function handlePublish() {
+  if (!domainIdValue.value) {
+    return;
+  }
+  publishDialogVisible.value = true;
+}
+
+async function confirmPublish() {
+  if (!domainIdValue.value) {
+    return;
+  }
+  submitting.value = true;
+  domainStore.publishDomain(domainIdValue.value).then((res) => {
+    // if res has domainData, it's the published DomainTemInfo object
+    if (res && res.domainData) {
+      domainForm.status = '1';
+      const jsonStr = JSON.stringify(res, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${domainForm.code}.json`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      ElMessage.success('领域发布成功并已下载配置');
+    } else {
+      // it was unpublished, just domain object
+      domainForm.status = '0';
+      ElMessage.success('领域已取消发布');
+    }
+    publishDialogVisible.value = false;
+  }).catch(() => {
+    ElMessage.error('操作失败');
+  }).finally(() => {
+    submitting.value = false;
+  });
+}
+
+async function handleDownload() {
+  if (!domainIdValue.value) {
+    return;
+  }
+  const res = await downloadDomain(domainIdValue.value);
+  const url = window.URL.createObjectURL(new Blob([res.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${domainForm.code}.json`;
+  link.click();
+}
+
+defineExpose({
+  handleDownload
+});
 </script>
 
 <style scoped>
-.domain-detail-page {
-  min-height: 100%;
-  padding: 16px 20px;
-  background: linear-gradient(180deg, #f6f9ff 0%, #ffffff 35%);
+.domain-setting-container {
+  width: 100%;
 }
 
-.detail-header {
+.page-header {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-.header-main {
-  flex: 1;
-}
-
-.header-main h2 {
+.page-main-title {
   margin: 0;
-  font-size: 22px;
-  color: #1f2d3d;
+  font-size: 20px;
 }
 
-.header-main p {
-  margin: 8px 0 0;
-  color: #6b7a90;
-  font-size: 13px;
+.page-sub-title {
+  margin: 6px 0 0;
+  color: #909399;
 }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.summary-card {
-  border-radius: 10px;
-}
-
-.summary-title {
-  font-size: 12px;
-  color: #8a98ae;
-}
-
-.summary-value {
-  margin-top: 6px;
-  color: #1f2d3d;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.detail-card {
-  border-radius: 10px;
-}
-
-.card-header {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2d3d;
-}
-
-.detail-actions {
+.header-actions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+  gap: 12px;
 }
 
-@media (max-width: 900px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
+.setting-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
 }
 </style>

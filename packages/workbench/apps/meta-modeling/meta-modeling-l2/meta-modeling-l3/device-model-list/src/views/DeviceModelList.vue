@@ -199,9 +199,15 @@ const viewJson = async (row: DeviceModel) => {
     if (res && res.data) {
       jsonDeviceModel.value = res.data
       jsonDialogVisible.value = true
+    } else {
+      // 容错处理：如果没取到完整数据，就用列表数据展示
+      jsonDeviceModel.value = row
+      jsonDialogVisible.value = true
     }
   } catch (error) {
-    ElMessage.error('获取详情失败')
+    // 接口异常容错：用列表数据展示
+    jsonDeviceModel.value = row
+    jsonDialogVisible.value = true
   }
 }
 

@@ -13,7 +13,7 @@ export default defineConfig({
                     'apps/platform/scenario-platform/customize/scenario/index': resolve(__dirname, 'apps/platform/scenario-platform/customize/scenario/index.html'),
                     'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
                     'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html'),
-                    // 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
+                    'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/template-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/template-list/index.html'),
                     'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html')
                 },
             output: {

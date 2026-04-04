@@ -376,14 +376,14 @@
     },
     {
       
-        "id": "NodeTypeList",
-        "code": "node-type-list",
-        "name": "节点类型",
+        "id": "TemplateList",
+        "code": "template-list",
+        "name": "模板列表",
         "parentId": "MetaModelingLevel3",
         "layer": "4",
         "menuType": "",
         "funcType": "1",
-        "menuPath": "apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html",
+        "menuPath": "apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/template-list/index.html",
         "icon": "./assets/icon/SystemFoundation.svg",
         "description": null,
         "pinyin": null,

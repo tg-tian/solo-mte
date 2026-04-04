@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
                     scenario: resolve(__dirname, 'apps/platform/scenario-platform/customize/scenario/index.html'),
                     'device-model-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html'),
                     'device-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html'),
-                    // 'node-type-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/node-type-list/index.html'),
+                    'template-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/template-list/index.html'),
                     'component-list': resolve(__dirname, 'apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/component-list/index.html')
                     // appBuilder: resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
                     // appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html')

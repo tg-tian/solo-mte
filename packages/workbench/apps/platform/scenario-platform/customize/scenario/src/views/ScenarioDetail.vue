@@ -5,9 +5,18 @@
         <h2>{{ scenario.sceneName }}</h2>
         <p>{{ scenario.sceneDescription || '暂无场景描述' }}</p>
       </div>
-      <el-tag :type="form.status === '1' ? 'warning' : 'primary'" effect="light">
-        {{ form.status === '1' ? '已发布' : '开发中' }}
-      </el-tag>
+      <div class="header-actions">
+        <el-tag :type="form.status === '1' ? 'warning' : 'primary'" effect="light" style="margin-right: 12px">
+          {{ form.status === '1' ? '已发布' : '开发中' }}
+        </el-tag>
+        <el-button 
+          :type="form.status === '1' ? 'warning' : 'success'" 
+          plain
+          @click="handlePublish"
+        >
+          {{ form.status === '1' ? '取消发布' : '发布场景' }}
+        </el-button>
+      </div>
     </div>
 
     <div class="summary-grid">
@@ -61,8 +70,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="图片地址" prop="imageUrl">
-              <el-input v-model="form.imageUrl" maxlength="255" />
+            <el-form-item label="场景图片" prop="imageUrl">
+              <el-upload
+                class="image-uploader"
+                :show-file-list="false"
+                :before-upload="beforeImageUpload"
+                :http-request="(options) => customUploadImage(options, 'scenario')"
+              >
+                <img v-if="form.imageUrl" :src="getFullImageUrl(form.imageUrl)" class="uploaded-image" />
+                <el-icon v-else class="image-uploader-icon"><Plus /></el-icon>
+              </el-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -93,6 +110,12 @@
         </div>
       </template>
       <el-table :data="areas" border v-loading="areaLoading" empty-text="暂无区域">
+        <el-table-column label="区域图片" width="120" align="center">
+          <template #default="{ row }">
+            <img v-if="row.image" :src="getFullImageUrl(row.image)" class="area-table-image" />
+            <span v-else class="text-gray-400">-</span>
+          </template>
+        </el-table-column>
         <el-table-column label="区域名称" min-width="120">
           <template #default="{ row }">
             <el-button link type="primary" @click.stop="showAreaTree(row)">{{ row.name }}</el-button>
@@ -111,7 +134,7 @@
     </el-card>
 
     <div class="detail-actions">
-      <el-button @click="$emit('cancel')">取消</el-button>
+      <el-button @click="handleCancel">取消</el-button>
       <el-button type="primary" :loading="saving" @click="submit">保存</el-button>
     </div>
 
@@ -132,6 +155,17 @@
         <el-form-item label="区域描述" prop="description">
           <el-input v-model="areaForm.description" type="textarea" :rows="3" maxlength="200" />
         </el-form-item>
+        <el-form-item label="区域图片" prop="image">
+          <el-upload
+            class="image-uploader"
+            :show-file-list="false"
+            :before-upload="beforeImageUpload"
+            :http-request="(options) => customUploadImage(options, 'area')"
+          >
+            <img v-if="areaForm.image" :src="getFullImageUrl(areaForm.image)" class="uploaded-image" />
+            <el-icon v-else class="image-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="areaDialogVisible = false">取消</el-button>
@@ -143,6 +177,28 @@
       <div class="area-tree-header">{{ selectedAreaName }}</div>
       <el-tree :data="areaTreeData" node-key="id" default-expand-all :props="{ label: 'name', children: 'children' }" />
     </el-dialog>
+
+    <el-dialog
+      v-model="publishDialogVisible"
+      :title="form.status === '1' ? '取消发布场景' : '发布场景并下载配置'"
+      width="500px"
+      class="premium-dialog"
+    >
+      <p class="dialog-tip">{{ form.status === '1' ? '取消发布后，该场景将无法在场景平台中被访问并使用。' : '发布后，该场景将可以在场景平台中被访问并使用，同时将自动下载配置文件。' }}</p>
+      <el-form label-position="top" v-if="form.status !== '1'">
+        <el-form-item label="发布访问地址 (URL)">
+          <el-input v-model="form.url" placeholder="http(s)://example.com" clearable>
+            <template #prefix><el-icon><Link /></el-icon></template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="publishDialogVisible = false">暂不处理</el-button>
+          <el-button type="primary" :loading="publishSubmitting" @click="publishScene">确认</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -150,7 +206,8 @@
 import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
-import { createArea, deleteArea, getAreaList, updateArea } from '../api/scenario';
+import { Link, Plus } from '@element-plus/icons-vue';
+import { createArea, deleteArea, getAreaList, updateArea, publishScenario, uploadImage } from '../api/scenario';
 import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
 
 const props = defineProps<{
@@ -195,10 +252,13 @@ const editingAreaId = ref('');
 const areaTreeDialogVisible = ref(false);
 const areaTreeData = ref<AreaRecord[]>([]);
 const selectedAreaName = ref('');
+const publishDialogVisible = ref(false);
+const publishSubmitting = ref(false);
 const areaForm = reactive({
   name: '',
   description: '',
   position: '',
+  image: '',
   parentId: null as string | null
 });
 const areaRules: FormRules = {
@@ -209,10 +269,54 @@ const parentAreaOptions = computed(() => {
 });
 const mapRef = ref<HTMLElement>();
 const mapError = ref('');
-const baiduMapAk = import.meta.env.VITE_BAIDU_MAP_AK || '';
+const baiduMapAk = (import.meta as any).env?.VITE_BAIDU_MAP_AK || '';
 let mapInstance: any = null;
 let mapMarker: any = null;
 let mapCircle: any = null;
+const host = (import.meta as any).env?.VITE_BASE_PATH || '';
+
+function getFullImageUrl(url: string) {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `${host}${url}`;
+}
+
+function beforeImageUpload(file: File) {
+  const isImage = file.type.startsWith('image/');
+  const isLt2M = file.size / 1024 / 1024 < 5;
+
+  if (!isImage) {
+    ElMessage.error('上传图片只能是 JPG/PNG/GIF 格式!');
+  }
+  if (!isLt2M) {
+    ElMessage.error('上传图片大小不能超过 5MB!');
+  }
+  return isImage && isLt2M;
+}
+
+async function customUploadImage(options: any, target: 'scenario' | 'area') {
+  try {
+    const res = await uploadImage(options.file);
+    if (res.status === 200 && typeof res.data === 'string') {
+      const imageUrl = res.data;
+      if (target === 'scenario') {
+        form.imageUrl = imageUrl;
+      } else {
+        areaForm.image = imageUrl;
+      }
+      ElMessage.success('上传成功');
+      options.onSuccess(res, options.file);
+    } else {
+      throw new Error('上传失败');
+    }
+  } catch (error) {
+    ElMessage.error('上传图片失败');
+    options.onError(error);
+  }
+}
+
 let mapScriptPromise: Promise<void> | null = null;
 
 async function refreshAreas() {
@@ -346,6 +450,49 @@ function showAreaTree(area: AreaRecord) {
   areaTreeDialogVisible.value = true;
 }
 
+const handlePublish = () => {
+  publishDialogVisible.value = true;
+};
+
+const publishScene = async () => {
+  if (form.status !== '1' && !form.url) {
+    ElMessage.warning('请输入发布访问地址');
+    return;
+  }
+  publishSubmitting.value = true;
+  try {
+    const targetStatus = form.status === '1' ? '0' : '1';
+    const res = await publishScenario({
+      sceneId: Number(form.sceneId),
+      status: targetStatus,
+      url: form.url || ''
+    });
+    
+    if (res.data && res.data.sceneData) {
+      const jsonStr = JSON.stringify(res.data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${form.sceneCode}.json`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      ElMessage.success('场景发布成功并已下载配置');
+      form.status = '1';
+    } else {
+      ElMessage.success('场景已取消发布');
+      form.status = '0';
+    }
+    
+    publishDialogVisible.value = false;
+    emit('save', form);
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data || '操作失败');
+  } finally {
+    publishSubmitting.value = false;
+  }
+};
+
 watch(
   () => props.scenario,
   (scenario) => {
@@ -377,6 +524,7 @@ function openCreateArea() {
   areaForm.name = '';
   areaForm.description = '';
   areaForm.position = '';
+  areaForm.image = '';
   areaForm.parentId = null;
   areaDialogVisible.value = true;
 }
@@ -386,6 +534,7 @@ function openEditArea(area: AreaRecord) {
   areaForm.name = area.name;
   areaForm.description = area.description || '';
   areaForm.position = area.position || '';
+  areaForm.image = area.image || '';
   areaForm.parentId = area.parentId && area.parentId !== '-1' ? area.parentId : null;
   areaDialogVisible.value = true;
 }
@@ -405,6 +554,7 @@ async function submitArea() {
       sceneId: Number(form.sceneId),
       description: areaForm.description.trim(),
       position: areaForm.position.trim(),
+      image: areaForm.image.trim(),
       parentId: areaForm.parentId && areaForm.parentId !== '-1' ? Number(areaForm.parentId) : -1
     };
     if (editingAreaId.value) {
@@ -456,6 +606,18 @@ async function submit() {
     imageUrl: (form.imageUrl || '').trim(),
     url: (form.url || '').trim()
   });
+}
+
+function handleCancel() {
+  if (window.top && window.top !== window) {
+    window.top.postMessage({
+      eventType: 'invoke',
+      method: 'closeUrl',
+      params: []
+    });
+  } else {
+    emit('cancel');
+  }
 }
 
 onBeforeUnmount(() => {
@@ -568,6 +730,49 @@ onBeforeUnmount(() => {
 .detail-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.image-uploader {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  background-color: var(--el-fill-color-lighter);
+}
+.image-uploader :deep(.el-upload) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.image-uploader:hover {
+  border-color: var(--el-color-primary);
+}
+.image-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  text-align: center;
+}
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.area-table-image {
+  width: 60px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid var(--el-border-color-lighter);
 }
 
 @media (max-width: 900px) {

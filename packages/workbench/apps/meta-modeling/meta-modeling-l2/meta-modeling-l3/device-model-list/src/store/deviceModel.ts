@@ -20,9 +20,13 @@ export const useDeviceModelStore = defineStore('deviceModel', {
         async fetchAllDeviceModels() {
             this.loading = true
             try {
-                const res: any = await getDeviceModels()
-                if (res.data && res.status === 200) {
-                    this.allDeviceModels = res.data
+                // Since the backend uses getDeviceModelPage, fetch the first page with a large size to simulate getting all
+                const params = { current: 1, size: 1000 }
+                const res: any = await getDeviceModelPage(params)
+                if (res.data && res.data.records) {
+                    this.allDeviceModels = res.data.records
+                } else if (res.status === 200 && res.records) {
+                    this.allDeviceModels = res.records
                 }
             } catch (error) {
                 console.error('Failed to fetch deviceModels:', error)

@@ -26,6 +26,7 @@ export interface ActionDefinition {
 
 export interface EventDefinition {
     fields: Record<string, PropertyDefinition>;
+    outputs?: Record<string, PropertyDefinition>;
     level: "info" | "warning" | "error";
     description?: string;
 }

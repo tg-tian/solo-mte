@@ -1,5 +1,19 @@
 <template>
-  <div class="f-page f-page-is-managelist domain-page">
+  <div v-if="isDetailMode" class="f-page f-page-is-managelist domain-page">
+    <DomainDetail
+      :mode="routeQuery.mode"
+      :domain-id="routeQuery.domainId"
+      :domain-name="routeQuery.domainName"
+      :domain-code="routeQuery.domainCode"
+      @back="goList"
+    />
+  </div>
+
+  <div v-else-if="isSceneMode" class="f-page f-page-is-managelist domain-page">
+    <SceneIndex :domain-id="sceneDomainId" />
+  </div>
+
+  <div v-else class="f-page f-page-is-managelist domain-page">
     <div class="page-header">
       <div class="page-title-group">
         <h2 class="page-title">领域列表</h2>
@@ -24,24 +38,6 @@
       </el-form>
     </el-card>
 
-    <el-dialog v-model="createDialogVisible" title="创建领域" width="520px" destroy-on-close>
-      <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="88px">
-        <el-form-item label="领域名称" prop="domainName">
-          <el-input v-model="createForm.domainName" maxlength="50" show-word-limit />
-        </el-form-item>
-        <el-form-item label="领域编码" prop="domainCode">
-          <el-input v-model="createForm.domainCode" maxlength="50" show-word-limit />
-        </el-form-item>
-        <el-form-item label="领域描述" prop="domainDescription">
-          <el-input v-model="createForm.domainDescription" type="textarea" :rows="3" maxlength="200" show-word-limit />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="createDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="createSubmitting" @click="submitCreate">创建</el-button>
-      </template>
-    </el-dialog>
-
     <div class="domain-list" v-loading="store.loading">
       <div v-for="item in filteredDomains" :key="item.domainId" class="f-domain-card f-template-card-row">
         <div class="f-domain-card-header listview-item-content">
@@ -59,68 +55,38 @@
         </div>
         <div class="f-domain-card-footer">
           <div class="btn-group f-btn-group-links">
-            <el-button text class="icon-btn" @click="openDomainDetail(item)">
-              <el-icon><Edit /></el-icon>
+            <el-button text class="icon-btn" @click="openDomainPlatform(item)">
+              <i class="f-icon f-icon-edit-cardview"></i>
             </el-button>
-            <el-button text class="icon-btn" :loading="publishingDomainId === item.domainId" @click="togglePublish(item)">
-              <el-icon v-if="isPublished(item.status)"><RefreshLeft /></el-icon>
-              <el-icon v-else><Promotion /></el-icon>
+            <el-button text class="icon-btn" @click="openDomainScen(item)">
+              <i class="f-icon f-icon-share"></i>
+            </el-button>
+            <el-button text class="icon-btn icon-btn-disabled">
+              <i class="f-icon f-icon-yxs_delete"></i>
             </el-button>
           </div>
         </div>
       </div>
     </div>
-
-    <el-dialog
-      v-model="detailDrawerVisible"
-      fullscreen
-      destroy-on-close
-      :show-close="false"
-      class="domain-detail-dialog"
-    >
-      <DomainDetail
-        v-if="activeDomain"
-        :domain="activeDomain"
-        :saving="editSubmitting"
-        @save="saveDomainDetail"
-        @cancel="detailDrawerVisible = false"
-      />
-    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { ElMessage } from 'element-plus';
-import type { FormInstance, FormRules } from 'element-plus';
-import { Edit, Promotion, RefreshLeft } from '@element-plus/icons-vue';
-import { createDomain, getDomainList, publishDomain, updateDomain } from '../api/domain';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useDomainStore } from '../store/domain';
 import type { DomainRecord } from '../types/models';
 import DomainDetail from './DomainDetail.vue';
+import SceneIndex from './SceneIndex.vue';
 
 const store = useDomainStore();
 const searchName = ref('');
 const searchStatus = ref('');
-const activeDomain = ref<DomainRecord | null>(null);
-const detailDrawerVisible = ref(false);
-const publishingDomainId = ref('');
-const editSubmitting = ref(false);
-const createDialogVisible = ref(false);
-const createSubmitting = ref(false);
-const createFormRef = ref<FormInstance>();
-const createForm = ref({
+const routeQuery = ref({
+  mode: '',
+  domainId: '',
   domainName: '',
-  domainCode: '',
-  domainDescription: ''
+  domainCode: ''
 });
-const createRules: FormRules = {
-  domainName: [{ required: true, message: '请输入领域名称', trigger: 'blur' }],
-  domainCode: [
-    { required: true, message: '请输入领域编码', trigger: 'blur' },
-    { pattern: /^[A-Za-z][A-Za-z0-9_]*$/, message: '领域编码需字母开头，仅支持字母数字下划线', trigger: 'blur' }
-  ]
-};
 
 const filteredDomains = computed(() => {
   return store.domains.filter((item) => {
@@ -130,17 +96,15 @@ const filteredDomains = computed(() => {
   });
 });
 
-async function refreshDomains() {
-  store.loading = true;
-  try {
-    store.domains = await getDomainList();
-  } finally {
-    store.loading = false;
-  }
-}
+const isDetailMode = computed(() => routeQuery.value.mode === 'create' || routeQuery.value.mode === 'edit' || routeQuery.value.mode === 'template');
+const isSceneMode = computed(() => routeQuery.value.mode === 'scene');
+const sceneDomainId = computed(() => {
+  const id = Number(routeQuery.value.domainId || 0);
+  return Number.isNaN(id) || id <= 0 ? null : id;
+});
 
 function statusText(status: string) {
-  if (isPublished(status)) {
+  if (status === '1') {
     return '已发布';
   }
   return '开发中';
@@ -149,116 +113,59 @@ function statusText(status: string) {
 function getBadgeClass(status: string) {
   return {
     bage: true,
-    'bage-developing': !isPublished(status),
-    'bage-published': isPublished(status)
+    'bage-developing': status !== '1',
+    'bage-published': status === '1'
   };
 }
 
-function openDomainDetail(domain: DomainRecord) {
-  activeDomain.value = domain;
-  detailDrawerVisible.value = true;
-}
-
-function isPublished(status: string) {
-  return `${status ?? ''}`.trim() === '1';
-}
-
-async function togglePublish(domain: DomainRecord) {
-  const nextStatus = isPublished(domain.status) ? '0' : '1';
-  publishingDomainId.value = domain.domainId;
-  try {
-    if (nextStatus === '0') {
-      await updateDomain(domain.domainId, {
-        code: domain.domainCode,
-        name: domain.domainName,
-        description: domain.domainDescription || '',
-        status: '0',
-        url: domain.url || ''
-      });
-    } else {
-      await publishDomain({
-        domainId: domain.domainId,
-        status: '1',
-        url: domain.url || ''
-      });
-    }
-    ElMessage.success(nextStatus === '1' ? '发布成功' : '已取消发布');
-    await refreshDomains();
-    if (activeDomain.value?.domainId === domain.domainId) {
-      activeDomain.value = store.domains.find((item) => item.domainId === domain.domainId) || null;
-    }
-  } catch (error: any) {
-    const message = error?.response?.data || '操作失败';
-    ElMessage.error(message);
-  } finally {
-    publishingDomainId.value = '';
-  }
-}
-
-async function saveDomainDetail(payload: DomainRecord) {
-  const currentStatus = activeDomain.value ? (isPublished(activeDomain.value.status) ? '1' : '0') : '0';
-  editSubmitting.value = true;
-  try {
-    await updateDomain(payload.domainId, {
-      code: payload.domainCode,
-      name: payload.domainName,
-      description: payload.domainDescription || '',
-      status: currentStatus,
-      url: payload.url || ''
+function openUrl(domain: DomainRecord, path: string) {
+  const deployPath = path.replace(/[`'"]/g, '');
+  if (window.top && window.top !== window) {
+    window.top.postMessage({
+      eventType: 'invoke',
+      method: 'openUrl',
+      params: [domain.domainId, domain.domainCode, domain.domainName, deployPath]
     });
-    if (currentStatus === '1') {
-      await publishDomain({
-        domainId: payload.domainId,
-        status: '1',
-        url: payload.url || ''
-      });
-    }
-    ElMessage.success('保存成功');
-    await refreshDomains();
-    activeDomain.value = store.domains.find((item) => item.domainId === payload.domainId) || null;
-    detailDrawerVisible.value = false;
-  } catch (error: any) {
-    const message = error?.response?.data || '保存失败';
-    ElMessage.error(message);
-  } finally {
-    editSubmitting.value = false;
+    return;
   }
+  window.open(deployPath, '_blank', 'noopener,noreferrer');
+}
+
+function buildDomainEditPath(domain: DomainRecord) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('mode', 'edit');
+  url.searchParams.set('domainId', String(domain.domainId));
+  url.searchParams.set('domainName', domain.domainName);
+  url.searchParams.set('domainCode', domain.domainCode);
+  return url.toString();
+}
+
+function openDomainPlatform(domain: DomainRecord) {
+  const path = buildDomainEditPath(domain);
+  openUrl(domain, path);
+}
+
+function buildDomainScenePath(domain: DomainRecord) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('mode', 'scene');
+  url.searchParams.set('domainId', String(domain.domainId));
+  url.searchParams.set('domainName', domain.domainName);
+  url.searchParams.set('domainCode', domain.domainCode);
+  return url.toString();
+}
+
+function openDomainScen(domain: DomainRecord) {
+  store.setCurrentDomain(domain);
+  const path = buildDomainScenePath(domain);
+  openUrl(domain, path);
 }
 
 function handleCreate() {
-  createForm.value = {
-    domainName: '',
-    domainCode: '',
-    domainDescription: ''
-  };
-  createDialogVisible.value = true;
-}
-
-async function submitCreate() {
-  if (!createFormRef.value) {
-    return;
-  }
-  const valid = await createFormRef.value.validate().catch(() => false);
-  if (!valid) {
-    return;
-  }
-  createSubmitting.value = true;
-  try {
-    await createDomain({
-      code: createForm.value.domainCode.trim(),
-      name: createForm.value.domainName.trim(),
-      description: createForm.value.domainDescription.trim(),
-      status: '0'
-    });
-    createDialogVisible.value = false;
-    ElMessage.success('创建成功');
-    await refreshDomains();
-  } catch (error: any) {
-    const message = error?.response?.data || '创建失败';
-    ElMessage.error(message);
-  } finally {
-    createSubmitting.value = false;
-  }
+  setDetailRoute({ mode: 'create' });
 }
 
 function resetSearch() {
@@ -267,8 +174,56 @@ function resetSearch() {
 }
 
 onMounted(() => {
-  refreshDomains();
+  syncRouteFromUrl();
+  window.addEventListener('hashchange', syncRouteFromUrl);
+  window.addEventListener('popstate', syncRouteFromUrl);
+  if (!store.domains.length) {
+    store.fetchDomains();
+  }
 });
+
+onUnmounted(() => {
+  window.removeEventListener('hashchange', syncRouteFromUrl);
+  window.removeEventListener('popstate', syncRouteFromUrl);
+});
+
+function parseUrlQuery() {
+  const hash = window.location.hash || '';
+  const hashQueryIndex = hash.indexOf('?');
+  const queryString = hashQueryIndex >= 0
+    ? hash.substring(hashQueryIndex + 1)
+    : window.location.search.replace(/^\?/, '');
+  const params = new URLSearchParams(queryString);
+  return {
+    mode: params.get('mode') || '',
+    domainId: params.get('domainId') || '',
+    domainName: params.get('domainName') || '',
+    domainCode: params.get('domainCode') || ''
+  };
+}
+
+function syncRouteFromUrl() {
+  routeQuery.value = parseUrlQuery();
+}
+
+function setDetailRoute(params: Record<string, string>) {
+  const url = new URL(window.location.href);
+  const hash = url.hash || '#/';
+  const hashPath = hash.includes('?') ? hash.slice(0, hash.indexOf('?')) : hash;
+  const next = new URLSearchParams(params);
+  url.hash = `${hashPath}?${next.toString()}`;
+  window.history.pushState({}, '', url.toString());
+  syncRouteFromUrl();
+}
+
+function goList() {
+  const url = new URL(window.location.href);
+  const hash = url.hash || '#/';
+  const hashPath = hash.includes('?') ? hash.slice(0, hash.indexOf('?')) : hash;
+  url.hash = hashPath;
+  window.history.pushState({}, '', url.toString());
+  syncRouteFromUrl();
+}
 </script>
 
 <style scoped>
@@ -428,11 +383,7 @@ onMounted(() => {
   color: #4d98ff;
 }
 
-:deep(.domain-detail-dialog .el-dialog__header) {
-  display: none;
-}
-
-:deep(.domain-detail-dialog .el-dialog__body) {
-  padding: 0;
+.icon-btn-disabled {
+  color: #b6c2d5;
 }
 </style>

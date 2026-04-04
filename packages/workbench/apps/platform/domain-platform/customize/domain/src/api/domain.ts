@@ -1,8 +1,7 @@
 import request from '../utils/request';
-import localDomains from '../assets/domains.json';
-import type { DomainRecord } from '../types/models';
+import type { DomainFormData, DomainRecord } from '../types/models';
 
-const domainSourceUri = 'http://139.196.147.52:8080/domains';
+const domainSourceUri = '/domains';
 
 export interface CreateDomainPayload {
   code: string;
@@ -12,9 +11,10 @@ export interface CreateDomainPayload {
 }
 
 export interface PublishDomainPayload {
-  domainId: string;
+  domainId: number;
   status: '0' | '1';
   url?: string;
+  dslData?: Record<string, any>;
 }
 
 export interface UpdateDomainPayload {
@@ -40,7 +40,7 @@ const statusMap: Record<string, string> = {
   development: '0'
 };
 
-function normalizeDomain(domain: Record<string, any>): DomainRecord {
+export function normalizeDomain(domain: Record<string, any>): DomainRecord {
   const rawStatus = `${domain.status ?? ''}`.trim().toLowerCase();
   const status = rawStatus in statusMap ? statusMap[rawStatus] : '0';
   return {
@@ -49,32 +49,87 @@ function normalizeDomain(domain: Record<string, any>): DomainRecord {
     domainCode: domain.domainCode ?? domain.code ?? domain.path ?? '',
     domainDescription: domain.domainDescription ?? domain.description ?? '',
     status,
-    url: domain.url
+    url: domain.url ?? '',
+    codeEditor: domain.codeEditor ?? 'Monaco Editor',
+    modelEditor: domain.modelEditor ?? 'GoJS / G6',
+    framework: domain.framework ?? domain.baseFramework ?? 'springboot',
+    dsl: domain.dsl ?? domain.dslStandard ?? 'default',
+    domainTemplateId: domain.domainTemplateId ?? null
   };
 }
 
-function getLocalDomains(): DomainRecord[] {
-  return (localDomains as Record<string, any>[]).map((item) => normalizeDomain(item));
+function toCreatePayload(data: DomainFormData | UpdateDomainPayload) {
+  return {
+    code: data.code,
+    name: data.name,
+    description: data.description,
+    status: data.status,
+    codeEditor: data.codeEditor,
+    modelEditor: data.modelEditor,
+    baseFramework: data.baseFramework,
+    dslStandard: data.dslStandard,
+    url: data.url
+  };
 }
 
 export async function getDomainList() {
   try {
     const response = await request.get(domainSourceUri);
-    const source = Array.isArray(response.data) && response.data.length > 0 ? response.data : getLocalDomains();
+    const responseData = response.data;
+    const source = Array.isArray(responseData)
+      ? responseData
+      : Array.isArray(responseData?.data)
+        ? responseData.data
+        : [];
     return source.map((item: Record<string, any>) => normalizeDomain(item));
   } catch (error) {
-    return getLocalDomains();
+    return [];
   }
 }
 
-export async function createDomain(payload: CreateDomainPayload) {
-  return request.post(domainSourceUri, payload);
+export function getDomainById(domainId: number) {
+  return request.get(`${domainSourceUri}/${domainId}`);
 }
 
-export async function publishDomain(payload: PublishDomainPayload) {
-  return request.post(`${domainSourceUri}/publish`, payload);
+export async function createDomain(payload: DomainFormData | CreateDomainPayload) {
+  const data = 'codeEditor' in payload ? toCreatePayload(payload) : payload;
+  return request.post(domainSourceUri, data);
 }
 
-export async function updateDomain(domainId: string, payload: UpdateDomainPayload) {
-  return request.put(`${domainSourceUri}/${domainId}`, payload);
+export async function publishDomain(domainId: number) {
+  return request.post(`${domainSourceUri}/publish`, domainId, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export async function updateDomain(domainId: string | number, payload: DomainFormData | UpdateDomainPayload) {
+  const data = 'codeEditor' in payload
+    ? toCreatePayload(payload)
+    : payload;
+  return request.put(`${domainSourceUri}/${domainId}`, data);
+}
+
+export async function createDomainFromTemplate(
+  domainData: DomainFormData,
+  templates: any[],
+  deviceTypes: any[],
+  components: any[]
+) {
+  return request.post(`${domainSourceUri}/from-template`, {
+    domainData: toCreatePayload(domainData),
+    templates,
+    deviceTypes,
+    components
+  });
+}
+
+export async function saveDomainTemplateId(domainId: number, templateId: number) {
+  return request.post(`${domainSourceUri}/templateId`, {
+    domainId,
+    templateId
+  });
+}
+
+export async function downloadDomain(domainId: number) {
+  return request.get(`${domainSourceUri}/download/${domainId}`, { responseType: 'blob' });
 }

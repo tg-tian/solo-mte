@@ -1,7 +1,7 @@
 import request from '../utils/request';
 import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
 
-const host = 'http://139.196.147.52:8080';
+const host = (import.meta as any).env?.VITE_BASE_PATH || '';
 const statusMap: Record<string, string> = {
   '0': '0',
   '1': '1',
@@ -108,12 +108,26 @@ export async function getScenarioList(domainId?: string) {
   }
 }
 
+export async function uploadImage(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  return request.post(`${host}/upload`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+}
+
 export async function createScenario(payload: SaveScenarioPayload) {
   return request.post(`${host}/scenes`, payload);
 }
 
 export async function updateScenario(sceneId: string, payload: SaveScenarioPayload) {
   return request.put(`${host}/scenes/${sceneId}`, payload);
+}
+
+export async function deleteScenario(sceneId: string) {
+  return request.delete(`${host}/scenes/${sceneId}`);
 }
 
 export async function publishScenario(payload: PublishScenarioPayload) {

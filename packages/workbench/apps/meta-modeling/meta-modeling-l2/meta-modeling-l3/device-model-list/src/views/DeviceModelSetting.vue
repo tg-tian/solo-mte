@@ -532,8 +532,9 @@ const state = reactive({
     identify: '',
     description: '',
     level: 'info' as 'info' | 'warning' | 'error',
-    fields: {} as Record<string, PropertyDefinition>
-  },
+    fields: {} as Record<string, PropertyDefinition>,
+    outputs: {} as Record<string, PropertyDefinition>
+  } as EventDefinition & { identify: string },
   paramForm: {
     identify: '',
     type: 'string',
@@ -572,42 +573,35 @@ const {
 const propertyList = computed(() => {
   return Object.entries(modelForm.value.properties || {}).map(([key, value]) => ({
     identify: key,
-    ...value
+    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
   }))
 })
 
 const actionList = computed(() => {
   return Object.entries(modelForm.value.actions || {}).map(([key, value]) => ({
     identify: key,
-    ...value
+    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
   }))
 })
 
 const eventList = computed(() => {
   return Object.entries(modelForm.value.events || {}).map(([key, value]) => ({
     identify: key,
-    ...value
+    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
   }))
 })
 
 const argumentList = computed(() => {
   return Object.entries(actionForm.value.arguments || {}).map(([key, value]) => ({
     identify: key,
-    ...value
+    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
   }))
 })
 
 const fieldList = computed(() => {
   return Object.entries(eventForm.value.fields || {}).map(([key, value]) => ({
     identify: key,
-    ...value
-  }))
-})
-
-const outputList = computed(() => {
-  return Object.entries(eventForm.value.outputs || {}).map(([key, value]) => ({
-    identify: key,
-    ...value
+    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
   }))
 })
 
@@ -793,7 +787,8 @@ const initEventForm = () => {
     identify: '',
     description: '',
     level: 'info',
-    fields: {}
+    fields: {},
+    outputs: {}
   }
 }
 
@@ -814,24 +809,34 @@ const initParamForm = () => {
 // 加载设备模型数据
 const loadDeviceModelData = async (id: number) => {
   try {
-    // 从API获取设备模型数据
-    const res: any = await getDeviceModelById(id)
-    if (res.data) {
-      const deviceModel = res.data
+    // 从 store 获取设备模型数据
+    if (deviceModelStore.allDeviceModels.length === 0) {
+      await deviceModelStore.fetchAllDeviceModels();
+    }
+    
+    const deviceModel = deviceModelStore.allDeviceModels.find((m: any) => String(m.id) === String(id));
+    
+    if (deviceModel) {
       // 加载基本信息
       deviceModelForm.value.modelName = deviceModel.modelName || ''
       deviceModelForm.value.category = deviceModel.category || ''
       deviceModelForm.value.provider = deviceModel.provider || ''
+      deviceModelForm.value.modelId = deviceModel.model ? (deviceModel.model as any).modelId : ''
       
       // 加载模型数据
       if (deviceModel.model) {
-        modelForm.value = JSON.parse(JSON.stringify(deviceModel.model))
-        if (modelForm.value.modelId) {
-          deviceModelForm.value.modelId = modelForm.value.modelId
+        const parsedModel = JSON.parse(JSON.stringify(deviceModel.model))
+        modelForm.value = {
+          ...parsedModel,
+          properties: parsedModel.properties || {},
+          actions: parsedModel.actions || {},
+          events: parsedModel.events || {}
         }
       } else {
         resetModelForm()
       }
+    } else {
+      throw new Error('未找到对应的设备模型')
     }
   } catch (error) {
     console.error('加载设备模型数据失败:', error)
@@ -839,25 +844,19 @@ const loadDeviceModelData = async (id: number) => {
   }
 }
 
-// 监听路由�?props 变化，加载对应的设备模型数据
+// 监听路由、props 变化，加载对应的设备模型数据
 watch([() => route.query.id, () => route.query.mode, () => props.deviceTypeId, () => props.mode], async ([routeId, routeMode, propsId, propsMode]) => {
   const mode = propsMode !== undefined ? propsMode : routeMode
   const id = propsId !== undefined ? propsId : (routeId ? parseInt(routeId as string) : null)
   
   if (mode === 'edit' && id) {
     await loadDeviceModelData(id as number)
-  } else {
-    resetDeviceModelForm()
-    resetModelForm()
   }
 }, { immediate: true })
 
 onMounted(async () => {
   if (isEditMode.value && deviceModelId.value) {
     await loadDeviceModelData(deviceModelId.value)
-  } else {
-    resetDeviceModelForm()
-    resetModelForm()
   }
 })
 

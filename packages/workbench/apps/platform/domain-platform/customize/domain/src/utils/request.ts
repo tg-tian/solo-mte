@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const service = axios.create({
+  baseURL: (import.meta as any).env?.VITE_BASE_PATH || '',
   timeout: 15000
 });
 
