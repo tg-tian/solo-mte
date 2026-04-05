@@ -52,3 +52,10 @@ export function getMapperContent(params: any) {
         params
     })
 }
+
+export function generateMapper(id: number) {
+    return request({
+        url: `/device/mapper/${id}/generate`,
+        method: 'post'
+    })
+}

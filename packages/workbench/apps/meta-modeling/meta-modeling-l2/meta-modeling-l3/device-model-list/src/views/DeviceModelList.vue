@@ -51,14 +51,6 @@
           <span class="model-name-text">{{ row.modelName }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="provider" label="供应商" width="120" align="center">
-        <template #default="{ row }">
-          <el-tag v-if="row.provider" size="small" type="success" effect="light">
-            {{ row.provider }}
-          </el-tag>
-          <span v-else style="color: #c0c4cc">-</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="category" label="品类" width="120" align="center">
         <template #default="{ row }">
           <el-tag v-if="row.category" size="small" effect="light" round>

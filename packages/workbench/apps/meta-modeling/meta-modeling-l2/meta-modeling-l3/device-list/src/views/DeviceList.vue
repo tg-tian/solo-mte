@@ -60,7 +60,7 @@
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" min-width="180" align="center" />
       <el-table-column prop="updateTime" label="更新时间" min-width="180" align="center" />
-      <el-table-column label="操作" width="200" fixed="right" align="center">
+      <el-table-column label="操作" width="280" fixed="right" align="center">
         <template #default="{ row }">
           <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
           <el-button link type="success" @click="viewMapper(row)">查看驱动</el-button>
@@ -118,7 +118,7 @@
                 v-for="item in deviceModelStore.deviceModels"
                 :key="item.id"
                 :label="item.modelName"
-                :value="item.modelId"
+                :value="item.model?.modelId"
               />
             </el-select>
           </el-form-item>
@@ -133,7 +133,7 @@
           </el-form-item>
         </div>
 
-        <el-divider content-position="left">属性映射 (物理属性 -> 平台属性)</el-divider>
+        <el-divider content-position="left">属性映射 (平台属性 -> 物理属性)</el-divider>
         <div class="property-mapping-section">
           <div v-if="!form.propertyMap || Object.keys(form.propertyMap).length === 0" class="empty-state">
             请先选择设备模型以加载属性
@@ -147,6 +147,20 @@
           </div>
         </div>
 
+        <el-divider content-position="left">事件映射 (平台事件 -> 物理事件)</el-divider>
+        <div class="property-mapping-section">
+          <div v-if="!form.eventMap || Object.keys(form.eventMap).length === 0" class="empty-state">
+            请先选择设备模型以加载事件
+          </div>
+          <div v-else class="mapping-list">
+            <div v-for="(value, key) in form.eventMap" :key="key" class="mapping-item">
+              <span class="platform-prop">{{ key }}</span>
+              <el-icon class="arrow-icon"><Right /></el-icon>
+              <el-input v-model="form.eventMap[key]" class="physical-input" placeholder="物理事件字段" />
+            </div>
+          </div>
+        </div>
+
         <el-divider content-position="left">操作实现 (Action Implementation)</el-divider>
         <div class="property-mapping-section">
           <div v-if="!form.actionMap || Object.keys(form.actionMap).length === 0" class="empty-state">
@@ -156,8 +170,8 @@
             <div v-for="(value, key) in form.actionMap" :key="key" class="mapping-item-vertical">
               <div class="mapping-item-header">
                 <span class="platform-prop">{{ key }}</span>
-                <span class="prop-desc" v-if="deviceModelStore.deviceModels.find(t => t.modelId === form.modelId)?.model?.actions[key]?.description">
-                  ({{ deviceModelStore.deviceModels.find(t => t.modelId === form.modelId)?.model?.actions[key]?.description }})
+                <span class="prop-desc" v-if="deviceModelStore.deviceModels.find(t => t.model?.modelId === form.modelId)?.model?.actions[key]?.description">
+                  ({{ deviceModelStore.deviceModels.find(t => t.model?.modelId === form.modelId)?.model?.actions[key]?.description }})
                 </span>
               </div>
               <div class="editor-wrapper">
@@ -177,6 +191,14 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button
+          type="warning"
+          :loading="generatingMapper"
+          :disabled="!isEdit || !form.id"
+          @click="generateMapperFromForm"
+        >
+          生成驱动
+        </el-button>
         <el-button type="primary" :loading="submitting" @click="submitForm">确定</el-button>
       </template>
     </el-dialog>
@@ -186,7 +208,7 @@
       v-model="mapperVisible" 
       title="驱动配置脚本 (Mapper)" 
       width="1000px"
-      class="premium-dialog mapper-dialog"
+      custom-class="premium-dialog mapper-dialog"
       append-to-body
       :lock-scroll="true"
       modal-class="no-scroll-overlay"
@@ -218,7 +240,7 @@ import { Plus, Right, Search, DocumentCopy } from '@element-plus/icons-vue'
 import { useDeviceStore } from '../store/device'
 import { useDeviceModelStore } from '../store/deviceModel'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getMapperContent } from '../api/device'
+import { getMapperContent, generateMapper as apiGenerateMapper, getDeviceById } from '../api/device'
 import type { FormInstance, FormRules } from 'element-plus'
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
@@ -245,13 +267,14 @@ const formattedRecords = computed(() => {
 })
 
 const getModelName = (modelId: string) => {
-  const model = deviceModelStore.deviceModels.find((item: any) => item.modelId === modelId)
+  const model = deviceModelStore.deviceModels.find((item: any) => item.model?.modelId === modelId)
   return model ? model.modelName : modelId
 }
 
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const submitting = ref(false)
+const generatingMapper = ref(false)
 const formRef = ref<FormInstance>()
 
 const form = reactive({
@@ -262,7 +285,8 @@ const form = reactive({
   deviceName: '',
   deviceMapperPath: undefined as string | undefined,
   propertyMap: {} as Record<string, string>,
-  actionMap: {} as Record<string, string>
+  actionMap: {} as Record<string, string>,
+  eventMap: {} as Record<string, string>
 })
 
 const rules = reactive<FormRules>({
@@ -297,49 +321,98 @@ const handleCreate = () => {
     deviceName: '',
     deviceMapperPath: undefined,
     propertyMap: {},
-    actionMap: {}
+    actionMap: {},
+    eventMap: {}
   })
   dialogVisible.value = true
 }
 
-const handleEdit = (row: any) => {
+const buildMergedMappings = (
+  modelId: string,
+  incomingPropertyMap: Record<string, string> = {},
+  incomingActionMap: Record<string, string> = {},
+  incomingEventMap: Record<string, string> = {}
+) => {
+  const selectedType = deviceModelStore.deviceModels.find((t: any) => t.model?.modelId === modelId)
+  const mergedPropertyMap: Record<string, string> = {}
+  const mergedActionMap: Record<string, string> = {}
+  const mergedEventMap: Record<string, string> = {}
+
+  if (selectedType?.model?.properties) {
+    Object.keys(selectedType.model.properties).forEach(key => {
+      mergedPropertyMap[key] = incomingPropertyMap[key] ?? key
+    })
+  }
+  Object.keys(incomingPropertyMap).forEach(key => {
+    if (!(key in mergedPropertyMap)) {
+      mergedPropertyMap[key] = incomingPropertyMap[key]
+    }
+  })
+
+  if (selectedType?.model?.actions) {
+    Object.keys(selectedType.model.actions).forEach(key => {
+      mergedActionMap[key] = incomingActionMap[key] ?? ''
+    })
+  }
+  Object.keys(incomingActionMap).forEach(key => {
+    if (!(key in mergedActionMap)) {
+      mergedActionMap[key] = incomingActionMap[key]
+    }
+  })
+
+  if (selectedType?.model?.events) {
+    Object.keys(selectedType.model.events).forEach(key => {
+      mergedEventMap[key] = incomingEventMap[key] ?? key
+    })
+  }
+  Object.keys(incomingEventMap).forEach(key => {
+    if (!(key in mergedEventMap)) {
+      mergedEventMap[key] = incomingEventMap[key]
+    }
+  })
+
+  return {
+    propertyMap: mergedPropertyMap,
+    actionMap: mergedActionMap,
+    eventMap: mergedEventMap
+  }
+}
+
+const handleEdit = async (row: any) => {
   isEdit.value = true
-  
-  // 确保所有字段都被正确复制，特别是id
-  form.id = row.id
-  form.provider = row.provider
-  form.modelId = row.modelId
-  form.deviceId = row.deviceId
-  form.deviceName = row.deviceName
-  form.deviceMapperPath = row.deviceMapperPath
-  form.propertyMap = row.propertyMap ? { ...row.propertyMap } : {}
-  form.actionMap = row.actionMap ? { ...row.actionMap } : {}
-  
+  let source = row
+  try {
+    const res: any = await getDeviceById(row.id)
+    source = res.data || row
+  } catch {
+    source = row
+  }
+
+  const mergedMappings = buildMergedMappings(
+    source.modelId,
+    source.propertyMap ? { ...source.propertyMap } : {},
+    source.actionMap ? { ...source.actionMap } : {},
+    source.eventMap ? { ...source.eventMap } : {}
+  )
+
+  form.id = source.id
+  form.provider = source.provider
+  form.modelId = source.modelId
+  form.deviceId = source.deviceId
+  form.deviceName = source.deviceName
+  form.deviceMapperPath = source.deviceMapperPath
+  form.propertyMap = mergedMappings.propertyMap
+  form.actionMap = mergedMappings.actionMap
+  form.eventMap = mergedMappings.eventMap
+
   dialogVisible.value = true
 }
 
 const handleDeviceTypeChange = (modelId: string) => {
-  const selectedType = deviceModelStore.deviceModels.find((t: any) => t.modelId === modelId)
-  if (selectedType) {
-    // form.deviceTypeName = selectedType.modelName // No longer needed
-    // 初始化属性映射为 1:1
-    const mapping = {} as Record<string, string>
-    if (selectedType.model && selectedType.model.properties) {
-      Object.keys(selectedType.model.properties).forEach(key => {
-        mapping[key] = key
-      })
-    }
-    form.propertyMap = mapping
-
-    // 初始化操作映射
-    const actionMapping = {} as Record<string, string>
-    if (selectedType.model && selectedType.model.actions) {
-      Object.keys(selectedType.model.actions).forEach(key => {
-        actionMapping[key] = '' // 默认空，用户自定义
-      })
-    }
-    form.actionMap = actionMapping
-  }
+  const mergedMappings = buildMergedMappings(modelId, form.propertyMap, form.actionMap, form.eventMap)
+  form.propertyMap = mergedMappings.propertyMap
+  form.actionMap = mergedMappings.actionMap
+  form.eventMap = mergedMappings.eventMap
 }
 
 const handleModelInput = (val: string) => {
@@ -394,6 +467,32 @@ const handleDelete = (row: any) => {
 
 const mapperVisible = ref(false)
 const mapperContent = ref('')
+const generateMapperFromForm = async () => {
+  if (!formRef.value) return
+  if (!isEdit.value || !form.id) {
+    ElMessage.warning('请先保存设备后再生成驱动')
+    return
+  }
+  await formRef.value.validate(async (valid) => {
+    if (!valid) return
+    generatingMapper.value = true
+    try {
+      const updated = await store.updateDevice(form as any)
+      if (!updated) {
+        ElMessage.error('生成失败：保存当前配置失败')
+        return
+      }
+      await apiGenerateMapper(form.id as number)
+      ElMessage.success('Mapper 生成成功')
+      handleSearch()
+    } catch (error: any) {
+      ElMessage.error(error.message || '生成失败')
+    } finally {
+      generatingMapper.value = false
+    }
+  })
+}
+
 const viewMapper = async (row: any) => {
   try {
     const res: any = await getMapperContent({

@@ -21,6 +21,7 @@ export interface EventDefinition {
 }
 
 export interface BaseDeviceModel {
+    modelId: string;
     modelName: string;
     provider?: string;
     category: string;
@@ -53,6 +54,7 @@ export interface Device {
     deviceMapperPath?: string; // 设备Mapper路径
     propertyMap?: Record<string, string>; // 属性映射规则
     actionMap?: Record<string, string>; // 操作实现映射
+    eventMap?: Record<string, string>; // 事件映射规则
     createTime?: string;
     updateTime?: string;
 }

@@ -43,11 +43,6 @@
               <el-input v-model="deviceModelForm.category" placeholder="例如：coffer"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="供应商" prop="provider">
-              <el-input v-model="deviceModelForm.provider" placeholder="例如：mqtt"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
     </el-card>
@@ -499,16 +494,16 @@ const paramFormRef = ref<FormInstance>()
 const state = reactive({
   activeTab: 'property',
   deviceModelForm: {
-    modelName: '',
     modelId: '',
+    modelName: '',
     category: '',
-    provider: ''
+    provider: undefined
   } as Partial<DeviceModel> & { modelId?: string },
   modelForm: {
     modelName: '',
     modelId: '',
     category: '',
-    provider: '',
+    provider: undefined,
     properties: {} as Record<string, PropertyDefinition>,
     actions: {} as Record<string, ActionDefinition>,
     events: {} as Record<string, EventDefinition>
@@ -573,35 +568,43 @@ const {
 const propertyList = computed(() => {
   return Object.entries(modelForm.value.properties || {}).map(([key, value]) => ({
     identify: key,
-    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
+    ...((typeof value === 'object' && value !== null) ? value : {})
   }))
 })
 
 const actionList = computed(() => {
   return Object.entries(modelForm.value.actions || {}).map(([key, value]) => ({
     identify: key,
-    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
+    ...((typeof value === 'object' && value !== null) ? value : {})
   }))
 })
 
 const eventList = computed(() => {
   return Object.entries(modelForm.value.events || {}).map(([key, value]) => ({
     identify: key,
-    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
+    ...((typeof value === 'object' && value !== null) ? value : {})
   }))
 })
 
 const argumentList = computed(() => {
   return Object.entries(actionForm.value.arguments || {}).map(([key, value]) => ({
     identify: key,
-    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
+    ...((typeof value === 'object' && value !== null) ? value : {})
   }))
 })
 
 const fieldList = computed(() => {
   return Object.entries(eventForm.value.fields || {}).map(([key, value]) => ({
     identify: key,
-    ...(typeof value === 'object' && value !== null ? (value as Record<string, any>) : {})
+    ...((typeof value === 'object' && value !== null) ? value : {})
+  }))
+})
+
+const outputList = computed(() => {
+  const outputs = eventForm.value.outputs || {}
+  return Object.entries(outputs).map(([key, value]) => ({
+    identify: key,
+    ...((typeof value === 'object' && value !== null) ? value : {})
   }))
 })
 
@@ -641,9 +644,6 @@ const basicRules = {
   ],
   category: [
     { required: true, message: '请输入所属品类', trigger: 'blur' }
-  ],
-  provider: [
-    { required: true, message: '请输入供应商', trigger: 'blur' }
   ]
 }
 
@@ -741,7 +741,7 @@ const resetDeviceModelForm = () => {
     modelName: '',
     modelId: '',
     category: '',
-    provider: ''
+    provider: undefined
   }
 }
 
@@ -751,7 +751,7 @@ const resetModelForm = () => {
     modelName: '',
     modelId: '',
     category: '',
-    provider: '',
+    provider: undefined,
     properties: {},
     actions: {},
     events: {}
@@ -820,7 +820,6 @@ const loadDeviceModelData = async (id: number) => {
       // 加载基本信息
       deviceModelForm.value.modelName = deviceModel.modelName || ''
       deviceModelForm.value.category = deviceModel.category || ''
-      deviceModelForm.value.provider = deviceModel.provider || ''
       deviceModelForm.value.modelId = deviceModel.model ? (deviceModel.model as any).modelId : ''
       
       // 加载模型数据
@@ -883,7 +882,6 @@ const submitForm = async () => {
         // 同步 modelForm 的基本信息
         modelForm.value.modelName = deviceModelForm.value.modelName!
         modelForm.value.category = deviceModelForm.value.category!
-        modelForm.value.provider = deviceModelForm.value.provider!
         modelForm.value.modelId = deviceModelForm.value.modelId!
 
         if (isEditMode.value && deviceModelId.value) {
