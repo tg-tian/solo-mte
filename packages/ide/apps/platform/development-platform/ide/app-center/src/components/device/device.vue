@@ -25,7 +25,7 @@
       </el-card>
 
       <div v-if="filteredDevices.length > 0">
-        <el-table v-loading="deviceStore.loading" :data="filteredDevices" class="device-table" border>
+        <el-table v-loading="deviceStore.loading" :data="filteredDevices" row-key="deviceId" class="device-table" border>
           <el-table-column prop="deviceId" label="设备编码" width="150" />
           <el-table-column prop="deviceName" label="设备名称" min-width="150" />
           <el-table-column prop="category" label="设备类型" width="120" />
@@ -42,8 +42,8 @@
           </el-table-column>
           <el-table-column label="状态" width="100">
             <template #default="scope">
-              <el-tag v-if="scope.row?.metadata?.isOnline" type="success">在线</el-tag>
-              <el-tag v-else type="danger">离线</el-tag>
+              <el-tag v-if="scope.row?.metadata?.isOnline" class="device-status-tag" type="success">在线</el-tag>
+              <el-tag v-else class="device-status-tag" type="danger">离线</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="320">
@@ -503,5 +503,9 @@ onBeforeUnmount(() => {
 .device-table {
   width: 100%;
   margin-top: 20px;
+}
+
+.device-status-tag {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
 </style>

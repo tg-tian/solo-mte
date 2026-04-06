@@ -57,14 +57,34 @@ export const useDeviceStore = defineStore('device', {
     applyShadow(payload: Device) {
       const index = this.devices.findIndex((item) => item.deviceId === payload.deviceId)
       if (index < 0) return
-      this.devices[index] = normalizeDevice({
-        ...this.devices[index],
-        ...payload,
-        state: {
-          reported: payload?.state?.reported ?? this.devices[index].state.reported,
-          desired: payload?.state?.desired ?? this.devices[index].state.desired,
+
+      const target = this.devices[index]
+      if (!target) return
+
+      if (payload.deviceName !== undefined) target.deviceName = payload.deviceName
+      if (payload.provider !== undefined) target.provider = payload.provider
+      if (payload.category !== undefined) target.category = payload.category
+      if (payload.metaModel !== undefined) target.metaModel = payload.metaModel
+      if (payload.isAccessible !== undefined) target.isAccessible = payload.isAccessible
+
+      target.state = {
+        reported: {
+          ...(target.state?.reported || {}),
+          ...(payload.state?.reported || {}),
         },
-      })
+        desired: {
+          ...(target.state?.desired || {}),
+          ...(payload.state?.desired || {}),
+        },
+      }
+
+      target.metadata = {
+        ...(target.metadata || {}),
+        ...(payload.metadata || {}),
+        lastUpdated: payload?.metadata?.lastUpdated ?? target.metadata?.lastUpdated ?? Date.now(),
+        isOnline: payload?.metadata?.isOnline ?? target.metadata?.isOnline ?? false,
+        version: payload?.metadata?.version ?? target.metadata?.version ?? 1,
+      }
     },
 
     connectShadowStream() {
