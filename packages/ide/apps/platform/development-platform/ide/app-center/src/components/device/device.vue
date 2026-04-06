@@ -89,7 +89,7 @@
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <el-card shadow="never">
           <el-descriptions v-if="Object.keys(reportProperties).length" :column="1" border>
-            <el-descriptions-item v-for="(value, key) in reportProperties" :key="key" :label="key">
+            <el-descriptions-item v-for="(value, key) in reportProperties" :key="String(key)" :label="String(key)">
               <pre style="margin:0">{{ formatValue(value) }}</pre>
             </el-descriptions-item>
           </el-descriptions>
@@ -228,8 +228,7 @@
 import { ref, reactive, computed, onMounted, onBeforeUnmount, toRefs } from 'vue'
 import { useSceneStore } from '../../store/scene'
 import { useDeviceStore } from '../../store/device'
-import { getSceneById } from '../../api/scene'
-import type { Device, ProviderConfig } from '../../types/models'
+import type { Device, ProviderConfig } from '../../types/device'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
  
 const props = defineProps<{ domainId: number ; sceneId: number }>()
@@ -414,7 +413,7 @@ const formatValue = (val: any) => {
 const handleAction = async (actionName: string, action: any) => {
     if (!action.arguments || Object.keys(action.arguments).length === 0) {
         try {
-            await deviceStore.sendCommand({deviceId: currentDevice.value!.deviceId, actionName, params: {}})
+            await deviceStore.sendCommand({ deviceId: currentDevice.value!.deviceId, action: actionName, params: {} })
             ElMessage.success('指令下发成功')
         } catch {
             ElMessage.error('指令下发失败')
@@ -573,13 +572,9 @@ const deleteDevice = async (row: any) => {
 }
 
 onMounted(async () => {
-  const localSceneId = sceneId.value as number
-  try {
-    const res: any = await getSceneById(localSceneId)
-    if (res.data && res.status === 200) {
-      sceneStore.setCurrentScene(res.data)
-    }
-  } catch {}
+  if (sceneId.value) {
+    await sceneStore.fetchSceneById(sceneId.value as number)
+  }
   await deviceStore.fetchDevices()
   await deviceStore.discoverDevices()
   deviceStore.connectShadowStream()
