@@ -23,9 +23,5 @@ export const useAreaStore = defineStore('area', {
         this.loading = false
       }
     },
-
-    clearAreas() {
-      this.areas = []
-    },
   },
 })

@@ -77,3 +77,10 @@
 .f-admin-app-center .f-page-header .f-app-center-user .f-app-center-user-name {
     margin-left: 0.5rem;
 }
+
+.f-admin-app-center .f-page-main {
+    height: calc(100vh - 64px);
+    overflow: auto;
+    padding: 16px 24px 24px;
+    box-sizing: border-box;
+}

@@ -5,36 +5,35 @@ import { getProviders, createProvider, deleteProvider } from '../api/provider'
 
 let wsInstance: WebSocket | null = null
 
+function normalizeDevice(device: Device): Device {
+  return {
+    ...device,
+    state: {
+      reported: device?.state?.reported || {},
+      desired: device?.state?.desired || {},
+    },
+    metadata: {
+      lastUpdated: device?.metadata?.lastUpdated ?? Date.now(),
+      isOnline: device?.metadata?.isOnline ?? false,
+      version: device?.metadata?.version ?? 1,
+    },
+  }
+}
+
 export const useDeviceStore = defineStore('device', {
   state: () => ({
     devices: [] as Device[],
     providers: [] as ProviderConfig[],
     discoveredDevices: [] as Device[],
-    currentDevice: null as Device | null,
     loading: false,
   }),
 
   actions: {
-    normalizeDevice(device: Device): Device {
-      return {
-        ...device,
-        state: {
-          reported: device?.state?.reported || {},
-          desired: device?.state?.desired || {},
-        },
-        metadata: {
-          lastUpdated: device?.metadata?.lastUpdated ?? Date.now(),
-          isOnline: device?.metadata?.isOnline ?? false,
-          version: device?.metadata?.version ?? 1,
-        },
-      }
-    },
-
     async fetchDevices() {
       this.loading = true
       try {
         const res: any = await getDevices()
-        this.devices = Array.isArray(res?.data) ? res.data.map((d: Device) => this.normalizeDevice(d)) : []
+        this.devices = Array.isArray(res?.data) ? res.data.map(normalizeDevice) : []
       } finally {
         this.loading = false
       }
@@ -42,11 +41,11 @@ export const useDeviceStore = defineStore('device', {
 
     async discoverDevices() {
       const res: any = await discoverDevices()
-      this.discoveredDevices = Array.isArray(res?.data) ? res.data.map((d: Device) => this.normalizeDevice(d)) : []
+      this.discoveredDevices = Array.isArray(res?.data) ? res.data.map(normalizeDevice) : []
     },
 
     handleDiscovery(device: Device) {
-      const normalized = this.normalizeDevice(device)
+      const normalized = normalizeDevice(device)
       const index = this.discoveredDevices.findIndex((item) => item.deviceId === normalized.deviceId)
       if (index >= 0) {
         this.discoveredDevices[index] = normalized
@@ -58,7 +57,7 @@ export const useDeviceStore = defineStore('device', {
     applyShadow(payload: Device) {
       const index = this.devices.findIndex((item) => item.deviceId === payload.deviceId)
       if (index < 0) return
-      this.devices[index] = this.normalizeDevice({
+      this.devices[index] = normalizeDevice({
         ...this.devices[index],
         ...payload,
         state: {
@@ -113,10 +112,6 @@ export const useDeviceStore = defineStore('device', {
     async sendCommand(command: DeviceCommand) {
       const res: any = await sendCommand(command)
       return res.status === 200 || res.data?.ok === true
-    },
-
-    setCurrentDevice(device: Device | null) {
-      this.currentDevice = device
     },
 
     async fetchProviders() {

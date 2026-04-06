@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Scene } from '../types/scene'
-import { getSceneById, getScenes } from '../api/scene'
+import { getSceneById } from '../api/scene'
 
 function normalizeScene(sceneData: any): Scene {
   return {
@@ -23,23 +23,11 @@ function normalizeScene(sceneData: any): Scene {
 
 export const useSceneStore = defineStore('scene', {
   state: () => ({
-    scenes: [] as Scene[],
     currentScene: null as Scene | null,
     loading: false,
   }),
 
   actions: {
-    async fetchScenes(domainId?: number) {
-      this.loading = true
-      try {
-        const res: any = await getScenes(domainId)
-        const list = Array.isArray(res?.data) ? res.data : []
-        this.scenes = list.map(normalizeScene)
-      } finally {
-        this.loading = false
-      }
-    },
-
     async fetchSceneById(id: number) {
       this.loading = true
       try {
@@ -49,10 +37,6 @@ export const useSceneStore = defineStore('scene', {
       } finally {
         this.loading = false
       }
-    },
-
-    setCurrentScene(scene: Scene | null) {
-      this.currentScene = scene
     },
   },
 })
