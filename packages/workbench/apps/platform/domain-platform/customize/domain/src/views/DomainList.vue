@@ -61,9 +61,6 @@
             <el-button text class="icon-btn" @click="openDomainScen(item)">
               <i class="f-icon f-icon-share"></i>
             </el-button>
-            <el-button text class="icon-btn icon-btn-disabled">
-              <i class="f-icon f-icon-yxs_delete"></i>
-            </el-button>
           </div>
         </div>
       </div>
