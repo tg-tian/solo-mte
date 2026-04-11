@@ -32,9 +32,9 @@
               <el-table-column prop="deviceName" label="设备名称" min-width="150" />
               <el-table-column prop="category" label="设备类型" width="120" />
               <el-table-column prop="provider" label="设备平台" width="120" />
-              <el-table-column label="设备位置" width="120">
+              <el-table-column label="设备位置" width="160">
                 <template #default="scope">
-                  {{ scope.row?.state?.reported?.location?.name || '' }}
+                  {{ getAreaDisplayName(scope.row) || scope.row?.state?.reported?.location?.name || '' }}
                 </template>
               </el-table-column>
               <el-table-column label="更新时间" width="180">
@@ -153,8 +153,18 @@
             <el-option label="HTTP" value="HTTP" />
           </el-select>
         </el-form-item>
+        <el-form-item v-if="isEdit" label="所属区域">
+          <el-select v-model="deviceForm.area" value-key="id" placeholder="请选择当前场景区域" clearable>
+            <el-option
+              v-for="area in areaStore.areas"
+              :key="area.id"
+              :label="area.name"
+              :value="area"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item v-if="isEdit" label="设备位置">
-          <el-input v-model="deviceForm.state.reported.location.name" placeholder="请输入设备位置" />
+          <el-input :model-value="deviceForm.area?.name || deviceForm.state.reported.location.name" placeholder="请选择所属区域" readonly />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -244,14 +254,17 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { useSceneStore } from '../../store/scene'
+import { useAreaStore } from '../../store/area'
 import { useDeviceStore } from '../../store/device'
 import DeviceDiscoveryDialog from './device-discovery-dialog.vue'
 import DeviceProviderDialogs from './device-provider-dialogs.vue'
 import type { Device, ProviderConfig } from '../../types/device'
+import type { Area } from '../../types/scene'
 
 const props = defineProps<{ sceneId: number }>()
 
 const sceneStore = useSceneStore()
+const areaStore = useAreaStore()
 const deviceStore = useDeviceStore()
 const deviceFormRef = ref<FormInstance>()
 const activeTab = ref('devices')
@@ -267,6 +280,7 @@ const state = reactive({
     provider: 'MQTT',
     category: '',
     deviceName: '',
+    area: null as Area | null,
     state: { reported: { location: { name: '' } }, desired: {} },
     metadata: { lastUpdated: Date.now(), isOnline: true, version: 1 },
   },
@@ -415,6 +429,7 @@ function handleEdit(row: Device) {
     provider: row.provider || 'MQTT',
     category: row.category || '',
     deviceName: row.deviceName || '',
+    area: resolveAreaFromDevice(row),
     state: {
       reported: { location: { name: row?.state?.reported?.location?.name || '' } },
       desired: row?.state?.desired || {},
@@ -446,16 +461,18 @@ async function submitDeviceForm() {
     }
     submitting.value = true
     try {
+      const selectedArea = deviceForm.value.area || null
       const payload: Partial<Device> = {
         deviceName: name,
         provider: deviceForm.value.provider,
         category: deviceForm.value.category,
+        area: selectedArea,
         state: {
           reported: {
             ...(deviceForm.value.state?.reported || {}),
             location: {
               ...(deviceForm.value.state?.reported?.location || {}),
-              name: deviceForm.value.state?.reported?.location?.name || '',
+              name: selectedArea?.name || deviceForm.value.state?.reported?.location?.name || '',
             },
           },
         },
@@ -505,6 +522,20 @@ function openReportDialog(row: Device) {
   currentDeviceId.value = row.deviceId
   reportDialogTitle.value = `${row.deviceName} 设备测试`
   reportDialogVisible.value = true
+}
+
+function resolveAreaFromDevice(device: Device): Area | null {
+  if (device?.area && typeof device.area === 'object' && 'id' in device.area) {
+    const matched = areaStore.areas.find((area) => area.id === Number((device.area as Area).id))
+    return matched || (device.area as Area)
+  }
+  const locationName = device?.state?.reported?.location?.name
+  if (!locationName) return null
+  return areaStore.areas.find((area) => area.name === locationName) || null
+}
+
+function getAreaDisplayName(device: Device) {
+  return resolveAreaFromDevice(device)?.name || ''
 }
 
 function formatValue(val: unknown) {
@@ -602,6 +633,7 @@ function clearEvents() {
 onMounted(async () => {
   if (props.sceneId) {
     await sceneStore.fetchSceneById(props.sceneId)
+    await areaStore.fetchAreas(props.sceneId)
   }
   await deviceStore.fetchDevices()
   await deviceStore.discoverDevices()
