@@ -1,61 +1,142 @@
 <template>
   <div class="scene-setting-container">
     <el-card class="setting-content">
-      <el-card class="device-search" shadow="never">
-        <div class="device-search-row">
-          <el-form :inline="true" :model="searchForm" class="search-form">
-            <el-form-item label="设备名称">
-              <el-input v-model="searchForm.name" placeholder="请输入设备名称" clearable />
-            </el-form-item>
-            <el-form-item label="状态">
-              <el-select v-model="searchForm.status" placeholder="请选择状态" clearable>
-                <el-option label="在线" :value="1" />
-                <el-option label="离线" :value="0" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="resetSearch">重置</el-button>
-            </el-form-item>
-          </el-form>
-          <div class="device-actions">
-            <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
-            <el-button type="primary" @click="handleConfig">平台配置</el-button>
-          </div>
-        </div>
-      </el-card>
+      <el-tabs v-model="activeTab" class="device-tabs">
+        <el-tab-pane label="设备管理" name="devices">
+          <el-card class="device-search" shadow="never">
+            <div class="device-search-row">
+              <el-form :inline="true" :model="searchForm" class="search-form">
+                <el-form-item label="设备名称">
+                  <el-input v-model="searchForm.name" placeholder="请输入设备名称" clearable />
+                </el-form-item>
+                <el-form-item label="状态">
+                  <el-select v-model="searchForm.status" placeholder="请选择状态" clearable>
+                    <el-option label="在线" :value="1" />
+                    <el-option label="离线" :value="0" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-button @click="resetSearch">重置</el-button>
+                </el-form-item>
+              </el-form>
+              <div class="device-actions">
+                <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
+                <el-button type="primary" @click="handleConfig">平台配置</el-button>
+              </div>
+            </div>
+          </el-card>
 
-      <div v-if="filteredDevices.length > 0">
-        <el-table v-loading="deviceStore.loading" :data="filteredDevices" row-key="deviceId" class="device-table" border>
-          <el-table-column prop="deviceId" label="设备编码" width="150" />
-          <el-table-column prop="deviceName" label="设备名称" min-width="150" />
-          <el-table-column prop="category" label="设备类型" width="120" />
-          <el-table-column prop="provider" label="设备平台" width="120" />
-          <el-table-column label="设备位置" width="120">
-            <template #default="scope">
-              {{ scope.row?.state?.reported?.location?.name || '' }}
-            </template>
-          </el-table-column>
-          <el-table-column label="更新时间" width="180">
-            <template #default="scope">
-              {{ scope.row?.metadata?.lastUpdated ? new Date(scope.row.metadata.lastUpdated).toLocaleString() : '' }}
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="100">
-            <template #default="scope">
-              <el-tag v-if="scope.row?.metadata?.isOnline" class="device-status-tag" type="success">在线</el-tag>
-              <el-tag v-else class="device-status-tag" type="danger">离线</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="320">
-            <template #default="scope">
-              <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-              <el-button type="warning" size="small" :disabled="!scope.row?.metadata?.isOnline" @click="openReportDialog(scope.row)">测试</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <el-empty v-else description="暂无设备" />
+          <div v-if="filteredDevices.length > 0">
+            <el-table v-loading="deviceStore.loading" :data="filteredDevices" row-key="deviceId" class="device-table" border>
+              <el-table-column prop="deviceId" label="设备编码" width="150" />
+              <el-table-column prop="deviceName" label="设备名称" min-width="150" />
+              <el-table-column prop="category" label="设备类型" width="120" />
+              <el-table-column prop="provider" label="设备平台" width="120" />
+              <el-table-column label="设备位置" width="120">
+                <template #default="scope">
+                  {{ scope.row?.state?.reported?.location?.name || '' }}
+                </template>
+              </el-table-column>
+              <el-table-column label="更新时间" width="180">
+                <template #default="scope">
+                  {{ scope.row?.metadata?.lastUpdated ? new Date(scope.row.metadata.lastUpdated).toLocaleString() : '' }}
+                </template>
+              </el-table-column>
+              <el-table-column label="状态" width="100">
+                <template #default="scope">
+                  <el-tag v-if="scope.row?.metadata?.isOnline" class="device-status-tag" type="success">在线</el-tag>
+                  <el-tag v-else class="device-status-tag" type="danger">离线</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="320">
+                <template #default="scope">
+                  <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+                  <el-button type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+                  <el-button type="warning" size="small" :disabled="!scope.row?.metadata?.isOnline" @click="openReportDialog(scope.row)">测试</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <el-empty v-else description="暂无设备" />
+        </el-tab-pane>
+
+        <el-tab-pane label="事件统计" name="events">
+          <el-card shadow="never" class="event-stats-toolbar-card">
+            <div class="event-stats-toolbar">
+              <el-select v-model="eventDeviceFilter" clearable filterable placeholder="按设备过滤" style="width: 260px">
+                <el-option
+                  v-for="device in eventDeviceOptions"
+                  :key="device.deviceId"
+                  :label="device.deviceName || device.deviceId"
+                  :value="device.deviceId"
+                />
+              </el-select>
+              <el-button @click="clearEvents">清空事件缓存</el-button>
+            </div>
+          </el-card>
+
+          <el-row :gutter="16" class="event-summary-row">
+            <el-col :xs="24" :sm="8">
+              <el-card shadow="hover">
+                <div class="summary-item"><span>事件总数</span><strong>{{ filteredEvents.length }}</strong></div>
+              </el-card>
+            </el-col>
+            <el-col :xs="24" :sm="8">
+              <el-card shadow="hover">
+                <div class="summary-item"><span>上报设备数</span><strong>{{ eventDeviceCount }}</strong></div>
+              </el-card>
+            </el-col>
+            <el-col :xs="24" :sm="8">
+              <el-card shadow="hover">
+                <div class="summary-item"><span>事件类型数</span><strong>{{ eventTypeCount }}</strong></div>
+              </el-card>
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="16">
+            <el-col :xs="24" :lg="10">
+              <el-card shadow="never">
+                <template #header>
+                  <div class="panel-header">
+                    <span>设备事件统计</span>
+                  </div>
+                </template>
+                <el-table :data="deviceEventStats" border>
+                  <el-table-column prop="deviceName" label="设备名称" min-width="140" />
+                  <el-table-column prop="deviceId" label="设备编码" min-width="150" />
+                  <el-table-column prop="count" label="事件数" width="100" />
+                  <el-table-column prop="typesText" label="事件类型" min-width="180" show-overflow-tooltip />
+                </el-table>
+              </el-card>
+            </el-col>
+            <el-col :xs="24" :lg="14">
+              <el-card shadow="never">
+                <template #header>
+                  <div class="panel-header">
+                    <span>事件明细</span>
+                  </div>
+                </template>
+                <div class="event-list-full">
+                  <el-card v-for="event in filteredEvents" :key="`${event.deviceId}-${event.timestamp}`" shadow="hover" class="event-card">
+                    <div class="event-card-head">
+                      <div>
+                        <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                        <div class="event-card-sub">{{ event.deviceId }}</div>
+                      </div>
+                      <div class="event-card-right">
+                        <el-tag size="small">{{ getEventType(event) }}</el-tag>
+                        <span>{{ formatTime(event.timestamp) }}</span>
+                      </div>
+                    </div>
+                    <pre>{{ formatValue(event.payload) }}</pre>
+                  </el-card>
+                  <el-empty v-if="!filteredEvents.length" description="暂无事件" />
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
 
     <el-dialog v-model="deviceDialogVisible" :title="isEdit ? '编辑设备' : '新增设备'" width="50%">
@@ -173,6 +254,8 @@ const props = defineProps<{ sceneId: number }>()
 const sceneStore = useSceneStore()
 const deviceStore = useDeviceStore()
 const deviceFormRef = ref<FormInstance>()
+const activeTab = ref('devices')
+const eventDeviceFilter = ref('')
 
 const state = reactive({
   searchForm: {
@@ -223,6 +306,48 @@ const filteredDevices = computed(() => {
   })
 })
 
+const eventDeviceOptions = computed(() => {
+  const map = new Map<string, Device>()
+  for (const device of deviceStore.devices || []) map.set(device.deviceId, device)
+  for (const event of deviceStore.recentEvents || []) {
+    if (event?.deviceId && !map.has(event.deviceId)) {
+      map.set(event.deviceId, { deviceId: event.deviceId, deviceName: event.deviceId } as Device)
+    }
+  }
+  return Array.from(map.values())
+})
+
+const filteredEvents = computed(() => {
+  const list = deviceStore.recentEvents || []
+  if (!eventDeviceFilter.value) return list
+  return list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+})
+
+const deviceEventStats = computed(() => {
+  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string> }>()
+  for (const event of filteredEvents.value) {
+    const deviceId = event?.deviceId || 'unknown'
+    const name = getDeviceDisplayName(deviceId)
+    if (!grouped.has(deviceId)) {
+      grouped.set(deviceId, { deviceId, deviceName: name, count: 0, types: new Set<string>() })
+    }
+    const current = grouped.get(deviceId)!
+    current.count += 1
+    current.types.add(getEventType(event))
+  }
+  return Array.from(grouped.values()).map((item) => ({
+    ...item,
+    typesText: Array.from(item.types).join('、') || '-',
+  }))
+})
+
+const eventDeviceCount = computed(() => deviceEventStats.value.length)
+const eventTypeCount = computed(() => {
+  const set = new Set<string>()
+  for (const event of filteredEvents.value) set.add(getEventType(event))
+  return set.size
+})
+
 const reportDialogVisible = ref(false)
 const reportDialogTitle = ref('设备测试')
 const currentDeviceId = ref('')
@@ -267,6 +392,7 @@ async function submitProvider() {
     await deviceStore.createProvider({ ...providerForm.value })
     ElMessage.success('保存成功')
     providerFormVisible.value = false
+    await deviceStore.fetchProviders()
   } catch {
     ElMessage.error('保存失败')
   }
@@ -277,6 +403,7 @@ async function handleDeleteProvider(row: ProviderConfig) {
     await ElMessageBox.confirm(`确定删除配置 ${row.provider} ?`, '提示', { type: 'warning' })
     await deviceStore.deleteProvider(row.provider)
     ElMessage.success('删除成功')
+    await deviceStore.fetchProviders()
   } catch {}
 }
 
@@ -386,11 +513,31 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
+function formatTime(val?: number) {
+  return val ? new Date(val).toLocaleString() : '-'
+}
+
+function getDeviceDisplayName(deviceId?: string) {
+  if (!deviceId) return '未知设备'
+  const matched = (deviceStore.devices || []).find((item) => item.deviceId === deviceId)
+  return matched?.deviceName || deviceId
+}
+
+function getEventType(event: any) {
+  const payload = event?.payload
+  if (!payload || typeof payload !== 'object') return 'unknown'
+  if (typeof payload.type === 'string' && payload.type) return payload.type
+  if (typeof payload.eventType === 'string' && payload.eventType) return payload.eventType
+  if (typeof payload.name === 'string' && payload.name) return payload.name
+  const keys = Object.keys(payload)
+  return keys[0] || 'unknown'
+}
+
 async function handleAction(actionName: string, action: any) {
   if (!currentDevice.value) return
   if (!action.arguments || Object.keys(action.arguments).length === 0) {
     try {
-      await deviceStore.sendCommand({ deviceId: currentDevice.value.deviceId, action: actionName, params: {} })
+      await deviceStore.sendCommand({ deviceId: currentDevice.value.deviceId, action: actionName, params: {} } as any)
       ElMessage.success('指令下发成功')
     } catch {
       ElMessage.error('指令下发失败')
@@ -410,7 +557,7 @@ async function submitAction() {
       deviceId: currentDevice.value.deviceId,
       action: currentActionName.value,
       params: actionFormModel.value,
-    })
+    } as any)
     ElMessage.success('指令下发成功')
     actionDialogVisible.value = false
   } catch {
@@ -448,12 +595,17 @@ async function addDeviceFromSelect(row: Device) {
   }
 }
 
+function clearEvents() {
+  deviceStore.recentEvents = []
+}
+
 onMounted(async () => {
   if (props.sceneId) {
     await sceneStore.fetchSceneById(props.sceneId)
   }
   await deviceStore.fetchDevices()
   await deviceStore.discoverDevices()
+  await deviceStore.fetchProviders()
   deviceStore.connectShadowStream()
 })
 
@@ -507,5 +659,88 @@ onBeforeUnmount(() => {
 
 .device-status-tag {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.event-stats-toolbar-card {
+  margin-bottom: 16px;
+}
+
+.event-stats-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.event-summary-row {
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary-item span {
+  color: #909399;
+}
+
+.summary-item strong {
+  font-size: 28px;
+  color: #303133;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.event-list-full {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-card {
+  background: #f8fafc;
+  border: 1px solid #ebeef5;
+}
+
+.event-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.event-card-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #909399;
+}
+
+.event-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #909399;
+  font-size: 12px;
+}
+
+.event-card pre,
+.shadow-viewer {
+  margin: 8px 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  max-height: 320px;
+  overflow: auto;
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 12px;
+  border-radius: 6px;
 }
 </style>

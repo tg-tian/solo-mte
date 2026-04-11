@@ -25,6 +25,7 @@ export const useDeviceStore = defineStore('device', {
     devices: [] as Device[],
     providers: [] as ProviderConfig[],
     discoveredDevices: [] as Device[],
+    recentEvents: [] as any[],
     loading: false,
   }),
 
@@ -100,6 +101,7 @@ export const useDeviceStore = defineStore('device', {
         if (!message?.topic) return
         if (message.topic === 'device.updated') this.applyShadow(message.data)
         if (message.topic === 'device.discovery') this.handleDiscovery(message.data)
+        if (message.topic === 'device.event') this.recentEvents = [message.data, ...this.recentEvents].slice(0, 50)
       }
       wsInstance.onclose = () => {
         wsInstance = null
