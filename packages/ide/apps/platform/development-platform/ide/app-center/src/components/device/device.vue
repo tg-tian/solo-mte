@@ -235,7 +235,6 @@
       :devices="selectList"
       :is-added="isInCurrentListByShadow"
       @add="addDeviceFromSelect"
-      @config="handleNewConfig"
     />
 
     <DeviceProviderDialogs
@@ -380,10 +379,6 @@ function resetSearch() {
 function handleConfig() {
   providerListVisible.value = true
   deviceStore.fetchProviders()
-}
-
-function handleNewConfig(row: Device) {
-  console.log('config device', row)
 }
 
 function openAddProvider() {

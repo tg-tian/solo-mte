@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Area } from '../types/scene'
-import { getAreas } from '../api/area'
+import { getAreas, createArea, updateArea, deleteArea } from '../api/area'
 import request from '../utils/request'
 
 function resolveImageUrl(image?: string | null) {
@@ -61,6 +61,34 @@ export const useAreaStore = defineStore('area', {
       } finally {
         this.loading = false
       }
+    },
+
+    async createArea(sceneId: number, data: Partial<Area>) {
+      const payload = {
+        sceneId,
+        name: data.name || '',
+        description: data.description || '',
+        position: data.position || '',
+        parentId: data.parentId ?? -1,
+        image: data.image || '',
+      }
+      return await createArea(payload)
+    },
+
+    async updateArea(id: number, sceneId: number, data: Partial<Area>) {
+      const payload = {
+        sceneId,
+        name: data.name || '',
+        description: data.description || '',
+        position: data.position || '',
+        parentId: data.parentId ?? -1,
+        image: data.image || '',
+      }
+      return await updateArea(id, payload)
+    },
+
+    async deleteArea(id: number) {
+      return await deleteArea(id)
     },
   },
 })

@@ -18,7 +18,10 @@
             <div class="card-title">区域列表</div>
             <div class="card-subtitle">共 {{ areaStore.areas.length }} 个区域</div>
           </div>
-          <el-button :disabled="areaTree.length === 0" @click="treeDialogVisible = true">查看区域树</el-button>
+          <div class="card-actions">
+            <el-button type="primary" @click="openCreateDialog">新增区域</el-button>
+            <el-button :disabled="areaTree.length === 0" @click="treeDialogVisible = true">查看区域树</el-button>
+          </div>
         </div>
       </template>
 
@@ -41,11 +44,22 @@
           <el-table-column prop="name" label="区域名称" min-width="180" />
           <el-table-column prop="description" label="区域描述" min-width="220" />
           <el-table-column prop="position" label="区域位置" min-width="180" />
+          <el-table-column label="父区域" min-width="140">
+            <template #default="scope">
+              {{ getParentAreaName(scope.row.parentId) }}
+            </template>
+          </el-table-column>
           <el-table-column label="层级" width="120">
             <template #default="scope">
               <el-tag :type="scope.row.parentId === -1 || scope.row.parentId === null ? 'success' : 'info'">
                 {{ scope.row.parentId === -1 || scope.row.parentId === null ? '根区域' : '子区域' }}
               </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="180" fixed="right">
+            <template #default="scope">
+              <el-button link type="primary" @click="openEditDialog(scope.row)">编辑</el-button>
+              <el-button link type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -72,11 +86,39 @@
       </el-tree>
       <el-empty v-else description="暂无区域树数据" />
     </el-dialog>
+
+    <el-dialog v-model="formDialogVisible" :title="isEdit ? '编辑区域' : '新增区域'" width="520px">
+      <el-form ref="areaFormRef" :model="areaForm" label-width="100px">
+        <el-form-item label="区域名称" required>
+          <el-input v-model="areaForm.name" placeholder="请输入区域名称" />
+        </el-form-item>
+        <el-form-item label="区域描述">
+          <el-input v-model="areaForm.description" type="textarea" :rows="3" placeholder="请输入区域描述" />
+        </el-form-item>
+        <el-form-item label="区域位置">
+          <el-input v-model="areaForm.position" placeholder="请输入区域位置" />
+        </el-form-item>
+        <el-form-item label="父区域">
+          <el-select v-model="areaForm.parentId" clearable placeholder="不选则为根区域">
+            <el-option :value="-1" label="根区域" />
+            <el-option v-for="item in parentAreaOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="图片地址">
+          <el-input v-model="areaForm.image" placeholder="请输入图片地址（可选）" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="formDialogVisible = false">取消</el-button>
+        <el-button type="primary" :loading="submitting" @click="submitAreaForm">保存</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { useSceneStore } from '../../store/scene'
 import { useAreaStore } from '../../store/area'
 import type { Area } from '../../types/scene'
@@ -86,6 +128,18 @@ const props = defineProps<{ sceneId: number }>()
 const sceneStore = useSceneStore()
 const areaStore = useAreaStore()
 const treeDialogVisible = ref(false)
+const formDialogVisible = ref(false)
+const isEdit = ref(false)
+const editingAreaId = ref<number | null>(null)
+const submitting = ref(false)
+const areaFormRef = ref<FormInstance>()
+const areaForm = reactive({
+  name: '',
+  description: '',
+  position: '',
+  parentId: -1 as number | null,
+  image: '',
+})
 
 const treeProps = {
   label: 'name',
@@ -115,6 +169,96 @@ const areaTree = computed<Area[]>(() => {
 
   return roots
 })
+
+const parentAreaOptions = computed(() => {
+  if (!isEdit.value || editingAreaId.value === null) return areaStore.areas
+  return areaStore.areas.filter((item) => item.id !== editingAreaId.value)
+})
+
+function getParentAreaName(parentId: number | null) {
+  if (parentId === null || parentId === -1) return '根区域'
+  return areaStore.areas.find((item) => item.id === parentId)?.name || `#${parentId}`
+}
+
+function resetAreaForm() {
+  areaForm.name = ''
+  areaForm.description = ''
+  areaForm.position = ''
+  areaForm.parentId = -1
+  areaForm.image = ''
+}
+
+function openCreateDialog() {
+  isEdit.value = false
+  editingAreaId.value = null
+  resetAreaForm()
+  formDialogVisible.value = true
+}
+
+function openEditDialog(row: Area) {
+  isEdit.value = true
+  editingAreaId.value = row.id
+  areaForm.name = row.name
+  areaForm.description = row.description
+  areaForm.position = row.position
+  areaForm.parentId = row.parentId ?? -1
+  areaForm.image = row.image || ''
+  formDialogVisible.value = true
+}
+
+async function submitAreaForm() {
+  if (!props.sceneId) {
+    ElMessage.error('缺少场景ID')
+    return
+  }
+  if (!areaForm.name.trim()) {
+    ElMessage.error('请输入区域名称')
+    return
+  }
+
+  submitting.value = true
+  try {
+    const payload = {
+      name: areaForm.name.trim(),
+      description: areaForm.description.trim(),
+      position: areaForm.position.trim(),
+      parentId: areaForm.parentId ?? -1,
+      image: areaForm.image.trim(),
+    }
+
+    if (isEdit.value && editingAreaId.value !== null) {
+      await areaStore.updateArea(editingAreaId.value, props.sceneId, payload)
+      ElMessage.success('区域更新成功')
+    } else {
+      await areaStore.createArea(props.sceneId, payload)
+      ElMessage.success('区域创建成功')
+    }
+
+    formDialogVisible.value = false
+    await areaStore.fetchAreas(props.sceneId)
+  } catch (error) {
+    console.error(error)
+    ElMessage.error(isEdit.value ? '区域更新失败' : '区域创建失败')
+  } finally {
+    submitting.value = false
+  }
+}
+
+async function handleDelete(row: Area) {
+  try {
+    await ElMessageBox.confirm(`确定删除区域“${row.name}”吗？`, '提示', { type: 'warning' })
+    await areaStore.deleteArea(row.id)
+    ElMessage.success('区域删除成功')
+    if (props.sceneId) {
+      await areaStore.fetchAreas(props.sceneId)
+    }
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      console.error(error)
+      ElMessage.error('区域删除失败')
+    }
+  }
+}
 
 onMounted(async () => {
   if (props.sceneId) {
@@ -163,25 +307,17 @@ onMounted(async () => {
   line-height: 1.6;
 }
 
-.scene-summary-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  color: #909399;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.scene-meta-item {
-  line-height: 1.4;
-}
-
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .card-title {
