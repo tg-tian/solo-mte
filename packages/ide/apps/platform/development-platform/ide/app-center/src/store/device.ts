@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Device, ProviderConfig, DeviceCommand, WsMessage } from '../types/device'
 import { getDevices, createDevice, updateDevice, deleteDevice, discoverDevices, sendCommand } from '../api/device'
-import { getProviders, createProvider, deleteProvider } from '../api/provider'
+import { getProviders, createProvider, updateProvider, deleteProvider } from '../api/provider'
 
 let wsInstance: WebSocket | null = null
 
@@ -145,6 +145,12 @@ export const useDeviceStore = defineStore('device', {
       const res: any = await createProvider(data)
       if (res.status === 201 || res.data?.ok === true) await this.fetchProviders()
       return res.status === 201 || res.data?.ok === true
+    },
+
+    async updateProvider(provider: string, data: Partial<ProviderConfig>) {
+      const res: any = await updateProvider(provider, data)
+      if (res.status === 200 || res.data?.ok === true) await this.fetchProviders()
+      return res.status === 200 || res.data?.ok === true
     },
 
     async deleteProvider(provider: string) {

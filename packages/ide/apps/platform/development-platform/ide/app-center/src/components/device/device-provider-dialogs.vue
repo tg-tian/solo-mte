@@ -7,8 +7,9 @@
       <el-table-column prop="provider" label="Provider ID" width="150" />
       <el-table-column prop="communication.protocol" label="协议" width="100" />
       <el-table-column prop="communication.baseUrl" label="Base URL" min-width="200" />
-      <el-table-column label="操作" width="100">
+      <el-table-column label="操作" width="160">
         <template #default="scope">
+          <el-button type="primary" size="small" @click="emit('edit', scope.row)">编辑</el-button>
           <el-button type="danger" size="small" @click="emit('delete', scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -18,10 +19,10 @@
     </template>
   </el-dialog>
 
-  <el-dialog :model-value="formVisible" title="新增配置" width="50%" @update:model-value="emit('update:formVisible', $event)">
+  <el-dialog :model-value="formVisible" :title="isEdit ? '编辑配置' : '新增配置'" width="50%" @update:model-value="emit('update:formVisible', $event)">
     <el-form :model="form" label-width="120px">
       <el-form-item label="Provider ID" required>
-        <el-input v-model="form.provider" placeholder="例如: mqtt-prod"></el-input>
+        <el-input v-model="form.provider" :disabled="isEdit" placeholder="例如: mqtt-prod"></el-input>
       </el-form-item>
       <el-form-item label="协议" required>
         <el-select v-model="form.communication.protocol" placeholder="选择协议">
@@ -50,12 +51,14 @@ defineProps<{
   formVisible: boolean
   providers: ProviderConfig[]
   form: ProviderConfig
+  isEdit: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'update:listVisible', value: boolean): void
   (e: 'update:formVisible', value: boolean): void
   (e: 'open-add'): void
+  (e: 'edit', row: ProviderConfig): void
   (e: 'save'): void
   (e: 'delete', row: ProviderConfig): void
 }>()

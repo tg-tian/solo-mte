@@ -9,6 +9,10 @@ export function createProvider(data: ProviderConfig): Promise<AxiosResponse<{ ok
   return axios.post('/providers', data)
 }
 
+export function updateProvider(provider: string, data: Partial<ProviderConfig>): Promise<AxiosResponse<{ ok: boolean; error?: string }>> {
+  return axios.put(`/providers/${provider}`, data)
+}
+
 export function deleteProvider(provider: string): Promise<AxiosResponse<{ ok: boolean; error?: string }>> {
   return axios.delete(`/providers/${provider}`)
 }

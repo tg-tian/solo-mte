@@ -242,7 +242,9 @@
       v-model:form-visible="providerFormVisible"
       :providers="deviceStore.providers"
       :form="providerForm"
+      :is-edit="providerFormEditMode"
       @open-add="openAddProvider"
+      @edit="openEditProvider"
       @save="submitProvider"
       @delete="handleDeleteProvider"
     />
@@ -290,6 +292,8 @@ const state = reactive({
   selectPageVisible: false,
   providerListVisible: false,
   providerFormVisible: false,
+  providerFormEditMode: false,
+  providerEditingId: '',
   providerForm: {
     provider: '',
     communication: {
@@ -299,7 +303,7 @@ const state = reactive({
   } as ProviderConfig,
 })
 
-const { searchForm, deviceForm, submitting, deviceDialogVisible, isEdit, currentId, selectPageVisible, providerListVisible, providerFormVisible, providerForm } = toRefs(state)
+const { searchForm, deviceForm, submitting, deviceDialogVisible, isEdit, currentId, selectPageVisible, providerListVisible, providerFormVisible, providerForm, providerFormEditMode, providerEditingId } = toRefs(state)
 
 const deviceRules = {
   deviceName: [
@@ -382,6 +386,8 @@ function handleConfig() {
 }
 
 function openAddProvider() {
+  providerFormEditMode.value = false
+  providerEditingId.value = ''
   providerForm.value = {
     provider: '',
     communication: {
@@ -392,18 +398,41 @@ function openAddProvider() {
   providerFormVisible.value = true
 }
 
+function openEditProvider(row: ProviderConfig) {
+  providerFormEditMode.value = true
+  providerEditingId.value = row.provider
+  providerForm.value = {
+    provider: row.provider,
+    communication: {
+      protocol: row.communication?.protocol || 'mqtt',
+      baseUrl: row.communication?.baseUrl || '',
+    },
+    auth: row.auth,
+  } as ProviderConfig
+  providerFormVisible.value = true
+}
+
 async function submitProvider() {
   if (!providerForm.value.provider || !providerForm.value.communication.baseUrl) {
     ElMessage.error('请填写完整信息')
     return
   }
   try {
-    await deviceStore.createProvider({ ...providerForm.value })
-    ElMessage.success('保存成功')
+    const payload = { ...providerForm.value }
+    const ok = providerFormEditMode.value
+      ? await deviceStore.updateProvider(providerEditingId.value || providerForm.value.provider, payload)
+      : await deviceStore.createProvider(payload)
+
+    if (!ok) {
+      ElMessage.error(providerFormEditMode.value ? '更新失败' : '保存失败')
+      return
+    }
+
+    ElMessage.success(providerFormEditMode.value ? '更新成功' : '保存成功')
     providerFormVisible.value = false
     await deviceStore.fetchProviders()
   } catch {
-    ElMessage.error('保存失败')
+    ElMessage.error(providerFormEditMode.value ? '更新失败' : '保存失败')
   }
 }
 
