@@ -6,13 +6,16 @@
         "dev": "vite --config ./vite.config.dev.ts",
         "build": "vue-tsc --noEmit && vite build --config ./vite.config.build.ts",
         "preview": "vite preview --config ./vite.config.dev.ts",
-        "build:system": "farris-cli build -c ./vite.config.build.ts"
+        "build:system": "farris-cli build -c ./vite.config.build.ts",
+        "localfs": "node localfs-server.mjs"
     },
     "dependencies": {
-        "@farris/ui-vue": "^1.6.5-beta.6",
+        "@farris/ui-vue": "1.6.5-beta.6",
         "@tgapk/lowcode-common": "^1.0.0",
         "@ubml/common":"1.0.0-beta.1",
         "@monaco-editor/loader": "^1.4.0",
+        "@microsoft/1ds-core-js": "^3.2.13",
+        "@microsoft/1ds-post-js": "^3.2.13",
         "axios": "^1.12.2",
         "element-plus": "^2.9.7",
         "@element-plus/icons-vue": "^2.3.1",

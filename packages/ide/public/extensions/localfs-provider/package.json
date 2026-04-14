@@ -1,0 +1,13 @@
+{
+    "name": "localfs-provider",
+    "displayName": "Local File System Provider",
+    "description": "Bridges local filesystem to VS Code Web via HTTP API",
+    "version": "0.0.1",
+    "publisher": "solo",
+    "engines": {
+        "vscode": "^1.70.0"
+    },
+    "activationEvents": ["onFileSystem:localfs"],
+    "browser": "./extension.js",
+    "contributes": {}
+}
