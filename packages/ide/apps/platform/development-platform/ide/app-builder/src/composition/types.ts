@@ -152,6 +152,7 @@ export interface WorkspaceOptions {
     boId: string;
     workspaceId: string;
     version: string;
+    location: string;
 }
 
 export interface UseWorkspace {
@@ -169,4 +170,34 @@ export interface UseIde {
     getInitCommandData: (frameId: string) => any;
 
     setInitCommandData: (frameId: string, data: any) => void;
+}
+
+export interface UserInfo {
+    address: string;
+    code: string;
+    email: string;
+    id: string;
+    lanName: string;
+    languageId: string;
+    mobilePhone: string;
+    name: string;
+    orgId: string;
+    orgName: string;
+    phone: string;
+    qq: string;
+    secLevel: string;
+    sex: string;
+    tenantId: number;
+    tenantName: string;
+    uentity: string | null;
+    unitId: string;
+    unitName: string;
+    userId: string;
+    userSetting: { id: string; userId: string; imgblob: string; };
+    weChat: string | null;
+}
+
+export interface UseUserInfo {
+    user: Ref<UserInfo>;
+    initialize: () => Promise<UserInfo>;
 }

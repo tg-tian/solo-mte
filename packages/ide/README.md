@@ -71,10 +71,35 @@ server: {
 
 ### 开发模式
 
-在调试模式下，可以执行以下命令启动开发服务器：
+开发调试需要同时启动以下两个服务：
+
+**1. 启动本地文件系统服务（localfs-server）**
+
+app-builder 中集成了 Web 版 VS Code 编辑器，需要通过 `localfs-server` 提供本地文件系统访问能力。该服务是一个独立的 Node.js HTTP 服务器，为编辑器的 `FileSystemProvider` 提供 REST API，支持文件的读写、目录浏览、重命名、删除等操作。
 
 ```bash
-# 使用 pnpm（推荐）
+# 在项目根目录（推荐）
+pnpm --filter @solo/ide run localfs
+
+# 或直接进入目录运行
+cd packages/ide
+node localfs-server.mjs [rootDir] [port]
+```
+
+- `rootDir`：服务的根目录，默认为当前工作目录
+- `port`：监听端口，默认为 `3456`
+
+启动后终端会输出：
+
+```
+[localfs-server] Serving "<rootDir>" on http://localhost:3456
+[localfs-server] API prefix: /__localfs/
+```
+
+**2. 启动 Vite 开发服务器**
+
+```bash
+# 在项目根目录（推荐）
 pnpm --filter @solo/ide run dev
 
 # 或直接进入目录运行
@@ -82,7 +107,31 @@ cd packages/ide
 pnpm dev
 ```
 
-开发服务器启动后，可以通过浏览器访问应用入口页面进行预览调试。
+开发服务器启动后，可以通过浏览器访问应用入口页面进行预览调试。`vite.config.dev.ts` 中已配置代理，将 `/__localfs` 请求转发至 localfs-server（端口 3456）：
+
+```TypeScript
+"/__localfs": {
+    target: "http://localhost:3456",
+    changeOrigin: true,
+    secure: false
+}
+```
+
+### localfs-server API 说明
+
+所有接口以 `/__localfs/` 为前缀，通过 `path` 查询参数指定目标路径：
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/__localfs/stat?path=<path>` | GET | 获取文件/目录状态信息 |
+| `/__localfs/readdir?path=<path>` | GET | 列出目录内容 |
+| `/__localfs/readfile?path=<path>` | GET | 读取文件内容 |
+| `/__localfs/writefile?path=<path>` | POST | 写入文件内容（请求体为文件数据） |
+| `/__localfs/mkdir?path=<path>` | POST | 创建目录（支持递归创建） |
+| `/__localfs/delete?path=<path>&recursive=true` | POST | 删除文件或目录 |
+| `/__localfs/rename?path=<from>&to=<to>` | POST | 重命名/移动文件 |
+| `/__localfs/set-root` | POST | 动态切换根目录（请求体：`{"rootDir": "<newPath>"}` ） |
+| `/__localfs/get-root` | GET | 获取当前根目录 |
 
 ### 构建应用程序
 

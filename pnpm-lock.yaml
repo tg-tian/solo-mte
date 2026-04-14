@@ -9,8 +9,11 @@ importers:
   .:
     dependencies:
       '@farris/ui-vue':
-        specifier: ^1.6.5-beta.8
-        version: 1.7.2(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))
+        specifier: 1.6.5-beta.6
+        version: 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))
+      '@ubml/common':
+        specifier: 1.0.0-beta.1
+        version: 1.0.0-beta.1(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(typescript@5.8.2)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))
       '@vitejs/plugin-vue':
         specifier: ^5.1.3
         version: 5.2.3(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))
@@ -200,8 +203,8 @@ importers:
         specifier: latest
         version: 0.0.1-beta.3(typescript@4.9.5)
       '@farris/ui-vue':
-        specifier: ^1.6.5-beta.8
-        version: 1.7.2(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.13(typescript@4.9.5))
+        specifier: 1.6.5-beta.6
+        version: 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.13(typescript@4.9.5))
       '@monaco-editor/loader':
         specifier: ^1.4.0
         version: 1.5.0
@@ -354,8 +357,14 @@ importers:
         specifier: ^2.3.1
         version: 2.3.2(vue@3.5.13(typescript@4.9.5))
       '@farris/ui-vue':
-        specifier: ^1.6.5-beta.6
+        specifier: 1.6.5-beta.6
         version: 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.13(typescript@4.9.5))
+      '@microsoft/1ds-core-js':
+        specifier: ^3.2.13
+        version: 3.2.18(tslib@2.8.1)
+      '@microsoft/1ds-post-js':
+        specifier: ^3.2.13
+        version: 3.2.18(tslib@2.8.1)
       '@monaco-editor/loader':
         specifier: ^1.4.0
         version: 1.5.0
@@ -520,7 +529,7 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2(vue@3.5.22(typescript@4.9.5))
       '@farris/ui-vue':
-        specifier: ^1.6.5-beta.6
+        specifier: 1.6.5-beta.6
         version: 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@4.9.5))
       '@monaco-editor/loader':
         specifier: ^1.4.0
@@ -2076,9 +2085,6 @@ packages:
   '@farris/ui-vue@1.6.5-beta.6':
     resolution: {integrity: sha512-3+SXOZWtW/ra16AINi9hJWI3Vrg3U6GvtWVYjg3mJCIL27oy+FcV2BvfI3dOVmH3YawxH8jUeYdTfNeIGmZM1A==}
 
-  '@farris/ui-vue@1.7.2':
-    resolution: {integrity: sha512-0XwbknkBz6HkIKYYk16tgyJ9Y9+EjoKR+tWBC57LzrsplBSLfAHAANxQMv/hNADbXGwoIkPSg2LnPEk6j6B4Uw==}
-
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
 
@@ -2269,6 +2275,12 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
+  '@microsoft/1ds-core-js@3.2.18':
+    resolution: {integrity: sha512-ytlFv3dfb8OGqvbZP8tSIlNvn3QNYxdsF0k6ikRMWSr6CmBxBi1sliaxc2Q5KuYOuaeWkd8WRm25Rx/UtHcyMg==}
+
+  '@microsoft/1ds-post-js@3.2.18':
+    resolution: {integrity: sha512-Tzjcja4SMyws3UP58kD2edFPNb7BJtx5uCgwf/PWXwDyfbUY1/crsTQdEyR98wy/vorvLDZdQlcL++VMChfYnQ==}
+
   '@microsoft/api-extractor-model@7.28.13':
     resolution: {integrity: sha512-39v/JyldX4MS9uzHcdfmjjfS6cYGAoXV+io8B5a338pkHiSt+gy2eXQ0Q7cGFJ7quSa1VqqlMdlPrB6sLR/cAw==}
 
@@ -2282,6 +2294,17 @@ packages:
   '@microsoft/api-extractor@7.52.2':
     resolution: {integrity: sha512-RX37V5uhBBPUvrrcmIxuQ8TPsohvr6zxo7SsLPOzBYcH9nbjbvtdXrts4cxHCXGOin9JR5ar37qfxtCOuEBTHA==}
     hasBin: true
+
+  '@microsoft/applicationinsights-core-js@2.8.18':
+    resolution: {integrity: sha512-yPHRZFLpnEO0uSgFPM1BLMRRwjoten9YBbn4pJRbCT4PigLnj748knmWsMwXIdcehtkRTYz78kPYa/LWP7nvmA==}
+    peerDependencies:
+      tslib: '*'
+
+  '@microsoft/applicationinsights-shims@2.0.2':
+    resolution: {integrity: sha512-PoHEgsnmcqruLNHZ/amACqdJ6YYQpED0KSRe6J7gIJTtpZC1FfFU9b1fmDKDKtFoUSrPzEh1qzO3kmRZP0betg==}
+
+  '@microsoft/dynamicproto-js@1.1.11':
+    resolution: {integrity: sha512-gNw9z9LbqLV+WadZ6/MMrWwO3e0LuoUH1wve/1iPsBNbgqeVCiB0EZFNNj2lysxS2gkqoF9hmyVaG3MoM1BkxA==}
 
   '@microsoft/tsdoc-config@0.16.2':
     resolution: {integrity: sha512-OGiIzzoBLgWWR0UdRJX98oYO+XKGf7tiK4Zk6tQ/E4IJqGCe7dvkTvgDZV5cFJUzLGDOjeAXrnZoA6QkVySuxw==}
@@ -2345,36 +2368,42 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-arm-musl@2.5.1':
     resolution: {integrity: sha512-6E+m/Mm1t1yhB8X412stiKFG3XykmgdIOqhjWj+VL8oHkKABfu/gjFj8DvLrYVHSBNC+/u5PeNrujiSQ1zwd1Q==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-linux-arm64-glibc@2.5.1':
     resolution: {integrity: sha512-LrGp+f02yU3BN9A+DGuY3v3bmnFUggAITBGriZHUREfNEzZh/GO06FF5u2kx8x+GBEUYfyTGamol4j3m9ANe8w==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-musl@2.5.1':
     resolution: {integrity: sha512-cFOjABi92pMYRXS7AcQv9/M1YuKRw8SZniCDw0ssQb/noPkRzA+HBDkwmyOJYp5wXcsTrhxO0zq1U11cK9jsFg==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-linux-x64-glibc@2.5.1':
     resolution: {integrity: sha512-GcESn8NZySmfwlTsIur+49yDqSny2IhPeZfXunQi48DMugKeZ7uy1FX83pO0X22sHntJ4Ub+9k34XQCX+oHt2A==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.5.1':
     resolution: {integrity: sha512-n0E2EQbatQ3bXhcH2D1XIAANAcTZkQICBPVaxMeaCVBtOpBZpWJuf7LwyWPSBDITb7In8mqQgJ7gH8CILCURXg==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@parcel/watcher-win32-arm64@2.5.1':
     resolution: {integrity: sha512-RFzklRvmc3PkjKjry3hLF9wD7ppR4AKcWNzH7kXR7GUe0Igb3Nz8fyPwtZCSquGrhU5HhUNDr/mKBqj7tqA2Vw==}
@@ -2451,56 +2480,67 @@ packages:
     resolution: {integrity: sha512-hhAALKJPidCwZcj+g+iN+38SIOkhK2a9bqtJR+EtyxrKKSt1ynCBeqrQy31z0oWU6thRZzdx53hVgEbRkuI19w==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.37.0':
     resolution: {integrity: sha512-jUb/kmn/Gd8epbHKEqkRAxq5c2EwRt0DqhSGWjPFxLeFvldFdHQs/n8lQ9x85oAeVb6bHcS8irhTJX2FCOd8Ag==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.37.0':
     resolution: {integrity: sha512-oNrJxcQT9IcbcmKlkF+Yz2tmOxZgG9D9GRq+1OE6XCQwCVwxixYAa38Z8qqPzQvzt1FCfmrHX03E0pWoXm1DqA==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.37.0':
     resolution: {integrity: sha512-pfxLBMls+28Ey2enpX3JvjEjaJMBX5XlPCZNGxj4kdJyHduPBXtxYeb8alo0a7bqOoWZW2uKynhHxF/MWoHaGQ==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.37.0':
     resolution: {integrity: sha512-yCE0NnutTC/7IGUq/PUHmoeZbIwq3KRh02e9SfFh7Vmc1Z7atuJRYWhRME5fKgT8aS20mwi1RyChA23qSyRGpA==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.37.0':
     resolution: {integrity: sha512-NxcICptHk06E2Lh3a4Pu+2PEdZ6ahNHuK7o6Np9zcWkrBMuv21j10SQDJW3C9Yf/A/P7cutWoC/DptNLVsZ0VQ==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.37.0':
     resolution: {integrity: sha512-PpWwHMPCVpFZLTfLq7EWJWvrmEuLdGn1GMYcm5MV7PaRgwCEYJAwiN94uBuZev0/J/hFIIJCsYw4nLmXA9J7Pw==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.37.0':
     resolution: {integrity: sha512-DTNwl6a3CfhGTAOYZ4KtYbdS8b+275LSLqJVJIrPa5/JuIufWWZ/QFvkxp52gpmguN95eujrM68ZG+zVxa8zHA==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.37.0':
     resolution: {integrity: sha512-hZDDU5fgWvDdHFuExN1gBOhCuzo/8TMpidfOR+1cPZJflcEzXdCy1LjnklQdW8/Et9sryOPJAKAQRw8Jq7Tg+A==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.37.0':
     resolution: {integrity: sha512-pKivGpgJM5g8dwj0ywBwe/HeVAUSuVVJhUTa/URXjxvoyTT/AxsLTAbkHkDHG7qQxLoW2s3apEIl26uUe08LVQ==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.37.0':
     resolution: {integrity: sha512-E2lPrLKE8sQbY/2bEkVTGDEk4/49UYRVWgj90MY8yPjpnGBQ+Xi1Qnr7b7UIWw1NOggdFQFOLZ8+5CzCiz143w==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.37.0':
     resolution: {integrity: sha512-Jm7biMazjNzTU4PrQtr7VS8ibeys9Pn29/1bm4ph7CP2kf21950LgN+BaE2mJ1QujnvOc6p54eWWiVvn05SOBg==}
@@ -6847,7 +6887,6 @@ packages:
   vue-i18n@11.1.12:
     resolution: {integrity: sha512-BnstPj3KLHLrsqbVU2UOrPmr0+Mv11bsUZG0PyCOzsawCivk8W00GMXHeVUWIDOgNaScCuZah47CZFE+Wnl8mw==}
     engines: {node: '>= 16'}
-    deprecated: This version is NOT deprecated. Previous deprecation was a mistake.
     peerDependencies:
       vue: ^3.0.0
 
@@ -8127,7 +8166,7 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.8.2)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@22.13.14)(typescript@5.8.2))(typescript@5.8.2)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -8692,40 +8731,7 @@ snapshots:
       - vite
       - vue
 
-  '@farris/ui-vue@1.7.2(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.13(typescript@4.9.5))':
-    dependencies:
-      '@docsearch/js': 3.6.0(@algolia/client-search@4.24.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)
-      '@farris/designer-dragula': 0.0.5
-      '@monaco-editor/loader': 1.5.0
-      '@types/lodash-es': 4.17.12
-      '@vue/shared': 3.5.22
-      '@vueuse/core': 9.13.0(vue@3.5.13(typescript@4.9.5))
-      async-validator: 4.2.5
-      axios: 1.12.2
-      bignumber.js: 9.1.2
-      date-fns: 3.6.0
-      echarts: 5.6.0
-      jsonp: 0.2.1
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      rxjs: 7.8.2
-      vite-plugin-dts: 2.3.0(@types/node@22.13.14)(rollup@4.37.0)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))
-      vue-i18n: 11.1.12(vue@3.5.13(typescript@4.9.5))
-    transitivePeerDependencies:
-      - '@algolia/client-search'
-      - '@types/node'
-      - '@types/react'
-      - '@vue/composition-api'
-      - debug
-      - react
-      - react-dom
-      - rollup
-      - search-insights
-      - supports-color
-      - vite
-      - vue
-
-  '@farris/ui-vue@1.7.2(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))':
+  '@farris/ui-vue@1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))':
     dependencies:
       '@docsearch/js': 3.6.0(@algolia/client-search@4.24.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)
       '@farris/designer-dragula': 0.0.5
@@ -8734,7 +8740,6 @@ snapshots:
       '@vue/shared': 3.5.22
       '@vueuse/core': 9.13.0(vue@3.5.22(typescript@5.8.2))
       async-validator: 4.2.5
-      axios: 1.12.2
       bignumber.js: 9.1.2
       date-fns: 3.6.0
       echarts: 5.6.0
@@ -8749,7 +8754,6 @@ snapshots:
       - '@types/node'
       - '@types/react'
       - '@vue/composition-api'
-      - debug
       - react
       - react-dom
       - rollup
@@ -9095,6 +9099,22 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
+  '@microsoft/1ds-core-js@3.2.18(tslib@2.8.1)':
+    dependencies:
+      '@microsoft/applicationinsights-core-js': 2.8.18(tslib@2.8.1)
+      '@microsoft/applicationinsights-shims': 2.0.2
+      '@microsoft/dynamicproto-js': 1.1.11
+    transitivePeerDependencies:
+      - tslib
+
+  '@microsoft/1ds-post-js@3.2.18(tslib@2.8.1)':
+    dependencies:
+      '@microsoft/1ds-core-js': 3.2.18(tslib@2.8.1)
+      '@microsoft/applicationinsights-shims': 2.0.2
+      '@microsoft/dynamicproto-js': 1.1.11
+    transitivePeerDependencies:
+      - tslib
+
   '@microsoft/api-extractor-model@7.28.13(@types/node@22.13.14)':
     dependencies:
       '@microsoft/tsdoc': 0.14.2
@@ -9146,6 +9166,16 @@ snapshots:
       typescript: 5.8.2
     transitivePeerDependencies:
       - '@types/node'
+
+  '@microsoft/applicationinsights-core-js@2.8.18(tslib@2.8.1)':
+    dependencies:
+      '@microsoft/applicationinsights-shims': 2.0.2
+      '@microsoft/dynamicproto-js': 1.1.11
+      tslib: 2.8.1
+
+  '@microsoft/applicationinsights-shims@2.0.2': {}
+
+  '@microsoft/dynamicproto-js@1.1.11': {}
 
   '@microsoft/tsdoc-config@0.16.2':
     dependencies:
@@ -9781,6 +9811,25 @@ snapshots:
       '@farris/ui-vue': 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(rollup@4.37.0)(search-insights@2.17.3)(vite@4.5.10(@types/node@22.13.14)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@4.9.5))
       axios: 1.12.2
       vue: 3.5.22(typescript@4.9.5)
+    transitivePeerDependencies:
+      - '@algolia/client-search'
+      - '@types/node'
+      - '@types/react'
+      - '@vue/composition-api'
+      - debug
+      - react
+      - react-dom
+      - rollup
+      - search-insights
+      - supports-color
+      - typescript
+      - vite
+
+  '@ubml/common@1.0.0-beta.1(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(typescript@5.8.2)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))':
+    dependencies:
+      '@farris/ui-vue': 1.6.5-beta.6(@algolia/client-search@4.24.0)(@types/node@22.13.14)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)(search-insights@2.17.3)(vite@5.4.15(@types/node@22.13.14)(sass-embedded@1.86.0)(sass@1.86.0)(terser@5.46.0))(vue@3.5.22(typescript@5.8.2))
+      axios: 1.12.2
+      vue: 3.5.22(typescript@5.8.2)
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/node'
@@ -11063,7 +11112,7 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@22.13.14)(typescript@5.8.2))(typescript@5.8.2):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@5.8.2)

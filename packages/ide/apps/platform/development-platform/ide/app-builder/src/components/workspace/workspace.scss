@@ -1,9 +1,189 @@
+// ============================================
+// 变量定义
+// ============================================
+// 主色调
+$primary-blue: #0e6ded;
+$primary-blue-light: #1f7cfa;
+$primary-blue-shadow: rgba(13, 106, 246, 0.4);
+$button-blue: #328bff;
+$button-blue-light: #2a87ff;
+$button-blue-shadow: rgba(69, 144, 255, 0.25);
+$tab-text-color: #355782;
+$user-icon-bg: #dae9ff;
+$user-icon-color: #529dff;
+$border-color: #ccc;
+
+// 渐变和阴影
+$gradient-start: rgba(221, 236, 255, 0.9);
+$gradient-end: rgba(249, 252, 255, 0.9);
+$shadow-color: rgba(90, 102, 133, 0.05);
+
+// 导航相关颜色
+$nav-bg-color: #0062e7;
+$nav-bg-color-light: #f8f8f8;
+$nav-search-bg: #0053c4;
+$nav-text-color: white;
+$nav-active-color: #2a87ff;
+$nav-hover-color: rgba(255, 255, 255, 0.8);
+$nav-icon-color: #edf5fc;
+
+// 页面卡片颜色
+$page-subtitle-color: #7a8dae;
+$page-text-color: rgba(0, 0, 0, 0.85);
+$badge-testing-bg: #eef5ff;
+$badge-testing-border: rgba(56, 143, 255, 0.8);
+$badge-testing-color: #388fff;
+$badge-published-bg: #fff4e5;
+$badge-published-border: rgba(255, 152, 0, 0.8);
+$badge-published-color: #ff9800;
+$badge-editing-bg: #f0f9f2;
+$badge-editing-border: rgba(51, 186, 143, 1);
+$badge-editing-color: #33ba8f;
+
 .f-admin {
+  background-color: #f8f8f8;
   .f-admin-content > div {
     display: none;
 
     &.active {
       display: flex;
+    }
+  }
+  > .f-page-header {
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    background-color: #f8f8f8;
+
+    > .f-page-header-base {
+      padding: 0;
+      height: 100%;
+      align-items: center;
+    }
+
+    .f-title {
+      width: 400px;
+    }
+
+    .f-title-logo {
+      background-image: url(/assets/images/farris_design_light.png);
+      background-position-x: unset;
+      background-size: cover;
+      height: 28px;
+      margin: 0 4px 0 12px;
+      width: 28px;
+    }
+
+    .f-content {
+      height: 100%;
+    }
+
+    .farris-nav {
+      border-bottom: none;
+      margin: auto;
+      height: 100%;
+
+      .farris-nav-item-link {
+        border-bottom: none;
+        .f-icon {
+          font-size: 1.2rem !important;
+        }
+      }
+
+      .farris-nav-item {
+        .farris-nav-item-bottom-line {
+          height: 4px;
+          // margin: 2px -40% 0 -40%;
+          // width: 180%;
+        }
+
+        &.active .farris-nav-item-bottom-line {
+          height: 4px;
+          background-image: linear-gradient(186deg, $primary-blue 10%, $primary-blue-light 100%);
+          box-shadow: 0 2px 10px 0 $primary-blue-shadow;
+          border-radius: 2px;
+          // max-width: 50%;
+          // margin: 2px -40% 0 -40%;
+        }
+      }
+    }
+
+    .f-header-toolbar {
+      display: flex;
+      justify-content: end;
+      padding-right: 20px;
+      position: relative;
+      width: 400px;
+
+      .workspace-toolbar-preview {
+        box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+        border-radius: 15px;
+        padding: 4px 20px;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 2s;
+      }
+      .btn-group {
+        box-shadow: 0 2px 20px 0 rgba(3, 18, 51, 0.04);
+        border-radius: 15px;
+      }
+
+      .workspace-toolbar-publish {
+        border: none;
+        box-shadow: none;
+        &.f-rt-btn {
+          border-radius: 15px;
+          padding: 4px 4px 4px 20px;
+          cursor: pointer;
+          transition: background-color 2s;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &.dropdown-toggle {
+          border-top-right-radius: 15px !important;
+          border-bottom-right-radius: 15px !important;
+          padding-right: 0.5rem;
+        }
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+      }
+
+      .f-app-builder-toolbar-split {
+        margin: 0 1rem;
+        height: 20px;
+        border-right: 1px solid $border-color;
+      }
+
+      .f-app-builder-user {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        .f-app-builder-user-icon {
+          align-items: center;
+          // background: $user-icon-bg;
+          border-radius: 20px;
+          display: flex;
+          height: 24px;
+          justify-content: center;
+          text-align: center;
+          vertical-align: middle;
+          width: 24px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .f-app-builder-user-name {
+          font-size: 1rem;
+          margin-left: 0.5rem;
+        }
+      }
     }
   }
 }
@@ -36,11 +216,7 @@
   }
 
   > .f-app-builder-main-tabs-background {
-    background-image: linear-gradient(
-      180deg,
-      rgba(221, 236, 255, 0.9) 0%,
-      rgba(249, 252, 255, 0.9) 63%
-    );
+    background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
     border-radius: 8px;
     box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
     height: 100%;
