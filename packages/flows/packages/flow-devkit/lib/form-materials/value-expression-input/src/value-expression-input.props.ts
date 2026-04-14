@@ -1,7 +1,7 @@
 import type { PropType, ExtractPropTypes, Ref } from 'vue';
 import { createPropsResolver } from '@farris/ui-vue';
 import valueExpressionInputSchema from './schema/value-expression-input.schema.json';
-import type { ValueExpress, TypeRefer, ParamValueValidateOptions } from '@farris/flow-devkit/types';
+import type { ValueExpress, TypeRefer, ParamValueValidateOptions, InputHelp } from '@farris/flow-devkit/types';
 import { type NodeVariables } from '@farris/flow-devkit/composition';
 
 export const VALUE_EXPRESSION_INPUT_NAME = 'FvfValueExpressionInput';
@@ -34,6 +34,9 @@ export const valueExpressionInputProps = {
 
     /** 校验选项 */
     validateOptions: { type: Object as PropType<ParamValueValidateOptions> },
+
+    /** 输入帮助 */
+    inputHelp: { type: Object as PropType<InputHelp> },
 
     nodeVariables: { type: Object as PropType<Ref<NodeVariables[]>> },
     writableNodeVariables: { type: Object as PropType<Ref<NodeVariables[]>> },

@@ -1,25 +1,25 @@
 import { ref, computed, reactive } from 'vue';
-import type { DeviceCategory, DeviceInstance } from '@farris/flow-devkit/types';
+import type { DeviceModel, DeviceInstance } from '@farris/flow-devkit/types';
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 
-let deviceCategoriesPromise: Promise<DeviceCategory[]> | undefined;
-const deviceCategories = ref<DeviceCategory[]>([]);
+let deviceCategoriesPromise: Promise<DeviceModel[]> | undefined;
+const deviceCategories = ref<DeviceModel[]>([]);
 
-const deviceCategoriesWithAction = computed<DeviceCategory[]>(() => {
+const deviceCategoriesWithAction = computed<DeviceModel[]>(() => {
     return deviceCategories.value.filter((device) => {
         const actions = device?.actions;
         return !!actions && typeof actions === 'object' && Object.keys(actions).length > 0;
     });
 });
-const deviceCategoriesWithEvent = computed<DeviceCategory[]>(() => {
+const deviceCategoriesWithEvent = computed<DeviceModel[]>(() => {
     return deviceCategories.value.filter((device) => {
         const events = device?.events;
         return !!events && typeof events === 'object' && Object.keys(events).length > 0;
     });
 });
 
-const deviceName2DeviceList = reactive(new Map<string, DeviceInstance[]>());
+const deviceCategory2DeviceInstanceList = reactive(new Map<string, DeviceInstance[]>());
 const deviceListLoaded = new Map<string, boolean>();
 
 export function useDeviceInfo() {
@@ -28,7 +28,7 @@ export function useDeviceInfo() {
         return true;
     }
 
-    async function loadDeviceCategories(): Promise<DeviceCategory[]> {
+    async function loadDeviceCategories(): Promise<DeviceModel[]> {
         const baseDevicePath = './flow-contents/device/';
         const manifestUrl = `${baseDevicePath}manifest.json`;
 
@@ -43,7 +43,7 @@ export function useDeviceInfo() {
                 return [];
             }
             const deviceRequestPromises = deviceNames.map(async (deviceName) => {
-                const deviceFileUrl = `${baseDevicePath}${deviceName}.json`;
+                const deviceFileUrl = `${baseDevicePath}${deviceName}.json?v=${(new Date()).getTime()}`;
                 try {
                     const deviceResponse = await axios.get<any>(deviceFileUrl, {
                         timeout: 20 * 1000,
@@ -73,7 +73,7 @@ export function useDeviceInfo() {
         }
     }
 
-    async function getDeviceCategories(): Promise<DeviceCategory[]> {
+    async function getDeviceCategories(): Promise<DeviceModel[]> {
         if (deviceCategoriesPromise) {
             return deviceCategoriesPromise;
         }
@@ -86,34 +86,34 @@ export function useDeviceInfo() {
         return deviceCategoriesPromise;
     }
 
-    async function getDeviceListByModelName(modelName: string): Promise<DeviceInstance[]> {
-        if (deviceListLoaded.get(modelName)) {
-            return deviceName2DeviceList.get(modelName) || [];
+    async function getDeviceListByCategory(category: string): Promise<DeviceInstance[]> {
+        if (deviceListLoaded.get(category)) {
+            return deviceCategory2DeviceInstanceList.get(category) || [];
         }
-        const url = `/devices/by-model?modelName=${modelName}`;
+        const url = `/api/runtime/bcc/v1.0/ubmlDevice/deviceList/${category}`;
         const deviceListResponse = await axios.get<DeviceInstance[]>(url, {
             timeout: 20 * 1000,
             headers: { 'Content-Type': 'application/json' },
         }).catch((error) => {
-            console.error(`[设备列表加载失败] ${modelName}`, error);
+            console.error(`[设备列表加载失败] ${category}`, error);
             return undefined;
         });
-        if (!deviceListResponse) {
+        if (!deviceListResponse || !Array.isArray(deviceListResponse.data)) {
             return [];
         }
         const deviceList = deviceListResponse.data || [];
-        deviceListLoaded.set(modelName, true);
-        deviceName2DeviceList.set(modelName, deviceList);
+        deviceListLoaded.set(category, true);
+        deviceCategory2DeviceInstanceList.set(category, deviceList);
         return deviceList;
     }
 
     return {
         shouldShowDeviceNodes,
         getDeviceCategories,
-        getDeviceListByModelName,
+        getDeviceListByCategory,
         deviceCategories,
         deviceCategoriesWithAction,
         deviceCategoriesWithEvent,
-        deviceName2DeviceList,
+        deviceCategory2DeviceInstanceList,
     };
 }

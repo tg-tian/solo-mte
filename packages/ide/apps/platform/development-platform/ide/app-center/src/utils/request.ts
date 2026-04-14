@@ -1,6 +1,4 @@
 import axios from 'axios' // 引入axios
-import { ElMessage } from 'element-plus'
-import { getToken } from './auth'
 const service = axios.create({
   baseURL: "http://139.196.147.52:8080",
   timeout: 99999
@@ -8,10 +6,6 @@ const service = axios.create({
 // http request 拦截器
 service.interceptors.request.use(
   (config: any) => {
-    // 全局添加 token
-    if (getToken()) {
-      config.headers['token'] = getToken()
-    }
     return config
   },
   (error) => {

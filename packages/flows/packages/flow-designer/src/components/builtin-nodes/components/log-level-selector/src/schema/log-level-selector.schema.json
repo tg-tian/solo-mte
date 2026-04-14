@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farris-design.gitee.io/log-level-selector.schema.json",
+  "type": "object",
+  "properties": {
+    "modelValue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string",
+            "title": "级别ID",
+            "description": "级别的唯一标识符"
+          },
+          "nodeData": {
+            "description": "nodeData",
+            "type": "object"
+          }
+        },
+        "required": ["levelId", "levelName"]
+      }
+    }
+  }
+}

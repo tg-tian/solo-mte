@@ -41,8 +41,15 @@ export function useMenu() {
     function closeMenu(): void {
         const params = getQueryParams();
         const rtfService = getRtfService();
-        if (rtfService && rtfService.hasOwnProperty('func') && typeof rtfService['func']['close'] === 'function') {
+        if (
+            rtfService &&
+            rtfService.hasOwnProperty('func') &&
+            typeof rtfService['func']['close'] === 'function' &&
+            params.tabId
+        ) {
             rtfService.func.close(params);
+        } else {
+            window.parent.postMessage('closeFlowDesigner', '*');
         }
     }
 

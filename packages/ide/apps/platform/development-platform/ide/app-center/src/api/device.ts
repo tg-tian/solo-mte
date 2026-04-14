@@ -1,12 +1,8 @@
 import axios, { type AxiosResponse } from 'axios'
-import type { Device } from '../types/models'
+import type { Device, DeviceCommand } from '../types/device'
 
 export function getDevices(): Promise<AxiosResponse<Device[]>> {
   return axios.get('/devices')
-}
-
-export function getDeviceById(id: string | number): Promise<AxiosResponse<Device>> {
-  return axios.get(`/devices/${id}`)
 }
 
 export function createDevice(data: Device): Promise<AxiosResponse<{ ok: boolean }>> {
@@ -25,6 +21,6 @@ export function discoverDevices(): Promise<AxiosResponse<Device[]>> {
   return axios.get('/discoverDevices')
 }
 
-export function sendCommand(command: any): Promise<AxiosResponse<{ ok: boolean }>> {
-  return axios.post(`/devices/command`, command)
+export function sendCommand(command: DeviceCommand): Promise<AxiosResponse<{ ok: boolean }>> {
+  return axios.post('/devices/command', command)
 }

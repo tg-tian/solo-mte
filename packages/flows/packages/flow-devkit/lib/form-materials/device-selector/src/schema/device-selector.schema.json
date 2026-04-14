@@ -14,8 +14,8 @@
       "type": "string",
       "default": "fvf-device-selector"
     },
-    "category": {
-      "description": "category",
+    "modelId": {
+      "description": "modelId",
       "type": "string"
     },
     "modelName": {

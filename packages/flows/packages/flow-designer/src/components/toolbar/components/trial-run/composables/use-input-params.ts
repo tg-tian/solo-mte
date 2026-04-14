@@ -3,18 +3,17 @@ import { useVueFlow } from '@vue-flow/core';
 import type { InputParam, ParamType } from '../types';
 import {
   nodeRegistry,
-  useTypeDetails,
+  DebugParameterUtils,
+  ParameterUtils,
+  BasicTypeRefer,
+  InputHelpKind,
   type FlowNodeInstance,
   type NodeData,
-  type TypeRefer,
+  type Parameter,
+  type EnumInputHelp,
 } from '@farris/flow-devkit';
 
 type TrialRunPanelTab = 'input' | 'result';
-
-interface ParamTypeInfo {
-  type: ParamType;
-  multiple: boolean;
-}
 
 /** 旧参数列表，用于保存用户输入的值 */
 let oldInputParams: InputParam[] = [];
@@ -33,7 +32,6 @@ export function useInputParams() {
   const runResult = ref('');
 
   const { nodes: allNodes } = useVueFlow();
-  const { isListType } = useTypeDetails();
 
   function getStartNode(): FlowNodeInstance | undefined {
     const startNode = allNodes.value.find(node => {
@@ -65,42 +63,6 @@ export function useInputParams() {
     }
   }
 
-  function getParamTypeInfo(type?: TypeRefer): ParamTypeInfo {
-    const defaultResult: ParamTypeInfo = { type: 'string', multiple: false };
-    if (!type) {
-      return defaultResult;
-    }
-    if (isListType(type)) {
-      const listItemType = type.genericTypes?.[0];
-      if (listItemType && listItemType.typeId === 'fileID' && listItemType.source === 'default') {
-        return { type: 'fileID', multiple: true };
-      } else {
-        return { type: 'array', multiple: false };
-      }
-    }
-    if (type.source !== 'default') {
-      return defaultResult;
-    }
-    const typeId = type.typeId || 'string';
-    switch (typeId) {
-      case 'string':
-        return { type: 'string', multiple: false };
-      case 'number':
-      case 'int':
-        return { type: 'number', multiple: false };
-      case 'boolean':
-        return { type: 'boolean', multiple: false };
-      case 'fileID':
-        return { type: 'fileID', multiple: false };
-      case 'any':
-        return { type: 'object', multiple: false };
-      case 'array':
-        return { type: 'array', multiple: false };
-      default:
-        return defaultResult;
-    }
-  }
-
   // 获取所有需要用户输入的参数
   function getAllRequiredInputParams(): Array<InputParam> {
     const paramMap = new Map<string, InputParam>();
@@ -119,7 +81,7 @@ export function useInputParams() {
       if (param.code === 'USER_INPUT' || param.code === 'USER_FILES') {
         return;
       }
-      const { type: paramType, multiple } = getParamTypeInfo(param.type);
+      const { type: paramType, multiple } = DebugParameterUtils.getDebugParamTypeInfo(param.type);
 
       const paramInfo: InputParam = {
         name: param.code,
@@ -143,6 +105,22 @@ export function useInputParams() {
     return !!paramA && !!paramB && paramA.type === paramB.type && paramA.multiple === paramB.multiple;
   }
 
+  function isParamValueValid(value: any, raw?: Parameter): boolean {
+    const type = raw?.type;
+    if (!ParameterUtils.isSame(type, BasicTypeRefer.StringType) || !raw || !value) {
+      return true;
+    }
+    const inputHelp = raw.inputHelp as (EnumInputHelp | undefined);
+    if (inputHelp?.kind !== InputHelpKind.enum) {
+      return true;
+    }
+    const enumItems = inputHelp.items || [];
+    if (enumItems.length === 0) {
+      return true;
+    }
+    return !!enumItems.find((item) => item.value === value);
+  }
+
   function initializeInputParams() {
     const allRequiredParams = getAllRequiredInputParams();
     const paramName2OldParam = new Map<string, InputParam>();
@@ -151,7 +129,11 @@ export function useInputParams() {
     });
     allRequiredParams.forEach(param => {
       const oldParam = paramName2OldParam.get(param.name);
-      if (oldParam && isSameParamType(oldParam, param)) {
+      if (
+        oldParam &&
+        isSameParamType(oldParam, param) &&
+        isParamValueValid(oldParam.value, param.raw)
+      ) {
         param.value = oldParam.value;
       }
     });

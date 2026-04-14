@@ -5,4 +5,8 @@ export { default as loopIcon } from './icon-loop.jpg';
 export { default as variableDefIcon } from './icon-variable-def.jpg';
 export { default as variableAssignIcon } from './icon-variable-assign.jpg';
 export { default as methodInvokeIcon } from './method-invoke.jpg';
+export { default as exceptionIcon } from './icon-exception.jpg';
+export { default as logIcon } from './icon-log.jpg';
+export { default as expressIcon } from './icon-express.jpg';
 export { default as defaultIcon } from './icon-default.jpg';
+export { default as deviceEventIcon } from './icon-device-event.png';

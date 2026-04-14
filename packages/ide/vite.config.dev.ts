@@ -133,23 +133,29 @@ export default defineConfig({
                 secure: false
             },
             "/devices": {
-                target: "http://localhost:3000",
+                target: "http://127.0.0.1:3000",
                 changeOrigin: true,
                 secure: false
             },
             "/deviceShadows": {
-                target: "http://localhost:3000",
+                target: "http://127.0.0.1:3000",
                 changeOrigin: true,
                 secure: false
             },
             "/providers": {
-                target: "http://localhost:3000",
+                target: "http://127.0.0.1:3000",
                 changeOrigin: true,
                 secure: false
             },
             "/discoverDevices": {
-                target: "http://localhost:3000",
+                target: "http://127.0.0.1:3000",
                 changeOrigin: true,
+                secure: false
+            },
+            "/ws": {
+                target: "ws://127.0.0.1:3000",
+                changeOrigin: true,
+                ws: true,
                 secure: false
             }
         }

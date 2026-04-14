@@ -149,9 +149,6 @@ export interface NodeMetadata {
 
   /** 连接点配置 */
   ports: NodePortConfig[];
-
-  /** 自定义配置信息 */
-  extensionConfig?: any;
 }
 
 /**
@@ -328,4 +325,7 @@ export interface NodeDefinition {
     outgoingNodes: FlowNodeInstance[],
     connectedEdges: GraphEdge[],
   ) => void;
+
+  /** 获取节点图标地址 */
+  getNodeIconUrl?: (nodeData: NodeData) => string;
 }

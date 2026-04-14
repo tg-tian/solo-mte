@@ -14,4 +14,4 @@ pinia.use(persistedstate);
 app.use(pinia);
 app.use(ElementPlus);
 // app.mount('#app');
-app.use(Locale, { uri: '', locale: 'zh-CHS' }).mount('#app');
+app.use(Locale as any, { uri: '', locale: 'zh-CHS' }).mount('#app');

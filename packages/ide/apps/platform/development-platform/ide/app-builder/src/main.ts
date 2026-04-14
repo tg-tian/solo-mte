@@ -7,4 +7,4 @@ import '../style.sass';
 
 const app = createApp(FAAppCenter);
 
-app.use(Farris).use(Locale, { uri: '', locale: 'zh-CHS' }).mount('#app');
+app.use(Farris as any).use(Locale as any, { uri: '', locale: 'zh-CHS' }).mount('#app');

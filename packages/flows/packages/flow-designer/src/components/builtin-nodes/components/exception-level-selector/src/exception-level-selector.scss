@@ -1,0 +1,33 @@
+.exception-level-editor {
+  width: 100%;
+  box-sizing: border-box;
+
+  .exception-level-list {
+    .level-item {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+      align-items: flex-start;
+
+      .exception-level-content {
+        display: flex;
+        flex: 1;
+        gap: 4px;
+        align-items: flex-start;
+
+        .exception-level-input,
+        .exception-level-combo {
+          flex: 0 0 auto;
+          height: 26px;
+          min-height: 26px;
+          box-sizing: border-box;
+        }
+
+        // 下拉框样式
+        .exception-level-combo {
+          width: 140px;
+        }
+      }
+    }
+  }
+}

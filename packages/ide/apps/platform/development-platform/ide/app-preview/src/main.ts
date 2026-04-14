@@ -6,4 +6,4 @@ import './style.sass';
 
 const app = createApp(FAAppPreview);
 
-app.use(Locale, { uri: '', locale: 'zh-CHS' }).mount('#app');
+app.use(Locale as any, { uri: '', locale: 'zh-CHS' }).mount('#app');

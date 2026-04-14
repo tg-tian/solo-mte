@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { VALUE_EXPRESSION_INPUT_NAME, type ValueExpressionInputProps } from '../value-expression-input.props';
 import type {
   ValueExpress,
@@ -8,6 +8,7 @@ import type {
   BoolConstExpr,
   StringsConstExpr,
   ValueExpressionResult,
+  EnumInputHelp,
 } from '@farris/flow-devkit/types';
 import { ValueExpressKind, BasicTypeRefer } from '@farris/flow-devkit/types';
 import { ValueExpressUtils, ParameterUtils } from '@farris/flow-devkit/utils';
@@ -20,26 +21,50 @@ export function useConstTab(props: ValueExpressionInputProps) {
 
   const inputType = ref<string>('string');
 
+  const hasEnumInputHelp = computed<boolean>(() => {
+    return props.inputHelp?.kind === 'enum';
+  });
+
+  const enumItems = computed(() => {
+    if (!hasEnumInputHelp.value) {
+      return [];
+    }
+    const items = (props.inputHelp as EnumInputHelp).items || [];
+    return items;
+  });
+
   const allInputType = {
+    enumType: { id: 'enum', text: '枚举' },
     stringType: { id: 'string', text: '字符串' },
     numberType: { id: 'number', text: '数值' },
     booleanType: { id: 'boolean', text: '布尔' },
     stringsType: { id: 'strings', text: '字符串集合' },
   };
 
-  const inputTypeOptions = onlyAllowArrayType ? [
-    allInputType.stringsType,
-  ] : [
-    allInputType.stringType,
-    allInputType.numberType,
-    allInputType.booleanType,
-    allInputType.stringsType,
-  ];
+  const inputTypeOptions = computed(() => {
+    if (props.onlyAllowArrayType) {
+      return [
+        allInputType.stringsType,
+      ];
+    }
+    const options = [
+      allInputType.stringType,
+      allInputType.numberType,
+      allInputType.booleanType,
+      allInputType.stringsType,
+    ];
+    if (hasEnumInputHelp.value) {
+      options.unshift(allInputType.enumType);
+    }
+    return options;
+  });
 
   const stringValue = ref<string>('');
   const numberValue = ref<number>(0);
   const booleanValue = ref<boolean>();
   const jsonValue = ref<string>('[""]');
+
+  const isEnumItemSelected = computed<boolean>(() => !!enumItems.value.find(item => item.value === stringValue.value));
 
   const stringArraySchema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -47,10 +72,19 @@ export function useConstTab(props: ValueExpressionInputProps) {
     "items": {
       "type": "string",
     },
-  }
+  };
 
   function getConstExpr(): ValueExpressionResult {
     switch (inputType.value) {
+      case 'enum':
+        if (isEnumItemSelected.value) {
+          return {
+            express: ValueExpressUtils.createStringConstExpr(stringValue.value),
+            type: BasicTypeRefer.StringType,
+          };
+        } else {
+          return { errorTip: '请选择一个枚举值' };
+        }
       case 'string':
         return {
           express: ValueExpressUtils.createStringConstExpr(stringValue.value),
@@ -91,6 +125,9 @@ export function useConstTab(props: ValueExpressionInputProps) {
     switch (typeID) {
       case 'StringType': {
         inputType.value = 'string';
+        if (hasEnumInputHelp.value) {
+          inputType.value = 'enum';
+        }
         break;
       }
       case 'BooleanType': {
@@ -119,6 +156,9 @@ export function useConstTab(props: ValueExpressionInputProps) {
       case ValueExpressKind.stringConst: {
         inputType.value = 'string';
         stringValue.value = (currentValue as StringConstExpr).value || '';
+        if (isEnumItemSelected.value || (hasEnumInputHelp.value && !stringValue.value)) {
+          inputType.value = 'enum';
+        }
         break;
       }
       case ValueExpressKind.numberConst: {
@@ -166,7 +206,7 @@ export function useConstTab(props: ValueExpressionInputProps) {
     }
     return (
       <f-radio-group
-        options={inputTypeOptions}
+        options={inputTypeOptions.value}
         textField="text"
         valueField="id"
         modelValue={inputType.value}
@@ -205,13 +245,13 @@ export function useConstTab(props: ValueExpressionInputProps) {
     onChange: (newValue: boolean) => void,
   ) {
     return (
-      <div class={bem('bool-opts')}>
+      <div class={bem('enum-opts')}>
         <div
-          class={[bem('bool-opts-item'), value === true && bem('bool-opts-item', 'selected')]}
+          class={[bem('enum-opts-item'), value === true && bem('enum-opts-item', 'selected')]}
           onClick={() => onChange(true)}
         >True</div>
         <div
-          class={[bem('bool-opts-item'), value === false && bem('bool-opts-item', 'selected')]}
+          class={[bem('enum-opts-item'), value === false && bem('enum-opts-item', 'selected')]}
           onClick={() => onChange(false)}
         >False</div>
       </div>
@@ -221,6 +261,28 @@ export function useConstTab(props: ValueExpressionInputProps) {
   function renderBooleanInput() {
     return renderBoolOptions(booleanValue.value, (newValue) => {
       booleanValue.value = newValue;
+    });
+  }
+
+  function renderEnumOptions(
+    value: string | undefined,
+    onChange: (newValue: any) => void,
+  ) {
+    return (
+      <div class={bem('enum-opts')}>
+        {enumItems.value.map((enumItem) => (
+          <div
+            class={[bem('enum-opts-item'), value === enumItem.value && bem('enum-opts-item', 'selected')]}
+            onClick={() => onChange(enumItem.value)}
+          >{enumItem.key}</div>
+        ))}
+      </div>
+    );
+  }
+
+  function renderEnumInput() {
+    return renderEnumOptions(stringValue.value, (newValue) => {
+      stringValue.value = newValue;
     });
   }
 
@@ -237,6 +299,7 @@ export function useConstTab(props: ValueExpressionInputProps) {
   function renderInputControls() {
     return (
       <>
+        {inputType.value === 'enum' && renderEnumInput()}
         {inputType.value === 'string' && renderStringInput()}
         {inputType.value === 'number' && renderNumberInput()}
         {inputType.value === 'boolean' && renderBooleanInput()}

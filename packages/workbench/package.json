@@ -34,6 +34,7 @@
         "@commitlint/config-conventional": "^19.2.0",
         "@farris/cli": "latest",
         "@farris/designer-dragula": "0.0.5",
+        "@playwright/test": "^1.58.2",
         "@testing-library/vue": "^7.0.0",
         "@types/jest": "^26.0.24",
         "@types/jsonp": "^0.2.3",

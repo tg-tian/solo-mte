@@ -1,11 +1,7 @@
 import {
     BuiltinNodeType,
     useDeviceInfo,
-    nodeRegistry,
     uuid,
-    type DeviceCategory,
-    type NodeMetadata,
-    type NodeDefinition,
 } from '@farris/flow-devkit';
 import type {
     NodePanelItem,
@@ -22,19 +18,6 @@ export function useDeviceNodes() {
         deviceCategoriesWithEvent,
     } = useDeviceInfo();
 
-    function registerDeviceCallNode(device: DeviceCategory): void {
-        const originalMetadata = DEVICE_CALL_NODE.metadata;
-        const newMetadata = Object.assign({}, originalMetadata, {
-            type: device.category,
-            label: device.modelName,
-            extensionConfig: device,
-        } as Partial<NodeMetadata>);
-        const nodeDefinition = Object.assign({}, DEVICE_CALL_NODE, {
-            metadata: newMetadata,
-        } as Partial<NodeDefinition>);
-        nodeRegistry.register(nodeDefinition);
-    }
-
     async function registerDeviceNodes(): Promise<NodePanelCategory[]> {
         if (!shouldShowDeviceNodes()) {
             return [];
@@ -45,12 +28,18 @@ export function useDeviceNodes() {
         const newNodePanelCategories: NodePanelCategory[] = [];
         deviceCategoriesWithAction.value.forEach((device) => {
             actionNodes.push({
-                type: device.category,
+                type: BuiltinNodeType.DeviceCall,
                 label: device.modelName,
-                icon: DEVICE_CALL_NODE.metadata.icon,
+                icon: device?.icon || DEVICE_CALL_NODE.metadata.icon,
                 description: '',
+                initialData: {
+                    data: {
+                        deviceModelId: device.modelId,
+                        name: device.modelName,
+                        description: '',
+                    },
+                },
             });
-            registerDeviceCallNode(device);
         });
         if (deviceCategoriesWithEvent.value.length) {
             eventNodes.push({

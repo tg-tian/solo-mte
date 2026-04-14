@@ -13,9 +13,14 @@ export enum BuiltinNodeType {
     VariableAssign = 'batchAssignValue',
     /** 函数调用节点 */
     MethodInvoke = 'methodInvoke',
-
+    /** 异常处理节点 */
+    Exception = 'exception',
+    /** 日志打印节点 */
+    Log = 'log',
+    /** 数学表达式计算节点 */
+    EXPRESS = 'express',
     /** 设备调用节点 */
-    DeviceCall = 'deviceCall',
+    DeviceCall = 'device',
     /** 设备事件监听节点 */
     DeviceEventListen = 'deviceEventListen',
 }

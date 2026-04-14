@@ -21,7 +21,9 @@
         "baseUrl": "./",
         "paths": {
             "@farris/ui-vue": ["../../node_modules/@farris/ui-vue"],
-            "@farris/admin": ["./src"]
+            "@farris/admin": ["./src"],
+            "@tgapk/lowcode-common": ["../../../lowcode-common/src/index.ts"],
+            "@tgapk/lowcode-common/*": ["../../../lowcode-common/src/*"]
         }
     },
     "include": [

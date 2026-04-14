@@ -48,7 +48,8 @@ export class FlowKindApi {
 
     private static correctFlowNodeGroups(groups: FlowNodeGroupInfo[] = []): void {
         groups.forEach((group) => {
-            const nodes = group.nodes || [];
+            const nodes = (group.nodes || []).filter((node) => !!node);
+            group.nodes = nodes;
             nodes.forEach((node) => {
                 node.jsUrl = this.correctUrl(node.jsUrl);
             });

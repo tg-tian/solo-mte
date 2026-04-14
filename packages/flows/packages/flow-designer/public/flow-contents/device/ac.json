@@ -1,0 +1,40 @@
+{
+  "modelId": "AC",
+  "modelName": "空调",
+  "icon": "./device-assets/ac.png",
+  "category": "ac",
+  "provider": null,
+  "properties": {},
+  "actions": {
+    "setMode": {
+      "arguments": {
+        "mode": {
+          "type": "enum",
+          "unit": null,
+          "readOnly": null,
+          "min": null,
+          "max": null,
+          "enumValues": ["cool", "heat", "fan", "dry", "auto"],
+          "description": "模式"
+        }
+      },
+      "description": "设置模式"
+    },
+    "setTemperature": {
+      "arguments": {
+        "temp": {
+          "type": "number",
+          "unit": null,
+          "readOnly": null,
+          "min": 16,
+          "max": 30,
+          "enumValues": null,
+          "description": "温度"
+        }
+      },
+      "description": "设置温度"
+    }
+  },
+  "events": {},
+  "extensions": null
+}
