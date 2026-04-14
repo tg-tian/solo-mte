@@ -39,7 +39,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .f-admin-function-board .f-admin-function-board-content .f-list-view-content{
@@ -85,4 +85,316 @@
     padding: 10px 0;
     padding-left: 38px;
     width: 160px;
+}
+
+/* ========= 发布菜单样式 ========= */
+
+.f-publish-container {
+    background: #fff;
+    border-radius: 8px;
+}
+
+.f-publish-empty-hint {
+    color: #999;
+    font-size: 13px;
+}
+
+.f-publish-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #999;
+    font-size: 14px;
+}
+
+.f-publish-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
+}
+
+.f-publish-empty-content {
+    text-align: center;
+}
+
+.f-publish-empty-text {
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.f-publish-board {
+    padding: 16px 0;
+}
+
+.f-publish-board-header {
+    padding: 0 4px 12px;
+    border-bottom: 1px solid #ebeef5;
+    margin-bottom: 16px;
+}
+
+.f-publish-board-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #303133;
+}
+
+/* 表单 */
+.f-publish-form {
+    padding: 0 4px;
+}
+
+.f-publish-form-field {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.f-publish-form-label {
+    width: 90px;
+    min-width: 90px;
+    text-align: right;
+    padding-right: 12px;
+    line-height: 32px;
+    font-size: 13px;
+    color: #606266;
+}
+
+.f-publish-form-label.required::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+}
+
+.f-publish-form-control {
+    flex: 1;
+}
+
+.f-publish-input {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #303133;
+    background: #fff;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.f-publish-input:focus {
+    border-color: #409eff;
+}
+
+.f-publish-input[readonly] {
+    background: #f5f7fa;
+    color: #909399;
+    cursor: default;
+}
+
+/* 分组切换 */
+.f-publish-group-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.f-publish-group-toggle {
+    display: flex;
+    gap: 0;
+}
+
+.f-publish-toggle-btn {
+    padding: 4px 16px;
+    border: 1px solid #dcdfe6;
+    background: #fff;
+    font-size: 13px;
+    color: #606266;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.f-publish-toggle-btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.f-publish-toggle-btn:last-child {
+    border-radius: 0 4px 4px 0;
+    border-left: none;
+}
+
+.f-publish-toggle-btn.active {
+    background: #409eff;
+    color: #fff;
+    border-color: #409eff;
+}
+
+.f-publish-toggle-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 单选按钮 */
+.f-publish-radio-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 32px;
+}
+
+.f-publish-radio {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #606266;
+}
+
+.f-publish-radio input[type="radio"] {
+    display: none;
+}
+
+.f-publish-radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #dcdfe6;
+    position: relative;
+    transition: border-color 0.2s;
+}
+
+.f-publish-radio.checked .f-publish-radio-dot {
+    border-color: #409eff;
+}
+
+.f-publish-radio.checked .f-publish-radio-dot::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #409eff;
+}
+
+/* 参数表格 */
+.f-publish-params-section {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #ebeef5;
+}
+
+.f-publish-params-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+    margin-bottom: 12px;
+}
+
+.f-publish-params-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.f-publish-params-table th {
+    background: #f5f7fa;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 500;
+    color: #909399;
+    border: 1px solid #ebeef5;
+}
+
+.f-publish-params-table td {
+    padding: 6px 8px;
+    border: 1px solid #ebeef5;
+}
+
+.f-publish-params-table td .f-publish-input {
+    border: none;
+    height: 28px;
+    padding: 0 4px;
+}
+
+.f-publish-btn-link {
+    background: none;
+    border: none;
+    color: #409eff;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 8px;
+}
+
+.f-publish-btn-danger {
+    color: #f56c6c;
+}
+
+.f-publish-btn-add-param {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    background: #409eff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.f-publish-btn-add-param:hover {
+    background: #66b1ff;
+}
+
+/* 底部按钮 */
+.f-publish-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+    margin-top: 12px;
+    border-top: 1px solid #ebeef5;
+}
+
+.f-publish-btn {
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #dcdfe6;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.f-publish-btn-default {
+    background: #fff;
+    color: #606266;
+}
+
+.f-publish-btn-default:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background: #ecf5ff;
+}
+
+.f-publish-btn-primary {
+    background: #409eff;
+    color: #fff;
+    border-color: #409eff;
+}
+
+.f-publish-btn-primary:hover {
+    background: #66b1ff;
+    border-color: #66b1ff;
 }
