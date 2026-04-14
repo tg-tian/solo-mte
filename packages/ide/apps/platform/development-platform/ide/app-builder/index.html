@@ -3,12 +3,45 @@
 
 <head>
     <meta charset="UTF-8" />
+    <!-- VS Code Web：直接加载 internal 包时不会执行 workbench.web.main.js，需自行设置静态资源根（与 public/vscode 对应） -->
+    <script>
+        globalThis._VSCODE_FILE_ROOT = new URL('/vscode/', window.location.href).href;
+    </script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" type="text/css" href="/assets/farris-all.css" />
     <link rel="stylesheet" type="text/css" href="/assets/icon/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="/assets/igix-ide2022.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript" src="/platform/runtime/sys/web/intelligentassistant/assistant-intg-sdk.umd.js"></script>
+    <link rel="stylesheet" type="text/css" href="/vscode/vs/workbench/workbench.web.main.internal.css"/>
+    <style>
+        /*
+         * 修复 VSCode Web 嵌入时的样式冲突：
+         * VSCode 运行时注入的 .icon { width:16px; height:16px } 会覆盖
+         * 预加载的 workbench CSS（因为 inline <style> 在 <link> 之后，级联优先级更高），
+         * 导致 activity bar 的 .action-item.icon 被压缩到 16×16px。
+         * 通过 #vscode-container 提升选择器优先级来修正。
+         */
+        #vscode-container .monaco-action-bar .action-item.icon {
+            width: auto;
+            height: auto;
+        }
+        #vscode-container .monaco-action-bar .actions-container {
+            list-style: none;
+        }
+
+        /* 箭头与文件名间距：仅在 contents 侧添加内边距，不影响 twistie/indent 布局 */
+        #vscode-container .monaco-tl-contents {
+            padding-left: 4px;
+        }
+        /* 确保 codicon 字体在 VS Code 容器内不被外部样式覆盖 */
+        #vscode-container .codicon[class*='codicon-'] {
+            font-family: 'codicon' !important;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="/assets/system.js"></script>
+    <script src="/vscode/nls.messages.js"></script>
+    <!-- <script type="text/javascript" src="/platform/runtime/sys/web/intelligentassistant/assistant-intg-sdk.umd.js"></script> -->
     <!-- <script type="text/javascript" src="/platform/runtime/sys/web/intelligentassistant/assistant.js"></script> -->
     <!-- <script type="text/javascript" src="/platform/runtime/sys/web/frm-extend/intelligentassistant.js"></script> -->
     <!-- <script type="text/javascript" src="/platform/runtime/sys/web/frm-extend/assistant-floating-icon.js"></script> -->

@@ -23,20 +23,23 @@ export function useWorkspace(): UseWorkspace {
     function initialize() {
         return new Promise<WorkspaceOptions>((resolve, reject) => {
             axios.get(workspaceUri).then((response) => {
-                const config = response.data;
-                if (config) {
-                    options.id = config['id'] || options.id;
-                    options.code = config['code'] || options.code;
-                    options.name = config['name'] || options.name;
-                    options.productId = config['productId'] || options.productId;
-                    options.paas = config['paas'] || options.paas;
-                    options.location = config['location'] || options.location;
-                    options.activated = config['activated'] || options.activated;
-                    options.role = config['role'] || options.role;
-                    options.creator = config['creator'] || options.creator;
-                    options.createdTime = config['createdTime'] || options.createdTime;
-                    options.lastModifier = config['lastModifier'] || options.lastModifier;
-                    options.lastModifiedTime = config['lastModifiedTime'] || options.lastModifiedTime;
+                const workspaces = response.data;
+                if (workspaces.length > 0) {
+                    const activeWorkspace = workspaces.find((workspace: any) => workspace.activated);
+                    if (activeWorkspace) {
+                        options.id = activeWorkspace['id'] || options.id;
+                        options.code = activeWorkspace['code'] || options.code;
+                        options.name = activeWorkspace['name'] || options.name;
+                        options.productId = activeWorkspace['productId'] || options.productId;
+                        options.paas = activeWorkspace['paas'] || options.paas;
+                        options.location = activeWorkspace['location'] || options.location;
+                        options.activated = activeWorkspace['activated'] || options.activated;
+                        options.role = activeWorkspace['role'] || options.role;
+                        options.creator = activeWorkspace['creator'] || options.creator;
+                        options.createdTime = activeWorkspace['createdTime'] || options.createdTime;
+                        options.lastModifier = activeWorkspace['lastModifier'] || options.lastModifier;
+                        options.lastModifiedTime = activeWorkspace['lastModifiedTime'] || options.lastModifiedTime;
+                    }
                 }
                 resolve(options);
             });

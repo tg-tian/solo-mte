@@ -2,6 +2,9 @@ import { UseFunctionInstance, UseWorkspace, WorkspaceOptions } from "./types";
 import axios from "axios";
 
 export function useWorkspace(useFunctionInstanceComposition: UseFunctionInstance): UseWorkspace {
+    const workspaceUri = '/api/dev/main/v1.0/ws';
+
+
     const options: WorkspaceOptions = {
         path: '',
         appId: '',
@@ -10,6 +13,7 @@ export function useWorkspace(useFunctionInstanceComposition: UseFunctionInstance
         boId: '',
         workspaceId: '',
         version: '',
+        location: ''
     };
 
     function initialize() {
@@ -20,11 +24,19 @@ export function useWorkspace(useFunctionInstanceComposition: UseFunctionInstance
             options.boId = queryParams.get('boId') || '';
             options.workspaceId = queryParams.get('ws') || '';
             const resourceUri = `/api/runtime/sys/v1.0/business-objects/${options.boId}`;
-            axios.get(resourceUri).then((response) => {
+            axios.get(resourceUri).then(async (response) => {
                 const resourceData = response.data as Record<string, any>;
                 const { code, name } = resourceData;
                 options.appCode = code;
                 options.appName = name;
+                if(options.workspaceId) {
+                    const wsResponse = await axios.get(workspaceUri);
+                    const workspaces = wsResponse.data;
+                    const activeWorkspace = workspaces.find((workspace: any) => workspace.id === options.workspaceId);
+                    if (activeWorkspace) {
+                        options.location = activeWorkspace['location'] || options.location;
+                    }
+                }
                 resolve(options);
             });
         });
