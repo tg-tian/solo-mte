@@ -9,7 +9,6 @@ import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
 import { useWorkspace } from "./composition/use-workspace";
 import './style.css';
-import axios from "axios";
 
 
 type ViewKey = 'start' | 'my-apps' | 'env' | 'device'
@@ -17,7 +16,8 @@ type ViewKey = 'start' | 'my-apps' | 'env' | 'device'
 export default defineComponent({
   name: 'FAAppCenter',
   setup() {
-    const title = ref('SOLO - 场景低代码开发平台')
+    const defaultTitle = 'SOLO - 场景低代码开发平台'
+    const title = ref(defaultTitle)
     const currentView = ref<ViewKey>('device')
     const workspace = ref('');
     const workspaceId = ref('');
@@ -38,6 +38,10 @@ export default defineComponent({
     const useAppDomainComposition = useAppDomain();
     // 监听Farris Admin全局配置对象初始化完成事件
     configInitialized.then((result: AppConfigOptions) => {
+      title.value = result.appTitle || defaultTitle;
+      if (typeof document !== 'undefined') {
+        document.title = title.value;
+      }
       useAppDomainComposition.setAppDomainSourceUri(result.appDataSourceUri);
       // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
       useAppDomainComposition.generateAppDomain(result.appDataSourceUri);
@@ -76,17 +80,14 @@ export default defineComponent({
     }
 
     function getScenarioInfo() {
-      const scenarioSourceUri = 'http://139.196.147.52:8080/scenes?domainId=26';
       const queryParams = new URLSearchParams(window.location.search);
-      const scenarioId = queryParams.get('scenarioId') || '';
-
-      axios.get(scenarioSourceUri).then((response) => {
-        const scenarioData = response.data;
-        const scenarioInfo = scenarioData.find((item: any) => item.sceneId == scenarioId);
-        if (scenarioInfo) {
-          title.value = `SOLO - ${scenarioInfo.sceneName}`;
+      const scenarioTitle = queryParams.get('scenarioTitle') || '';
+      if (scenarioTitle && title.value === defaultTitle) {
+        title.value = scenarioTitle;
+        if (typeof document !== 'undefined') {
+          document.title = title.value;
         }
-      });
+      }
     }
 
     onBeforeMount(() => {

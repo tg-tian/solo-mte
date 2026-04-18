@@ -64,6 +64,8 @@ export interface AppConfigOptions {
 
     appDataSourceUri: string;
 
+    appTitle?: string;
+
 }
 
 export interface UseAppConfig {
