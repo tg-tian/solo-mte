@@ -32,10 +32,10 @@
             <template #default="scope">
               <el-image
                 v-if="scope.row.image"
-                :src="scope.row.image"
+                :src="getFullImageUrl(scope.row.image)"
                 fit="cover"
                 class="area-image"
-                :preview-src-list="[scope.row.image]"
+                :preview-src-list="[getFullImageUrl(scope.row.image)]"
                 preview-teleported
               />
               <el-empty v-else :image-size="32" description="无图片" />
@@ -174,6 +174,14 @@ const parentAreaOptions = computed(() => {
   if (!isEdit.value || editingAreaId.value === null) return areaStore.areas
   return areaStore.areas.filter((item) => item.id !== editingAreaId.value)
 })
+
+const baseURL = import.meta.env.VITE_APP_CENTER_BASE_URL || 'http://139.196.147.52:8080'
+
+function getFullImageUrl(url?: string | null) {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  return `${baseURL}${url}`
+}
 
 function getParentAreaName(parentId: number | null) {
   if (parentId === null || parentId === -1) return '根区域'
