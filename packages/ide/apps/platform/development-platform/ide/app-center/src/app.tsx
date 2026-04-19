@@ -19,6 +19,7 @@ export default defineComponent({
     const defaultTitle = 'SOLO - 场景低代码开发平台'
     const title = ref(defaultTitle)
     const currentView = ref<ViewKey>('device')
+    const sceneId = ref<number | undefined>(undefined)
     const workspace = ref('');
     const workspaceId = ref('');
     const currentUserName = ref('');
@@ -39,6 +40,7 @@ export default defineComponent({
     // 监听Farris Admin全局配置对象初始化完成事件
     configInitialized.then((result: AppConfigOptions) => {
       title.value = result.appTitle || defaultTitle;
+      sceneId.value = result.sceneId;
       if (typeof document !== 'undefined') {
         document.title = title.value;
       }
@@ -127,8 +129,8 @@ export default defineComponent({
           <div class="f-page-main">
             {shouldShowWelcome.value && <FWelcome>Welcome</FWelcome>}
             {shouldShowAppsView.value && <FApps>AppList</FApps>}
-            {shouldShowEnv.value && <Env sceneId={28} />}
-            {shouldShowDevice.value && <Device sceneId={28} />}
+            {shouldShowEnv.value && sceneId.value && <Env sceneId={sceneId.value} />}
+            {shouldShowDevice.value && sceneId.value && <Device sceneId={sceneId.value} />}
           </div>
         </div>
       )

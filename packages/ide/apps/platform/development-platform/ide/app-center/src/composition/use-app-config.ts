@@ -20,6 +20,8 @@ export function useAppConfig(): UseAppConfig {
         appDataSourceUri: '',
         /** 应用标题 */
         appTitle: defaultTitle,
+        /** 场景ID */
+        sceneId: undefined,
     };
 
     function applyConfig(config: any) {
@@ -28,6 +30,11 @@ export function useAppConfig(): UseAppConfig {
         }
         options.appDataSourceUri = config['appDataSourceUri'] || options.appDataSourceUri;
         options.appTitle = config?.sceneData?.name || options.appTitle || defaultTitle;
+        const rawSceneId = config?.sceneData?.sceneId ?? config?.sceneData?.id;
+        const normalizedSceneId = Number(rawSceneId);
+        if (Number.isFinite(normalizedSceneId) && normalizedSceneId > 0) {
+            options.sceneId = normalizedSceneId;
+        }
     }
 
     function findFirstScenarioConfig() {

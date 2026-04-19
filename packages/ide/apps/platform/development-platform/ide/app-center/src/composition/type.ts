@@ -66,6 +66,8 @@ export interface AppConfigOptions {
 
     appTitle?: string;
 
+    sceneId?: number;
+
 }
 
 export interface UseAppConfig {
