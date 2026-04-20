@@ -5,16 +5,26 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import fs from 'fs';
 import path from 'path';
 
+function isWithinRoot(filePath: string, root: string): boolean {
+    const sep = path.sep;
+    const prefix = root.endsWith(sep) ? root : root + sep;
+    return filePath === root || filePath.startsWith(prefix);
+}
+
 /**
  * Vite 插件：将 /extensions/** 下的静态文件直接返回（绕过 Vite 模块变换），
  * 确保 VS Code 的 Extension Host Worker 能正确加载扩展代码。
+ * 依次查找多个根目录：public/extensions（如 localfs-provider）、内置扩展目录。
  */
-function extensionPublicPassthrough(publicDir: string) {
-    const extRoot = path.resolve(publicDir, 'extensions');
+function extensionPublicPassthrough(extensionRoots: string[]) {
+    const roots = extensionRoots.map((r) => path.resolve(r));
     const MIME: Record<string, string> = {
         '.js': 'application/javascript; charset=utf-8',
         '.json': 'application/json; charset=utf-8',
         '.map': 'application/json',
+        '.svg': 'image/svg+xml',
+        '.png': 'image/png',
+        '.woff2': 'font/woff2',
     };
     return {
         name: 'extension-public-passthrough',
@@ -24,15 +34,68 @@ function extensionPublicPassthrough(publicDir: string) {
                 const raw = req.url?.split('?')[0] ?? '';
                 if (!raw.startsWith('/extensions/')) return next();
                 const rel = decodeURIComponent(raw.slice('/extensions/'.length));
-                const filePath = path.resolve(extRoot, rel);
-                if (!filePath.startsWith(extRoot)) return next();
-                fs.readFile(filePath, (err, data) => {
-                    if (err) return next();
-                    const ext = path.extname(filePath).toLowerCase();
-                    res.setHeader('Content-Type', MIME[ext] ?? 'application/octet-stream');
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    res.end(data);
-                });
+
+                const tryRoot = (i: number): void => {
+                    if (i >= roots.length) return next();
+                    const extRoot = roots[i];
+                    const filePath = path.resolve(extRoot, rel);
+                    if (!isWithinRoot(filePath, extRoot)) return tryRoot(i + 1);
+                    fs.readFile(filePath, (err, data) => {
+                        if (err) return tryRoot(i + 1);
+                        const ext = path.extname(filePath).toLowerCase();
+                        res.setHeader('Content-Type', MIME[ext] ?? 'application/octet-stream');
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.end(data);
+                    });
+                };
+                tryRoot(0);
+            };
+            server.middlewares.stack.unshift({ route: '', handle: handler });
+        },
+    };
+}
+
+/**
+ * Workbench 通过 amd 加载器（resolveAmdNodeModule）把 npm 包名解析成站点根路径
+ * `/node_modules/&lt;pkg&gt;/&lt;subpath&gt;`，在浏览器里用 script/import 拉取。
+ * 这与「是否部署整份 node_modules」无关：只是 **URL 形如** /node_modules/… 的静态资源。
+ *
+ * 开发：优先读 packages/ide/node_modules；生产可只部署 `public/node_modules`（由 sync-xterm-to-public 生成）。
+ */
+function nodeModulesPassthrough(nodeModulesRoots: string[]) {
+    const roots = nodeModulesRoots.map((r) => path.resolve(r));
+    const MIME: Record<string, string> = {
+        '.js': 'application/javascript; charset=utf-8',
+        '.mjs': 'application/javascript; charset=utf-8',
+        '.css': 'text/css; charset=utf-8',
+        '.json': 'application/json; charset=utf-8',
+        '.map': 'application/json',
+        '.wasm': 'application/wasm',
+    };
+    return {
+        name: 'node-modules-passthrough',
+        enforce: 'pre' as const,
+        configureServer(server: ViteDevServer) {
+            const handler = (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+                const raw = req.url?.split('?')[0] ?? '';
+                if (!raw.startsWith('/node_modules/')) return next();
+                const rel = decodeURIComponent(raw.slice('/node_modules/'.length));
+
+                const tryRoot = (i: number): void => {
+                    if (i >= roots.length) return next();
+                    const root = roots[i];
+                    const rootPrefix = root + path.sep;
+                    const filePath = path.resolve(root, rel);
+                    if (!filePath.startsWith(rootPrefix)) return tryRoot(i + 1);
+                    fs.readFile(filePath, (err, data) => {
+                        if (err) return tryRoot(i + 1);
+                        const ext = path.extname(filePath).toLowerCase();
+                        res.setHeader('Content-Type', MIME[ext] ?? 'application/octet-stream');
+                        res.setHeader('Access-Control-Allow-Origin', '*');
+                        res.end(data);
+                    });
+                };
+                tryRoot(0);
             };
             server.middlewares.stack.unshift({ route: '', handle: handler });
         },
@@ -96,9 +159,23 @@ function vscodePublicPassthrough(vscodeDir: string) {
 }
 
 // https://vitejs.dev/config/
+const ideBuiltinExtensionsDir = path.resolve(
+    __dirname,
+    'apps/platform/development-platform/ide/extensions'
+);
+
 export default defineConfig({
     plugins: [
-        extensionPublicPassthrough(path.resolve(__dirname, 'public')),
+        extensionPublicPassthrough([
+            path.resolve(__dirname, 'public', 'extensions'),
+            ideBuiltinExtensionsDir,
+            // Remote server 内置扩展目录：须与 vscode/start-server.sh 的 builtin-extensions-dir 一致，否则 github-authentication 等在远端 404
+            path.resolve(__dirname, 'vscode', 'extensions'),
+        ]),
+        nodeModulesPassthrough([
+            path.resolve(__dirname, 'node_modules'),
+            path.resolve(__dirname, 'public', 'node_modules'),
+        ]),
         vscodePublicPassthrough(path.resolve(__dirname, 'public/vscode')),
         vue(),
         vueJsx(),

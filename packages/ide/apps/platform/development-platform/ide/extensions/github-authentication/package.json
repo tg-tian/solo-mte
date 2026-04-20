@@ -1,0 +1,26 @@
+{
+  "name": "github-authentication",
+  "displayName": "GitHub Authentication (embedded stub)",
+  "description": "Registers a no-op github auth provider so the workbench does not time out; no real OAuth.",
+  "version": "0.0.1",
+  "publisher": "vscode",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onAuthenticationRequest:github",
+    "onCommand:vscode-github-authentication.embedded.noop"
+  ],
+  "main": "./extension.js",
+  "browser": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-github-authentication.embedded.noop",
+        "title": "GitHub Authentication (embedded no-op)"
+      }
+    ]
+  }
+}
