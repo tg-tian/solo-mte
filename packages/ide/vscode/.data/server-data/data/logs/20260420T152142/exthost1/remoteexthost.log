@@ -1,6 +1,0 @@
-2026-04-20 15:28:56.128 [info] Extension host with pid 37500 started
-2026-04-20 15:28:56.137 [info] Lock '/Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/server-data/data/User/workspaceStorage/3eda3a62/vscode.lock': Lock acquired.
-2026-04-20 15:28:56.238 [info] Eager extensions activated
-2026-04-20 15:32:01.668 [info] Extension host terminating: received terminate message from renderer
-2026-04-20 15:32:01.671 [info] Lock '/Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/server-data/data/User/workspaceStorage/3eda3a62/vscode.lock': Marking the lockfile as scheduled to be released in 6000 ms.
-2026-04-20 15:32:01.673 [info] Extension host with pid 37500 exiting with code 0

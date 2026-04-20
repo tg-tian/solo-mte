@@ -1,4 +1,0 @@
-2026-04-20 17:19:27.747 [info] Extension host with pid 67716 started
-2026-04-20 17:19:27.766 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Lock acquired.
-2026-04-20 17:19:27.937 [info] ExtensionService#_doActivateExtension saoudrizwan.claude-dev, startup: false, activationEvent: 'onView:claude-dev.SidebarProvider'
-2026-04-20 17:19:29.997 [info] Eager extensions activated

@@ -22,3 +22,4 @@ release/caf-server/logs
 node_modules
 dist
 .idea
+packages/ide/vscode/.data/
