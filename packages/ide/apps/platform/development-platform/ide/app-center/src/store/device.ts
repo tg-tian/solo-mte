@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { Device, ProviderConfig, DeviceCommand, WsMessage } from '../types/device'
 import { getDevices, createDevice, updateDevice, deleteDevice, discoverDevices, sendCommand } from '../api/device'
 import { getProviders, createProvider, updateProvider, deleteProvider } from '../api/provider'
+import { getMapperLoaderUrl, updateMapperLoaderUrl } from '../api/system'
 
 let wsInstance: WebSocket | null = null
 
@@ -26,6 +27,7 @@ export const useDeviceStore = defineStore('device', {
     providers: [] as ProviderConfig[],
     discoveredDevices: [] as Device[],
     recentEvents: [] as any[],
+    mapperLoaderUrl: '',
     loading: false,
   }),
 
@@ -139,6 +141,21 @@ export const useDeviceStore = defineStore('device', {
     async fetchProviders() {
       const res: any = await getProviders()
       this.providers = Array.isArray(res?.data) ? res.data : []
+    },
+
+    async fetchMapperLoaderUrl() {
+      const res: any = await getMapperLoaderUrl()
+      this.mapperLoaderUrl = res?.data?.url || ''
+      return this.mapperLoaderUrl
+    },
+
+    async updateMapperLoaderUrl(url: string) {
+      const res: any = await updateMapperLoaderUrl(url)
+      if (res?.data?.ok) {
+        this.mapperLoaderUrl = res.data.url || url
+        return true
+      }
+      return false
     },
 
     async createProvider(data: ProviderConfig) {

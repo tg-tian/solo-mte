@@ -240,12 +240,16 @@
     <DeviceProviderDialogs
       v-model:list-visible="providerListVisible"
       v-model:form-visible="providerFormVisible"
+      v-model:library-visible="libraryConfigVisible"
+      v-model:mapper-loader-url="mapperLoaderUrl"
       :providers="deviceStore.providers"
       :form="providerForm"
       :is-edit="providerFormEditMode"
       @open-add="openAddProvider"
+      @open-library-config="openLibraryConfig"
       @edit="openEditProvider"
       @save="submitProvider"
+      @save-library-config="submitLibraryConfig"
       @delete="handleDeleteProvider"
     />
   </div>
@@ -292,8 +296,10 @@ const state = reactive({
   selectPageVisible: false,
   providerListVisible: false,
   providerFormVisible: false,
+  libraryConfigVisible: false,
   providerFormEditMode: false,
   providerEditingId: '',
+  mapperLoaderUrl: '',
   providerForm: {
     provider: '',
     communication: {
@@ -303,7 +309,7 @@ const state = reactive({
   } as ProviderConfig,
 })
 
-const { searchForm, deviceForm, submitting, deviceDialogVisible, isEdit, currentId, selectPageVisible, providerListVisible, providerFormVisible, providerForm, providerFormEditMode, providerEditingId } = toRefs(state)
+const { searchForm, deviceForm, submitting, deviceDialogVisible, isEdit, currentId, selectPageVisible, providerListVisible, providerFormVisible, libraryConfigVisible, providerForm, providerFormEditMode, providerEditingId, mapperLoaderUrl } = toRefs(state)
 
 const deviceRules = {
   deviceName: [
@@ -380,9 +386,18 @@ function resetSearch() {
   searchForm.value.status = undefined
 }
 
-function handleConfig() {
+async function handleConfig() {
   providerListVisible.value = true
-  deviceStore.fetchProviders()
+  await Promise.all([deviceStore.fetchProviders(), deviceStore.fetchMapperLoaderUrl()])
+  mapperLoaderUrl.value = deviceStore.mapperLoaderUrl || ''
+}
+
+async function openLibraryConfig() {
+  if (!mapperLoaderUrl.value) {
+    await deviceStore.fetchMapperLoaderUrl()
+    mapperLoaderUrl.value = deviceStore.mapperLoaderUrl || ''
+  }
+  libraryConfigVisible.value = true
 }
 
 function openAddProvider() {
@@ -443,6 +458,27 @@ async function handleDeleteProvider(row: ProviderConfig) {
     ElMessage.success('删除成功')
     await deviceStore.fetchProviders()
   } catch {}
+}
+
+async function submitLibraryConfig() {
+  const url = mapperLoaderUrl.value.trim()
+  if (!url) {
+    ElMessage.error('请填写设备库地址')
+    return
+  }
+
+  try {
+    const ok = await deviceStore.updateMapperLoaderUrl(url)
+    if (!ok) {
+      ElMessage.error('设备库地址保存失败')
+      return
+    }
+    mapperLoaderUrl.value = deviceStore.mapperLoaderUrl || url
+    libraryConfigVisible.value = false
+    ElMessage.success('设备库地址已更新')
+  } catch {
+    ElMessage.error('设备库地址保存失败')
+  }
 }
 
 function handleEdit(row: Device) {
