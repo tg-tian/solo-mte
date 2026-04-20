@@ -1,0 +1,8 @@
+export var InlineSuggestAlternativeAction;
+(function (InlineSuggestAlternativeAction) {
+    function toString(action) {
+        return action?.command.id ?? undefined;
+    }
+    InlineSuggestAlternativeAction.toString = toString;
+})(InlineSuggestAlternativeAction || (InlineSuggestAlternativeAction = {}));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSW5saW5lU3VnZ2VzdEFsdGVybmF0aXZlQWN0aW9uLmpzIiwic291cmNlUm9vdCI6ImZpbGU6Ly8vVXNlcnMvc2FnaS9zb3VyY2UvdnNjb2RlL3NyYy8iLCJzb3VyY2VzIjpbInZzL2VkaXRvci9jb250cmliL2lubGluZUNvbXBsZXRpb25zL2Jyb3dzZXIvbW9kZWwvSW5saW5lU3VnZ2VzdEFsdGVybmF0aXZlQWN0aW9uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWNBLE1BQU0sS0FBVyw4QkFBOEIsQ0FJOUM7QUFKRCxXQUFpQiw4QkFBOEI7SUFDOUMsU0FBZ0IsUUFBUSxDQUFDLE1BQWtEO1FBQzFFLE9BQU8sTUFBTSxFQUFFLE9BQU8sQ0FBQyxFQUFFLElBQUksU0FBUyxDQUFDO0lBQ3hDLENBQUM7SUFGZSx1Q0FBUSxXQUV2QixDQUFBO0FBQ0YsQ0FBQyxFQUpnQiw4QkFBOEIsS0FBOUIsOEJBQThCLFFBSTlDIn0=

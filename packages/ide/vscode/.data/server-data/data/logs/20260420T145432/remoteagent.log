@@ -1,0 +1,22 @@
+2026-04-20 14:54:33.953 [info] 
+
+
+
+
+2026-04-20 14:54:33.953 [error] SystemError [ERR_SYSTEM_ERROR]: A system error occurred: uv_interface_addresses returned Unknown system error 1 (Unknown system error 1)
+    at networkInterfaces (node:os:217:16)
+    at getMac (file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/vs/base/node/macAddress.js:16:20)
+    at getMacMachineId (file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/vs/base/node/id.js:81:28)
+    at async file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/vs/base/node/id.js:72:24
+    at async Promise.all (index 2)
+    at async setupServerServices (file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/vs/server/node/serverServices.js:132:49)
+    at async createServer (file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/vs/server/node/remoteExtensionHostAgentServer.js:571:52)
+    at async file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/server-main.js:48:32
+    at async Server.<anonymous> (file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/out/server-main.js:124:9)
+2026-04-20 14:54:33.953 [info] Extension host agent started.
+2026-04-20 14:54:33.956 [info] Started initializing default profile extensions in extensions installation folder. file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/extensions
+2026-04-20 14:54:33.963 [error] [File Watcher (node.js)] Failed to watch /Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/server-data/data/Machine for changes using fs.watch() (Error: EMFILE: too many open files, watch, undefined)
+2026-04-20 14:54:33.967 [error] [File Watcher (node.js)] Failed to watch /Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/extensions for changes using fs.watch() (Error: EMFILE: too many open files, watch, undefined)
+2026-04-20 14:54:33.979 [info] Completed initializing default profile extensions in extensions installation folder. file:///Users/sagi/source/ubml/ubml-sdk/packages/development/vscode/.data/extensions
+2026-04-20 15:54:29.101 [error] [127.0.0.1][bfaa011d][ExtensionHostConnection] Unknown reconnection token (never seen).
+2026-04-20 15:54:29.107 [error] [127.0.0.1][2574bee2][ManagementConnection] Unknown reconnection token (never seen).

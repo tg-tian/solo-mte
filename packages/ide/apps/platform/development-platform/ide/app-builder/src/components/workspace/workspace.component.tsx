@@ -3,6 +3,7 @@ import { nextTick } from 'vue';
 import FANavigation from '../navigation/navigation.component';
 import FANavigationCompact from '../navigation/navigation-compact.component';
 import FAContentArea from '../content-area/content-area.component';
+import FAppCodeEditor from '../code-editor/code-editor.component';
 import { ConfigOptions, FunctionInstance, UseConfig, UseFunctionInstance, WorkspaceOptions } from '../../composition/types';
 import { useConfig } from '../../composition/use-config';
 import { useFunctionInstance } from '../../composition/use-function-instance';
@@ -11,7 +12,7 @@ import { useWorkAreaInstance } from '../../composition/use-work-area-instance';
 
 import { WorkspaceProps, workspaceProps } from './workspace.props';
 import innerComponentRegistry from '../component-registry';
-import { computed, defineAsyncComponent, defineComponent, inject, onMounted, provide, ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, provide, ref } from 'vue';
 import { FAccordion, FAccordionItem, FListView, FPopover, FSearchBox, FNav } from "@farris/ui-vue";
 import { FunctionItem, MenuGroup, MenuGroupItem, UseMenuData, WorkAreaInstance, UserInfo } from '../../composition/types';
 import FFunctionNavigation from '../function-board/function-board.component';
@@ -20,9 +21,6 @@ import { useIde } from '../../composition/use-ide';
 import { useIntelligentAssistant } from '../assistant/use-intelligent-assistant';
 import { useAssistantIcon } from '../assistant/use-assistant-icon';
 import { useUserInfo } from '../../composition/use-user-info';
-const loadCodeEditorComponent = () => import('../code-editor/code-editor.component');
-const FAppCodeEditor = defineAsyncComponent(loadCodeEditorComponent);
-let codeEditorPreloadPromise: Promise<void> | null = null;
 
 export default defineComponent({
     name: 'FAppWorkspace',
@@ -34,38 +32,12 @@ export default defineComponent({
         const currentUserName = ref('');
         const currentUserAvatar = ref('');
         const currentView = ref('Designer');
-        const hasCodeEditorMounted = ref(false);
-        const codeEditorInitPending = ref(false);
         const currentAppLocation = ref('');
         const navData = [
             { id: 'Designer', text: '设计', icon: 'f-icon f-icon-perspective_view' },
             { id: 'CodeEditor', text: '代码', icon: 'f-icon f-icon-code' },
         ];
         const codeEditorRef = ref<{ initializeVSCode?: (rootDir: string) => void | Promise<void> }>();
-
-        function preloadCodeEditorResources() {
-            if (!codeEditorPreloadPromise) {
-                codeEditorPreloadPromise = loadCodeEditorComponent()
-                    .then((module) => module.preloadVSCodeResources?.())
-                    .catch((error) => {
-                        console.warn('代码编辑器预加载失败:', error);
-                    });
-            }
-            return codeEditorPreloadPromise;
-        }
-
-        function scheduleCodeEditorPreload() {
-            const runner = () => {
-                preloadCodeEditorResources();
-            };
-            if ('requestIdleCallback' in window) {
-                (window as Window & {
-                    requestIdleCallback: (cb: IdleRequestCallback, opts?: IdleRequestOptions) => number;
-                }).requestIdleCallback(() => runner(), { timeout: 2000 });
-                return;
-            }
-            window.setTimeout(runner, 1200);
-        }
 
         const title = ref();
         // 初始化Farris Admin全局配置对象
@@ -197,20 +169,12 @@ export default defineComponent({
             // 在依赖注入服务中注册Farris Admin主框架Html元素
             provide('f-admin-main-element', adminMainElementRef.value);
             provide('f-admin-config', config);
-            scheduleCodeEditorPreload();
         });
 
         function scheduleCodeEditorInit() {
-            codeEditorInitPending.value = true;
             nextTick(() => {
                 requestAnimationFrame(() => {
-                    const initializeVSCode = codeEditorRef.value?.initializeVSCode;
-                    if (!initializeVSCode || !shouldShowCodeEditor.value) {
-                        return;
-                    }
-                    const rootDir = currentAppLocation.value || useWorkspaceComposition.options.path;
-                    initializeVSCode(rootDir);
-                    codeEditorInitPending.value = false;
+                    codeEditorRef.value?.initializeVSCode?.(currentAppLocation.value);
                 });
             });
         }
@@ -218,22 +182,12 @@ export default defineComponent({
         // 默认已是 CodeEditor 时，watch 不会因「从未变为 true」而触发，必须在挂载后主动初始化一次
         onMounted(() => {
             if (shouldShowCodeEditor.value) {
-                hasCodeEditorMounted.value = true;
                 scheduleCodeEditorInit();
             }
         });
 
         watch(shouldShowCodeEditor, (show) => {
             if (show) {
-                preloadCodeEditorResources();
-                hasCodeEditorMounted.value = true;
-                scheduleCodeEditorInit();
-            }
-        });
-
-        // 异步组件首次挂载后再补一次初始化，避免首轮调度时 ref 尚未就绪
-        watch(codeEditorRef, (editorRef) => {
-            if (editorRef && codeEditorInitPending.value && shouldShowCodeEditor.value) {
                 scheduleCodeEditorInit();
             }
         });
@@ -243,9 +197,6 @@ export default defineComponent({
         }
 
         function renderCodeEditor() {
-            if (!hasCodeEditorMounted.value) {
-                return null;
-            }
             return <FAppCodeEditor ref={codeEditorRef} rootDir={useWorkspaceComposition.options.path} style={codeEditorStyle.value}></FAppCodeEditor>;
         }
 

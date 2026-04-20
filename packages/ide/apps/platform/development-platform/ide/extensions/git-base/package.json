@@ -15,7 +15,7 @@
     "*"
   ],
   "main": "./out/extension.js",
-  "browser": "./dist/browser/extension.js",
+  "browser": "./out/extension.js",
   "icon": "resources/icons/git.png",
   "scripts": {
     "compile": "gulp compile-extension:git-base",

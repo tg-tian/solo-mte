@@ -1,0 +1,7 @@
+2026-04-20 20:10:02.109 [info] Extension host with pid 96512 started
+2026-04-20 20:10:02.291 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Lock acquired.
+2026-04-20 20:10:03.833 [info] Eager extensions activated
+2026-04-20 20:10:03.846 [info] ExtensionService#_doActivateExtension saoudrizwan.claude-dev, startup: false, activationEvent: 'onStartupFinished'
+2026-04-20 20:14:24.911 [info] Extension host terminating: received terminate message from renderer
+2026-04-20 20:14:24.923 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Marking the lockfile as scheduled to be released in 6000 ms.
+2026-04-20 20:14:25.242 [info] Extension host with pid 96512 exiting with code 0

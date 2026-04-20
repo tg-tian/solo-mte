@@ -1,0 +1,401 @@
+2026-04-20 16:54:17.415 [info] Extension host with pid 61578 started
+2026-04-20 16:54:17.426 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Lock acquired.
+2026-04-20 16:54:17.669 [info] ExtensionService#_doActivateExtension saoudrizwan.claude-dev, startup: false, activationEvent: 'onLanguage'
+2026-04-20 16:54:18.348 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:310:32641
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at bUr.exports (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:485:132)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:488:11368
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:488:44491
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:505:36618
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:505:47632
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:505:52427
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:505:52706
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:670:77
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:670:22648
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7791:1744)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:18.536 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:961:9580
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:961:9899
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:961:10176
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:961:11044
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:963:874
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:970:1163
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:970:2316
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:971:5115
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:971:5695
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:971:9888
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7341:2844
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7341:8420
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:1559
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:18.746 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1151:91422
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1160:87680
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1160:90008
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1161:130
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:21985
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:18.825 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:37332
+    at get value (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:32279)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1815:202
+    at Function.n (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:30012)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1815:27066
+    at n (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:30012)
+    at new ZodObject (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:30271)
+    at _v (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1815:18716)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1815:31710
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1815:60549
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1829:13185
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7290:7314
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7290:25816
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7341:145
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1161:5676
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1263:92
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1263:7347
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1264:3327
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:22009
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:18.913 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1297:120597
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1297:122868
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1297:124037
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1297:126219
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1306:43028
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1306:43760
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1306:48963
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1354:5114
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1354:5570
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1354:8084
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1354:8260
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:3876:19347
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:3876:19489
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7209:104
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7290:7510
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7290:25816
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7341:145
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1161:5676
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1263:92
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1263:7347
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1264:3327
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:22009
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:19.011 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1439:14176
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1445:5548
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1445:6376
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1445:6436
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:32504
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1760:208
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:22069
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:19.041 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:22936
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:48400
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:67101
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:138653
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:139757
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1478:177347
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1486:1086
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1486:1281
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1512:331
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1513:2534
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1513:6734
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1513:7572
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1513:13821
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1516:7345
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1517:1558
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1517:3026
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1517:4060
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1517:10492
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1520:1771
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:357
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1520:4648
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1523:449
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1523:5158
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:32516
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1760:208
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:22069
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:19.065 [error] PendingMigrationError: navigator is now a global in nodejs, please see https://aka.ms/vscode-extensions/navigator for additional info on this error.
+    at get (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:119:39)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1661:18203
+    at get value (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1661:10547)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1697:148
+    at Function.n (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1661:7834)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1699:29643
+    at n (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1661:7834)
+    at new ZodObject (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1661:8076)
+    at At (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1699:18114)
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1699:36780
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:12441
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:12484
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:12521
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:29313
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1747:32522
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1760:208
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:1790:22069
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7767:31183
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:2051
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14349
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7784:14766
+    at /Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:2:325
+    at Object.<anonymous> (/Users/sagi/source/solo-mte/packages/ide/vscode/.data/extensions/saoudrizwan.claude-dev-3.79.0/dist/extension.js:7793:56)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12)
+    at Module._load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extensionHostProcess.js:68:29)
+    at Function.load (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:32:37)
+    at Function.load [as _load] (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/proxyResolver.js:290:33)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at ExtHostExtensionService._doLoadModule (file:///Users/sagi/source/solo-mte/packages/ide/vscode/out/vs/workbench/api/node/extHostExtensionService.js:216:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-20 16:54:19.213 [info] Eager extensions activated
