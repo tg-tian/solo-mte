@@ -663,10 +663,7 @@ function isInCurrentListByShadow(row: Device) {
 }
 
 function getWorkbenchBaseUrl() {
-  const origin = window.location.origin
-  const pathName = window.location.pathname || ''
-  const workbenchPrefix = pathName.startsWith('/workbench') ? '/workbench/' : '/'
-  return `${origin}${workbenchPrefix}`
+  return import.meta.env.VITE_WORKBENCH_TARGET_BASE_URL || 'http://139.196.239.110:5173/'
 }
 
 function buildWorkbenchUrl(menuPath: string, query: Record<string, string | number | undefined> = {}) {

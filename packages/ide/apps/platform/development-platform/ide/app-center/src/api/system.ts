@@ -1,9 +1,10 @@
-import axios, { type AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
+import request from '../utils/request'
 
 export function getMapperLoaderUrl(): Promise<AxiosResponse<{ url: string }>> {
-  return axios.get('/system/mapper-loader-url')
+  return request.get('/system/mapper-loader-url')
 }
 
 export function updateMapperLoaderUrl(url: string): Promise<AxiosResponse<{ ok: boolean; url: string; error?: string }>> {
-  return axios.put('/system/mapper-loader-url', { url })
+  return request.put('/system/mapper-loader-url', { url })
 }
