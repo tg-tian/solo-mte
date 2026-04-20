@@ -6,6 +6,8 @@ import type { Area } from './scene'
 
 export type Device = BaseDevice & {
   area?: Area | null
+  inaccessibleReason?: 'missing_library_url' | 'missing_mapper' | 'missing_model' | 'mapper_error'
+  inaccessibleMessage?: string
 }
 
 export type { ProviderConfig, DeviceCommand, WsMessage }

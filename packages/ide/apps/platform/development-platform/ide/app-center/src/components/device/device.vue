@@ -21,7 +21,8 @@
               </el-form>
               <div class="device-actions">
                 <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
-                <el-button type="primary" @click="handleConfig">平台配置</el-button>
+                <el-button @click="openLibraryConfig">配置设备库</el-button>
+                <el-button type="primary" @click="handleConfig">物理平台配置</el-button>
               </div>
             </div>
           </el-card>
@@ -235,6 +236,7 @@
       :devices="selectList"
       :is-added="isInCurrentListByShadow"
       @add="addDeviceFromSelect"
+      @configure="openWorkbenchForDevice"
     />
 
     <DeviceProviderDialogs
@@ -658,6 +660,62 @@ async function submitAction() {
 
 function isInCurrentListByShadow(row: Device) {
   return (deviceStore.devices || []).some((item: Device) => item.deviceId === row.deviceId)
+}
+
+function getWorkbenchBaseUrl() {
+  const origin = window.location.origin
+  const pathName = window.location.pathname || ''
+  const workbenchPrefix = pathName.startsWith('/workbench') ? '/workbench/' : '/'
+  return `${origin}${workbenchPrefix}`
+}
+
+function buildWorkbenchUrl(menuPath: string, query: Record<string, string | number | undefined> = {}) {
+  const url = new URL(menuPath, getWorkbenchBaseUrl())
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && `${value}` !== '') {
+      url.searchParams.set(key, String(value))
+    }
+  })
+  return url.toString()
+}
+
+function openWorkbenchForDevice(row: Device) {
+  if (row.inaccessibleReason === 'missing_library_url') {
+    openLibraryConfig()
+    ElMessage.warning('请先配置设备库地址，再继续处理设备模型或 Mapper')
+    return
+  }
+
+  const deviceId = row.deviceId || ''
+  const deviceName = row.deviceName || ''
+  const provider = row.provider || ''
+  const deviceModel = (row as any).deviceModel || ''
+  const category = row.category || ''
+
+  const commonQuery = {
+    source: 'app-center',
+    deviceId,
+    deviceName,
+    provider,
+    deviceModel,
+    category,
+  }
+
+  let targetUrl = ''
+  if (row.isAccessible === false) {
+    if (row.inaccessibleReason === 'missing_model') {
+      targetUrl = buildWorkbenchUrl('apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-model-list/index.html#/setting', {
+        mode: 'create',
+        ...commonQuery,
+      })
+    } else {
+      targetUrl = buildWorkbenchUrl('apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html', commonQuery)
+    }
+  } else {
+    targetUrl = buildWorkbenchUrl('apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/device-list/index.html', commonQuery)
+  }
+
+  window.open(targetUrl, '_blank', 'noopener,noreferrer')
 }
 
 async function addDeviceFromSelect(row: Device) {

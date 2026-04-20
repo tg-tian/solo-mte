@@ -2,7 +2,6 @@
   <el-dialog :model-value="listVisible" title="配置管理" width="70%" @update:model-value="emit('update:listVisible', $event)">
     <div style="margin-bottom: 15px; display: flex; gap: 12px;">
       <el-button type="primary" @click="emit('open-add')">新增配置</el-button>
-      <el-button @click="emit('open-library-config')">配置设备库</el-button>
     </div>
     <el-table :data="providers" border>
       <el-table-column prop="provider" label="Provider ID" width="150" />
