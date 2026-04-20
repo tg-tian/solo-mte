@@ -25,6 +25,23 @@ export default defineComponent({
             g._VSCODE_FILE_ROOT = new URL(`${prefix}vscode/`, window.location.href).href;
         }
 
+        async function ensureNlsMessagesLoaded() {
+            const g = globalThis as typeof globalThis & {
+                _VSCODE_NLS_MESSAGES?: unknown[];
+            };
+            if (Array.isArray(g._VSCODE_NLS_MESSAGES) && typeof g._VSCODE_NLS_MESSAGES[1879] === 'string') {
+                return;
+            }
+
+            const fileRoot = (globalThis as typeof globalThis & { _VSCODE_FILE_ROOT?: string })._VSCODE_FILE_ROOT;
+            if (!fileRoot) {
+                return;
+            }
+
+            // workbench.web.main.internal 在启动 web worker 时依赖该全局变量传递本地化表。
+            await import(/* @vite-ignore */ `${fileRoot}nls.messages.js`);
+        }
+
         function buildOptions(rootDir: string) {
             // rootDir 由调用方传入，作为 server 端真实磁盘路径打开
             const folderUri = URI.from({
@@ -93,6 +110,7 @@ export default defineComponent({
             }
             try {
                 ensureVsCodeFileRoot();
+                await ensureNlsMessagesLoaded();
                 const options = buildOptions(rootDir);
                 console.log(`[code-editor] 打开远端工作区: vscode-remote://${remoteAuthority}${rootDir || '/'}`);
                 create(container, options);

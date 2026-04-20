@@ -64,6 +64,10 @@ export interface AppConfigOptions {
 
     appDataSourceUri: string;
 
+    appTitle?: string;
+
+    sceneId?: number;
+
 }
 
 export interface UseAppConfig {

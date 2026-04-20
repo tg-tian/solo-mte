@@ -134,6 +134,12 @@ export async function publishScenario(payload: PublishScenarioPayload) {
   return request.post(`${host}/scenes/publish`, payload);
 }
 
+export async function downloadScenarioConfig(sceneId: string) {
+  return request.get(`${host}/scenes/download/${sceneId}`, {
+    responseType: 'blob'
+  });
+}
+
 export async function getDomainOptions() {
   try {
     const response = await request.get(`${host}/domains`);

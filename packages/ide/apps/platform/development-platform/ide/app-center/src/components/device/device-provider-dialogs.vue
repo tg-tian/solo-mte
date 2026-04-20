@@ -1,6 +1,6 @@
 <template>
   <el-dialog :model-value="listVisible" title="配置管理" width="70%" @update:model-value="emit('update:listVisible', $event)">
-    <div style="margin-bottom: 15px;">
+    <div style="margin-bottom: 15px; display: flex; gap: 12px;">
       <el-button type="primary" @click="emit('open-add')">新增配置</el-button>
     </div>
     <el-table :data="providers" border>
@@ -41,6 +41,20 @@
       </span>
     </template>
   </el-dialog>
+
+  <el-dialog :model-value="libraryVisible" title="配置设备库" width="50%" @update:model-value="emit('update:libraryVisible', $event)">
+    <el-form label-width="120px">
+      <el-form-item label="设备库地址" required>
+        <el-input :model-value="mapperLoaderUrl" placeholder="例如: http://139.196.147.52:8080" @update:model-value="emit('update:mapperLoaderUrl', $event)" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="emit('update:libraryVisible', false)">取消</el-button>
+        <el-button type="primary" @click="emit('save-library-config')">保存</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -49,6 +63,8 @@ import type { ProviderConfig } from '../../types/device'
 defineProps<{
   listVisible: boolean
   formVisible: boolean
+  libraryVisible: boolean
+  mapperLoaderUrl: string
   providers: ProviderConfig[]
   form: ProviderConfig
   isEdit: boolean
@@ -57,9 +73,13 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'update:listVisible', value: boolean): void
   (e: 'update:formVisible', value: boolean): void
+  (e: 'update:libraryVisible', value: boolean): void
+  (e: 'update:mapperLoaderUrl', value: string): void
   (e: 'open-add'): void
+  (e: 'open-library-config'): void
   (e: 'edit', row: ProviderConfig): void
   (e: 'save'): void
+  (e: 'save-library-config'): void
   (e: 'delete', row: ProviderConfig): void
 }>()
 </script>

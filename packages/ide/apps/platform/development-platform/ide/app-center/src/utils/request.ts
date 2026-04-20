@@ -1,6 +1,7 @@
 import axios from 'axios' // 引入axios
+const baseURL = import.meta.env.VITE_APP_CENTER_BASE_URL || 'http://139.196.147.52:8080'
 const service = axios.create({
-  baseURL: "http://139.196.147.52:8080",
+  baseURL,
   timeout: 99999
 })
 // http request 拦截器
