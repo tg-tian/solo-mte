@@ -1,0 +1,6 @@
+2026-04-20 16:07:30.781 [info] Extension host with pid 50227 started
+2026-04-20 16:07:30.789 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Lock acquired.
+2026-04-20 16:07:30.896 [info] Eager extensions activated
+2026-04-20 16:37:04.041 [info] Extension host terminating: received terminate message from renderer
+2026-04-20 16:37:04.059 [info] Lock '/Users/sagi/source/solo-mte/packages/ide/vscode/.data/server-data/data/User/workspaceStorage/-487ac483/vscode.lock': Marking the lockfile as scheduled to be released in 6000 ms.
+2026-04-20 16:37:04.076 [info] Extension host with pid 50227 exiting with code 0

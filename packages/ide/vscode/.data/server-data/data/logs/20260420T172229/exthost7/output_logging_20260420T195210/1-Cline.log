@@ -1,0 +1,31 @@
+[Cline] Setting up VS Code host...
+LOG [DistinctId] initialized:
+DEBUG [AgentConfigLoader] Loaded 0 agent config(s) from disk.
+LOG PostHog client initialized
+LOG [BannerService] initialized
+DEBUG No stored authentication data found
+LOG [Controller] ClineProvider instantiated
+WARN No user found after restoring auth token
+LOG [Cline] extension activated in 163.65887500000008 ms
+LOG [OTEL] Creating MeterProvider with exporters: otlp
+LOG [OTEL] OTLP metrics reader created (http/json, interval: 60000ms)
+LOG [OTEL] MeterProvider initialized with 1 reader(s)
+LOG [OTEL] Creating LoggerProvider with exporters: otlp
+LOG [OTEL] OTLP logs exporter created (http/json)
+LOG [OTEL] Log batch processor configured: maxQueue=2048, batchSize=512, timeout=5000ms
+LOG [OTEL] LoggerProvider initialized
+LOG [OTEL DEBUG] OpenTelemetry initialization complete
+LOG [OTEL] Provider initialized - Logger: true, Meter: true
+INFO TelemetryProviderFactory: Created providers - PostHogTelemetryProvider, OpenTelemetryProvider
+INFO [TelemetryService] Initialized with 2 telemetry provider(s)
+LOG FileContextTracker: Processed 0 tasks, found 0 pending warnings, 0 orphaned, deleted 0, took 28ms
+LOG [VscodeWebviewProvider] Webview view resolved
+LOG No Groq API key found, using static models as fallback
+ERROR Error fetching Baseten models:
+ERROR Baseten API Error:
+LOG [DEBUG] sending OpenRouter models event
+LOG OpenRouter models fetched and saved
+LOG Vercel AI Gateway models fetched and saved
+LOG [BannerService] Raw API response: 1 items: [{"id":"bnr-01KPBWCRVKR71TM232K3YQ5VQ2","placement":"welcome","titleMd":"Opus 4.7 available:"}]
+LOG [BannerService] After provider filter: 1 banners: [{"id":"bnr-01KPBWCRVKR71TM232K3YQ5VQ2","placement":"welcome"}]
+LOG [BannerService] Fetched 1 banner(s) at 2026-04-20T11:52:16.993Z

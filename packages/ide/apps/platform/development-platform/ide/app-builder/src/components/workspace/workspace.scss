@@ -41,7 +41,7 @@ $badge-editing-border: rgba(51, 186, 143, 1);
 $badge-editing-color: #33ba8f;
 
 .f-admin {
-  background-color: #f8f8f8;
+  background-color: #e6eef9;
   .f-admin-content > div {
     display: none;
 
@@ -54,7 +54,7 @@ $badge-editing-color: #33ba8f;
     overflow: hidden;
     margin-bottom: 0 !important;
     margin-top: 0 !important;
-    background-color: #f8f8f8;
+    background-color: #e6eef9;
 
     > .f-page-header-base {
       padding: 0;
@@ -67,7 +67,7 @@ $badge-editing-color: #33ba8f;
     }
 
     .f-title-logo {
-      background-image: url(/assets/images/farris_design_light.png);
+      background-image: url(/assets/images/solo-icon.png);
       background-position-x: unset;
       background-size: cover;
       height: 28px;
@@ -185,6 +185,11 @@ $badge-editing-color: #33ba8f;
         }
       }
     }
+  }
+  .f-page-main {
+    margin: 0 !important;
+    box-shadow: 0 -2px 20px 0 rgba(3, 18, 51, .05);
+    z-index: 1;
   }
 }
 
