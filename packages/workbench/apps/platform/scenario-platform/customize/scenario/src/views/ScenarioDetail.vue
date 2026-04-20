@@ -209,7 +209,7 @@ import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { Link, Plus } from '@element-plus/icons-vue';
-import { createArea, deleteArea, getAreaList, updateArea, publishScenario, uploadImage } from '../api/scenario';
+import { createArea, deleteArea, getAreaList, updateArea, publishScenario, uploadImage, downloadScenarioConfig } from '../api/scenario';
 import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
 
 interface ScenarioSubmitPayload {
@@ -443,44 +443,25 @@ const handlePublish = () => {
   publishDialogVisible.value = true;
 };
 
-function buildScenarioConfigPayload() {
-  return {
-    sceneData: {
-      sceneId: form.sceneId,
-      code: form.sceneCode,
-      name: form.sceneName,
-      description: form.sceneDescription || '',
-      status: form.status,
-      url: form.url || '',
-      domainId: Number(form.domainId),
-      location:
-        form.longitude !== null && form.longitude !== undefined && form.latitude !== null && form.latitude !== undefined
-          ? { lng: Number(form.longitude), lat: Number(form.latitude) }
-          : null,
-      imageUrl: form.imageUrl || ''
-    },
-    areas: areas.value.map((item) => ({
-      id: item.id,
-      name: item.name,
-      sceneId: item.sceneId,
-      description: item.description || '',
-      image: item.image || '',
-      position: item.position || '',
-      parentId: item.parentId ?? '-1'
-    }))
-  };
-}
+async function exportScenarioConfig() {
+  if (!form.sceneId) {
+    ElMessage.warning('请先保存场景后再导出');
+    return;
+  }
 
-function exportScenarioConfig() {
-  const configPayload = buildScenarioConfigPayload();
-  const blob = new Blob([JSON.stringify(configPayload, null, 2)], { type: 'application/json' });
-  const downloadUrl = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = downloadUrl;
-  link.download = `${form.sceneCode || form.sceneName || 'scenario'}.config`;
-  link.click();
-  window.URL.revokeObjectURL(downloadUrl);
-  ElMessage.success('配置导出成功');
+  try {
+    const response = await downloadScenarioConfig(String(form.sceneId));
+    const blob = new Blob([response.data], { type: 'application/zip' });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'config.zip';
+    link.click();
+    window.URL.revokeObjectURL(downloadUrl);
+    ElMessage.success('配置导出成功');
+  } catch (error) {
+    ElMessage.error('配置导出失败');
+  }
 }
 
 const publishScene = async () => {
