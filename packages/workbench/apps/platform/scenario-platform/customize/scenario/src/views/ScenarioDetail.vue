@@ -284,12 +284,19 @@ const baiduMapAk = (import.meta as any).env?.VITE_BAIDU_MAP_AK || '';
 let mapInstance: any = null;
 let mapMarker: any = null;
 let mapCircle: any = null;
-const host = (import.meta as any).env?.VITE_BASE_PATH || '';
+const host = ((import.meta as any).env?.VITE_BASE_PATH || '').replace(/\/$/, '');
+
+function normalizeImagePath(path: string) {
+  if (!path) return '';
+  return path.startsWith('/') ? path : `/${path}`;
+}
 
 function getFullImageUrl(url: string) {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  return `${host}${url}`;
+
+  const normalizedUrl = normalizeImagePath(url);
+  return host ? `${host}${normalizedUrl}` : normalizedUrl;
 }
 
 function beforeImageUpload(file: File) {
