@@ -80,8 +80,8 @@ export default defineComponent({
                 notifyService?.warning({ message: '请填写菜单编号和菜单名称' });
                 return;
             }
-            if (!form.groupId && !form.groupName) {
-                notifyService?.warning({ message: '请选择或新建菜单分组' });
+            if (!form.groupName?.trim()) {
+                notifyService?.warning({ message: '请填写菜单分组名称' });
                 return;
             }
             const result = await publishMenu();
@@ -227,7 +227,7 @@ export default defineComponent({
                         <input
                             class="f-publish-input"
                             title="菜单分组"
-                            placeholder={form.groupIsNew ? '请输入新分组名称' : '请输入已有分组名称'}
+                            placeholder="请输入菜单分组名称"
                             value={form.groupName}
                             readonly={isReadonly}
                             onInput={(e: Event) => { form.groupName = (e.target as HTMLInputElement).value; }}
