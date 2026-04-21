@@ -73,6 +73,22 @@ export interface PublishPageState {
     functionRecord: Record<string, any> | null;
 }
 
+/** 发布流程归集参数（App 以当前业务对象标识为键，不再使用页面流元数据标识） */
+export interface PublishMenuExecutionParams {
+    /** 业务对象标识，对应 GET/POST gspapp、PUT gspapp、发布菜单 payload 中的 app 维度 id */
+    businessObjectId: string;
+    projectPath: string;
+    metadataReliedPath: string;
+    pageFlowContent: PageFlowContent | null;
+    /** GET gspapp/:businessObjectId 的结果 */
+    appPublishRecordBeforePublish: AppPublishRecord | null;
+    /** 当前要发布的页面入口（页面流 pages 或 Form 摘要构造） */
+    targetPage: PageFlowPage;
+    /** 表单：产品/模块/分组/菜单类型等 */
+    form: PublishMenuForm;
+    appUrl: string;
+}
+
 export interface UsePublish {
     pageFlowConfig: Ref<PageFlowConfig | null>;
     pageFlowContent: Ref<PageFlowContent | null>;
@@ -85,7 +101,10 @@ export interface UsePublish {
     loadPageFlowContent: (pageFlowMetadataID: string) => Promise<void>;
     selectPage: (page: PageFlowPage) => Promise<void>;
     initNewPublish: () => void;
+    /** 从查询 APP 发布记录起执行后续步骤并发布（不在此拉取页面流元数据） */
     publishMenu: () => Promise<boolean>;
+    /** 从 GET gspapp/:boId 起归集参数（使用 workspace 业务对象标识） */
+    collectPublishMenuExecutionParams: () => Promise<PublishMenuExecutionParams | null>;
 }
 
 export function usePublish(): UsePublish {
@@ -155,10 +174,10 @@ export function usePublish(): UsePublish {
         pages.value = content.pages || [];
     }
 
-    /** Step 3: 查询APP发布记录 */
-    async function queryAppPublishRecord(pageFlowMetadataID: string): Promise<AppPublishRecord | null> {
+    /** Step 3: 查询 APP 发布记录（以业务对象标识为 App id） */
+    async function queryAppPublishRecord(businessObjectId: string): Promise<AppPublishRecord | null> {
         try {
-            const uri = `/api/runtime/sys/v1.0/gspapp/${pageFlowMetadataID}`;
+            const uri = `/api/runtime/sys/v1.0/gspapp/${businessObjectId}`;
             const response = await axios.get(uri);
             if (response.data && response.data.id) {
                 return response.data as AppPublishRecord;
@@ -169,29 +188,64 @@ export function usePublish(): UsePublish {
         }
     }
 
-    /** 查询祖先节点（关键应用、模块） */
+    /** 与菜单、缓存查询一致：功能入口与页面元数据共用同一标识（优先 formUri，否则 page.id） */
+    function resolvePageMetadataId(page: PageFlowPage): string {
+        const uri = page.formUri;
+        if (uri !== undefined && uri !== null && String(uri).trim() !== '') {
+            return String(uri);
+        }
+        return page.id;
+    }
+
+    function getBoParentIdForPublish(row: Record<string, any>): string {
+        const pid = row.parentID ?? row.parentId ?? row.ParentID ?? row.ParentId;
+        return pid === undefined || pid === null ? '' : String(pid);
+    }
+
+    /** 通过 bolistwithlock 解析关键应用、模块（与菜单摘要一致，不使用 business-objects/.../ancestors） */
     async function loadAncestorInfo(): Promise<void> {
         try {
             const boId = options.boId;
-            const uri = `/api/runtime/sys/v1.0/business-objects/${boId}/ancestors`;
+            if (!boId) {
+                return;
+            }
+            const uri = '/api/runtime/sys/v1.0/business-objects-lock/bolistwithlock';
             const response = await axios.get(uri);
-            const ancestors = response.data as Record<string, any>[];
-            const product = ancestors.find((a: any) => Number(a.layer) === 2);
-            const module = ancestors.find((a: any) => Number(a.layer) === 3);
-            if (product) {
-                ancestorInfo.value.productId = product.id;
-                ancestorInfo.value.productName = product.name;
-                publishForm.value.productId = product.id;
-                publishForm.value.productName = product.name;
+            const raw = response.data;
+            const list = (Array.isArray(raw) ? raw : (raw?.items || raw?.data || [])) as Record<string, any>[];
+            if (!list.length) {
+                return;
             }
-            if (module) {
-                ancestorInfo.value.moduleId = module.id;
-                ancestorInfo.value.moduleName = module.name;
-                publishForm.value.moduleId = module.id;
-                publishForm.value.moduleName = module.name;
+            const idMap = new Map<string, Record<string, any>>();
+            for (const row of list) {
+                if (row?.id) {
+                    idMap.set(String(row.id), row);
+                }
             }
+            const current = idMap.get(String(boId));
+            if (!current) {
+                return;
+            }
+            const moduleId = getBoParentIdForPublish(current);
+            const moduleRow = moduleId ? idMap.get(moduleId) : undefined;
+            if (!moduleRow) {
+                return;
+            }
+            const productId = getBoParentIdForPublish(moduleRow);
+            const productRow = productId ? idMap.get(productId) : undefined;
+            if (!productRow) {
+                return;
+            }
+            ancestorInfo.value.productId = String(productRow.id || '');
+            ancestorInfo.value.productName = String(productRow.name || '');
+            ancestorInfo.value.moduleId = String(moduleRow.id || '');
+            ancestorInfo.value.moduleName = String(moduleRow.name || '');
+            publishForm.value.productId = ancestorInfo.value.productId;
+            publishForm.value.productName = ancestorInfo.value.productName;
+            publishForm.value.moduleId = ancestorInfo.value.moduleId;
+            publishForm.value.moduleName = ancestorInfo.value.moduleName;
         } catch {
-            // ancestor query failed, leave defaults
+            // bolistwithlock 失败则保留表单中的默认/空值
         }
     }
 
@@ -207,15 +261,26 @@ export function usePublish(): UsePublish {
             functionRecord: null
         };
 
-        if (!pageFlowConfig.value) return;
+        const boId = options.boId;
+        if (!boId) {
+            publishState.value = {
+                published: false,
+                showForm: false,
+                loading: false,
+                appRecord: null,
+                matchedInvoke: null,
+                functionRecord: null
+            };
+            return;
+        }
 
-        const pfId = pageFlowConfig.value.pageFlowMetadataID;
-        const appRecord = await queryAppPublishRecord(pfId);
+        const appRecord = await queryAppPublishRecord(boId);
         await loadAncestorInfo();
 
         if (appRecord && appRecord.appInvoks) {
+            const metadataId = resolvePageMetadataId(page);
             const matchedInvoke = appRecord.appInvoks.find(
-                (inv: AppInvoke) => inv.code === page.code
+                (inv: AppInvoke) => inv.code === page.code || inv.id === metadataId
             );
             if (matchedInvoke) {
                 publishState.value = {
@@ -267,11 +332,12 @@ export function usePublish(): UsePublish {
         });
     }
 
-    /** Step 4: 创建App */
-    async function createApp(pfId: string): Promise<boolean> {
+    /** Step 4: 创建 App（id = 业务对象标识） */
+    async function createApp(): Promise<boolean> {
         const page = currentPage.value!;
+        const appId = options.boId;
         const payload = {
-            id: pfId,
+            id: appId,
             code: page.code,
             name: page.name,
             nameLanguage: { 'zh-CHS': page.name },
@@ -285,50 +351,74 @@ export function usePublish(): UsePublish {
         return response.data === true || response.data === 'true';
     }
 
-    /** Step 5: 填写AppInvoke */
-    async function updateAppInvoke(pfId: string): Promise<AppInvoke> {
+    /** Step 5: 填写 AppInvoke（PUT gspapp），在已有 appInvoks 上合并/更新当前入口 */
+    async function updateAppInvoke(existingApp: AppPublishRecord | null): Promise<AppInvoke> {
         const page = currentPage.value!;
-        const invokeId = generateUUID();
+        const appId = options.boId;
+        const metadataId = resolvePageMetadataId(page);
+        const baseInvoks = existingApp?.appInvoks ? [...existingApp.appInvoks] : [];
+        const existingIndex = baseInvoks.findIndex(
+            (inv: AppInvoke) => inv.code === page.code || inv.id === metadataId
+        );
+        const invokeId = metadataId;
         const invoke: AppInvoke = {
             appEntrance: page.code,
-            appId: pfId,
+            appId: appId,
             code: page.code,
             id: invokeId,
             name: page.name
         };
+        if (existingIndex >= 0) {
+            baseInvoks[existingIndex] = invoke;
+        } else {
+            baseInvoks.push(invoke);
+        }
+        const appCode = existingApp?.code || page.code;
+        const appName = existingApp?.name || page.name;
+        const nameLanguage = existingApp?.nameLanguage || { 'zh-CHS': appName };
         const payload = {
-            id: pfId,
-            code: page.code,
-            name: page.name,
-            nameLanguage: { 'zh-CHS': page.name },
-            layer: 4,
-            url: buildAppUrl(),
-            bizObjectId: options.boId,
-            appInvoks: [invoke],
-            parentId: '0'
+            id: appId,
+            code: appCode,
+            name: appName,
+            nameLanguage,
+            layer: existingApp?.layer ?? 4,
+            url: existingApp?.url || buildAppUrl(),
+            bizObjectId: existingApp?.bizObjectId || options.boId,
+            appInvoks: baseInvoks,
+            parentId: existingApp?.parentId ?? '0'
         };
         await axios.put('/api/runtime/sys/v1.0/gspapp', payload);
         return invoke;
     }
 
-    /** Step 6: 创建菜单分组（若需要新建） */
+    /**
+     * Step 6: 创建菜单分组。
+     * 用户只需填写分组名称：自动生成 GUID 作为分组 id，POST 创建分组并回写 form.groupId。
+     * 未填名称时，若表单上已有 groupId（例如只读回显）则直接返回该 id。
+     */
     async function createMenuGroup(): Promise<string> {
         const form = publishForm.value;
-        if (!form.groupIsNew || !form.groupName) {
-            return form.groupId;
+        const existingId = (form.groupId || '').trim();
+        /** 已有分组（如从上级菜单回填）：直接使用，不再 POST 新建 */
+        if (existingId && !form.groupIsNew) {
+            return existingId;
+        }
+        const name = form.groupName?.trim();
+        if (!name) {
+            return '';
         }
         const groupId = generateUUID();
         const payload = {
             id: groupId,
             parentId: form.moduleId,
-            code: form.groupName,
+            code: name,
             funcType: '3',
             isDetail: true,
             isSysInit: false,
             layer: '3',
             menuType: '0',
-            name: form.groupName,
-            nameLanguage: { 'zh-CHS': form.groupName },
+            name: name,
+            nameLanguage: { 'zh-CHS': name },
             description: ''
         };
         await axios.post('/api/runtime/sys/v1.0/functions', payload);
@@ -336,18 +426,19 @@ export function usePublish(): UsePublish {
         return groupId;
     }
 
-    /** Step 7: 发布功能菜单 */
-    async function publishFunction(appId: string, invoke: AppInvoke, groupId: string): Promise<boolean> {
+    /** Step 7: 发布功能菜单（功能菜单记录 id 与页面元数据 id 一致，便于 funcOperations 与 Form 对齐） */
+    async function publishFunction(invoke: AppInvoke, groupId: string): Promise<boolean> {
         const form = publishForm.value;
         const page = currentPage.value!;
-        const functionId = generateUUID();
+        const appId = options.boId;
+        const functionId = resolvePageMetadataId(page);
         const payload = {
             productId: form.productId,
             moduleId: form.moduleId,
             groupId: groupId,
             appId: appId,
             appInvokId: invoke.id,
-            bizObjectId: 'BO',
+            bizObjectId: options.boId,
             bizOpId: form.bizOpId,
             id: functionId,
             code: form.menuCode || page.code,
@@ -377,27 +468,94 @@ export function usePublish(): UsePublish {
         return response.data === true || response.data === 'true';
     }
 
-    /** 完整发布流程 */
+    /** 在已得到 appRecord（GET gspapp）时，归集后续发布用到的参数快照 */
+    function buildPublishMenuExecutionParams(appRecord: AppPublishRecord | null): PublishMenuExecutionParams | null {
+        const page = currentPage.value;
+        const businessObjectId = options.boId;
+        if (!page || !businessObjectId) {
+            return null;
+        }
+        const projectPath = `${options.path}/metadata`;
+        const metadataReliedPath = `${options.path}/metadata/components`;
+        return {
+            businessObjectId,
+            projectPath,
+            metadataReliedPath,
+            pageFlowContent: pageFlowContent.value,
+            appPublishRecordBeforePublish: appRecord,
+            targetPage: page,
+            form: { ...publishForm.value },
+            appUrl: buildAppUrl()
+        };
+    }
+
+    /**
+     * 从查询 APP 发布记录开始归集参数（不在此处请求 app-config / metadatas/relied）。
+     * 使用 workspace 中的业务对象标识作为 gspapp 主键。
+     */
+    async function collectPublishMenuExecutionParams(): Promise<PublishMenuExecutionParams | null> {
+        if (!currentPage.value) {
+            return null;
+        }
+        if (!options.boId) {
+            return null;
+        }
+        const appRecord = await queryAppPublishRecord(options.boId);
+        return buildPublishMenuExecutionParams(appRecord);
+    }
+
+    /**
+     * 发布编排（App 以业务对象标识为键）：
+     * 1 GET gspapp/:boId（归集参数）
+     * →（无记录则）2 POST gspapp → 3 PUT gspapp（AppInvoke）→ 4 POST functions（新建分组）→ 5 POST functions（发布菜单）
+     */
     async function publishMenu(): Promise<boolean> {
-        if (!currentPage.value || !pageFlowConfig.value) return false;
+        if (!currentPage.value) {
+            return false;
+        }
         publishState.value.loading = true;
         try {
-            const pfId = pageFlowConfig.value.pageFlowMetadataID;
+            const params = await collectPublishMenuExecutionParams();
+            if (!params) {
+                publishState.value.loading = false;
+                return false;
+            }
+            const bizId = params.businessObjectId;
+            let appRecord = params.appPublishRecordBeforePublish;
+            publishState.value.appRecord = appRecord;
 
-            let appRecord = publishState.value.appRecord;
+            // —— Step 2：若无发布记录则创建 App —— POST gspapp（id = 业务对象标识）
             if (!appRecord) {
-                await createApp(pfId);
-                appRecord = await queryAppPublishRecord(pfId);
+                const created = await createApp();
+                if (!created) {
+                    publishState.value.loading = false;
+                    return false;
+                }
+                appRecord = await queryAppPublishRecord(bizId);
+                publishState.value.appRecord = appRecord;
+                if (!appRecord) {
+                    publishState.value.loading = false;
+                    return false;
+                }
             }
 
-            const invoke = await updateAppInvoke(pfId);
+            // —— Step 3：填写 AppInvoke —— PUT gspapp
+            const invoke = await updateAppInvoke(appRecord);
+
+            // —— Step 4：创建菜单分组（若新建）—— POST functions
             const groupId = await createMenuGroup();
-            const result = await publishFunction(pfId, invoke, groupId);
+            if (!groupId) {
+                publishState.value.loading = false;
+                return false;
+            }
+
+            // —— Step 5：发布功能菜单 —— POST functions
+            const result = await publishFunction(invoke, groupId);
 
             if (result) {
                 publishState.value.published = true;
                 publishState.value.matchedInvoke = invoke;
-                publishState.value.appRecord = appRecord;
+                publishState.value.appRecord = await queryAppPublishRecord(bizId);
             }
             publishState.value.loading = false;
             return result;
@@ -419,6 +577,7 @@ export function usePublish(): UsePublish {
         loadPageFlowContent,
         selectPage,
         initNewPublish,
-        publishMenu
+        publishMenu,
+        collectPublishMenuExecutionParams
     };
 }
