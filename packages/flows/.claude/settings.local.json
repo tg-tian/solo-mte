@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for pkg:*)",
+      "Bash(do echo:*)",
+      "Read(//d/Projects/farris-pc/solo/solo-mte/packages/flows/packages/$pkg/**)",
+      "Bash(done)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

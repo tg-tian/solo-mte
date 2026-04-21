@@ -30,7 +30,7 @@ export function useDeviceInfo() {
 
     async function loadDeviceCategories(): Promise<DeviceModel[]> {
         const baseDevicePath = './flow-contents/device/';
-        const manifestUrl = `${baseDevicePath}manifest.json`;
+        const manifestUrl = `${baseDevicePath}manifest.json?v=${(new Date()).getTime()}`;
 
         try {
             const manifestResponse = await axios.get<string[]>(manifestUrl, {

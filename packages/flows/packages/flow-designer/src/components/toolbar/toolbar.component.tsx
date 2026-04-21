@@ -3,10 +3,11 @@ import AddNode from './components/add-node.vue';
 import ViewportSelect from './components/viewport.vue';
 import { toolbarProps } from "./toolbar.props";
 import { MiniMap } from '@vue-flow/minimap';
-import { useLayout, useValidate, useVerifyDetailsPanel, useTrialRunPanel } from '@flow-designer/hooks';
+import { useLayout, useValidate, useVerifyDetailsPanel, useTrialRunPanel, useAiChatPanel } from '@flow-designer/hooks';
 import { useNotify } from '@farris/flow-devkit';
 import { default as LayoutIcon } from './assets/toolbar/layout.svg';
 import { default as ThumbnailIcon } from './assets/toolbar/thumbnail.svg';
+import { default as AiChatIcon } from './assets/toolbar/ai-chat.svg';
 
 import css from './toolbar.module.scss';
 
@@ -22,6 +23,7 @@ export default defineComponent({
     const { isFlowValid } = useValidate();
     const verifyDetailsPanel = useVerifyDetailsPanel();
     const { openTrialRunPanel } = useTrialRunPanel();
+    const { openAiChatPanel } = useAiChatPanel();
 
     const showMiniMap = ref<boolean>(false);
 
@@ -73,6 +75,13 @@ export default defineComponent({
 
             {/* 分隔符 */}
             <div class={css['divider']}></div>
+
+            {/* AI 助手按钮 */}
+            <f-tooltip content="AI 助手" placement="top" trigger="hover">
+              <span class={css['tooltip-wrapper']} onClick={openAiChatPanel}>
+                <img src={AiChatIcon} alt="AI 助手" />
+              </span>
+            </f-tooltip>
 
             {/* 试运行按钮 */}
             <div

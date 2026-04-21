@@ -15,6 +15,8 @@
     "paths": {
       "@flow-designer/*": ["src/*"],
       "@farris/flow-devkit": ["../flow-devkit/lib/index.ts"],
+      "@farris/x-ui": ["../tmp-local-dependency/x-ui/index.d.ts"],
+      "@farris/x-conversation": ["../tmp-local-dependency/x-conversation/index.d.ts"],
       "@/*": ["src/*"]
     }
   },

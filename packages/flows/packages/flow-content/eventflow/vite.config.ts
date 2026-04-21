@@ -29,6 +29,8 @@ export default defineConfig(({ mode }) => {
         '@flow-designer': fileURLToPath(new URL('../../flow-designer/src', import.meta.url)),
         '@farris/flow-designer': fileURLToPath(new URL('../../flow-designer/src', import.meta.url)),
         '@farris/flow-devkit': fileURLToPath(new URL('../../flow-devkit/lib', import.meta.url)),
+        '@farris/x-ui/index.css': fileURLToPath(new URL('../../tmp-local-dependency/x-ui/index.css', import.meta.url)),
+        '@farris/x-conversation/index.css': fileURLToPath(new URL('../../tmp-local-dependency/x-conversation/index.css', import.meta.url)),
       },
     },
     // 代理配置
