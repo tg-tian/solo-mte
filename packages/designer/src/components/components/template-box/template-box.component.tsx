@@ -82,7 +82,7 @@ export default defineComponent({
         return;
       }
 
-      const modalEditorRef = modalService.open({
+      modalInstance.value = modalService.open({
         title: "模板库",
         width: 1200,
         height: 900,
@@ -92,8 +92,6 @@ export default defineComponent({
         enableEsc: false,
         draggable: true,
       });
-
-      modalInstance.value = modalEditorRef?.modalRef?.value;
     }
 
     /**
