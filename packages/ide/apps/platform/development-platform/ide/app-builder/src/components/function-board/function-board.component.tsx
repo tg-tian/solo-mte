@@ -80,10 +80,6 @@ export default defineComponent({
                 notifyService?.warning({ message: '请填写菜单编号和菜单名称' });
                 return;
             }
-            if (!form.groupName?.trim()) {
-                notifyService?.warning({ message: '请填写菜单分组名称' });
-                return;
-            }
             const result = await publishMenu();
             if (result) {
                 notifyService?.success({ message: '发布菜单成功' });
@@ -211,28 +207,12 @@ export default defineComponent({
                     <input class="f-publish-input" title="模块" value={form.moduleName} readonly />
                 )}
                 {renderFormField('菜单分组', true, () =>
-                    <div class="f-publish-group-field">
-                        <div class="f-publish-group-toggle">
-                            <button
-                                class={{ 'f-publish-toggle-btn': true, 'active': !form.groupIsNew }}
-                                onClick={() => { form.groupIsNew = false; }}
-                                disabled={isReadonly}
-                            >已有分组</button>
-                            <button
-                                class={{ 'f-publish-toggle-btn': true, 'active': form.groupIsNew }}
-                                onClick={() => { form.groupIsNew = true; }}
-                                disabled={isReadonly}
-                            >新建分组</button>
-                        </div>
-                        <input
-                            class="f-publish-input"
-                            title="菜单分组"
-                            placeholder="请输入菜单分组名称"
-                            value={form.groupName}
-                            readonly={isReadonly}
-                            onInput={(e: Event) => { form.groupName = (e.target as HTMLInputElement).value; }}
-                        />
-                    </div>
+                    <input
+                        class="f-publish-input"
+                        title="菜单分组"
+                        value={form.groupName}
+                        readonly
+                    />
                 )}
                 {renderFormField('功能操作', true, () =>
                     <input

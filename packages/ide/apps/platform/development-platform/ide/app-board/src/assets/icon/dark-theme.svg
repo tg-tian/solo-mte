@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_ 深色主题</title>
+    <g id="框架" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.7-个人中心" transform="translate(-481.000000, -501.000000)">
+            <g id="个人信息弹窗" transform="translate(240.000000, 290.000000)">
+                <g id="主题" transform="translate(20.000000, 205.000000)">
+                    <g id="外观切换" transform="translate(191.000000, 0.000000)">
+                        <g id="icon_-深色主题" transform="translate(30.000000, 6.000000)">
+                            <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+                            <path d="M7,4.5 C7,6.98528137 9.01471863,9 11.5,9 C12.4014194,9 13.2409346,8.73495654 13.9448664,8.27854887 C13.5673769,10.9472182 11.2734149,13 8.5,13 C5.46243388,13 3,10.5375661 3,7.5 C3,4.72658511 5.05278176,2.4326231 7.7218354,2.05462384 C7.26521822,2.75851194 7,3.59828345 7,4.5 Z" id="形状结合" fill="#001B66"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
