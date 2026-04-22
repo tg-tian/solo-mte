@@ -1,0 +1,63 @@
+{
+  "modelId": "AICam",
+  "modelName": "智能摄像头",
+  "provider": null,
+  "category": "camera",
+  "properties": {},
+  "actions": {
+    "on": {
+      "arguments": {},
+      "description": "开启"
+    },
+    "off": {
+      "arguments": {},
+      "description": "关闭"
+    }
+  },
+  "events": {
+    "attendee_detected": {
+      "fields": {
+        "vip": {
+          "type": "boolean",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "是否VIP"
+        },
+        "person_id": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "人员ID"
+        },
+        "person_name": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "人员姓名"
+        },
+        "meeting_room": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "会议室"
+        }
+      },
+      "outputs": {},
+      "level": "info",
+      "description": "识别到人员"
+    }
+  },
+  "extensions": null
+}
