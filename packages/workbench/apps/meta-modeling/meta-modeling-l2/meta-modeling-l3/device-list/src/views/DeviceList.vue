@@ -36,7 +36,7 @@
       class="premium-table"
       :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
     >
-      <el-table-column prop="deviceId" label="设备ID" min-width="150" align="center">
+      <el-table-column prop="deviceId" label="设备型号" min-width="150" align="center">
         <template #default="{ row }">
           <el-tag size="small" effect="plain">{{ row.deviceId }}</el-tag>
         </template>
@@ -125,8 +125,8 @@
         </div>
 
         <div class="form-grid">
-          <el-form-item label="设备ID" prop="deviceId">
-            <el-input v-model="form.deviceId" placeholder="请输入设备ID (例如: SN123456)" @input="handleModelInput" />
+          <el-form-item label="设备型号" prop="deviceId">
+            <el-input v-model="form.deviceId" placeholder="请输入设备型号 (例如: SN123456)" @input="handleModelInput" />
           </el-form-item>
           <el-form-item label="设备名称" prop="deviceName">
             <el-input v-model="form.deviceName" placeholder="请输入设备名称" />
@@ -292,7 +292,7 @@ const form = reactive({
 const rules = reactive<FormRules>({
     provider: [{ required: true, message: '请选择供应商', trigger: 'change' }],
     modelId: [{ required: true, message: '请选择设备模型', trigger: 'change' }],
-    deviceId: [{ required: true, message: '请输入设备ID', trigger: 'blur' }]
+    deviceId: [{ required: true, message: '请输入设备型号', trigger: 'blur' }]
   })
 
 onMounted(async () => {
@@ -416,7 +416,7 @@ const handleDeviceTypeChange = (modelId: string) => {
 }
 
 const handleModelInput = (val: string) => {
-  // 默认将设备ID字段带出到设备名称 (如果名称为空或与之前ID一致)
+  // 默认将设备型号字段带出到设备名称 (如果名称为空或与之前型号一致)
   if (!form.deviceName || form.deviceName === '') {
     form.deviceName = val
   }
