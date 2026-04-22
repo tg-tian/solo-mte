@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_消息通知</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="16" height="16"></rect>
+    </defs>
+    <g id="框架" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.0-首页-左侧导航240px" transform="translate(-24.000000, -290.000000)">
+            <g id="功能" transform="translate(12.000000, 120.000000)">
+                <g id="消息通知" transform="translate(12.000000, 168.000000)">
+                    <g id="icon_消息通知" transform="translate(0.000000, 2.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="矩形"></g>
+                        <g id="编组-2" mask="url(#mask-2)">
+                            <g transform="translate(1.000000, 1.000000)">
+                                <path d="M5,11.5 C5,12.6045695 5.8954305,13.5 7,13.5 C8.1045695,13.5 9,12.6045695 9,11.5" id="路径" stroke="#1A1A1A" stroke-width="1" fill="none"></path>
+                                <path d="M7,1.5 C8.31167628,1.5 9.49917628,2.03166186 10.3587572,2.89124279 C11.2183381,3.75082372 11.75,4.93832372 11.75,6.25 L11.75,6.25 L11.75,11.5 L2.25,11.5 L2.25,6.25 C2.25,4.93832372 2.78166186,3.75082372 3.64124279,2.89124279 C4.50082372,2.03166186 5.68832372,1.5 7,1.5 L7,1.5 Z" id="矩形" stroke="#1A1A1A" stroke-width="1" fill="none"></path>
+                                <path d="M6.8232233,0.573223305 C7.06903559,0.5 7.13153559,0.527982203 7.1767767,0.573223305 C7.2220178,0.618464406 7.25,0.680964406 7.25,0.75 L7.25,0.75 L7.25,1.5 L6.75,1.5 L6.75,0.75 C6.75,0.680964406 6.7779822,0.618464406 6.8232233,0.573223305 Z" id="矩形" stroke="#1A1A1A" stroke-width="1" fill="none"></path>
+                                <rect id="矩形" stroke="none" fill="#1A1A1A" fill-rule="evenodd" x="0" y="11" width="14" height="1"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

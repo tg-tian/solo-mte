@@ -3,6 +3,7 @@ import { FPageHeader } from '@farris/ui-vue';
 import { menuProps, MenuProps } from './menu.props';
 import { usePublish, PageFlowPage } from '../function-board/use-publish.composition';
 import { MenuSummaryItem, useMenuSummary } from './use-menu-summary.composition';
+import { UseWorkspace } from '../../composition/types';
 
 export default defineComponent({
     name: 'FAppMenu',
@@ -10,6 +11,8 @@ export default defineComponent({
     emits: [],
     setup(props: MenuProps) {
         const notifyService = inject('FNotifyService') as any;
+        const useWorkspaceComposition = inject('f-admin-workspace') as UseWorkspace;
+        const { options } = useWorkspaceComposition;
         const publishComposition = usePublish();
         const menuSummaryComposition = useMenuSummary() as any;
         const {
@@ -33,6 +36,26 @@ export default defineComponent({
 
         const initialized = ref(false);
         const activeSummaryId = ref('');
+
+        function getDefaultGroupFromCurrentBo(): { groupId: string; groupName: string } {
+            const groupId = String(options.boId || '').trim();
+            const groupName = String(options.appName || '').trim() || groupId;
+            return { groupId, groupName };
+        }
+
+        function applyDefaultGroupToForm(force = false): void {
+            const defaults = getDefaultGroupFromCurrentBo();
+            if (!defaults.groupId) {
+                return;
+            }
+            if (force || !String(publishForm.value.groupId || '').trim()) {
+                publishForm.value.groupId = defaults.groupId;
+            }
+            if (force || !String(publishForm.value.groupName || '').trim()) {
+                publishForm.value.groupName = defaults.groupName;
+            }
+            publishForm.value.groupIsNew = false;
+        }
 
         const headerButtons = computed(() => {
             return []
@@ -74,9 +97,7 @@ export default defineComponent({
         function resetFormBySummary(summaryItem: MenuSummaryItem) {
             publishForm.value.menuCode = summaryItem.code;
             publishForm.value.menuName = summaryItem.name;
-            publishForm.value.groupId = '';
-            publishForm.value.groupName = '';
-            publishForm.value.groupIsNew = false;
+            applyDefaultGroupToForm(true);
             publishForm.value.menuType = 'SysMenu';
             publishForm.value.staticParams = [];
             publishForm.value.bizOpId = 'BOManager';
@@ -188,9 +209,7 @@ export default defineComponent({
                     publishState.value.showForm = true;
                     publishForm.value.menuCode = '';
                     publishForm.value.menuName = '';
-                    publishForm.value.groupId = '';
-                    publishForm.value.groupName = '';
-                    publishForm.value.groupIsNew = false;
+                    applyDefaultGroupToForm(true);
                     publishForm.value.menuType = 'SysMenu';
                     publishForm.value.staticParams = [];
                     return;
@@ -203,11 +222,6 @@ export default defineComponent({
             const form = publishForm.value;
             if (!form.menuCode || !form.menuName) {
                 notifyService?.warning?.({ message: '请填写菜单编号和菜单名称' });
-                return;
-            }
-            const hasExistingGroup = !!(form.groupId || '').trim() && !form.groupIsNew;
-            if (!hasExistingGroup && !form.groupName?.trim()) {
-                notifyService?.warning?.({ message: '请填写菜单分组名称（新建分组）或选择已有分组' });
                 return;
             }
             const result = await publishMenu();
@@ -328,32 +342,12 @@ export default defineComponent({
                 {renderFormField('关键应用', true, () => <input class="menu-input" title="关键应用" value={form.productName} readonly />)}
                 {renderFormField('模块', true, () => <input class="menu-input" title="模块" value={form.moduleName} readonly />)}
                 {renderFormField('菜单分组', true, () =>
-                    <div class="menu-group-field">
-                        <div class="menu-group-toggle">
-                            <button
-                                class={{ 'menu-toggle-btn': true, 'active': !form.groupIsNew }}
-                                disabled={readonly}
-                                onClick={() => { form.groupIsNew = false; }}
-                            >
-                                已有分组
-                            </button>
-                            <button
-                                class={{ 'menu-toggle-btn': true, 'active': form.groupIsNew }}
-                                disabled={readonly}
-                                onClick={() => { form.groupIsNew = true; }}
-                            >
-                                新建分组
-                            </button>
-                        </div>
-                        <input
-                            class="menu-input"
-                            title="菜单分组"
-                            placeholder="请输入菜单分组名称"
-                            value={form.groupName}
-                            readonly={readonly}
-                            onInput={(event: Event) => { form.groupName = (event.target as HTMLInputElement).value; }}
-                        />
-                    </div>
+                    <input
+                        class="menu-input"
+                        title="菜单分组"
+                        value={form.groupName}
+                        readonly
+                    />
                 )}
                 {renderFormField('功能操作', true, () =>
                     <input

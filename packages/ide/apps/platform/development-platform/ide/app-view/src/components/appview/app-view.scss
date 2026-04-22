@@ -1,0 +1,11 @@
+.app-view-page {
+  .f-admin {
+    .f-admin-content > div {
+      display: none;
+
+      &.active {
+        display: block;
+      }
+    }
+  }
+}
