@@ -118,7 +118,7 @@
                   </div>
                 </template>
                 <div class="event-list-full">
-                  <el-card v-for="event in filteredEvents" :key="`${event.deviceId}-${event.timestamp}`" shadow="hover" class="event-card">
+                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${event.timestamp}-${index}`" shadow="hover" class="event-card">
                     <div class="event-card-head">
                       <div>
                         <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
