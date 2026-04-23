@@ -103,7 +103,14 @@
                   </div>
                 </template>
                 <el-table :data="deviceEventStats" border>
-                  <el-table-column prop="deviceName" label="设备名称" min-width="140" />
+                  <el-table-column prop="deviceName" label="设备名称" min-width="200">
+                    <template #default="scope">
+                      <div class="event-device-name-cell">
+                        <span class="event-device-name">{{ scope.row.deviceName }}</span>
+                        <span class="event-device-time">{{ scope.row.lastTimeText }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="deviceId" label="设备编码" min-width="150" />
                   <el-table-column prop="count" label="事件数" width="100" />
                   <el-table-column prop="lastTimeText" label="最近事件时间" min-width="180" />
@@ -648,40 +655,94 @@ function parseTimestamp(value: unknown): number | null {
   return null
 }
 
+function parseJsonIfPossible(value: unknown): unknown {
+  if (typeof value !== 'string') return value
+  const trimmed = value.trim()
+  if (!trimmed) return value
+  if (!((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']')))) {
+    return value
+  }
+  try {
+    return JSON.parse(trimmed)
+  } catch {
+    return value
+  }
+}
+
+function extractTimestampDeep(input: unknown, depth = 0): number | null {
+  if (depth > 5) return null
+
+  const direct = parseTimestamp(input)
+  if (direct !== null) return direct
+
+  const value = parseJsonIfPossible(input)
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const parsed = extractTimestampDeep(item, depth + 1)
+      if (parsed !== null) return parsed
+    }
+    return null
+  }
+
+  if (!value || typeof value !== 'object') return null
+
+  const objectValue = value as Record<string, unknown>
+  const keys = Object.keys(objectValue)
+  const priorityPattern = /(timestamp|timeStamp|eventTimestamp|occurredAt|createdAt|eventTime|time|ts|date)/i
+
+  for (const key of keys) {
+    if (!priorityPattern.test(key)) continue
+    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
+    if (parsed !== null) return parsed
+  }
+
+  for (const key of keys) {
+    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
+    if (parsed !== null) return parsed
+  }
+
+  return null
+}
+
 function resolveEventTimestamp(event: any): number | null {
-  if (!event || typeof event !== 'object') return null
-  const payload = event.payload && typeof event.payload === 'object' ? event.payload : {}
-  const payloadData = (payload as any).data && typeof (payload as any).data === 'object' ? (payload as any).data : {}
+  if (!event) return null
+  const eventObject = parseJsonIfPossible(event)
+  if (!eventObject || typeof eventObject !== 'object') return null
+  const payloadRaw = (eventObject as any).payload
+  const payload = parseJsonIfPossible(payloadRaw)
+  const payloadData = payload && typeof payload === 'object' ? parseJsonIfPossible((payload as any).data) : null
   const candidates = [
-    event.timestamp,
-    event.timeStamp,
-    event.eventTimestamp,
-    event.ts,
-    event.time,
-    event.createdAt,
-    event.occurredAt,
-    event.eventTime,
-    (payload as any).timestamp,
-    (payload as any).timeStamp,
-    (payload as any).eventTimestamp,
-    (payload as any).ts,
-    (payload as any).time,
-    (payload as any).createdAt,
-    (payload as any).occurredAt,
-    (payload as any).eventTime,
-    payloadData.timestamp,
-    payloadData.timeStamp,
-    payloadData.eventTimestamp,
-    payloadData.ts,
-    payloadData.time,
-    payloadData.createdAt,
-    payloadData.occurredAt,
-    payloadData.eventTime,
+    (eventObject as any).timestamp,
+    (eventObject as any).timeStamp,
+    (eventObject as any).eventTimestamp,
+    (eventObject as any).ts,
+    (eventObject as any).time,
+    (eventObject as any).createdAt,
+    (eventObject as any).occurredAt,
+    (eventObject as any).eventTime,
+    payload && typeof payload === 'object' ? (payload as any).timestamp : null,
+    payload && typeof payload === 'object' ? (payload as any).timeStamp : null,
+    payload && typeof payload === 'object' ? (payload as any).eventTimestamp : null,
+    payload && typeof payload === 'object' ? (payload as any).ts : null,
+    payload && typeof payload === 'object' ? (payload as any).time : null,
+    payload && typeof payload === 'object' ? (payload as any).createdAt : null,
+    payload && typeof payload === 'object' ? (payload as any).occurredAt : null,
+    payload && typeof payload === 'object' ? (payload as any).eventTime : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).timestamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).timeStamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTimestamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).ts : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).time : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).createdAt : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).occurredAt : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTime : null,
   ]
   for (const candidate of candidates) {
     const parsed = parseTimestamp(candidate)
     if (parsed !== null) return parsed
   }
+  const deepParsed = extractTimestampDeep(eventObject)
+  if (deepParsed !== null) return deepParsed
   return null
 }
 
@@ -952,6 +1013,21 @@ onBeforeUnmount(() => {
 .event-card-time-inline {
   font-size: 12px;
   color: #606266;
+}
+
+.event-device-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-device-name {
+  color: #303133;
+}
+
+.event-device-time {
+  font-size: 12px;
+  color: #909399;
 }
 
 .event-card-head {
