@@ -103,6 +103,8 @@ export interface UsePublish {
     initNewPublish: () => void;
     /** 从查询 APP 发布记录起执行后续步骤并发布（不在此拉取页面流元数据） */
     publishMenu: () => Promise<boolean>;
+    /** 取消发布：从 gspapp 的 appInvoks 移除当前页并 PUT，再 DELETE 对应功能菜单 */
+    unpublishMenu: () => Promise<boolean>;
     /** 从 GET gspapp/:boId 起归集参数（使用 workspace 业务对象标识） */
     collectPublishMenuExecutionParams: () => Promise<PublishMenuExecutionParams | null>;
 }
@@ -203,7 +205,7 @@ export function usePublish(): UsePublish {
         const metadataPath = page.relativePath;
         const projectPath = page.relativePath.split('/').slice(0, -1).join('/');
         const baseMetadataId = resolvePageMetadataId(page);
-        return `metadataPath=${metadataPath}&projectPath=${projectPath}&baseMetadataId=${baseMetadataId}`;
+        return `?baseMetadataId=${baseMetadataId}`;
     }
 
     function getBoParentIdForPublish(row: Record<string, any>): string {
@@ -397,7 +399,7 @@ export function usePublish(): UsePublish {
         );
         const invokeId = metadataId;
         const invoke: AppInvoke = {
-            appEntrance: page.code,
+            appEntrance: buildPreviewAppEntrance(page),
             appId: appId,
             code: page.code,
             id: invokeId,
@@ -417,13 +419,85 @@ export function usePublish(): UsePublish {
             name: appName,
             nameLanguage,
             layer: existingApp?.layer ?? 4,
-            url: existingApp?.url || buildAppUrl(),
+            url: buildAppUrl(),
             bizObjectId: existingApp?.bizObjectId || options.boId,
             appInvoks: baseInvoks,
             parentId: existingApp?.parentId ?? '0'
         };
         await axios.put('/api/runtime/sys/v1.0/gspapp', payload);
         return invoke;
+    }
+
+    /**
+     * 从 App 的 appInvoks 中移除当前页对应入口，并 PUT gspapp 持久化。
+     */
+    async function removeAppInvokeForCurrentPage(existingApp: AppPublishRecord): Promise<void> {
+        const page = currentPage.value!;
+        const appId = options.boId!;
+        const metadataId = resolvePageMetadataId(page);
+        const baseInvoks = existingApp.appInvoks ? [...existingApp.appInvoks] : [];
+        const filteredInvoks = baseInvoks.filter(
+            (inv: AppInvoke) => !(inv.code === page.code || inv.id === metadataId)
+        );
+        const appCode = existingApp.code;
+        const appName = existingApp.name;
+        const nameLanguage = existingApp.nameLanguage || { 'zh-CHS': appName };
+        const payload = {
+            id: appId,
+            code: appCode,
+            name: appName,
+            nameLanguage,
+            layer: existingApp.layer ?? 4,
+            url: buildAppUrl(),
+            bizObjectId: existingApp.bizObjectId || appId,
+            appInvoks: filteredInvoks,
+            parentId: existingApp.parentId ?? '0'
+        };
+        await axios.put('/api/runtime/sys/v1.0/gspapp', payload);
+    }
+
+    /** DELETE 运行时功能菜单，id 与页面元数据 id（Form metadataId）一致 */
+    async function deletePublishedFunctionMenu(pageMetadataId: string): Promise<void> {
+        const id = (pageMetadataId || '').trim();
+        if (!id) {
+            return;
+        }
+        await axios.delete(`/api/runtime/sys/v1.0/functions/${encodeURIComponent(id)}`);
+    }
+
+    /**
+     * 取消发布：先更新 AppInvoke（移除当前页），再删除功能菜单记录。
+     */
+    async function unpublishMenu(): Promise<boolean> {
+        if (!currentPage.value) {
+            return false;
+        }
+        const bizId = options.boId;
+        if (!bizId) {
+            return false;
+        }
+        publishState.value.loading = true;
+        try {
+            const page = currentPage.value;
+            const metadataId = resolvePageMetadataId(page);
+            const appRecord = await queryAppPublishRecord(bizId);
+            if (!appRecord) {
+                publishState.value.loading = false;
+                return false;
+            }
+            await removeAppInvokeForCurrentPage(appRecord);
+            await deletePublishedFunctionMenu(metadataId);
+
+            publishState.value.published = false;
+            publishState.value.matchedInvoke = null;
+            publishState.value.appRecord = await queryAppPublishRecord(bizId);
+            publishState.value.showForm = true;
+            publishState.value.loading = false;
+            return true;
+        } catch {
+            publishState.value.loading = false;
+            return false;
+        }
     }
 
     /**
@@ -623,6 +697,7 @@ export function usePublish(): UsePublish {
         selectPage,
         initNewPublish,
         publishMenu,
+        unpublishMenu,
         collectPublishMenuExecutionParams
     };
 }

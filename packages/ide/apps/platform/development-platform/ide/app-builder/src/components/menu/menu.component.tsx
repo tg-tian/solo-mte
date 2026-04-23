@@ -21,7 +21,8 @@ export default defineComponent({
             publishForm,
             selectPage,
             initNewPublish,
-            publishMenu
+            publishMenu,
+            unpublishMenu
         } = publishComposition;
         const {
             menuSummaryItems,
@@ -237,8 +238,22 @@ export default defineComponent({
             }
         }
 
-        function onClickCancelPublish() {
+        function onClickCancelDraft() {
             publishState.value.showForm = false;
+        }
+
+        async function onClickUnpublish() {
+            const result = await unpublishMenu();
+            if (result) {
+                notifyService?.success?.({ message: '取消发布成功' });
+                await refreshPublishedStateOnly();
+                const currentSummary = menuSummaryItems.value.find(item => item.id === activeSummaryId.value);
+                if (currentSummary) {
+                    await onClickSummaryItem(currentSummary);
+                }
+            } else {
+                notifyService?.show?.({ type: 'error', message: '取消发布失败' });
+            }
         }
 
         function onAddParam() {
@@ -410,7 +425,7 @@ export default defineComponent({
                 {renderParamsTable(readonly)}
                 <div class="menu-form-footer">
                     {!state.published && (
-                        <button class="menu-btn menu-btn-default" type="button" onClick={onClickCancelPublish}>
+                        <button class="menu-btn menu-btn-default" type="button" onClick={onClickCancelDraft}>
                             取消
                         </button>
                     )}
@@ -425,8 +440,13 @@ export default defineComponent({
                         </button>
                     )}
                     {state.published && (
-                        <button class="menu-btn menu-btn-default" type="button" onClick={onClickCancelPublish}>
-                            取消
+                        <button
+                            class="menu-btn menu-btn-default"
+                            type="button"
+                            disabled={publishState.value.loading}
+                            onClick={onClickUnpublish}
+                        >
+                            {publishState.value.loading ? '处理中...' : '取消发布'}
                         </button>
                     )}
                 </div>
