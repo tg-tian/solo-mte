@@ -2,13 +2,14 @@ import { ref } from "vue";
 import type { JSX } from "vue/jsx-runtime";
 import { FXConversation } from '@farris/x-conversation';
 import type { ConversationData, Message } from '@farris/x-conversation';
-import type { MessageContentUserAuth } from '@farris/x-ui';
+import type { MessageContentUserAuth, MessageContentAgentThinking } from '@farris/x-ui';
 import { useVueFlow } from '@vue-flow/core';
 import { uuid } from '@farris/flow-devkit';
 import type { FlowMetadata } from '@farris/flow-devkit';
 import type { SimplifiedFlowData } from './simplified-flow-data-types';
 import { useVueFlowDataConverter } from './use-vue-flow-data-converter';
 import { useSimplifiedFlowDataConverter } from './use-simplified-flow-data-converter';
+import { useFlowGenerator } from './use-flow-generator';
 import type { UserAuthConfirmEvent } from '@flow-designer/types';
 import '@farris/x-ui/index.css';
 import '@farris/x-conversation/index.css';
@@ -21,82 +22,6 @@ interface UseAiChatPanel {
 }
 
 let aiChatPanelInstance: UseAiChatPanel;
-
-/** Mock 简化版流程数据，模拟大模型返回 */
-const MOCK_SIMPLIFIED_FLOW_DATA: SimplifiedFlowData = {
-    nodes: [
-        {
-            id: "event_1",
-            type: "deviceEventListen",
-            name: "咖啡完成事件",
-            position: { x: 0, y: 260 },
-            deviceModelId: "coffeeMaker",
-            deviceEvent: "coffeeComplete",
-            outputParams: [
-                { code: "duration", type: "string" },
-                { code: "start_time", type: "string" },
-                { code: "coffee_type", type: "string" }
-            ]
-        },
-        {
-            id: "selector_1",
-            type: "selector",
-            name: "判断咖啡类型",
-            position: { x: 400, y: 260 },
-            branches: [
-                {
-                    logicOperator: "and",
-                    conditions: [
-                        {
-                            left: { nodeId: "event_1", variablePath: "coffee_type" },
-                            operator: "equal",
-                            right: { literal: "Cappuccino" }
-                        }
-                    ],
-                    port: "cappuccino"
-                },
-                {
-                    logicOperator: null,
-                    conditions: [],
-                    port: "else"
-                }
-            ]
-        },
-        {
-            id: "device_call_cool",
-            type: "device",
-            name: "空调制冷",
-            position: { x: 700, y: 160 },
-            deviceModelId: "AC",
-            deviceId: "",
-            deviceAction: "setMode",
-            inputParams: [{ code: "mode", value: { literal: "cool" } }]
-        },
-        {
-            id: "device_call_heat",
-            type: "device",
-            name: "空调制热",
-            position: { x: 700, y: 360 },
-            deviceModelId: "AC",
-            deviceId: "",
-            deviceAction: "setMode",
-            inputParams: [{ code: "mode", value: { literal: "heat" } }]
-        }
-    ],
-    edges: [
-        { sourceNodeId: "event_1", targetNodeId: "selector_1" },
-        {
-            sourceNodeId: "selector_1",
-            sourcePort: "cappuccino",
-            targetNodeId: "device_call_cool"
-        },
-        {
-            sourceNodeId: "selector_1",
-            sourcePort: "else",
-            targetNodeId: "device_call_heat"
-        }
-    ]
-};
 
 export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
     if (aiChatPanelInstance) {
@@ -112,9 +37,16 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
         pendingMessages: [],
     });
 
+    /** 待用户确认后应用的流程数据 */
+    const pendingFlowData = ref<SimplifiedFlowData | null>(null);
+
+    /** 正在等待接口返回时的消息 ID，用于替换而非追加新消息 */
+    const loadingMessageId = ref<string | null>(null);
+
     const { setNodes, setEdges } = useVueFlow();
     const { convertFlowMetadata2VueFlowData } = useVueFlowDataConverter();
     const { convertSimplifiedToOriginal } = useSimplifiedFlowDataConverter();
+    const { generateFlow } = useFlowGenerator();
 
     function openAiChatPanel() {
         showAiChatPanel.value = true;
@@ -150,11 +82,10 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
      * 处理用户点击"应用"按钮
      */
     function handleUserAuthConfirm(event: UserAuthConfirmEvent) {
-        if (event.optionId === 'apply') {
-            // 应用流程数据到画布
-            applySimplifiedFlowData(MOCK_SIMPLIFIED_FLOW_DATA);
+        if (event.optionId === 'apply' && pendingFlowData.value) {
+            applySimplifiedFlowData(pendingFlowData.value);
+            pendingFlowData.value = null;
 
-            // 追加"已应用"消息
             const confirmMessage: Message = {
                 id: `agent-${Date.now()}`,
                 name: 'AI 助手',
@@ -174,6 +105,11 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
         if (!content || typeof content !== 'string' || !content.trim()) {
             return;
         }
+        // 正在等待回复时，禁止再次发送
+        if (loadingMessageId.value !== null) {
+            return;
+        }
+
         const userMessage: Message = {
             id: `user-${Date.now()}`,
             name: '我',
@@ -187,30 +123,67 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
             messages: [...conversationData.value.messages, userMessage],
         };
 
-        // Mock: 模拟大模型返回，询问是否应用流程
-        // TODO: 替换为实际的大模型 API 调用
-        setTimeout(() => {
+        // 立即显示"思考中..."加载消息
+        loadingMessageId.value = `agent-${Date.now()}`;
+        const loadingMessage: Message = {
+            id: loadingMessageId.value,
+            name: 'AI 助手',
+            role: 'assistant',
+            content: {
+                type: 'AgentThinking',
+                streamStatus: 'start',
+                text: ''
+            } as MessageContentAgentThinking,
+            timestamp: Date.now(),
+            agentId: '',
+        };
+        conversationData.value = {
+            ...conversationData.value,
+            messages: [...conversationData.value.messages, loadingMessage],
+        };
+
+        // 调用接口生成流程
+        generateFlow(content).then(({ data, description }) => {
+            pendingFlowData.value = data;
+
             const userAuthContent: MessageContentUserAuth = {
                 type: 'UserAuth',
                 standardType: 'agent/request-run',
-                description: '已根据您的描述生成流程，是否应用到画布？',
+                description: description
+                    ? `已生成流程：${description}，是否应用到画布？`
+                    : '已生成流程，是否应用到画布？',
                 options: [
                     { optionId: 'apply', name: '应用', message: '用户确认应用流程' }
                 ]
             };
-            const agentMessage: Message = {
-                id: `agent-${Date.now()}`,
-                name: 'AI 助手',
-                role: 'assistant',
-                content: userAuthContent,
-                timestamp: Date.now(),
-                agentId: '',
-            };
+
+            // 替换加载消息为实际内容
+            const updatedMessages = conversationData.value.messages.map(msg =>
+                msg.id === loadingMessageId.value
+                    ? { ...msg, content: userAuthContent }
+                    : msg
+            );
             conversationData.value = {
                 ...conversationData.value,
-                messages: [...conversationData.value.messages, agentMessage],
+                messages: updatedMessages,
             };
-        }, 1000);
+            loadingMessageId.value = null;
+        }).catch((error: Error) => {
+            // 替换为错误消息
+            const errorMessages = conversationData.value.messages.map(msg =>
+                msg.id === loadingMessageId.value
+                    ? {
+                        ...msg,
+                        content: `生成流程失败：${error.message}` as unknown as MessageContentUserAuth
+                    }
+                    : msg
+            );
+            conversationData.value = {
+                ...conversationData.value,
+                messages: errorMessages,
+            };
+            loadingMessageId.value = null;
+        });
     }
 
     function renderAiChatPanel() {

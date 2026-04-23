@@ -30,7 +30,10 @@ export default defineConfig(({ mode }) => {
         '@farris/flow-designer': fileURLToPath(new URL('../../flow-designer/src', import.meta.url)),
         '@farris/flow-devkit': fileURLToPath(new URL('../../flow-devkit/lib', import.meta.url)),
         '@farris/x-ui/index.css': fileURLToPath(new URL('../../tmp-local-dependency/x-ui/index.css', import.meta.url)),
+        '@farris/x-ui/components/coding': fileURLToPath(new URL('../../tmp-local-dependency/x-ui/farris.x-ui.esm.js', import.meta.url)),
+        '@farris/x-ui': fileURLToPath(new URL('../../tmp-local-dependency/x-ui/farris.x-ui.esm.js', import.meta.url)),
         '@farris/x-conversation/index.css': fileURLToPath(new URL('../../tmp-local-dependency/x-conversation/index.css', import.meta.url)),
+        '@farris/x-conversation': fileURLToPath(new URL('../../tmp-local-dependency/x-conversation/farris.x-conversation.esm.js', import.meta.url)),
       },
     },
     // 代理配置

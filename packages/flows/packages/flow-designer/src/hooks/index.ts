@@ -21,3 +21,4 @@ export * from './use-node-types';
 export * from './use-ai-chat-panel';
 export * from './use-simplified-flow-data-converter';
 export * from './simplified-flow-data-types';
+export * from './use-flow-generator';
