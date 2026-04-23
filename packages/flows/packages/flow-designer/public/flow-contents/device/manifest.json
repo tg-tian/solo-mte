@@ -1,1 +1,6 @@
-["coffee-maker", "ac", "robot", "aicam"]
+[
+    "coffee-maker",
+    "ac",
+    "delivery-robot",
+    "aicam"
+]
