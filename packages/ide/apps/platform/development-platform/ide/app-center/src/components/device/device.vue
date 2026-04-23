@@ -21,7 +21,7 @@
               </el-form>
               <div class="device-actions">
                 <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
-                <el-button @click="openLibraryConfig">配置设备库</el-button>
+                <el-button type="primary" @click="openLibraryConfig">配置设备库</el-button>
                 <el-button type="primary" @click="handleConfig">物理平台配置</el-button>
               </div>
             </div>
@@ -106,6 +106,8 @@
                   <el-table-column prop="deviceName" label="设备名称" min-width="140" />
                   <el-table-column prop="deviceId" label="设备编码" min-width="150" />
                   <el-table-column prop="count" label="事件数" width="100" />
+                  <el-table-column prop="lastTimeText" label="最近事件时间" min-width="180" />
+                  <el-table-column prop="lastType" label="最新事件类型" min-width="140" show-overflow-tooltip />
                   <el-table-column prop="typesText" label="事件类型" min-width="180" show-overflow-tooltip />
                 </el-table>
               </el-card>
@@ -118,7 +120,8 @@
                   </div>
                 </template>
                 <div class="event-list-full">
-                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${event.timestamp}-${index}`" shadow="hover" class="event-card">
+                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${resolveEventTimestamp(event) ?? 'na'}-${index}`" shadow="hover" class="event-card">
+                    <div class="event-card-time">发生时间：{{ formatEventTime(event) }}</div>
                     <div class="event-card-head">
                       <div>
                         <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
@@ -126,7 +129,6 @@
                       </div>
                       <div class="event-card-right">
                         <el-tag size="small">{{ getEventType(event) }}</el-tag>
-                        <span>{{ formatTime(event.timestamp) }}</span>
                       </div>
                     </div>
                     <pre>{{ formatValue(event.payload) }}</pre>
@@ -344,26 +346,44 @@ const eventDeviceOptions = computed(() => {
 
 const filteredEvents = computed(() => {
   const list = deviceStore.recentEvents || []
-  if (!eventDeviceFilter.value) return list
-  return list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+  const result = eventDeviceFilter.value
+    ? list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+    : list
+  return [...result].sort((a: any, b: any) => (resolveEventTimestamp(b) || 0) - (resolveEventTimestamp(a) || 0))
 })
 
 const deviceEventStats = computed(() => {
-  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string> }>()
+  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string>; lastTimestamp: number; lastType: string }>()
   for (const event of filteredEvents.value) {
     const deviceId = event?.deviceId || 'unknown'
     const name = getDeviceDisplayName(deviceId)
     if (!grouped.has(deviceId)) {
-      grouped.set(deviceId, { deviceId, deviceName: name, count: 0, types: new Set<string>() })
+      grouped.set(deviceId, {
+        deviceId,
+        deviceName: name,
+        count: 0,
+        types: new Set<string>(),
+        lastTimestamp: 0,
+        lastType: '-',
+      })
     }
     const current = grouped.get(deviceId)!
+    const eventType = getEventType(event)
+    const eventTimestamp = resolveEventTimestamp(event) || 0
     current.count += 1
-    current.types.add(getEventType(event))
+    current.types.add(eventType)
+    if (eventTimestamp >= current.lastTimestamp) {
+      current.lastTimestamp = eventTimestamp
+      current.lastType = eventType
+    }
   }
-  return Array.from(grouped.values()).map((item) => ({
-    ...item,
-    typesText: Array.from(item.types).join('、') || '-',
-  }))
+  return Array.from(grouped.values())
+    .map((item) => ({
+      ...item,
+      lastTimeText: formatTime(item.lastTimestamp),
+      typesText: Array.from(item.types).join('、') || '-',
+    }))
+    .sort((a, b) => b.count - a.count)
 })
 
 const eventDeviceCount = computed(() => deviceEventStats.value.length)
@@ -606,8 +626,54 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
-function formatTime(val?: number) {
+function parseTimestamp(value: unknown): number | null {
+  if (value === null || value === undefined || value === '') return null
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value.getTime()
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value < 1e12 ? value * 1000 : value
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return null
+    if (/^\d+(\.\d+)?$/.test(trimmed)) {
+      const numeric = Number(trimmed)
+      if (!Number.isFinite(numeric)) return null
+      return numeric < 1e12 ? numeric * 1000 : numeric
+    }
+    const parsed = Date.parse(trimmed)
+    return Number.isNaN(parsed) ? null : parsed
+  }
+  return null
+}
+
+function resolveEventTimestamp(event: any): number | null {
+  if (!event || typeof event !== 'object') return null
+  const payload = event.payload && typeof event.payload === 'object' ? event.payload : {}
+  const candidates = [
+    event.timestamp,
+    event.ts,
+    event.time,
+    event.createdAt,
+    event.occurredAt,
+    (payload as any).timestamp,
+    (payload as any).ts,
+    (payload as any).time,
+    (payload as any).createdAt,
+    (payload as any).occurredAt,
+  ]
+  for (const candidate of candidates) {
+    const parsed = parseTimestamp(candidate)
+    if (parsed) return parsed
+  }
+  return null
+}
+
+function formatTime(val?: number | null) {
   return val ? new Date(val).toLocaleString() : '-'
+}
+
+function formatEventTime(event: any) {
+  return formatTime(resolveEventTimestamp(event))
 }
 
 function getDeviceDisplayName(deviceId?: string) {
@@ -848,11 +914,20 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 2px;
 }
 
 .event-card {
   background: #f8fafc;
   border: 1px solid #ebeef5;
+}
+
+.event-card-time {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #606266;
 }
 
 .event-card-head {
