@@ -121,10 +121,12 @@
                 </template>
                 <div class="event-list-full">
                   <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${resolveEventTimestamp(event) ?? 'na'}-${index}`" shadow="hover" class="event-card">
-                    <div class="event-card-time">发生时间：{{ formatEventTime(event) }}</div>
                     <div class="event-card-head">
                       <div>
-                        <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                        <div class="event-card-main">
+                          <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                          <span class="event-card-time-inline">{{ formatEventTime(event) }}</span>
+                        </div>
                         <div class="event-card-sub">{{ event.deviceId }}</div>
                       </div>
                       <div class="event-card-right">
@@ -649,27 +651,42 @@ function parseTimestamp(value: unknown): number | null {
 function resolveEventTimestamp(event: any): number | null {
   if (!event || typeof event !== 'object') return null
   const payload = event.payload && typeof event.payload === 'object' ? event.payload : {}
+  const payloadData = (payload as any).data && typeof (payload as any).data === 'object' ? (payload as any).data : {}
   const candidates = [
     event.timestamp,
+    event.timeStamp,
+    event.eventTimestamp,
     event.ts,
     event.time,
     event.createdAt,
     event.occurredAt,
+    event.eventTime,
     (payload as any).timestamp,
+    (payload as any).timeStamp,
+    (payload as any).eventTimestamp,
     (payload as any).ts,
     (payload as any).time,
     (payload as any).createdAt,
     (payload as any).occurredAt,
+    (payload as any).eventTime,
+    payloadData.timestamp,
+    payloadData.timeStamp,
+    payloadData.eventTimestamp,
+    payloadData.ts,
+    payloadData.time,
+    payloadData.createdAt,
+    payloadData.occurredAt,
+    payloadData.eventTime,
   ]
   for (const candidate of candidates) {
     const parsed = parseTimestamp(candidate)
-    if (parsed) return parsed
+    if (parsed !== null) return parsed
   }
   return null
 }
 
 function formatTime(val?: number | null) {
-  return val ? new Date(val).toLocaleString() : '-'
+  return val !== null && val !== undefined ? new Date(val).toLocaleString() : '-'
 }
 
 function formatEventTime(event: any) {
@@ -914,18 +931,25 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 620px;
+  height: 620px;
   overflow-y: auto;
   padding-right: 2px;
+  overscroll-behavior: contain;
 }
 
 .event-card {
+  flex: 0 0 auto;
   background: #f8fafc;
   border: 1px solid #ebeef5;
 }
 
-.event-card-time {
-  margin-bottom: 10px;
+.event-card-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.event-card-time-inline {
   font-size: 12px;
   color: #606266;
 }
