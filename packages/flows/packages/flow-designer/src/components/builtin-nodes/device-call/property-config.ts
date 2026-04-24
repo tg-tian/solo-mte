@@ -2,15 +2,20 @@ import {
     BaseControlProperty,
     useDeviceInfo,
     DeviceUtils,
+    BasicTypeRefer,
+    ValueExpressUtils,
     type NodeData,
     type DeviceModel,
     type Parameter,
     type FvComboListData,
+    type ValueExpress,
 } from '@farris/flow-devkit';
 
 export class NodeProperty extends BaseControlProperty {
 
     public getPropertyConfig(nodeData: NodeData) {
+        const self = this;
+        this.setupOutputParams(nodeData);
         const deviceModelId = nodeData.deviceModelId;
         const { deviceCategoriesWithAction } = useDeviceInfo();
         const deviceCategory: DeviceModel = deviceCategoriesWithAction.value.find((device: DeviceModel) => {
@@ -69,6 +74,9 @@ export class NodeProperty extends BaseControlProperty {
                     });
                     nodeData.inputParams = newParams;
                 }
+                if (changeObject?.propertyID === 'deviceId') {
+                    self.updateDeviceIdInOutputParams(nodeData.deviceId, nodeData);
+                }
             },
         };
         this.propertyConfig.categories['arguments'] = {
@@ -84,6 +92,44 @@ export class NodeProperty extends BaseControlProperty {
                 }
             },
         };
+        this.propertyConfig.categories['outputParams'] = {
+            title: '输出参数',
+            properties: {
+                outputParams: {
+                    type: "array",
+                    editor: {
+                        type: 'fvf-json-schema-editor',
+                        readonly: true,
+                    }
+                }
+            }
+        };
         return this.propertyConfig;
+    }
+
+    private getDeviceIdValueExpress(deviceId?: string): ValueExpress | undefined {
+        if (typeof deviceId === 'string' && deviceId) {
+            return ValueExpressUtils.createStringConstExpr(deviceId);
+        } else {
+            return undefined;
+        }
+    }
+
+    private setupOutputParams(nodeData: NodeData): void {
+        if (Array.isArray(nodeData.outputParams) && nodeData.outputParams.length === 1) {
+            return;
+        }
+        const DEVICE_ID_PARAM_CODE = 'deviceId';
+        nodeData.outputParams = [{
+            id: DEVICE_ID_PARAM_CODE,
+            code: DEVICE_ID_PARAM_CODE,
+            type: BasicTypeRefer.StringType,
+            valueExpr: this.getDeviceIdValueExpress(nodeData.deviceId),
+        }];
+    }
+
+    private updateDeviceIdInOutputParams(newDeviceId: string, nodeData: NodeData): void {
+        const newValueExpr = this.getDeviceIdValueExpress(newDeviceId);
+        nodeData.outputParams[0].valueExpr = newValueExpr;
     }
 }
