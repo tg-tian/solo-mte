@@ -362,6 +362,7 @@ const filteredEvents = computed(() => {
 })
 
 const deviceEventStats = computed(() => {
+  const currentSystemTime = Date.now()
   const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string>; lastTimestamp: number; lastType: string }>()
   for (const event of filteredEvents.value) {
     const deviceId = event?.deviceId || 'unknown'
@@ -378,13 +379,10 @@ const deviceEventStats = computed(() => {
     }
     const current = grouped.get(deviceId)!
     const eventType = getEventType(event)
-    const eventTimestamp = resolveEventTimestamp(event) || 0
     current.count += 1
     current.types.add(eventType)
-    if (eventTimestamp >= current.lastTimestamp) {
-      current.lastTimestamp = eventTimestamp
-      current.lastType = eventType
-    }
+    current.lastTimestamp = currentSystemTime
+    current.lastType = eventType
   }
   return Array.from(grouped.values())
     .map((item) => ({
@@ -636,10 +634,20 @@ function formatValue(val: unknown) {
 }
 
 function parseTimestamp(value: unknown): number | null {
+  const minValidMs = Date.UTC(2000, 0, 1, 0, 0, 0, 0)
+  const maxValidMs = Date.UTC(2100, 0, 1, 0, 0, 0, 0)
+
+  const normalizeAndValidate = (input: number): number | null => {
+    const normalized = input < 1e12 ? input * 1000 : input
+    if (!Number.isFinite(normalized)) return null
+    if (normalized < minValidMs || normalized > maxValidMs) return null
+    return normalized
+  }
+
   if (value === null || value === undefined || value === '') return null
   if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value.getTime()
   if (typeof value === 'number' && Number.isFinite(value)) {
-    return value < 1e12 ? value * 1000 : value
+    return normalizeAndValidate(value)
   }
   if (typeof value === 'string') {
     const trimmed = value.trim()
@@ -647,10 +655,11 @@ function parseTimestamp(value: unknown): number | null {
     if (/^\d+(\.\d+)?$/.test(trimmed)) {
       const numeric = Number(trimmed)
       if (!Number.isFinite(numeric)) return null
-      return numeric < 1e12 ? numeric * 1000 : numeric
+      return normalizeAndValidate(numeric)
     }
     const parsed = Date.parse(trimmed)
-    return Number.isNaN(parsed) ? null : parsed
+    if (Number.isNaN(parsed)) return null
+    return parsed < minValidMs || parsed > maxValidMs ? null : parsed
   }
   return null
 }
