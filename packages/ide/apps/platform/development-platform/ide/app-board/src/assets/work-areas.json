@@ -1,0 +1,19 @@
+[
+    {
+        "workAreaId": "default",
+        "instanceId": "default",
+        "code": "default",
+        "name": "default",
+        "functions": [
+            {
+                "functionId": "home",
+                "instanceId": "home",
+                "code": "home",
+                "name": "",
+                "url": "/platform/runtime/sys/web/home/index.html",
+                "icon": "f-icon f-icon-index-face",
+                "fix": true
+            }
+        ]
+    }
+]

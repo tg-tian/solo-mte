@@ -103,6 +103,8 @@ export interface UsePublish {
     initNewPublish: () => void;
     /** 从查询 APP 发布记录起执行后续步骤并发布（不在此拉取页面流元数据） */
     publishMenu: () => Promise<boolean>;
+    /** 取消发布：从 gspapp 的 appInvoks 移除当前页并 PUT，再 DELETE 对应功能菜单 */
+    unpublishMenu: () => Promise<boolean>;
     /** 从 GET gspapp/:boId 起归集参数（使用 workspace 业务对象标识） */
     collectPublishMenuExecutionParams: () => Promise<PublishMenuExecutionParams | null>;
 }
@@ -148,11 +150,9 @@ export function usePublish(): UsePublish {
         staticParams: []
     });
 
+    /** 渲染器 HTML 入口（不含 hash），与 app-view 中 buildGspAppInvokeUrl 组合 appEntrance 使用 */
     function buildAppUrl(): string {
-        const pathSegments = options.path.split('/').filter(Boolean);
-        // e.g. /apps/cases/referencies/web/bo-referenceapp-front/index.html
-        const urlParts = pathSegments.map(s => s.toLowerCase());
-        return `/apps/${urlParts.join('/')}/index.html`;
+        return '/platform/common/web/renderer/index.html';
     }
 
     /** Step 1: 查询页面流元数据标识 */
@@ -195,6 +195,17 @@ export function usePublish(): UsePublish {
             return String(uri);
         }
         return page.id;
+    }
+
+    /**
+     * gspapp AppInvoke.appEntrance：固定 `#/preview` 路由 + 与预览页一致的 query（metadataPath / projectPath / baseMetadataId）。
+     * 最终 iframe 地址形如：.../index.html#/preview?metadataPath=...&projectPath=...&baseMetadataId=...
+     */
+    function buildPreviewAppEntrance(page: PageFlowPage): string {
+        const metadataPath = page.relativePath;
+        const projectPath = page.relativePath.split('/').slice(0, -1).join('/');
+        const baseMetadataId = resolvePageMetadataId(page);
+        return `?baseMetadataId=${baseMetadataId}`;
     }
 
     function getBoParentIdForPublish(row: Record<string, any>): string {
@@ -316,20 +327,46 @@ export function usePublish(): UsePublish {
         publishForm.value.menuName = currentPage.value.name;
         publishForm.value.bizOpId = 'BOManager';
         publishForm.value.bizOpCode = 'BOManager';
-        publishForm.value.groupId = '';
-        publishForm.value.groupName = '';
-        publishForm.value.groupIsNew = false;
+        applyDefaultMenuGroupToForm(true);
         publishForm.value.menuType = 'SysMenu';
         publishForm.value.staticParams = [];
         publishState.value.showForm = true;
     }
 
-    function generateUUID(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-            const r = (Math.random() * 16) | 0;
-            const v = c === 'x' ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-        });
+    function getDefaultMenuGroup(): { groupId: string; groupName: string } {
+        const groupId = String(options.boId || '').trim();
+        const groupName = String(options.appName || '').trim() || groupId;
+        return { groupId, groupName };
+    }
+
+    function applyDefaultMenuGroupToForm(force = false): void {
+        const defaults = getDefaultMenuGroup();
+        if (!defaults.groupId) {
+            return;
+        }
+        if (force || !String(publishForm.value.groupId || '').trim()) {
+            publishForm.value.groupId = defaults.groupId;
+        }
+        if (force || !String(publishForm.value.groupName || '').trim()) {
+            publishForm.value.groupName = defaults.groupName;
+        }
+        publishForm.value.groupIsNew = false;
+    }
+
+    function normalizeFunctionsGetPayload(raw: unknown): Record<string, any> | null {
+        if (raw === undefined || raw === null) {
+            return null;
+        }
+        if (Array.isArray(raw)) {
+            const first = raw[0];
+            return first && typeof first === 'object' && !Array.isArray(first)
+                ? (first as Record<string, any>)
+                : null;
+        }
+        if (typeof raw === 'object') {
+            return raw as Record<string, any>;
+        }
+        return null;
     }
 
     /** Step 4: 创建 App（id = 业务对象标识） */
@@ -362,7 +399,7 @@ export function usePublish(): UsePublish {
         );
         const invokeId = metadataId;
         const invoke: AppInvoke = {
-            appEntrance: page.code,
+            appEntrance: buildPreviewAppEntrance(page),
             appId: appId,
             code: page.code,
             id: invokeId,
@@ -382,7 +419,7 @@ export function usePublish(): UsePublish {
             name: appName,
             nameLanguage,
             layer: existingApp?.layer ?? 4,
-            url: existingApp?.url || buildAppUrl(),
+            url: buildAppUrl(),
             bizObjectId: existingApp?.bizObjectId || options.boId,
             appInvoks: baseInvoks,
             parentId: existingApp?.parentId ?? '0'
@@ -392,22 +429,102 @@ export function usePublish(): UsePublish {
     }
 
     /**
-     * Step 6: 创建菜单分组。
-     * 用户只需填写分组名称：自动生成 GUID 作为分组 id，POST 创建分组并回写 form.groupId。
-     * 未填名称时，若表单上已有 groupId（例如只读回显）则直接返回该 id。
+     * 从 App 的 appInvoks 中移除当前页对应入口，并 PUT gspapp 持久化。
+     */
+    async function removeAppInvokeForCurrentPage(existingApp: AppPublishRecord): Promise<void> {
+        const page = currentPage.value!;
+        const appId = options.boId!;
+        const metadataId = resolvePageMetadataId(page);
+        const baseInvoks = existingApp.appInvoks ? [...existingApp.appInvoks] : [];
+        const filteredInvoks = baseInvoks.filter(
+            (inv: AppInvoke) => !(inv.code === page.code || inv.id === metadataId)
+        );
+        const appCode = existingApp.code;
+        const appName = existingApp.name;
+        const nameLanguage = existingApp.nameLanguage || { 'zh-CHS': appName };
+        const payload = {
+            id: appId,
+            code: appCode,
+            name: appName,
+            nameLanguage,
+            layer: existingApp.layer ?? 4,
+            url: buildAppUrl(),
+            bizObjectId: existingApp.bizObjectId || appId,
+            appInvoks: filteredInvoks,
+            parentId: existingApp.parentId ?? '0'
+        };
+        await axios.put('/api/runtime/sys/v1.0/gspapp', payload);
+    }
+
+    /** DELETE 运行时功能菜单，id 与页面元数据 id（Form metadataId）一致 */
+    async function deletePublishedFunctionMenu(pageMetadataId: string): Promise<void> {
+        const id = (pageMetadataId || '').trim();
+        if (!id) {
+            return;
+        }
+        await axios.delete(`/api/runtime/sys/v1.0/functions/${encodeURIComponent(id)}`);
+    }
+
+    /**
+     * 取消发布：先更新 AppInvoke（移除当前页），再删除功能菜单记录。
+     */
+    async function unpublishMenu(): Promise<boolean> {
+        if (!currentPage.value) {
+            return false;
+        }
+        const bizId = options.boId;
+        if (!bizId) {
+            return false;
+        }
+        publishState.value.loading = true;
+        try {
+            const page = currentPage.value;
+            const metadataId = resolvePageMetadataId(page);
+            const appRecord = await queryAppPublishRecord(bizId);
+            if (!appRecord) {
+                publishState.value.loading = false;
+                return false;
+            }
+            await removeAppInvokeForCurrentPage(appRecord);
+            await deletePublishedFunctionMenu(metadataId);
+
+            publishState.value.published = false;
+            publishState.value.matchedInvoke = null;
+            publishState.value.appRecord = await queryAppPublishRecord(bizId);
+            publishState.value.showForm = true;
+            publishState.value.loading = false;
+            return true;
+        } catch {
+            publishState.value.loading = false;
+            return false;
+        }
+    }
+
+    /**
+     * Step 6: 复用或创建菜单分组。
+     * 默认分组固定使用当前业务对象（id/name），先查是否已存在；不存在时再创建。
      */
     async function createMenuGroup(): Promise<string> {
+        applyDefaultMenuGroupToForm();
         const form = publishForm.value;
-        const existingId = (form.groupId || '').trim();
-        /** 已有分组（如从上级菜单回填）：直接使用，不再 POST 新建 */
-        if (existingId && !form.groupIsNew) {
-            return existingId;
-        }
-        const name = form.groupName?.trim();
-        if (!name) {
+        const groupId = (form.groupId || '').trim();
+        const name = (form.groupName || '').trim() || groupId;
+        if (!groupId || !name) {
             return '';
         }
-        const groupId = generateUUID();
+        try {
+            const getUri = `/api/runtime/sys/v1.0/functions/${encodeURIComponent(groupId)}`;
+            const existingRes = await axios.get(getUri);
+            const existingRecord = normalizeFunctionsGetPayload(existingRes.data);
+            if (existingRecord?.id) {
+                publishForm.value.groupId = String(existingRecord.id);
+                publishForm.value.groupName = String(existingRecord.name ?? existingRecord.code ?? name);
+                publishForm.value.groupIsNew = false;
+                return String(existingRecord.id);
+            }
+        } catch {
+            // 分组不存在或查询失败时，回落到创建
+        }
         const payload = {
             id: groupId,
             parentId: form.moduleId,
@@ -423,6 +540,8 @@ export function usePublish(): UsePublish {
         };
         await axios.post('/api/runtime/sys/v1.0/functions', payload);
         publishForm.value.groupId = groupId;
+        publishForm.value.groupName = name;
+        publishForm.value.groupIsNew = false;
         return groupId;
     }
 
@@ -485,7 +604,7 @@ export function usePublish(): UsePublish {
             appPublishRecordBeforePublish: appRecord,
             targetPage: page,
             form: { ...publishForm.value },
-            appUrl: buildAppUrl()
+            appUrl: `${buildAppUrl()}#/${buildPreviewAppEntrance(page)}`
         };
     }
 
@@ -578,6 +697,7 @@ export function usePublish(): UsePublish {
         selectPage,
         initNewPublish,
         publishMenu,
+        unpublishMenu,
         collectPublishMenuExecutionParams
     };
 }

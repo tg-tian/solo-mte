@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_退出登录@1x</title>
+    <g id="框架" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.7-个人中心" transform="translate(-260.000000, -658.000000)">
+            <g id="个人信息弹窗" transform="translate(240.000000, 290.000000)">
+                <g id="icon_退出登录" transform="translate(20.000000, 368.000000)">
+                    <rect id="矩形" x="0" y="0" width="20" height="20"></rect>
+                    <path d="M5.55045978,3.35056853 C5.11600607,3.64186436 4.71168118,3.97461032 4.34314575,4.34314575 C2.8954305,5.790861 2,7.790861 2,10 C2,14.418278 5.581722,18 10,18 C14.418278,18 18,14.418278 18,10 C18,7.790861 17.1045695,5.790861 15.6568542,4.34314575 C15.2883188,3.97461032 14.8839939,3.64186436 14.4495402,3.35056853" id="路径" stroke="#1A1A1A" stroke-width="1.1" stroke-linecap="round"></path>
+                    <rect id="矩形" fill="#1A1A1A" fill-rule="nonzero" x="9.45" y="2" width="1.1" height="9"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

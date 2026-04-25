@@ -1,0 +1,224 @@
+[
+    {
+        "modelId": "coffeeMaker",
+        "modelName": "咖啡机",
+        "icon": "./device-assets/coffee-maker.png",
+        "category": "coffer",
+        "provider": null,
+        "properties": {},
+        "actions": {
+            "makeCoffee": {
+                "arguments": {
+                    "coffee_type": {
+                        "type": "enum",
+                        "unit": "",
+                        "readOnly": false,
+                        "min": null,
+                        "max": null,
+                        "enumValues": [
+                            "Americano",
+                            "Latte",
+                            "Espresso",
+                            "Cappuccino"
+                        ],
+                        "description": "咖啡种类"
+                    }
+                },
+                "description": "制作咖啡"
+            }
+        },
+        "events": {
+            "coffeeComplete": {
+                "fields": {
+                    "duration": {
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "min": null,
+                        "max": null,
+                        "enumValues": [],
+                        "description": "制作时长"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "min": null,
+                        "max": null,
+                        "enumValues": [],
+                        "description": "开始时间"
+                    },
+                    "coffee_type": {
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "min": null,
+                        "max": null,
+                        "enumValues": [],
+                        "description": "咖啡类型"
+                    }
+                },
+                "outputs": null,
+                "level": "info",
+                "description": "咖啡制作完成"
+            }
+        },
+        "extensions": null
+    },
+    {
+        "modelId": "AC",
+        "modelName": "空调",
+        "icon": "./device-assets/ac.png",
+        "category": "ac",
+        "provider": null,
+        "properties": {},
+        "actions": {
+            "setMode": {
+                "arguments": {
+                    "mode": {
+                        "type": "enum",
+                        "unit": null,
+                        "readOnly": null,
+                        "min": null,
+                        "max": null,
+                        "enumValues": [
+                            "cool",
+                            "heat",
+                            "fan",
+                            "dry",
+                            "auto"
+                        ],
+                        "description": "模式"
+                    }
+                },
+                "description": "设置模式"
+            },
+            "setTemperature": {
+                "arguments": {
+                    "temp": {
+                        "type": "number",
+                        "unit": null,
+                        "readOnly": null,
+                        "min": 16,
+                        "max": 30,
+                        "enumValues": null,
+                        "description": "温度"
+                    }
+                },
+                "description": "设置温度"
+            }
+        },
+        "events": {},
+        "extensions": null
+    },
+    {
+        "events": {
+            "deliveryFailed": {
+                "level": "info",
+                "fields": {
+                    "reason": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "失败原因"
+                    }
+                },
+                "outputs": {},
+                "description": "送餐失败"
+            },
+            "deliveryComplete": {
+                "level": "info",
+                "fields": {
+                    "order_id": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "订单ID"
+                    },
+                    "finish_time": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "完成时间"
+                    }
+                },
+                "outputs": {},
+                "description": "送餐完成"
+            }
+        },
+        "actions": {
+            "deliverFood": {
+                "arguments": {
+                    "order_id": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "订单ID"
+                    },
+                    "pickup_location": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "取餐位置"
+                    },
+                    "target_location": {
+                        "max": null,
+                        "min": null,
+                        "type": "string",
+                        "unit": "",
+                        "readOnly": false,
+                        "enumValues": [],
+                        "description": "送达位置"
+                    }
+                },
+                "description": "执行送餐任务"
+            }
+        },
+        "modelId": "DeliveryRobot",
+        "category": "robot",
+        "provider": null,
+        "modelName": "送餐机器人",
+        "extensions": null,
+        "properties": {
+            "status": {
+                "max": null,
+                "min": null,
+                "type": "enum",
+                "unit": "",
+                "readOnly": false,
+                "enumValues": [
+                    "idle",
+                    "moving",
+                    "delivering",
+                    "charging",
+                    "error"
+                ],
+                "description": "机器人状态"
+            },
+            "batteryLevel": {
+                "max": 100.0,
+                "min": 0.0,
+                "type": "number",
+                "unit": "%",
+                "readOnly": false,
+                "enumValues": [],
+                "description": "电量"
+            }
+        }
+    }
+]

@@ -1,0 +1,38 @@
+{
+    "title": "X Workbench",
+    "emptyFunctionPage": "./assets/empty-page.html",
+    "functionSourceUri": "/api/runtime/sys/v1.0/functions/funcGroups?funcType=4",
+    "workAreaSourceUri": "./assets/work-areas.json",
+    "residentWorkAreas": [
+        {
+            "workAreaId": "default",
+            "instanceId": "default",
+            "code": "default",
+            "name": "default",
+            "functions": [
+                {
+                    "functionId": "home",
+                    "instanceId": "home",
+                    "code": "home",
+                    "name": "",
+                    "url": "/platform/runtime/sys/web/home/index.html",
+                    "icon": "f-icon f-icon-index-face",
+                    "fix": true
+                }
+            ]
+        }
+    ],
+    "residentFunctions": [
+        {
+            "functionId": "home",
+            "instanceId": "home",
+            "code": "home",
+            "name": "",
+            "url": "/platform/runtime/sys/web/home/index.html",
+            "icon": "f-icon f-icon-index-face",
+            "fix": true
+        }
+    ],
+    "resolveFunctionUri": "/api/runtime/sys/v1.0/functions/funcInvok",
+    "fallbackResovleFunctionUri": ""
+}

@@ -1,0 +1,111 @@
+{
+  "modelId": "DeliveryRobot",
+  "modelName": "送餐机器人",
+  "icon": "./device-assets/robot.png",
+  "provider": "mqtt",
+  "category": "robot",
+  "properties": {
+    "status": {
+      "type": "enum",
+      "unit": "",
+      "readOnly": false,
+      "min": null,
+      "max": null,
+      "enumValues": [
+        "idle",
+        "moving",
+        "delivering",
+        "charging",
+        "error"
+      ],
+      "description": "机器人状态"
+    },
+    "batteryLevel": {
+      "type": "number",
+      "unit": "%",
+      "readOnly": false,
+      "min": 0,
+      "max": 100,
+      "enumValues": [],
+      "description": "电量"
+    }
+  },
+  "actions": {
+    "deliverFood": {
+      "arguments": {
+        "order_id": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "订单ID"
+        },
+        "pickup_location": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "取餐位置"
+        },
+        "target_location": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "送达位置"
+        }
+      },
+      "description": "执行送餐任务"
+    }
+  },
+  "events": {
+    "deliveryFailed": {
+      "fields": {
+        "reason": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "失败原因"
+        }
+      },
+      "outputs": {},
+      "level": "info",
+      "description": "送餐失败"
+    },
+    "deliveryComplete": {
+      "fields": {
+        "order_id": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "订单ID"
+        },
+        "finish_time": {
+          "type": "string",
+          "unit": "",
+          "readOnly": false,
+          "min": null,
+          "max": null,
+          "enumValues": [],
+          "description": "完成时间"
+        }
+      },
+      "outputs": {},
+      "level": "info",
+      "description": "送餐完成"
+    }
+  },
+  "extensions": null
+}

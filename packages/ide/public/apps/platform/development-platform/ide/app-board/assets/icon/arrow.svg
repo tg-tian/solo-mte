@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_箭头</title>
+    <g id="框架" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.0-首页-左侧导航240px" transform="translate(-204.000000, -290.000000)">
+            <g id="功能" transform="translate(12.000000, 120.000000)">
+                <g id="消息通知" transform="translate(12.000000, 168.000000)">
+                    <g id="icon_箭头" transform="translate(188.000000, 10.000000) rotate(-90.000000) translate(-188.000000, -10.000000) translate(180.000000, 2.000000)">
+                        <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+                        <polyline id="路径-16" stroke="#808080" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill-rule="nonzero" transform="translate(8.000000, 8.500000) scale(1, -1) translate(-8.000000, -8.500000) " points="3.5 11 8 6 12.5 11"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

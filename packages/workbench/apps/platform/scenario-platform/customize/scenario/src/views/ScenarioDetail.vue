@@ -455,7 +455,7 @@ async function exportScenarioConfig() {
     const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = 'config.zip';
+    link.download = `${form.sceneId}-${form.sceneCode}.zip`;
     link.click();
     window.URL.revokeObjectURL(downloadUrl);
     ElMessage.success('配置导出成功');

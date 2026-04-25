@@ -5,7 +5,16 @@ import { ALL_NODE_PORTS_REGISTRY_KEY, uuid } from '@farris/flow-devkit';
 import { useVueFlow, type GraphNode } from '@vue-flow/core';
 import { usePosition } from './use-position';
 
+interface UseLayout {
+    layoutAndFitView: () => Promise<void>;
+}
+
+let layoutInstance: UseLayout;
+
 export function useLayout() {
+    if (layoutInstance) {
+        return layoutInstance;
+    }
 
     const {
         nodes: allNodes,
@@ -168,7 +177,6 @@ export function useLayout() {
         }
     }
 
-    return {
-        layoutAndFitView,
-    };
+    layoutInstance = { layoutAndFitView };
+    return layoutInstance;
 }

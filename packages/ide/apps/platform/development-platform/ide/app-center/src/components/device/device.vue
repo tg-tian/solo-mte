@@ -21,7 +21,7 @@
               </el-form>
               <div class="device-actions">
                 <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
-                <el-button @click="openLibraryConfig">配置设备库</el-button>
+                <el-button type="primary" @click="openLibraryConfig">配置设备库</el-button>
                 <el-button type="primary" @click="handleConfig">物理平台配置</el-button>
               </div>
             </div>
@@ -103,9 +103,18 @@
                   </div>
                 </template>
                 <el-table :data="deviceEventStats" border>
-                  <el-table-column prop="deviceName" label="设备名称" min-width="140" />
+                  <el-table-column prop="deviceName" label="设备名称" min-width="200">
+                    <template #default="scope">
+                      <div class="event-device-name-cell">
+                        <span class="event-device-name">{{ scope.row.deviceName }}</span>
+                        <span class="event-device-time">{{ scope.row.lastTimeText }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="deviceId" label="设备编码" min-width="150" />
                   <el-table-column prop="count" label="事件数" width="100" />
+                  <el-table-column prop="lastTimeText" label="最近事件时间" min-width="180" />
+                  <el-table-column prop="lastType" label="最新事件类型" min-width="140" show-overflow-tooltip />
                   <el-table-column prop="typesText" label="事件类型" min-width="180" show-overflow-tooltip />
                 </el-table>
               </el-card>
@@ -118,15 +127,17 @@
                   </div>
                 </template>
                 <div class="event-list-full">
-                  <el-card v-for="event in filteredEvents" :key="`${event.deviceId}-${event.timestamp}`" shadow="hover" class="event-card">
+                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${resolveEventTimestamp(event) ?? 'na'}-${index}`" shadow="hover" class="event-card">
                     <div class="event-card-head">
                       <div>
-                        <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                        <div class="event-card-main">
+                          <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                          <span class="event-card-time-inline">{{ formatEventTime(event) }}</span>
+                        </div>
                         <div class="event-card-sub">{{ event.deviceId }}</div>
                       </div>
                       <div class="event-card-right">
                         <el-tag size="small">{{ getEventType(event) }}</el-tag>
-                        <span>{{ formatTime(event.timestamp) }}</span>
                       </div>
                     </div>
                     <pre>{{ formatValue(event.payload) }}</pre>
@@ -344,26 +355,42 @@ const eventDeviceOptions = computed(() => {
 
 const filteredEvents = computed(() => {
   const list = deviceStore.recentEvents || []
-  if (!eventDeviceFilter.value) return list
-  return list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+  const result = eventDeviceFilter.value
+    ? list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+    : list
+  return [...result].sort((a: any, b: any) => (resolveEventTimestamp(b) || 0) - (resolveEventTimestamp(a) || 0))
 })
 
 const deviceEventStats = computed(() => {
-  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string> }>()
+  const currentSystemTime = Date.now()
+  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string>; lastTimestamp: number; lastType: string }>()
   for (const event of filteredEvents.value) {
     const deviceId = event?.deviceId || 'unknown'
     const name = getDeviceDisplayName(deviceId)
     if (!grouped.has(deviceId)) {
-      grouped.set(deviceId, { deviceId, deviceName: name, count: 0, types: new Set<string>() })
+      grouped.set(deviceId, {
+        deviceId,
+        deviceName: name,
+        count: 0,
+        types: new Set<string>(),
+        lastTimestamp: 0,
+        lastType: '-',
+      })
     }
     const current = grouped.get(deviceId)!
+    const eventType = getEventType(event)
     current.count += 1
-    current.types.add(getEventType(event))
+    current.types.add(eventType)
+    current.lastTimestamp = currentSystemTime
+    current.lastType = eventType
   }
-  return Array.from(grouped.values()).map((item) => ({
-    ...item,
-    typesText: Array.from(item.types).join('、') || '-',
-  }))
+  return Array.from(grouped.values())
+    .map((item) => ({
+      ...item,
+      lastTimeText: formatTime(item.lastTimestamp),
+      typesText: Array.from(item.types).join('、') || '-',
+    }))
+    .sort((a, b) => b.count - a.count)
 })
 
 const eventDeviceCount = computed(() => deviceEventStats.value.length)
@@ -606,8 +633,134 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
-function formatTime(val?: number) {
-  return val ? new Date(val).toLocaleString() : '-'
+function parseTimestamp(value: unknown): number | null {
+  const minValidMs = Date.UTC(2000, 0, 1, 0, 0, 0, 0)
+  const maxValidMs = Date.UTC(2100, 0, 1, 0, 0, 0, 0)
+
+  const normalizeAndValidate = (input: number): number | null => {
+    const normalized = input < 1e12 ? input * 1000 : input
+    if (!Number.isFinite(normalized)) return null
+    if (normalized < minValidMs || normalized > maxValidMs) return null
+    return normalized
+  }
+
+  if (value === null || value === undefined || value === '') return null
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value.getTime()
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return normalizeAndValidate(value)
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return null
+    if (/^\d+(\.\d+)?$/.test(trimmed)) {
+      const numeric = Number(trimmed)
+      if (!Number.isFinite(numeric)) return null
+      return normalizeAndValidate(numeric)
+    }
+    const parsed = Date.parse(trimmed)
+    if (Number.isNaN(parsed)) return null
+    return parsed < minValidMs || parsed > maxValidMs ? null : parsed
+  }
+  return null
+}
+
+function parseJsonIfPossible(value: unknown): unknown {
+  if (typeof value !== 'string') return value
+  const trimmed = value.trim()
+  if (!trimmed) return value
+  if (!((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']')))) {
+    return value
+  }
+  try {
+    return JSON.parse(trimmed)
+  } catch {
+    return value
+  }
+}
+
+function extractTimestampDeep(input: unknown, depth = 0): number | null {
+  if (depth > 5) return null
+
+  const direct = parseTimestamp(input)
+  if (direct !== null) return direct
+
+  const value = parseJsonIfPossible(input)
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const parsed = extractTimestampDeep(item, depth + 1)
+      if (parsed !== null) return parsed
+    }
+    return null
+  }
+
+  if (!value || typeof value !== 'object') return null
+
+  const objectValue = value as Record<string, unknown>
+  const keys = Object.keys(objectValue)
+  const priorityPattern = /(timestamp|timeStamp|eventTimestamp|occurredAt|createdAt|eventTime|time|ts|date)/i
+
+  for (const key of keys) {
+    if (!priorityPattern.test(key)) continue
+    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
+    if (parsed !== null) return parsed
+  }
+
+  for (const key of keys) {
+    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
+    if (parsed !== null) return parsed
+  }
+
+  return null
+}
+
+function resolveEventTimestamp(event: any): number | null {
+  if (!event) return null
+  const eventObject = parseJsonIfPossible(event)
+  if (!eventObject || typeof eventObject !== 'object') return null
+  const payloadRaw = (eventObject as any).payload
+  const payload = parseJsonIfPossible(payloadRaw)
+  const payloadData = payload && typeof payload === 'object' ? parseJsonIfPossible((payload as any).data) : null
+  const candidates = [
+    (eventObject as any).timestamp,
+    (eventObject as any).timeStamp,
+    (eventObject as any).eventTimestamp,
+    (eventObject as any).ts,
+    (eventObject as any).time,
+    (eventObject as any).createdAt,
+    (eventObject as any).occurredAt,
+    (eventObject as any).eventTime,
+    payload && typeof payload === 'object' ? (payload as any).timestamp : null,
+    payload && typeof payload === 'object' ? (payload as any).timeStamp : null,
+    payload && typeof payload === 'object' ? (payload as any).eventTimestamp : null,
+    payload && typeof payload === 'object' ? (payload as any).ts : null,
+    payload && typeof payload === 'object' ? (payload as any).time : null,
+    payload && typeof payload === 'object' ? (payload as any).createdAt : null,
+    payload && typeof payload === 'object' ? (payload as any).occurredAt : null,
+    payload && typeof payload === 'object' ? (payload as any).eventTime : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).timestamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).timeStamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTimestamp : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).ts : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).time : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).createdAt : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).occurredAt : null,
+    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTime : null,
+  ]
+  for (const candidate of candidates) {
+    const parsed = parseTimestamp(candidate)
+    if (parsed !== null) return parsed
+  }
+  const deepParsed = extractTimestampDeep(eventObject)
+  if (deepParsed !== null) return deepParsed
+  return null
+}
+
+function formatTime(val?: number | null) {
+  return val !== null && val !== undefined ? new Date(val).toLocaleString() : '-'
+}
+
+function formatEventTime(event: any) {
+  return formatTime(resolveEventTimestamp(event))
 }
 
 function getDeviceDisplayName(deviceId?: string) {
@@ -848,11 +1001,42 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 620px;
+  overflow-y: auto;
+  padding-right: 2px;
+  overscroll-behavior: contain;
 }
 
 .event-card {
+  flex: 0 0 auto;
   background: #f8fafc;
   border: 1px solid #ebeef5;
+}
+
+.event-card-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.event-card-time-inline {
+  font-size: 12px;
+  color: #606266;
+}
+
+.event-device-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-device-name {
+  color: #303133;
+}
+
+.event-device-time {
+  font-size: 12px;
+  color: #909399;
 }
 
 .event-card-head {

@@ -204,6 +204,23 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false
             },
+            /**
+             * /apps 默认走运行时 (5200)；
+             * 以 /apps/platform/development-platform 开头的 IDE 子应用页面与资源须由本机 Vite(5174) 处理，不能交给 5200。
+             * 用 bypass 跳过代理：须 **返回 string**（会写回 req.url 并 next），由 Vite 处理。
+             * 注意：当前 Vite 若 return false 会错误地执行 res.end(404)，把 404 当 chunk 写出并报错。
+             */
+            '/apps': {
+                target: 'http://localhost:5200',
+                changeOrigin: true,
+                secure: false,
+                bypass(req) {
+                    const pathname = (req.url || '').split('?')[0] || '';
+                    if (pathname.startsWith('/apps/platform/development-platform')) {
+                        return req.url || '/';
+                    }
+                },
+            },
             "/runtime": {
                 target: "http://localhost:5200",
                 changeOrigin: true,
@@ -229,6 +246,11 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false
             },
+            "/system": {
+                target: "http://127.0.0.1:3000",
+                changeOrigin: true,
+                secure: false
+            },
             "/ws": {
                 target: "ws://127.0.0.1:3000",
                 changeOrigin: true,
@@ -247,9 +269,11 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: path.resolve(__dirname, 'index.html'),
+                appBoard: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-board/index.html'),
                 appBuilder: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
                 appCenter: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html'),
-                appPreview: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-preview/index.html')
+                appPreview: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-preview/index.html'),
+                appView: path.resolve(__dirname, 'apps/platform/development-platform/ide/app-view/index.html')
             }
         }
     },
