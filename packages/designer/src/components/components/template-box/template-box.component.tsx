@@ -43,25 +43,26 @@ export default defineComponent({
       }
     }
     function onSelectedTemplate(templateData: any) {
-      if (!templateData?.component || !templateData.index) {
+      if (!templateData?.code_file || !templateData?.template_index) {
+        notifyService.warning('模板内容加载失败或与当前表单设计器不兼容，请更换模板重试。');
         return;
       }
-      if (templateList.value.find((item) => item.id === templateData.index)) {
-        notifyService.warning('模板已添加，请勿重复操作');
+      if (templateList.value.find((item) => item.id === templateData.template_index)) {
+        notifyService.warning('模板已添加，请勿重复操作。');
         closeModal();
         return;
       }
-      let templateSchema = templateData.component;
-      if (typeof templateData.component === "string") {
+      let templateSchema = templateData.code_file;
+      if (typeof templateSchema === "string") {
         templateSchema = {
           type: "html-template",
           html: templateSchema,
         };
       }
       templateList.value.push({
-        id: templateData.index,
+        id: templateData.template_index,
         name: templateData.name,
-        description: templateData.description,
+        description: templateData.template_description,
         // 模板内容
         component: templateSchema,
       });

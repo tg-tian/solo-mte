@@ -1,6 +1,7 @@
 import { defineComponent, ref, onMounted, onUnmounted } from "vue";
 import { TemplateModalProps, templateModalProps } from "./template-box.props";
 import "./template-box.scss";
+import axios from "axios";
 
 export default defineComponent({
   name: "FTemplateModal",
@@ -10,10 +11,20 @@ export default defineComponent({
   setup(props: TemplateModalProps, context) {
     const iframeRef = ref();
 
-    function handleTemplateData(event: any) {
+    /**
+     * 查询单个模板内容
+     */
+    async function queryTemplateJsonById(templateId: string) {
+      const url = `https://lctemplates.gitlink.org.cn/templates/${templateId}.json`;
+      return await axios.get(url);
+    }
+    /**
+     * 处理模板库的通讯事件
+     */
+    async function handleTemplateData(event: any) {
       if (event?.data) {
-        delete event.data.id;
-        context.emit("submit", event.data);
+        const templateJson = await queryTemplateJsonById(event.data.id);
+        context.emit("submit", templateJson?.data);
       }
     }
     onMounted(() => {
@@ -32,7 +43,7 @@ export default defineComponent({
     return () => {
       return (
         <iframe
-          src="https://lctemplates.gitlink.org.cn/templates?iframe=1"
+          src="https://lctemplates.gitlink.org.cn/templates?iframe=1&schema=inBuilder&domain=通用"
           id="template-iframe"
           ref={iframeRef}
           width="100%"
@@ -40,5 +51,5 @@ export default defineComponent({
         ></iframe>
       );
     };
-  }
+  },
 });

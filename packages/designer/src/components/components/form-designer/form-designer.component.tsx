@@ -214,6 +214,10 @@ export default defineComponent({
          * @returns 
          */
         function changePageComponent(selectionNode: any) {
+            // 仅在移动设计器模式下处理页面切换
+            if (designerMode !== DesignerMode.Mobile) {
+                return;
+            }
             const isPageChanged = selectionNode.componentId && componentId.value !== selectionNode.componentId;
             if (isPageChanged) {
                 componentId.value = selectionNode.componentId;
