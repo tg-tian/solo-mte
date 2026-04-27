@@ -1,6 +1,7 @@
 {
   "modelId": "AICam",
   "modelName": "智能摄像头",
+  "icon": "./device-assets/aicam.png",
   "provider": null,
   "category": "camera",
   "properties": {},

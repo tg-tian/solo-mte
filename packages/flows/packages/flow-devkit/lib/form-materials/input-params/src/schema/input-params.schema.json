@@ -38,6 +38,10 @@
     "validateOptions": {
       "description": "validateOptions",
       "type": "object"
+    },
+    "operationOptions": {
+      "description": "operationOptions",
+      "type": "object"
     }
   },
   "required": ["id", "type"]

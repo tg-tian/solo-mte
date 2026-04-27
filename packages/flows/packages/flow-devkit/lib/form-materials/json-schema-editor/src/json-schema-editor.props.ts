@@ -1,7 +1,7 @@
 import type { PropType, ExtractPropTypes } from 'vue';
 import { createPropsResolver } from '@farris/ui-vue';
 import jsonSchemaEditorSchema from './schema/json-schema-editor.schema.json';
-import type { Parameter, ParamValidateOptions } from '@farris/flow-devkit/types';
+import type { Parameter, ParamValidateOptions, ParamOperationOptions } from '@farris/flow-devkit/types';
 
 export const COMPONENT_NAME = 'FvfJsonSchemaEditor';
 
@@ -27,6 +27,9 @@ export const jsonSchemaEditorProps = {
 
     /** 是否编辑`输入帮助设置`相关的字段 */
     canEditInputHelp: { type: Boolean, default: false },
+
+    /** 操作控制选项 */
+    operationOptions: { type: Object as PropType<ParamOperationOptions> },
 };
 
 export type JsonSchemaEditorProps = ExtractPropTypes<typeof jsonSchemaEditorProps>;
