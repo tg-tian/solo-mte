@@ -90,13 +90,13 @@ export class NodeProperty extends BaseControlProperty {
                     const newParam = DeviceUtils.convertDeviceParameter2Parameter(eventArgCode, eventArg);
                     newOutputParams.push(newParam);
                 });
-                nodeData.outputParams = newOutputParams;
+                nodeData.inputParams = newOutputParams;
             },
         };
         this.propertyConfig.categories['args'] = {
             title: '事件参数',
             properties: {
-                outputParams: {
+                inputParams: {
                     type: "array",
                     editor: {
                         type: 'fvf-json-schema-editor',
