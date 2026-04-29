@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 import type { ValueExpress, NodeVariableExpr, SystemVariableExpr, MethodInvokeExpr } from '@farris/flow-devkit/types';
 import { ValueExpressKind } from '@farris/flow-devkit/types';
 import { useBem, ParamValidateUtils } from '@farris/flow-devkit/utils';
-import { getNodeVariables, useFlow } from '@farris/flow-devkit/composition';
+import { getNodeVariables, useFlow, nodeRegistry } from '@farris/flow-devkit/composition';
 import { VALUE_EXPRESSION_INPUT_NAME } from '../value-expression-input.props';
 import { type NodeVariables } from '@farris/flow-devkit/composition';
 import { useMethodTypes } from '@farris/flow-devkit/hooks';
@@ -57,7 +57,9 @@ export function useValueExpression(options?: RenderOptions) {
       return { isDefined, nodeName, paramCode: express.variable, fieldCodes: fields };
     }
     const nodeName = targetNode.data.name || targetNode.metadata.label || '';
-    const nodeIcon = targetNode.metadata.icon || '';
+    const nodeDefinition = nodeRegistry.get(targetNode.type || '');
+    const getNodeIconUrl = nodeDefinition?.getNodeIconUrl;
+    const nodeIcon = getNodeIconUrl?.(targetNode.data) || targetNode.metadata?.icon || '';
     const paramCode = targetParam.code || '';
     return { isDefined, nodeName, nodeIcon, paramCode, fieldCodes: fields };
   }
