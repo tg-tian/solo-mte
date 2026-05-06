@@ -10,11 +10,11 @@ export const useDomainTemplateStore = defineStore('domainTemplate', {
     setCurrentDomainTemplate(domainTemplate: any) {
       this.currentDomainTemplate = domainTemplate;
     },
-    async saveDomainTemplate(domainData: any, templates: any[], deviceTypes: any[], components: any[], templateId?: number) {
+    async saveDomainTemplate(domainData: any, templates: any[], deviceModels: any[], components: any[], templateId?: number) {
       const dslData = {
         domainData,
         templates,
-        deviceTypes,
+        deviceTypes: deviceModels,
         components
       };
       const payload = {

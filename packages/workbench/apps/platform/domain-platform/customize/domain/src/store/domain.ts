@@ -36,8 +36,8 @@ export const useDomainStore = defineStore('domain', {
       }
       return res.data;
     },
-    async createDomainFromTemplate(data: DomainFormData, templates: any[], deviceTypes: any[], components: any[]) {
-      const res = await createDomainFromTemplate(data, templates, deviceTypes, components);
+    async createDomainFromTemplate(data: DomainFormData, templates: any[], deviceModels: any[], components: any[]) {
+      const res = await createDomainFromTemplate(data, templates, deviceModels, components);
       if (res.status === 200) {
         await this.fetchDomains();
       }

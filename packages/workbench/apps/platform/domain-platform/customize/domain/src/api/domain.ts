@@ -112,13 +112,13 @@ export async function updateDomain(domainId: string | number, payload: DomainFor
 export async function createDomainFromTemplate(
   domainData: DomainFormData,
   templates: any[],
-  deviceTypes: any[],
+  deviceModels: any[],
   components: any[]
 ) {
   return request.post(`${domainSourceUri}/from-template`, {
     domainData: toCreatePayload(domainData),
     templates,
-    deviceTypes,
+    deviceTypes: deviceModels,
     components
   });
 }

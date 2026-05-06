@@ -80,7 +80,7 @@
         </el-tab-pane>
 
         <el-tab-pane label="设备模型库" name="model" v-if="isEditMode || isFromTemplate">
-          <DomainDeviceType :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+          <DomainDeviceModel :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
         </el-tab-pane>
 
         <el-tab-pane label="领域组件" name="component" v-if="isEditMode || isFromTemplate">
@@ -109,12 +109,12 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import DomainTemplate from './domain-detail/DomainTemplate.vue';
-import DomainDeviceType from './domain-detail/DomainDeviceType.vue';
+import DomainDeviceModel from './domain-detail/DomainDeviceModel.vue';
 import DomainComponent from './domain-detail/DomainComponent.vue';
 import { useDomainStore } from '../store/domain';
 import { useDomainComponentTemplateStore } from '../store/domainComponentTemplate';
 import { useDomainTemplateStore } from '../store/domainTemplate';
-import { useDeviceTypeStore } from '../store/deviceType';
+import { useDeviceModelStore } from '../store/deviceModel';
 import { useComponentStore } from '../store/component';
 import { downloadDomain } from '../api/domain';
 import type { DomainFormData } from '../types/models';
@@ -133,7 +133,7 @@ const emit = defineEmits<{
 const domainStore = useDomainStore();
 const domainTemplateStore = useDomainTemplateStore();
 const domainComponentTemplateStore = useDomainComponentTemplateStore();
-const deviceTypeStore = useDeviceTypeStore();
+const deviceModelStore = useDeviceModelStore();
 const componentStore = useComponentStore();
 
 const activeTab = ref('basic');
@@ -192,7 +192,7 @@ function resetFormData() {
     domainTemplateId: null
   });
   domainComponentTemplateStore.setTemplates([]);
-  deviceTypeStore.setDeviceTypes([]);
+  deviceModelStore.setDeviceModels([]);
   componentStore.setComponents([]);
 }
 
@@ -248,7 +248,7 @@ async function submitForm() {
         await domainStore.createDomainFromTemplate(
           domainForm,
           domainComponentTemplateStore.templates,
-          deviceTypeStore.deviceTypes,
+          deviceModelStore.deviceModels,
           componentStore.components
         );
         ElMessage.success('从模板创建成功');

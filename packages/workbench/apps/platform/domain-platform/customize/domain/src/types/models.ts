@@ -38,7 +38,7 @@ export interface TemplateRecord {
   url?: string;
 }
 
-export interface DeviceTypeRecord {
+export interface DeviceModelRecord {
   id: number;
   modelId?: string;
   modelName?: string;

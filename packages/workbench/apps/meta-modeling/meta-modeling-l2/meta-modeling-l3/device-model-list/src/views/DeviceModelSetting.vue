@@ -886,9 +886,9 @@ const submitForm = async () => {
 
         if (isEditMode.value && deviceModelId.value) {
           // 更新设备模型 (包含模型)
-          const { modelId, ...rest } = deviceModelForm.value
           const deviceModelData = {
-            ...rest,
+            ...deviceModelForm.value,
+            modelId: deviceModelForm.value.modelId,
             model: modelForm.value
           } as DeviceModel
           await deviceModelStore.updateDeviceModel(deviceModelId.value, deviceModelData)
@@ -903,9 +903,10 @@ const submitForm = async () => {
           }
         } else {
           // 创建设备模型 - 明确排除 id 字段，让数据库自动生成
-          const { id, modelId, ...createData } = deviceModelForm.value
+          const { id, ...createData } = deviceModelForm.value
           const deviceModelData = {
             ...createData,
+            modelId: deviceModelForm.value.modelId,
             type: deviceTypeCategory.value, // 根据来源页面设置 type 字段
             model: modelForm.value
           } as any as DeviceModel
