@@ -1,9 +1,9 @@
-import {markRaw} from 'vue';
+import { markRaw } from 'vue';
 import { type NodeDefinition } from '@farris/flow-devkit'
 import { expressIcon } from '@flow-designer/assets/images';
 import { BasicTypeRefer, BuiltinNodeType, ValidateUtils } from '@farris/flow-devkit'
 import NodeComponent from './node.component.vue';
-import { NodeProperty } from './property-config.ts';
+import { NodeProperty } from './property-config';
 
 /**
  * 数学表达式计算节点
@@ -46,7 +46,7 @@ export const EXPRESS_NODE: NodeDefinition = {
 
     validator: (nodeData) => {
         const errors: string[] = [];
-        if(nodeData.inputParams.length === 0){
+        if (nodeData.inputParams.length === 0) {
             errors.push('请选择输入参数');
         }
 

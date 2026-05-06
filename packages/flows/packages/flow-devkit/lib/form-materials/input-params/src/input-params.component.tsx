@@ -23,6 +23,20 @@ export default defineComponent({
       return params.value.map(param => param.code);
     });
 
+    const shouldShowAddButton = computed<boolean>(() => {
+      if (typeof props.operationOptions?.showAddBtn === 'boolean') {
+        return props.operationOptions.showAddBtn;
+      }
+      return !props.isFixedSchema;
+    });
+
+    const shouldShowDeleteBtn = computed<boolean>(() => {
+      if (typeof props.operationOptions?.showDeleteBtn === 'boolean') {
+        return props.operationOptions.showDeleteBtn;
+      }
+      return !props.isFixedSchema;
+    });
+
     function createNewParam(): Parameter {
       return {
         id: uuid(),
@@ -88,7 +102,7 @@ export default defineComponent({
           <div class={bem('title-item')} style="flex: 2">{props.paramCodeColumnTitle || '参数名'}</div>
           <div class={bem('title-item')} style="flex: 1; min-width: 100px;">{props.paramTypeColumnTitle || '类型'}</div>
           <div class={bem('title-item')} style="flex: 3">{props.paramValueColumnTitle || '参数值'}</div>
-          {!props.isFixedSchema && (
+          {shouldShowDeleteBtn.value && (
             <div class={bem('placeholder')}></div>
           )}
         </div>
@@ -115,7 +129,7 @@ export default defineComponent({
       // 检查参数是否可编辑，如果不可编辑则所有字段都只读
       const isParamReadonly = props.isFixedSchema || param.readOnly === true;
       // 检查是否显示删除按钮
-      const showDeleteBtn = !props.isFixedSchema && param.readOnly !== true;
+      const showDeleteBtn = shouldShowDeleteBtn.value && param.readOnly !== true;
 
       return (
         <div class={bem('param')} key={param.id}>
@@ -144,12 +158,11 @@ export default defineComponent({
               placeholder={'输入或引用参数值'}
               typeFilter={props.typeFilter}
               class={valueError ? 'fvf-error-state' : undefined}
-              inputHelp={param.inputHelp}
               onUpdate:modelValue={(newValue, _, { type }) => onUpdateParamValue(param, newValue, type)}
             ></ValueExpressionInput>
             {renderErrorTip(valueError)}
           </div>
-          {!props.isFixedSchema && (
+          {shouldShowDeleteBtn.value && (
             <div class={bem('delete-btn')} onClick={() => handleDelete(param)}>
               {showDeleteBtn && <i class="f-icon f-icon-enclosure_delete"></i>}
             </div>
@@ -163,7 +176,7 @@ export default defineComponent({
     }
 
     function renderAddButton() {
-      if (props.isFixedSchema) {
+      if (!shouldShowAddButton.value) {
         return;
       }
       return (

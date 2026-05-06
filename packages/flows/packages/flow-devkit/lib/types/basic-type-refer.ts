@@ -3,14 +3,14 @@ import type { TypeRefer } from './type';
 const BasicTypeReferID = {
     StringType: 'StringType',
     IntegerType: 'IntegerType',
-    BooleanType: 'BooleanType',
     NumberType: 'NumberType',
+    BooleanType: 'BooleanType',
     ObjectType: 'ObjectType',
     FileType: 'FileType',
     StringArrayType: 'StringArrayType',
     IntegerArrayType: 'IntegerArrayType',
-    BooleanArrayType: 'BooleanArrayType',
     NumberArrayType: 'NumberArrayType',
+    BooleanArrayType: 'BooleanArrayType',
     ObjectArrayType: 'ObjectArrayType',
     FileArrayType: 'FileArrayType',
     ArrayType: 'ArrayType',
@@ -31,17 +31,17 @@ export const BasicTypeRefer: Record<BasicTypeReferID, TypeRefer> = {
         typeCode: 'Integer',
         typeName: 'Integer',
     },
-    [BasicTypeReferID.BooleanType]: {
-        source: 'default',
-        typeId: 'boolean',
-        typeCode: 'Boolean',
-        typeName: 'Boolean',
-    },
     [BasicTypeReferID.NumberType]: {
         source: 'default',
         typeId: 'number',
         typeCode: 'Number',
         typeName: 'Number',
+    },
+    [BasicTypeReferID.BooleanType]: {
+        source: 'default',
+        typeId: 'boolean',
+        typeCode: 'Boolean',
+        typeName: 'Boolean',
     },
     [BasicTypeReferID.ObjectType]: {
         source: 'default',
@@ -79,18 +79,6 @@ export const BasicTypeRefer: Record<BasicTypeReferID, TypeRefer> = {
             typeName: 'Integer',
         }]
     },
-    [BasicTypeReferID.BooleanArrayType]: {
-        source: 'default',
-        typeId: 'list',
-        typeCode: 'Array<Boolean>',
-        typeName: 'Array<Boolean>',
-        genericTypes: [{
-            source: 'default',
-            typeId: 'boolean',
-            typeCode: 'Boolean',
-            typeName: 'Boolean',
-        }]
-    },
     [BasicTypeReferID.NumberArrayType]: {
         source: 'default',
         typeId: 'list',
@@ -101,6 +89,18 @@ export const BasicTypeRefer: Record<BasicTypeReferID, TypeRefer> = {
             typeId: 'number',
             typeCode: 'Number',
             typeName: 'Number',
+        }]
+    },
+    [BasicTypeReferID.BooleanArrayType]: {
+        source: 'default',
+        typeId: 'list',
+        typeCode: 'Array<Boolean>',
+        typeName: 'Array<Boolean>',
+        genericTypes: [{
+            source: 'default',
+            typeId: 'boolean',
+            typeCode: 'Boolean',
+            typeName: 'Boolean',
         }]
     },
     [BasicTypeReferID.ObjectArrayType]: {

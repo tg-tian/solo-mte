@@ -8,7 +8,7 @@
         <span class="text">{{ data.deviceEvent || '未设置' }}</span>
       </NodeField>
       <NodeField name="事件参数">
-        <ParamTagList fieldName="参数" :params="data.outputParams" />
+        <ParamTagList fieldName="参数" :params="data.inputParams" />
       </NodeField>
     </NodeContentWrapper>
   </NodeWrapper>
