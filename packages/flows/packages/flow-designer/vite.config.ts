@@ -18,6 +18,11 @@ export default defineConfig(({ mode }) => {
   const alias: Record<string, string> = {
     '@flow-designer': path.resolve(__dirname, './src'),
     '@/api': path.resolve(__dirname, './src/api'),
+    '@farris/x-ui/index.css': path.resolve(__dirname, '../tmp-local-dependency/x-ui/index.css'),
+    '@farris/x-ui/components/coding': path.resolve(__dirname, '../tmp-local-dependency/x-ui/farris.x-ui.esm.js'),
+    '@farris/x-ui': path.resolve(__dirname, '../tmp-local-dependency/x-ui/farris.x-ui.esm.js'),
+    '@farris/x-conversation/index.css': path.resolve(__dirname, '../tmp-local-dependency/x-conversation/index.css'),
+    '@farris/x-conversation': path.resolve(__dirname, '../tmp-local-dependency/x-conversation/farris.x-conversation.esm.js'),
   };
   if (isDev) {
     alias['@farris/flow-devkit'] = path.resolve(__dirname, '../flow-devkit/lib');

@@ -1,4 +1,4 @@
-export type JsonSchemaType = 'array' | 'object' | 'string' | 'boolean' | 'number';
+export type JsonSchemaType = 'array' | 'object' | 'string' | 'boolean' | 'number' | 'int';
 
 export enum JsonSchemaBasicType {
     Array = 'array',
@@ -6,6 +6,7 @@ export enum JsonSchemaBasicType {
     String = 'string',
     Boolean = 'boolean',
     Number = 'number',
+    Integer = 'int',
 }
 
 export interface JsonSchema {

@@ -1,5 +1,4 @@
-import { BaseControlProperty, BasicTypeRefer, type NodeData, type TypeRefer } from '@farris/flow-devkit'
-import type { PropType } from 'vue'
+import { BaseControlProperty, type NodeData } from '@farris/flow-devkit'
 
 export class NodeProperty extends BaseControlProperty {
     public getPropertyConfig(nodeData: NodeData) {
@@ -11,8 +10,8 @@ export class NodeProperty extends BaseControlProperty {
                 name: {
                     type: "object",
                     editor: {
-                      type: 'fvf-node-header',
-                      nodeData
+                        type: 'fvf-node-header',
+                        nodeData
                     },
                 }
             }
@@ -23,9 +22,8 @@ export class NodeProperty extends BaseControlProperty {
                 inputParams: {
                     type: "array",
                     editor: {
-                      /*type: 'express-input-params',*/
-                      type: 'express-input-params',
-                      nodeData
+                        type: 'express-input-params',
+                        nodeData
                     },
                 }
             }
@@ -36,10 +34,10 @@ export class NodeProperty extends BaseControlProperty {
                 express: {
                     type: "string",
                     editor: {
-                      type: 'textarea',
-                      placeholder: '请输入',
-                      rows: 5,
-                      nodeData
+                        type: 'textarea',
+                        placeholder: '请输入',
+                        rows: 5,
+                        nodeData
                     }
                 }
             }
@@ -50,9 +48,9 @@ export class NodeProperty extends BaseControlProperty {
                 outputParams: {
                     type: "array",
                     editor: {
-                      type: 'fvf-json-schema-editor',
-                      readonly: true,
-                      nodeData
+                        type: 'fvf-json-schema-editor',
+                        readonly: true,
+                        nodeData
                     }
                 }
             }

@@ -1,0 +1,107 @@
+/**
+ * 选择器节点
+ * @description
+ * 节点功能：连接多个下游分支，若设定的条件成立则仅运行对应的分支，若均不成立则只运行“否则”分支
+ * 连接点：一个输入端口（默认），多个输出端口（由`branches`决定，端口ID取值为`SelectorBranch.port`）
+ */
+export interface SelectorNode extends FlowNode {
+    kind: "selector";
+    branches: SelectorBranch[];
+}
+
+/**
+ * 循环节点
+ * @description
+ * 节点功能：根据循环数组，循环执行一段逻辑
+ * 
+ * 循环节点包含一个子画布，根据循环数组来循环执行子画布中的流程
+ * 只有同一层级的节点才能连线，比如：循环节点内的子节点不能和循环节点外部的节点连线
+ * 子节点除了可以访问其上级节点和上级节点的前序节点的输出变量，还可以通过访问其上级循环节点所提供的编号为"item"和"index"的只读变量
+ * 
+ * 连接点：一个输入端口（默认），一个输出端口（默认）
+ */
+export interface LoopNode extends FlowNode {
+    kind: "loop";
+    /** 输出变量列表，可以被子节点引用，也可以被后续节点引用 */
+    outputParams: Parameter[];
+    /** 循环数组，表达式的类型必须是可迭代的 */
+    iterableExpr: ValueExpress;
+    /** 循环节点的编号为"item"的变量表示当前循环正在访问的循环数组中的元素，可以被子节点只读访问，不能被外部节点访问 */
+    iterableVariable: "item";
+    /** 子画布中的子节点 */
+    nodes: FlowNode[];
+    /** 子画布中子节点之间的连接线 */
+    edges: FlowEdge[];
+}
+
+/**
+ * 函数调用节点
+ * @description
+ * 节点功能：用于调用一个函数
+ * 连接点：一个输入端口（默认），一个输出端口（默认）
+ */
+export interface MethodInvokeNode extends FlowNode {
+    type: "methodInvoke";
+    /** 函数调用表达式 */
+    express: MethodInvokeExpr;
+    /** 输出变量列表，由函数调用表达式`express`决定，如果调用的函数有返回值，则`outputParams`长度为1，包含一个编号为`returnValue`的参数 */
+    outputParams: Parameter[];
+}
+
+/**
+ * 变量定义节点
+ * @description
+ * 节点功能：定义一个或多个变量，供后续节点访问
+ * 连接点：一个输入端口（默认），一个输出端口（默认）
+ */
+export interface VariableDefNode extends FlowNode {
+    kind: "variableDef";
+    /** 新定义的变量列表，作为节点的输出变量列表，供后续节点访问 */
+    outputParams: Parameter[];
+}
+
+/**
+ * 变量赋值节点
+ * @description
+ * 节点功能：用于给可写入的变量赋值（若无特殊说明，节点的输出变量都是可写入的）
+ * 连接点：一个输入端口（默认），一个输出端口（默认）
+ */
+export interface VariableAssignmentNode extends FlowNode {
+    kind: "batchAssignValue";
+    /** 赋值表达式，用于为一个或多个变量赋值 */
+    expresses: AssignValueExpr[];
+}
+
+/**
+ * 设备调用节点
+ * @description
+ * 节点功能：调用指定设备的指定操作
+ * 连接点：一个输入端口（默认），一个输出端口（默认）
+ */
+export interface DeviceCallNode extends FlowNode {
+    kind: "device";
+    /** 指定设备类型 */
+    deviceModelId: string;
+    /** 指定具体的某一个设备ID，如果为空则表示自动选择具体设备 */
+    deviceId?: string;
+    /** 指定要调用的设备操作 */
+    deviceAction: string;
+    /** 调用指定设备操作所需要传递的参数列表 */
+    inputParams: Parameter[];
+}
+
+/**
+ * 设备事件监听节点
+ * @description
+ * 节点功能：监听指定类型设备的指定事件，作为流程的开始节点，在监听到对应事件后触发流程执行
+ * 连接点：作为流程的开始节点，只有一个输出端口（默认）
+ */
+export interface DeviceEventListenNode extends FlowNode {
+    kind: "deviceEventListen";
+    /** 监听设备类型，表示要监听哪种设备的事件 */
+    deviceModelId: string;
+    /** 设备事件名，表示要监听设备的哪种事件 */
+    deviceEvent: string;
+    /** 事件的参数列表，作为节点的输出变量列表 */
+    outputParams: Parameter[];
+}

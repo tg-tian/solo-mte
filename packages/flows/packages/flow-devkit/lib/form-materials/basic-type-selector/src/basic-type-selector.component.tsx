@@ -17,10 +17,12 @@ export default defineComponent({
 
     const selectOptions = computed<TdOptionProps[]>(() => [
       { value: 'string', label: 'String' },
+      { value: 'int', label: 'Integer' },
       { value: 'number', label: 'Number' },
       { value: 'boolean', label: 'Boolean' },
       { value: 'object', label: 'Object', disabled: props.disableObjectOptions },
       { value: 'array-string', label: 'Array<String>' },
+      { value: 'array-int', label: 'Array<Integer>' },
       { value: 'array-number', label: 'Array<Number>' },
       { value: 'array-boolean', label: 'Array<Boolean>' },
       { value: 'array-object', label: 'Array<Object>', disabled: props.disableObjectOptions },

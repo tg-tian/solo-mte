@@ -1,7 +1,7 @@
 import type { PropType, ExtractPropTypes } from 'vue';
 import { createPropsResolver } from '@farris/ui-vue';
 import inputParamsSchema from './schema/input-params.schema.json';
-import type { Parameter, TypeRefer, ParamValidateOptions } from '@farris/flow-devkit/types';
+import type { Parameter, TypeRefer, ParamValidateOptions, ParamOperationOptions } from '@farris/flow-devkit/types';
 
 export const inputParamsProps = {
 
@@ -10,7 +10,7 @@ export const inputParamsProps = {
 
     /**
      * 是否固定结构
-     * @description 如果启用，则参数值和参数类型只读，无法新增或删除参数
+     * @description 如果启用，则参数名和参数类型只读，无法新增或删除参数
      */
     isFixedSchema: { type: Boolean, default: false },
 
@@ -28,6 +28,9 @@ export const inputParamsProps = {
 
     /** 校验选项 */
     validateOptions: { type: Object as PropType<ParamValidateOptions> },
+
+    /** 操作控制选项 */
+    operationOptions: { type: Object as PropType<ParamOperationOptions> },
 };
 
 export type InputParamsProps = ExtractPropTypes<typeof inputParamsProps>;

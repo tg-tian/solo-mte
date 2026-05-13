@@ -2,7 +2,7 @@ import { cloneDeep, mergeWith } from "lodash-es";
 import { FormBindingType, FormComponent, FormMetaDataModule, FormMetadaDataDom, FormSchema, FormSchemaEntity, FormSchemaEntityField, FormVariable, FormVariableCategory, FormVariableTypes, FormViewModel, FormViewModelField, FormWebCmd, MetadataDto, UseFormSchema, FormExpression, ExternalFormMetadata } from "../types";
 import { NodeType, Node } from "../types/events-editor";
 import { inject } from "vue";
-import { LookupSchemaRepositoryToken, schemaMap } from "@farris/ui-vue";
+import { DgControl, LookupSchemaRepositoryToken, schemaMap } from "@farris/ui-vue";
 import { LookupSchemaService } from "./schema-repository/lookup/lookup-schema.service";
 import { DesignerMode } from "../types/designer-context";
 
@@ -42,10 +42,6 @@ export function useFormSchema(): UseFormSchema {
     /** 获取表单元数据 */
     function getFormSchema(): FormMetadaDataDom {
         return formSchema;
-    }
-
-    function getExternalComponents(): any[] {
-        return formSchema?.module?.externalComponents || [];
     }
 
     
@@ -1279,7 +1275,46 @@ export function useFormSchema(): UseFormSchema {
     function getExternalComponents(): any[] {
         return formSchema?.module?.externalComponents || [];
     }
+    /**
+     * 检查组件是否在侧边栏中，在侧边栏中的字段可以与非侧边栏中的字段重复。
+     */
+     function checkComponentExistInDrawer(componentId: string): boolean {
+        if (!componentId) {
+            return false;
+        }
 
+        const rootComponent = getComponentById('root-component');
+        const drawer = selectNode(rootComponent, item => item.type === DgControl.drawer?.type && item.contents?.length);
+        if (drawer) {
+            const result = selectNode(drawer, item => item.type === DgControl['component-ref'].type && item.component === componentId);
+            if (result) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     *  获取页面id
+     */
+     function getPageIdByComponentId(comonentId: string): string | undefined {
+        let currentComponent = getComponentById(comonentId);
+        while (currentComponent) {
+            if (currentComponent.componentType === 'page') {
+                return currentComponent.id;
+            }
+            const viewModel = getViewModelById(currentComponent.viewModel);
+            if (!viewModel || !viewModel.parent) {
+                break;
+            }
+            const parentViewModel = getViewModelById(viewModel.parent);
+            if (!parentViewModel) {
+                break;
+            }
+            currentComponent = getComponentByViewModelId(parentViewModel.id);
+        }
+        return;
+    }
     return {
         getModule,
         setViewmodels,
@@ -1325,6 +1360,9 @@ export function useFormSchema(): UseFormSchema {
         getDefaultValueByFiledAndType,
         designerMode,
         removeCommunicationInComponent,
-        getExternalComponents
+        getExternalComponents,
+        checkComponentExistInDrawer,
+        
+        getPageIdByComponentId
     };
 }

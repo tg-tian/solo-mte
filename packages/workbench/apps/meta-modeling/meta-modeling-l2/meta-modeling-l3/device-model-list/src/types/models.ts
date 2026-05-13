@@ -1,6 +1,7 @@
 //设备类型
 export interface DeviceModel {
     id: number;
+    modelId: string;
     modelName: string;
     provider?: string;
     category: string;

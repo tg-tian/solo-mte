@@ -2,6 +2,7 @@ import {
     BaseControlProperty,
     useDeviceInfo,
     DeviceUtils,
+    BasicTypeRefer,
     type NodeData,
     type DeviceModel,
     type Parameter,
@@ -74,24 +75,28 @@ export class NodeProperty extends BaseControlProperty {
                 const currentDeviceCategory: DeviceModel = deviceCategoriesWithEvent.value.find((device: DeviceModel) => {
                     return device.modelId === nodeData.deviceModelId;
                 });
-                const eventArgs = currentDeviceCategory?.events?.[nodeData.deviceEvent]?.fields;
-                if (!eventArgs) {
-                    nodeData.outputParams = [];
-                    return;
-                }
-                const newOutputParams: Parameter[] = [];
+                const eventArgs = currentDeviceCategory?.events?.[nodeData.deviceEvent]?.fields || {};
+                const DEVICE_ID_PARAM_CODE = 'deviceId';
+                const newOutputParams: Parameter[] = nodeData.deviceEvent ? [{
+                    id: DEVICE_ID_PARAM_CODE,
+                    code: DEVICE_ID_PARAM_CODE,
+                    type: BasicTypeRefer.StringType,
+                }] : [];
                 Object.keys(eventArgs).forEach((eventArgCode) => {
+                    if (eventArgCode === DEVICE_ID_PARAM_CODE) {
+                        return;
+                    }
                     const eventArg = eventArgs[eventArgCode];
                     const newParam = DeviceUtils.convertDeviceParameter2Parameter(eventArgCode, eventArg);
                     newOutputParams.push(newParam);
                 });
-                nodeData.outputParams = newOutputParams;
+                nodeData.inputParams = newOutputParams;
             },
         };
         this.propertyConfig.categories['args'] = {
             title: '事件参数',
             properties: {
-                outputParams: {
+                inputParams: {
                     type: "array",
                     editor: {
                         type: 'fvf-json-schema-editor',

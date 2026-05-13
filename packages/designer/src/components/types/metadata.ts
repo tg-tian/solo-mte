@@ -252,6 +252,8 @@ export interface UseFormSchema {
     removeCommunicationInComponent: (componentSchema: any) => void;
     externalFormSchema: Map<string, ExternalFormMetadata>;
     getExternalComponents: () => any[];
+    checkComponentExistInDrawer: (componentId: string) => boolean;
+    getPageIdByComponentId: (componentId: string) => string | undefined;
 }
 
 export interface UseSchemaService {

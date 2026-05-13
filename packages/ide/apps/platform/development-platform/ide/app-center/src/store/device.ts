@@ -103,7 +103,13 @@ export const useDeviceStore = defineStore('device', {
         if (!message?.topic) return
         if (message.topic === 'device.updated') this.applyShadow(message.data)
         if (message.topic === 'device.discovery') this.handleDiscovery(message.data)
-        if (message.topic === 'device.event') this.recentEvents = [message.data, ...this.recentEvents].slice(0, 50)
+        if (message.topic === 'device.event') {
+          const eventData = {
+            ...(message.data as any),
+            receivedAt: Date.now(),
+          }
+          this.recentEvents = [eventData, ...this.recentEvents].slice(0, 50)
+        }
       }
       wsInstance.onclose = () => {
         wsInstance = null

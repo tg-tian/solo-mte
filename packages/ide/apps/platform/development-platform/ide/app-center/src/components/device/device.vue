@@ -21,7 +21,7 @@
               </el-form>
               <div class="device-actions">
                 <el-button type="primary" @click="selectPageVisible = true">添加设备</el-button>
-                <el-button @click="openLibraryConfig">配置设备库</el-button>
+                <el-button type="primary" @click="openLibraryConfig">配置设备库</el-button>
                 <el-button type="primary" @click="handleConfig">物理平台配置</el-button>
               </div>
             </div>
@@ -103,10 +103,18 @@
                   </div>
                 </template>
                 <el-table :data="deviceEventStats" border>
-                  <el-table-column prop="deviceName" label="设备名称" min-width="140" />
+                  <el-table-column prop="deviceName" label="设备名称" min-width="200">
+                    <template #default="scope">
+                      <div class="event-device-name-cell">
+                        <span class="event-device-name">{{ scope.row.deviceName }}</span>
+                        <span class="event-device-time">{{ scope.row.lastTimeText }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="deviceId" label="设备编码" min-width="150" />
                   <el-table-column prop="count" label="事件数" width="100" />
-                  <el-table-column prop="typesText" label="事件类型" min-width="180" show-overflow-tooltip />
+                  <el-table-column prop="lastTimeText" label="最近事件时间" min-width="180" />
+                  <el-table-column prop="lastType" label="最近事件类型" min-width="180" show-overflow-tooltip />
                 </el-table>
               </el-card>
             </el-col>
@@ -118,15 +126,17 @@
                   </div>
                 </template>
                 <div class="event-list-full">
-                  <el-card v-for="event in filteredEvents" :key="`${event.deviceId}-${event.timestamp}`" shadow="hover" class="event-card">
+                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${event.receivedAt ?? 'na'}-${index}`" shadow="hover" class="event-card">
                     <div class="event-card-head">
                       <div>
-                        <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                        <div class="event-card-main">
+                          <strong>{{ getDeviceDisplayName(event.deviceId) }}</strong>
+                          <span class="event-card-time-inline">{{ formatEventTime(event) }}</span>
+                        </div>
                         <div class="event-card-sub">{{ event.deviceId }}</div>
                       </div>
                       <div class="event-card-right">
                         <el-tag size="small">{{ getEventType(event) }}</el-tag>
-                        <span>{{ formatTime(event.timestamp) }}</span>
                       </div>
                     </div>
                     <pre>{{ formatValue(event.payload) }}</pre>
@@ -344,26 +354,41 @@ const eventDeviceOptions = computed(() => {
 
 const filteredEvents = computed(() => {
   const list = deviceStore.recentEvents || []
-  if (!eventDeviceFilter.value) return list
-  return list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+  const result = eventDeviceFilter.value
+    ? list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
+    : list
+  return [...result].sort((a: any, b: any) => (Number(b?.receivedAt) || 0) - (Number(a?.receivedAt) || 0))
 })
 
 const deviceEventStats = computed(() => {
-  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string> }>()
+  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; lastTimestamp: number; lastType: string }>()
   for (const event of filteredEvents.value) {
     const deviceId = event?.deviceId || 'unknown'
     const name = getDeviceDisplayName(deviceId)
     if (!grouped.has(deviceId)) {
-      grouped.set(deviceId, { deviceId, deviceName: name, count: 0, types: new Set<string>() })
+      grouped.set(deviceId, {
+        deviceId,
+        deviceName: name,
+        count: 0,
+        lastTimestamp: 0,
+        lastType: '-',
+      })
     }
     const current = grouped.get(deviceId)!
+    const eventType = getEventType(event)
+    const eventTimestamp = Number(event?.receivedAt) || 0
     current.count += 1
-    current.types.add(getEventType(event))
+    if (eventTimestamp >= current.lastTimestamp) {
+      current.lastTimestamp = eventTimestamp
+      current.lastType = eventType
+    }
   }
-  return Array.from(grouped.values()).map((item) => ({
-    ...item,
-    typesText: Array.from(item.types).join('、') || '-',
-  }))
+  return Array.from(grouped.values())
+    .map((item) => ({
+      ...item,
+      lastTimeText: formatTime(item.lastTimestamp),
+    }))
+    .sort((a, b) => b.count - a.count)
 })
 
 const eventDeviceCount = computed(() => deviceEventStats.value.length)
@@ -606,8 +631,12 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
-function formatTime(val?: number) {
-  return val ? new Date(val).toLocaleString() : '-'
+function formatTime(val?: number | null) {
+  return val !== null && val !== undefined ? new Date(val).toLocaleString() : '-'
+}
+
+function formatEventTime(event: any) {
+  return formatTime(Number(event?.receivedAt) || null)
 }
 
 function getDeviceDisplayName(deviceId?: string) {
@@ -848,11 +877,42 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 620px;
+  overflow-y: auto;
+  padding-right: 2px;
+  overscroll-behavior: contain;
 }
 
 .event-card {
+  flex: 0 0 auto;
   background: #f8fafc;
   border: 1px solid #ebeef5;
+}
+
+.event-card-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.event-card-time-inline {
+  font-size: 12px;
+  color: #606266;
+}
+
+.event-device-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-device-name {
+  color: #303133;
+}
+
+.event-device-time {
+  font-size: 12px;
+  color: #909399;
 }
 
 .event-card-head {

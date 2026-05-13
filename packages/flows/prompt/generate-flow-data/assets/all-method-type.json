@@ -1,0 +1,927 @@
+[
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.list.ListUtils",
+    "code": "ListUtils",
+    "name": "列表类函数",
+    "methods": [
+      {
+        "code": "add",
+        "name": "添加单个元素",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "element",
+            "name": "元素",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": null
+      },
+      {
+        "code": "addAll",
+        "name": "添加多个元素",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "addingList",
+            "name": "元素列表",
+            "type": "array",
+            "varArgs": false
+          }
+        ],
+        "returnType": null
+      },
+      {
+        "code": "size",
+        "name": "列表长度",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "contains",
+        "name": "是否包含元素",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "element",
+            "name": "元素",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "sumByField",
+        "name": "基于字段求和",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "fieldName",
+            "name": "字段名",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "sortByField",
+        "name": "基于字段排序",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "fieldName",
+            "name": "字段名",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "asc",
+            "name": "是否升序",
+            "type": "boolean",
+            "varArgs": false
+          }
+        ],
+        "returnType": null
+      },
+      {
+        "code": "includedInList",
+        "name": "是否包含指定元素",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "element",
+            "name": "要包含的元素",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "getFieldStrings",
+        "name": "获取指定字段值集合",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "fieldName",
+            "name": "字段名",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "array"
+      },
+      {
+        "code": "getFieldDistinctStrings",
+        "name": "获取指定字段值集合(去重)",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "fieldName",
+            "name": "字段名",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "array"
+      },
+      {
+        "code": "createStringCollection",
+        "name": "创建字符串集合",
+        "parameters": [
+          {
+            "code": "strings",
+            "name": "字符串集合",
+            "type": "string",
+            "varArgs": true
+          }
+        ],
+        "returnType": "array"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.MathUtils",
+    "code": "MathUtils",
+    "name": "数学类函数",
+    "methods": [
+      {
+        "code": "abs",
+        "name": "求绝对值",
+        "parameters": [
+          {
+            "code": "a",
+            "name": "数字",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "round",
+        "name": "四舍五入",
+        "parameters": [
+          {
+            "code": "a",
+            "name": "数字",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "random",
+        "name": "生成随机数",
+        "parameters": [],
+        "returnType": "number"
+      },
+      {
+        "code": "ceil",
+        "name": "向上取整",
+        "parameters": [
+          {
+            "code": "a",
+            "name": "数字",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "floor",
+        "name": "向下取整",
+        "parameters": [
+          {
+            "code": "a",
+            "name": "数字",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "isEqual",
+        "name": "是否等于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "number",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isNotEqual",
+        "name": "是否不等于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isGreaterThan",
+        "name": "是否大于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isGreaterThanEqual",
+        "name": "是否大于等于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isLessThan",
+        "name": "是否小于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isLessThanEqual",
+        "name": "是否小于等于",
+        "parameters": [
+          {
+            "code": "number1",
+            "name": "数字1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "number2",
+            "name": "数字2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.StringUtils",
+    "code": "StringUtils",
+    "name": "字符串函数",
+    "methods": [
+      {
+        "code": "subString",
+        "name": "截取字符串",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "beginIndex",
+            "name": "开始位置",
+            "type": "number",
+            "varArgs": false
+          },
+          {
+            "code": "length",
+            "name": "截取长度",
+            "type": "number",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "length",
+        "name": "获取长度",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "equals",
+        "name": "是否相等",
+        "parameters": [
+          {
+            "code": "str1",
+            "name": "字符串1",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "str2",
+            "name": "字符串2",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "contains",
+        "name": "包含字符串",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "target",
+            "name": "要包含的字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "notContains",
+        "name": "不包含字符串",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "target",
+            "name": "不包含的字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "startWith",
+        "name": "开始于",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "prefix",
+            "name": "前缀",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "notStartWith",
+        "name": "不开始于",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "prefix",
+            "name": "前缀",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "endWith",
+        "name": "结束于",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "suffix",
+            "name": "后缀",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "notEndWith",
+        "name": "不结束于",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "suffix",
+            "name": "后缀",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "replace",
+        "name": "替换",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "target",
+            "name": "目标字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "replacement",
+            "name": "替换为",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "toLowerCase",
+        "name": "转小写",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "toUpperCase",
+        "name": "转大写",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "indexOf",
+        "name": "查找字符串首次匹配位置",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "target",
+            "name": "目标字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "lastIndexOf",
+        "name": "查找字符串最后匹配位置",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "target",
+            "name": "目标字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "trim",
+        "name": "去掉空格",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "createGuid",
+        "name": "生成唯一标识",
+        "parameters": [],
+        "returnType": "string"
+      },
+      {
+        "code": "isEmpty",
+        "name": "是空串",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "isNumStr",
+        "name": "是空串",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      },
+      {
+        "code": "concat",
+        "name": "拼接字符串",
+        "parameters": [
+          {
+            "code": "str1",
+            "name": "字符串1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str2",
+            "name": "字符串2",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "concat3",
+        "name": "拼接3个字符串",
+        "parameters": [
+          {
+            "code": "str1",
+            "name": "字符串1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str2",
+            "name": "字符串2",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str3",
+            "name": "字符串3",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "concat4",
+        "name": "拼接4个字符串",
+        "parameters": [
+          {
+            "code": "str1",
+            "name": "字符串1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str2",
+            "name": "字符串2",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str3",
+            "name": "字符串3",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str4",
+            "name": "字符串4",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "concat5",
+        "name": "拼接5个字符串",
+        "parameters": [
+          {
+            "code": "str1",
+            "name": "字符串1",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str2",
+            "name": "字符串2",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str3",
+            "name": "字符串3",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str4",
+            "name": "字符串4",
+            "type": "any",
+            "varArgs": false
+          },
+          {
+            "code": "str5",
+            "name": "字符串5",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.datetime.OffsetDateTimeUtils",
+    "code": "OffsetDateTimeUtils",
+    "name": "时间函数",
+    "methods": [
+      {
+        "code": "formatNow",
+        "name": "格式化当前日期",
+        "parameters": [
+          {
+            "code": "format",
+            "name": "格式",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.regex.RegexUtils",
+    "code": "RegexUtils",
+    "name": "正则校验函数",
+    "methods": [
+      {
+        "code": "matches",
+        "name": "正则校验",
+        "parameters": [
+          {
+            "code": "regex",
+            "name": "正则表达式",
+            "type": "string",
+            "varArgs": false
+          },
+          {
+            "code": "str",
+            "name": "要校验的字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "boolean"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.common.function.idp.IDPListUtil",
+    "code": "IDPListUtil",
+    "name": "IDP列表类函数",
+    "methods": [
+      {
+        "code": "getFieldStrings",
+        "name": "获取指定字段值集合",
+        "parameters": [
+          {
+            "code": "list",
+            "name": "列表",
+            "type": "array",
+            "varArgs": false
+          },
+          {
+            "code": "fieldName",
+            "name": "字段名",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "array"
+      }
+    ]
+  },
+  {
+    "typeUrl": "com.inspur.edp.rule.dsl.core.function.ConvertUtils",
+    "code": "ConvertUtils",
+    "name": "类型转换",
+    "methods": [
+      {
+        "code": "convertToString",
+        "name": "转字符串",
+        "parameters": [
+          {
+            "code": "a",
+            "name": "对象",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      },
+      {
+        "code": "convertToDouble",
+        "name": "转小数",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "convertToInt",
+        "name": "转整数",
+        "parameters": [
+          {
+            "code": "str",
+            "name": "字符串",
+            "type": "string",
+            "varArgs": false
+          }
+        ],
+        "returnType": "number"
+      },
+      {
+        "code": "convertToCHNMoney",
+        "name": "转人民币中文",
+        "parameters": [
+          {
+            "code": "money",
+            "name": "字符串",
+            "type": "any",
+            "varArgs": false
+          }
+        ],
+        "returnType": "string"
+      }
+    ]
+  }
+]

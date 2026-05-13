@@ -13,6 +13,8 @@
     "baseUrl": "./",
     "paths": {
       "@flow-designer/*": ["src/*"],
+      "@farris/x-ui": ["../tmp-local-dependency/x-ui/index.d.ts"],
+      "@farris/x-conversation": ["../tmp-local-dependency/x-conversation/index.d.ts"],
       "@/*": ["src/*"]
     }
   },

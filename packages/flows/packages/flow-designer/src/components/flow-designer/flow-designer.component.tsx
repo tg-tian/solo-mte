@@ -1,5 +1,6 @@
 import { ref, defineComponent, watch, computed, provide, type CSSProperties } from "vue";
 import { FlowView } from '../flow-view';
+import { TemplateSearch } from '../template-search';
 import { flowDesignerProps } from './flow-designer.props';
 import { throttle } from "lodash-es";
 import { useSubFlowCanvasRegistry } from "@farris/flow-devkit";
@@ -49,11 +50,6 @@ export default defineComponent({
             trailing: false,
         });
 
-        const toolbarItems = [
-            { id: 'save', text: '保存', onClick: onSave },
-            { id: 'close', text: '关闭', onClick: closeMenu },
-        ];
-
         const pageTitle = ref<string>('流程编排');
 
         function init(): void {
@@ -68,6 +64,8 @@ export default defineComponent({
 
         watch(isLoaded, init, { immediate: true });
 
+        const showCloseButton = false;
+
         function renderLoadingMask() {
             return (
                 <div class={css['mask']} style={maskStyle.value}>
@@ -78,11 +76,32 @@ export default defineComponent({
             );
         }
 
+        function renderPageHeader() {
+            return (
+                <div class="f-page-header">
+                    <nav class="f-page-header-base">
+                        <div class="f-title">
+                            <span class="f-title-icon f-text-orna-bill">
+                                <i class="f-icon f-icon-page-title-record"></i>
+                            </span>
+                            <h4 class="f-title-text">事件驱动流</h4>
+                        </div>
+                        <div class={css['f-page-header__right']}>
+                            <TemplateSearch />
+                            <div class={css['f-page-header__divider']}></div>
+                            <button class="btn f-rt-btn f-btn-ml btn-secondary" onClick={onSave}>保存</button>
+                            {showCloseButton && <button class="btn f-rt-btn f-btn-ml btn-secondary" onClick={closeMenu}>关闭</button>}
+                        </div>
+                    </nav>
+                </div>
+            );
+        }
+
         function renderFullPage() {
             return (
                 <div class={[css['flow-designer'], css['full-page']]}>
                     <div class="f-page f-page-navigate">
-                        <f-page-header title={pageTitle.value} buttons={toolbarItems}></f-page-header>
+                        {renderPageHeader()}
                         <div class="f-page-main">
                             {isLoaded.value && (
                                 <FlowView />

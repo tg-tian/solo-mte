@@ -1,2 +1,3 @@
 export * from './flow-kind';
 export * from './node-category';
+export * from './conversation';

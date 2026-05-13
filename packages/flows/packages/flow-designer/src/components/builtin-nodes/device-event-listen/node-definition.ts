@@ -20,6 +20,9 @@ export const DEVICE_EVENT_LISTEN_NODE: NodeDefinition = {
         ]
     },
     component: markRaw(DeviceEventListenComponent),
+    getOutputParams: (nodeData) => {
+        return nodeData.inputParams || [];
+    },
     getPropertyPanelConfig: (nodeData) => {
         const config = new NodeProperty();
         return config.getPropertyConfig(nodeData);

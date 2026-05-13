@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject } from "vue";
+import { computed, defineComponent, inject, nextTick } from "vue";
 import { VueFlow } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { Toolbar } from '../toolbar';
@@ -15,6 +15,9 @@ import {
     useNodeTypes,
     useTrialRunPanel,
     useChatflow,
+    useLayout,
+    useAiChatPanel,
+    useTemplateSearch,
     FLOW_DESIGNER_PROPS_KEY,
 } from '@flow-designer/hooks';
 import { flowViewProps } from './flow-view.props';
@@ -48,6 +51,17 @@ export default defineComponent({
 
         const { renderNodeDebugDrawer } = useNodeDebug();
         const { renderTrialRunPanel } = useTrialRunPanel();
+        const { layoutAndFitView } = useLayout();
+
+        function afterReloadFlow(): void {
+            rebuildNodePredecessorMap();
+            nextTick(() => {
+                layoutAndFitView();
+            });
+        }
+
+        const { renderAiChatPanel } = useAiChatPanel(afterReloadFlow);
+        useTemplateSearch(afterReloadFlow);
 
         const { onDragOver, onDrop, onDragLeave } = useDragNewNode();
 
@@ -114,6 +128,8 @@ export default defineComponent({
                         {renderNodePropertyPanel()}
                         {/* 单节点调试面板 */}
                         {renderNodeDebugDrawer()}
+                        {/* AI 对话面板 - 浮动在属性面板上方 */}
+                        {renderAiChatPanel()}
                     </div>
                 </div>
             );

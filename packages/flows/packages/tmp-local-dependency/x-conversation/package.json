@@ -1,0 +1,16 @@
+{
+  "name": "@farris/x-conversation",
+  "version": "0.0.1",
+  "description": "可复用的 AI 对话组件",
+  "type": "module",
+  "main": "./farris.x-conversation.umd.cjs",
+  "module": "./farris.x-conversation.esm.js",
+  "types": "./components/index.d.ts",
+  "style": "./index.css",
+  "dependencies": {
+    "@farris/x-ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  }
+}

@@ -2,21 +2,21 @@
   <div class="page-container">
     <div class="page-header">
       <div class="page-title-group">
-        <h2 class="page-main-title">设备元模型管理</h2>
-        <p class="page-sub-title">定义和管理平台支持的物联网设备元模型</p>
+        <h2 class="page-main-title">设备类型管理</h2>
+        <p class="page-sub-title">定义和管理平台支持的物联网设备类型</p>
       </div>
       <el-button type="primary" class="create-btn" @click="openDeviceModelSetting()">
-        <el-icon><Plus /></el-icon>创建设备元模型
+        <el-icon><Plus /></el-icon>创建设备类型
       </el-button>
     </div>
 
     <!-- 搜索栏 -->
     <el-card class="search-card" shadow="never">
       <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="模型名称">
+        <el-form-item label="设备类型名称">
           <el-input 
             v-model="searchForm.modelName" 
-            placeholder="请输入模型名称" 
+            placeholder="请输入设备类型名称" 
             clearable
             @keyup.enter="handleSearch"
             style="width: 240px"
@@ -41,12 +41,12 @@
       class="premium-table"
       :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
     >
-      <el-table-column prop="modelId" label="模型ID" width="150" align="center">
+      <el-table-column prop="modelId" label="设备类型ID" width="150" align="center">
         <template #default="{ row }">
           <el-tag size="small" effect="plain">{{ row.model?.modelId || '-' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="modelName" label="模型名称" min-width="150">
+      <el-table-column prop="modelName" label="设备类型名称" min-width="150">
         <template #default="{ row }">
           <span class="model-name-text">{{ row.modelName }}</span>
         </template>
@@ -84,7 +84,7 @@
     </div>
 
     <!-- JSON查看对话框 -->
-    <el-dialog v-model="jsonDialogVisible" title="设备模型JSON" width="60%">
+    <el-dialog v-model="jsonDialogVisible" title="设备类型JSON" width="60%">
       <pre class="json-viewer">{{ formattedDeviceModelJson }}</pre>
       <template #footer>
         <span class="dialog-footer">
@@ -213,7 +213,7 @@ const copyJson = () => {
 
 const handleDelete = (row: DeviceModel) => {
   ElMessageBox.confirm(
-    `确定要删除设备模型 "${row.modelName}" 吗？`,
+    `确定要删除设备类型 "${row.modelName}" 吗？`,
     '警告',
     {
       confirmButtonText: '确定',

@@ -101,6 +101,12 @@ importers:
       '@farris/ui-vue':
         specifier: ^1.6.5-beta.7
         version: 1.6.5-beta.7(@algolia/client-search@4.25.2)(@types/node@22.18.1)(rollup@4.50.0)(search-insights@2.17.3)(vite@7.1.4(@types/node@22.18.1)(jiti@2.5.1)(sass@1.91.0)(terser@5.44.0))(vue@3.5.20(typescript@5.8.3))
+      '@farris/x-conversation':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-conversation
+      '@farris/x-ui':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-ui
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -177,6 +183,12 @@ importers:
       '@farris/ui-vue':
         specifier: ^1.6.5-beta.7
         version: 1.6.5-beta.7(@algolia/client-search@4.25.2)(@types/node@22.18.1)(rollup@4.50.0)(search-insights@2.17.3)(vite@7.1.4(@types/node@22.18.1)(jiti@2.5.1)(sass@1.91.0)(terser@5.44.0))(vue@3.5.20(typescript@5.8.3))
+      '@farris/x-conversation':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-conversation
+      '@farris/x-ui':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-ui
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -250,6 +262,12 @@ importers:
       '@farris/ui-vue':
         specifier: ^1.6.5-beta.7
         version: 1.6.5-beta.7(@algolia/client-search@4.25.2)(@types/node@22.18.1)(rollup@4.50.0)(search-insights@2.17.3)(vite@7.1.4(@types/node@22.18.1)(jiti@2.5.1)(sass@1.91.0)(terser@5.44.0))(vue@3.5.20(typescript@5.8.3))
+      '@farris/x-conversation':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-conversation
+      '@farris/x-ui':
+        specifier: workspace:*
+        version: link:../../tmp-local-dependency/x-ui
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -307,6 +325,12 @@ importers:
 
   packages/flow-designer:
     dependencies:
+      '@farris/x-conversation':
+        specifier: workspace:*
+        version: link:../tmp-local-dependency/x-conversation
+      '@farris/x-ui':
+        specifier: workspace:*
+        version: link:../tmp-local-dependency/x-ui
       '@vue-flow/minimap':
         specifier: ~1.5.4
         version: 1.5.4(@vue-flow/core@1.46.2(vue@3.5.20(typescript@5.8.3)))(vue@3.5.20(typescript@5.8.3))
@@ -478,6 +502,21 @@ importers:
       vue-tsc:
         specifier: ^3.0.4
         version: 3.0.6(typescript@5.8.3)
+
+  packages/tmp-local-dependency/x-conversation:
+    dependencies:
+      '@farris/x-ui':
+        specifier: workspace:*
+        version: link:../x-ui
+      vue:
+        specifier: ^3.2.0
+        version: 3.5.20(typescript@5.8.3)
+
+  packages/tmp-local-dependency/x-ui:
+    dependencies:
+      vue:
+        specifier: ^3.2.0
+        version: 3.5.20(typescript@5.8.3)
 
 packages:
 

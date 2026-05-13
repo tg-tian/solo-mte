@@ -332,7 +332,7 @@
     {
         "id": "DeviceModel",
         "code": "device-model-list",
-        "name": "设备元模型",
+        "name": "设备类型",
         "parentId": "MetaModelingLevel3",
         "layer": "4",
         "menuType": "",
@@ -347,7 +347,7 @@
     {
         "id": "DeviceList",
         "code": "device-list",
-        "name": "设备列表",
+        "name": "设备型号列表",
         "parentId": "MetaModelingLevel3",
         "layer": "4",
         "menuType": "",

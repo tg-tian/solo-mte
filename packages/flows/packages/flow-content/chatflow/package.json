@@ -29,6 +29,8 @@
     "@farris/flow-designer": "workspace:^",
     "@farris/flow-devkit": "workspace:^",
     "@farris/ui-vue": "^1.6.5-beta.7",
+    "@farris/x-conversation": "workspace:*",
+    "@farris/x-ui": "workspace:*",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",

@@ -1,0 +1,27 @@
+目前，generate-flow-data\assets\all-method-type.json 的内容是从业务系统中直接获取到的类型数据，过于复杂了，而且其中的大部分内容都没用，给ai造成很大负担，必须进行简化。
+而且，由于这些类型数据后续在业务系统中可能更新，所以需要你实现一个py脚本，支持通过脚本将目前原始的类型数据进行简化。
+简化要求如下：
+1、只保留在本项目场景下有用的数据，本项目仅在生成函数调用节点、函数调用表达式时需要参考该json，所以你应该根据目前函数调用表达式的生成规则来确定哪些字段有用；
+2、让字段命名更统一，降低ai的理解负担，比如：生成函数调用表达式时，需要填写typeUrl字段，而它对应的是json中的typeId，这里就应该统一为typeUrl；
+3、解决类型不匹配的问题：在简化流程数据的规范中，因为要简化，所以类型只使用一个字符串进行表示（string、number、boolean、object、array），而在json中使用的还是我们原本的类型表示方法，它用一个对象表示类型，如下：
+{ "source": "default", "typeId": "string", "typeCode": null, "typeName": null, "genericTypes": null }
+使用这种方式不仅可以表示基础数据类型，也可以表示复杂类型，如果 source 等于 default，则表示为基础类型，此时typeId即为要表示的基础类型明，这里是string说明是字符串类型
+我们需要把各种对象表示的类型统统映射为：string、number、boolean、object、array、any 中的一个
+还有，json中函数返回值为空则这样表示：
+{
+                    "source": "default",
+                    "typeId": "void",
+                    "typeCode": null,
+                    "typeName": null,
+                    "genericTypes": null
+                },
+我们直接改写为："returnType": null 来表示函数没有返回值
+
+在scripts目录下编写你的脚本，读取同目录下的 all-method-type.json，并在同目录下生成 all-method-type.simple.json
+对于类型对象，如果其source为default且typeId为string、number、boolean、object、array、any中的一个，则直接映射为typeId的字符串的值即可；如果有其它情况，则在error.log目录报错；
+你需要在脚本的同目录下创建一个 type-map-rule.log，文件的内容是额外指定的类型映射规则，初始内容为：
+default|java.lang.Iterable > array
+表示 source 为 default 且 typeId 为 java.lang.Iterable 则映射为 "array"
+我后续会根据脚本运行时的报错向其中添加更多规则，每个规则一行，脚本运行时要读取这些规则
+
+接下来，请读取 generate-flow-data\assets\all-method-type.json 并设计你的简化规则
