@@ -114,8 +114,7 @@
                   <el-table-column prop="deviceId" label="设备编码" min-width="150" />
                   <el-table-column prop="count" label="事件数" width="100" />
                   <el-table-column prop="lastTimeText" label="最近事件时间" min-width="180" />
-                  <el-table-column prop="lastType" label="最新事件类型" min-width="140" show-overflow-tooltip />
-                  <el-table-column prop="typesText" label="事件类型" min-width="180" show-overflow-tooltip />
+                  <el-table-column prop="lastType" label="最近事件类型" min-width="180" show-overflow-tooltip />
                 </el-table>
               </el-card>
             </el-col>
@@ -127,7 +126,7 @@
                   </div>
                 </template>
                 <div class="event-list-full">
-                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${resolveEventTimestamp(event) ?? 'na'}-${index}`" shadow="hover" class="event-card">
+                  <el-card v-for="(event, index) in filteredEvents" :key="`${event.deviceId}-${event.receivedAt ?? 'na'}-${index}`" shadow="hover" class="event-card">
                     <div class="event-card-head">
                       <div>
                         <div class="event-card-main">
@@ -358,12 +357,11 @@ const filteredEvents = computed(() => {
   const result = eventDeviceFilter.value
     ? list.filter((event: any) => event?.deviceId === eventDeviceFilter.value)
     : list
-  return [...result].sort((a: any, b: any) => (resolveEventTimestamp(b) || 0) - (resolveEventTimestamp(a) || 0))
+  return [...result].sort((a: any, b: any) => (Number(b?.receivedAt) || 0) - (Number(a?.receivedAt) || 0))
 })
 
 const deviceEventStats = computed(() => {
-  const currentSystemTime = Date.now()
-  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; types: Set<string>; lastTimestamp: number; lastType: string }>()
+  const grouped = new Map<string, { deviceId: string; deviceName: string; count: number; lastTimestamp: number; lastType: string }>()
   for (const event of filteredEvents.value) {
     const deviceId = event?.deviceId || 'unknown'
     const name = getDeviceDisplayName(deviceId)
@@ -372,23 +370,23 @@ const deviceEventStats = computed(() => {
         deviceId,
         deviceName: name,
         count: 0,
-        types: new Set<string>(),
         lastTimestamp: 0,
         lastType: '-',
       })
     }
     const current = grouped.get(deviceId)!
     const eventType = getEventType(event)
+    const eventTimestamp = Number(event?.receivedAt) || 0
     current.count += 1
-    current.types.add(eventType)
-    current.lastTimestamp = currentSystemTime
-    current.lastType = eventType
+    if (eventTimestamp >= current.lastTimestamp) {
+      current.lastTimestamp = eventTimestamp
+      current.lastType = eventType
+    }
   }
   return Array.from(grouped.values())
     .map((item) => ({
       ...item,
       lastTimeText: formatTime(item.lastTimestamp),
-      typesText: Array.from(item.types).join('、') || '-',
     }))
     .sort((a, b) => b.count - a.count)
 })
@@ -633,134 +631,12 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
-function parseTimestamp(value: unknown): number | null {
-  const minValidMs = Date.UTC(2000, 0, 1, 0, 0, 0, 0)
-  const maxValidMs = Date.UTC(2100, 0, 1, 0, 0, 0, 0)
-
-  const normalizeAndValidate = (input: number): number | null => {
-    const normalized = input < 1e12 ? input * 1000 : input
-    if (!Number.isFinite(normalized)) return null
-    if (normalized < minValidMs || normalized > maxValidMs) return null
-    return normalized
-  }
-
-  if (value === null || value === undefined || value === '') return null
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value.getTime()
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return normalizeAndValidate(value)
-  }
-  if (typeof value === 'string') {
-    const trimmed = value.trim()
-    if (!trimmed) return null
-    if (/^\d+(\.\d+)?$/.test(trimmed)) {
-      const numeric = Number(trimmed)
-      if (!Number.isFinite(numeric)) return null
-      return normalizeAndValidate(numeric)
-    }
-    const parsed = Date.parse(trimmed)
-    if (Number.isNaN(parsed)) return null
-    return parsed < minValidMs || parsed > maxValidMs ? null : parsed
-  }
-  return null
-}
-
-function parseJsonIfPossible(value: unknown): unknown {
-  if (typeof value !== 'string') return value
-  const trimmed = value.trim()
-  if (!trimmed) return value
-  if (!((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']')))) {
-    return value
-  }
-  try {
-    return JSON.parse(trimmed)
-  } catch {
-    return value
-  }
-}
-
-function extractTimestampDeep(input: unknown, depth = 0): number | null {
-  if (depth > 5) return null
-
-  const direct = parseTimestamp(input)
-  if (direct !== null) return direct
-
-  const value = parseJsonIfPossible(input)
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      const parsed = extractTimestampDeep(item, depth + 1)
-      if (parsed !== null) return parsed
-    }
-    return null
-  }
-
-  if (!value || typeof value !== 'object') return null
-
-  const objectValue = value as Record<string, unknown>
-  const keys = Object.keys(objectValue)
-  const priorityPattern = /(timestamp|timeStamp|eventTimestamp|occurredAt|createdAt|eventTime|time|ts|date)/i
-
-  for (const key of keys) {
-    if (!priorityPattern.test(key)) continue
-    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
-    if (parsed !== null) return parsed
-  }
-
-  for (const key of keys) {
-    const parsed = extractTimestampDeep(objectValue[key], depth + 1)
-    if (parsed !== null) return parsed
-  }
-
-  return null
-}
-
-function resolveEventTimestamp(event: any): number | null {
-  if (!event) return null
-  const eventObject = parseJsonIfPossible(event)
-  if (!eventObject || typeof eventObject !== 'object') return null
-  const payloadRaw = (eventObject as any).payload
-  const payload = parseJsonIfPossible(payloadRaw)
-  const payloadData = payload && typeof payload === 'object' ? parseJsonIfPossible((payload as any).data) : null
-  const candidates = [
-    (eventObject as any).timestamp,
-    (eventObject as any).timeStamp,
-    (eventObject as any).eventTimestamp,
-    (eventObject as any).ts,
-    (eventObject as any).time,
-    (eventObject as any).createdAt,
-    (eventObject as any).occurredAt,
-    (eventObject as any).eventTime,
-    payload && typeof payload === 'object' ? (payload as any).timestamp : null,
-    payload && typeof payload === 'object' ? (payload as any).timeStamp : null,
-    payload && typeof payload === 'object' ? (payload as any).eventTimestamp : null,
-    payload && typeof payload === 'object' ? (payload as any).ts : null,
-    payload && typeof payload === 'object' ? (payload as any).time : null,
-    payload && typeof payload === 'object' ? (payload as any).createdAt : null,
-    payload && typeof payload === 'object' ? (payload as any).occurredAt : null,
-    payload && typeof payload === 'object' ? (payload as any).eventTime : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).timestamp : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).timeStamp : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTimestamp : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).ts : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).time : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).createdAt : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).occurredAt : null,
-    payloadData && typeof payloadData === 'object' ? (payloadData as any).eventTime : null,
-  ]
-  for (const candidate of candidates) {
-    const parsed = parseTimestamp(candidate)
-    if (parsed !== null) return parsed
-  }
-  const deepParsed = extractTimestampDeep(eventObject)
-  if (deepParsed !== null) return deepParsed
-  return null
-}
-
 function formatTime(val?: number | null) {
   return val !== null && val !== undefined ? new Date(val).toLocaleString() : '-'
 }
 
 function formatEventTime(event: any) {
-  return formatTime(resolveEventTimestamp(event))
+  return formatTime(Number(event?.receivedAt) || null)
 }
 
 function getDeviceDisplayName(deviceId?: string) {
