@@ -1,5 +1,5 @@
 import { defineComponent, inject, onMounted, ref, watch } from "vue";
-import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FPopover, FSearchBox } from "@farris/ui-vue";
+import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, F_MODAL_SERVICE_TOKEN, FPopover, FSearchBox } from "@farris/ui-vue";
 import { AppDomain, AppModule, AppObject, UseAppDomain, UseWorkspace } from "../../composition/type";
 import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 import CreateAppDomainComponent from './create-app-entity/create-app-domain.component';
@@ -12,6 +12,7 @@ export default defineComponent({
     props: {},
     emits: [],
     setup() {
+        const modalService = inject(F_MODAL_SERVICE_TOKEN, null);
         const useAppDomainComposition = inject('f-app-center-app-domain') as UseAppDomain;
         const useWorkspaceComposition = inject('f-app-center-workspace') as UseWorkspace;
         const { options } = useWorkspaceComposition;
@@ -23,6 +24,18 @@ export default defineComponent({
         const createEntityAnchorRef = ref<HTMLElement | null>(null);
         const createAppDomainComponentRef = ref();
         const createModuleComponentRef = ref();
+        const modalInstanceRef = ref<any>();
+
+        function getActiveAppDomain() {
+            return currentAppDomain.value || (appDomains.value.length ? appDomains.value[0] : null);
+        }
+
+        function ensureCurrentAppDomain() {
+            const domain = getActiveAppDomain();
+            if (domain && !currentAppDomain.value) {
+                currentAppDomain.value = domain;
+            }
+        }
 
         function resetMenuItemSelectionStatus() {
             Array.from(appDomainMap.entries()).forEach(([appDomainId, appDomainInstanceRef]) => {
@@ -30,7 +43,10 @@ export default defineComponent({
             });
         }
 
-        function onClickMenuGroupHeader() {
+        function onClickMenuGroupHeader(appDomain: AppDomain) {
+            currentAppDomain.value = appDomain;
+            currentAppModule.value = appDomain.modules.length > 0 ? appDomain.modules[0] : undefined;
+            currentAppObjects.value = appDomain.modules.length > 0 ? appDomain.modules[0].apps : [];
             resetMenuItemSelectionStatus();
         }
 
@@ -43,6 +59,10 @@ export default defineComponent({
         watch(() => currentAppObjects.value, () => {
             appListViewRef.value.updateDataSource(currentAppObjects.value);
         });
+
+        watch(() => appDomains.value, () => {
+            ensureCurrentAppDomain();
+        }, { immediate: true });
 
         function onClickMenuItem(payload: MouseEvent, appDomain: AppDomain, appModule: AppModule) {
             resetMenuItemSelectionStatus();
@@ -58,13 +78,18 @@ export default defineComponent({
         }
 
         function onClickNewApp() {
+            if (!modalService) return;
             const options = {
                 title: '创建应用',
                 width: 540,
-                render: () => <AppWizardComponent ref={appWizardComponentRef} appModule={currentAppModule.value}></AppWizardComponent>,
-                acceptCallback: acceptToCreateNewApp
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => modalInstanceRef.value?.close() },
+                    { text: '确定', class: 'btn btn-primary', handle: () => { acceptToCreateNewApp(); modalInstanceRef.value?.close(); } }
+                ],
+                render: () => <AppWizardComponent ref={appWizardComponentRef} appModule={currentAppModule.value}></AppWizardComponent>
             } as any;
-            FModalService.show(options);
+            const modalRef = modalService.open(options);
+            modalInstanceRef.value = modalRef?.modalRef?.value;
         }
 
         function onClickCreateEntityButton() {
@@ -80,6 +105,7 @@ export default defineComponent({
                     if (success) {
                         setTimeout(() => {
                             updateAppDomain();
+                            ensureCurrentAppDomain();
                         }, 100);
                     }
                 });
@@ -87,24 +113,51 @@ export default defineComponent({
         }
 
         function onClickCreateAppDomain() {
+            if (!modalService) return;
             if (createEntityPopoverRef.value) {
                 createEntityPopoverRef.value.hide();
             }
             const options = {
                 title: '创建应用域',
                 width: 540,
-                render: () => <CreateAppDomainComponent ref={createAppDomainComponentRef}></CreateAppDomainComponent>,
-                acceptCallback: acceptToCreateAppDomain
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => modalInstanceRef.value?.close() },
+                    { text: '确定', class: 'btn btn-primary', handle: () => { acceptToCreateAppDomain(); modalInstanceRef.value?.close(); } }
+                ],
+                render: () => <CreateAppDomainComponent ref={createAppDomainComponentRef}></CreateAppDomainComponent>
             } as any;
-            FModalService.show(options);
+            const modalRef = modalService.open(options);
+            modalInstanceRef.value = modalRef?.modalRef?.value;
         }
 
         function acceptToCreateModule() {
             if (createModuleComponentRef.value) {
-                createModuleComponentRef.value.acceptToCreate().then((success: boolean) => {
-                    if (success) {
+                createModuleComponentRef.value.acceptToCreate().then((result: { success: boolean; code: string; name: string }) => {
+                    if (result.success) {
                         setTimeout(() => {
                             updateAppDomain();
+                            // 等待数据更新后更新模块列表并选中新建的模块
+                            setTimeout(() => {
+                                const appDomain = getActiveAppDomain();
+                                if (appDomain) {
+                                    // 更新模块列表的数据源
+                                    const appDomainInstanceRef = appDomainMap.get(appDomain.id);
+                                    if (appDomainInstanceRef?.value) {
+                                        appDomainInstanceRef.value.updateDataSource(appDomain.modules);
+                                    }
+
+                                    if (appDomain.modules.length > 0) {
+                                        const newModule = appDomain.modules.find(m => m.code === result.code && m.name === result.name);
+                                        if (newModule) {
+                                            updateAppObjects(appDomain, newModule);
+                                        } else if (appDomain.modules.length > 0) {
+                                            // 如果找不到新模块，选中最后一个（新建的）
+                                            const lastModule = appDomain.modules[appDomain.modules.length - 1];
+                                            updateAppObjects(appDomain, lastModule);
+                                        }
+                                    }
+                                }
+                            }, 300);
                         }, 100);
                     }
                 });
@@ -112,16 +165,23 @@ export default defineComponent({
         }
 
         function onClickCreateModule() {
+            if (!modalService) return;
             if (createEntityPopoverRef.value) {
                 createEntityPopoverRef.value.hide();
             }
+            ensureCurrentAppDomain();
+            const activeDomain = getActiveAppDomain();
             const options = {
                 title: '创建模块',
                 width: 540,
-                render: () => <CreateModuleComponent ref={createModuleComponentRef} appDomainId={currentAppDomain.value?.id} appDomainName={currentAppDomain.value?.name}></CreateModuleComponent>,
-                acceptCallback: acceptToCreateModule
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => modalInstanceRef.value?.close() },
+                    { text: '确定', class: 'btn btn-primary', handle: () => { acceptToCreateModule(); modalInstanceRef.value?.close(); } }
+                ],
+                render: () => <CreateModuleComponent ref={createModuleComponentRef} appDomainId={activeDomain?.id} appDomainName={activeDomain?.name}></CreateModuleComponent>
             } as any;
-            FModalService.show(options);
+            const modalRef = modalService.open(options);
+            modalInstanceRef.value = modalRef?.modalRef?.value;
         }
 
         function renderCreateEntityPopover() {
@@ -141,27 +201,26 @@ export default defineComponent({
 
         function renderAppModule(appDomain: AppDomain, { item, index, selectedItem }) {
             return <div onClick={(payload: MouseEvent) => onClickMenuItem(payload, appDomain, item)}>
-                <svg class="top-right-corner" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 0,10 A 10,10 0 0 0 10,0 L 10,10 L 0,10 Z" fill="white" />
-                </svg>
                 <span>{item.name}</span>
-                <svg class="bottom-right-corner" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 0,0 A 10,10 0 0 1 10,10 L 10,0 L 0,0 Z" fill="white" />
-                </svg>
             </div>;
         }
 
         function renderAppModules(appDomain: AppDomain, appModules: AppModule[]) {
             const appDomainInstanceRef = appDomainMap.get(appDomain.id);
             return <FListView key={`modules-${appDomain.id}`} ref={appDomainInstanceRef} data={appModules} customClass="f-admin-app-module-list" itemClass="f-admin-app-module-list-item">
-                {{ content: ({ item, index, selectedItem }) => renderAppModule(appDomain, { item, index, selectedItem }) }}
+                {{
+                    content: ({ item, index, selectedItem }) => renderAppModule(appDomain, { item, index, selectedItem }),
+                    empty: () => <div class="f-admin-app-module-list-empty">暂无模块</div>
+                }}
             </FListView>;
         }
 
-        function renderAppDomainNavigation(appDomains: any[]) {
+        function renderAppDomainNavigation() {
             return <FAccordion customClass="f-admin-app-domain-groups">
-                {appDomains.map((appDomain: AppDomain) => {
-                    return <FAccordionItem key={appDomain.id} customClass="f-admin-app-domain" iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={onClickMenuGroupHeader}>
+                {appDomains.value.map((appDomain: AppDomain) => {
+                    const isSelected = currentAppDomain.value?.id === appDomain.id;
+                    const customClass = `f-admin-app-domain${isSelected ? ' f-admin-app-domain-selected' : ''}`;
+                    return <FAccordionItem key={appDomain.id} customClass={customClass} iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={() => onClickMenuGroupHeader(appDomain)}>
                         {renderAppModules(appDomain, appDomain.modules)}
                     </FAccordionItem>;
                 })}
@@ -171,7 +230,7 @@ export default defineComponent({
         function renderLeftPanel() {
             return (
                 <div class="f-admin-app-center-left-panel">
-                    {renderAppDomainNavigation(appDomains.value)}
+                    {renderAppDomainNavigation()}
                     <div class="f-admin-create-entity-bar" ref={createEntityAnchorRef}>
                         <FButton onClick={onClickCreateEntityButton}>新建</FButton>
                     </div>
@@ -247,7 +306,8 @@ export default defineComponent({
                         <FListView ref={appListViewRef} customClass="f-admin-apps-list f-utils-fill-flex-column" data={currentAppObjects.value} header="ContentHeader" view="CardView">
                             {{
                                 header: renderAppsListHeader,
-                                content: renderAppCard
+                                content: renderAppCard,
+                                empty: () => <div class="f-admin-apps-list-empty">暂无应用，请点击「新建应用」创建</div>
                             }}
                         </FListView>
                     </FLayoutPane>

@@ -14,12 +14,18 @@ export default defineComponent({
         const entityName = ref('');
         const { createModule } = useCreateAppDomainModule();
 
-        function acceptToCreate(): Promise<boolean> {
-            return new Promise<boolean>((resolve) => {
+        function acceptToCreate(): Promise<{ success: boolean; code: string; name: string }> {
+            return new Promise<{ success: boolean; code: string; name: string }>((resolve) => {
+                // 验证必填字段
+                if (!entityCode.value || !entityName.value) {
+                    alert('请填写编号和名称');
+                    resolve({ success: false, code: '', name: '' });
+                    return;
+                }
                 createModule(entityCode.value, entityName.value, props.appDomainId).then(() => {
-                    resolve(true);
+                    resolve({ success: true, code: entityCode.value, name: entityName.value });
                 }).catch(() => {
-                    resolve(false);
+                    resolve({ success: false, code: '', name: '' });
                 });
             });
         }
