@@ -40,6 +40,7 @@ export function useCreateAppDomainModule() {
         const payload = {
             code,
             name,
+            businessObjectName: name,
             languageName: { 'zh-CHS': name },
             description: name,
             id,

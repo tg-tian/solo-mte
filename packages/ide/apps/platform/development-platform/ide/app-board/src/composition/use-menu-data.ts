@@ -2,6 +2,11 @@ import axios from 'axios';
 import { FunctionGroup, FunctionGroupItem, FunctionItem, MenuGroup, MenuGroupItem, UseConfig, UseMenuData } from './types';
 import { ref } from 'vue';
 
+/**
+ * 需要屏蔽的菜单编号黑名单，屏蔽这些编号的节点及其下级
+ */
+const MENU_CODE_BLACKLIST = ['SysPub', 'Bpms', 'HIP', 'Cms', 'inIoT', 'Epp', 'OC', 'BP09', 'emc', 'ChatBot_Factory', 'AgentCenter', 'KnowledgeBase', 'ai-capacity-open', 'ai-capacity-supervisor', 'aicknowledgegraph', 'AiComponent', 'ModelsManager'];
+
 export function useMenuData(): UseMenuData {
     const idField = 'id';
     const layerField = 'layer';
@@ -118,7 +123,8 @@ export function useMenuData(): UseMenuData {
     function buildFunctionGroup(appDomain: string, appModule: string, rawFunctionGroup: Record<string, any>) {
         const { id, code, name: category, menuPath } = rawFunctionGroup;
         const appGroup = code;
-        const rawFunctionItemsData = parentIdAndChildrenMap.get(id) || [];
+        const rawFunctionItemsData = (parentIdAndChildrenMap.get(id) || [])
+            .filter((rawItem: any) => !MENU_CODE_BLACKLIST.includes(rawItem.code));
         const functionGroupItems: FunctionGroupItem[] = rawFunctionItemsData.map((rawFunctionItemData: any) => {
             const { id, code, name, menuPath } = rawFunctionItemData;
             return { id, appDomain, appModule, appGroup, category, code, name, menuPath } as FunctionGroupItem;
@@ -137,7 +143,8 @@ export function useMenuData(): UseMenuData {
         const functionItems: FunctionItem[] = [];
         rawFunctionGroupsData.reduce((functions: FunctionItem[], rawFunctionGroupData: any) => {
             const { id: functionGroupId, code: appGroup, name: category } = rawFunctionGroupData;
-            const rawFunctionItemsData = parentIdAndChildrenMap.get(functionGroupId) || [];
+            const rawFunctionItemsData = (parentIdAndChildrenMap.get(functionGroupId) || [])
+                .filter((rawItem: any) => !MENU_CODE_BLACKLIST.includes(rawItem.code));
             rawFunctionItemsData.reduce((result: FunctionItem[], rawFunctionItemData: any) => {
                 const { id, code, name, menuPath } = rawFunctionItemData;
                 result.push({ id, appDomain, appModule, appGroup, category, code, name, menuPath } as FunctionGroupItem);
@@ -157,7 +164,8 @@ export function useMenuData(): UseMenuData {
     function buildMenuGroupItem(appDomain: string, rawMenuGroupItemData: Record<string, any>): MenuGroupItem {
         const { id, code, name, menuPath } = rawMenuGroupItemData;
         const appModule = code;
-        const rawFunctionGroupsData = parentIdAndChildrenMap.get(id) || [];
+        const rawFunctionGroupsData = (parentIdAndChildrenMap.get(id) || [])
+            .filter((rawItem: any) => !MENU_CODE_BLACKLIST.includes(rawItem.code));
         const functionGroups: FunctionGroup[] = rawFunctionGroupsData.map((rawFunctionGroupData: any) => {
             return buildFunctionGroup(appDomain, appModule, rawFunctionGroupData);
         });
@@ -173,7 +181,8 @@ export function useMenuData(): UseMenuData {
     function buildMenuGroup(rawMenuGroupData: Record<string, any>): MenuGroup {
         const { id, code, name, icon } = rawMenuGroupData;
         const appDomain = code;
-        const rawMenuGroupItemsData = parentIdAndChildrenMap.get(id) || [];
+        const rawMenuGroupItemsData = (parentIdAndChildrenMap.get(id) || [])
+            .filter((rawItem: any) => !MENU_CODE_BLACKLIST.includes(rawItem.code));
         const items: MenuGroupItem[] = rawMenuGroupItemsData.map((rawMenuGroupItemData: any) => {
             return buildMenuGroupItem(appDomain, rawMenuGroupItemData);
         });
@@ -208,7 +217,31 @@ export function useMenuData(): UseMenuData {
         generateDataItemMap(normalizedRawMenuGroups);
         generateParentIdAndChildrenMap(normalizedRawMenuGroups);
 
+        // 找出黑名单中的编号对应的所有节点ID（包括下级）
+        const blockedNodeIds = new Set<string>();
+        const findBlockedNodes = (nodeIds: string[]) => {
+            for (const nodeId of nodeIds) {
+                if (blockedNodeIds.has(nodeId)) continue;
+                const rawItem = rawDataItemMap.get(nodeId);
+                if (rawItem && MENU_CODE_BLACKLIST.includes(rawItem.code)) {
+                    blockedNodeIds.add(nodeId);
+                    // 递归添加所有下级节点
+                    const children = parentIdAndChildrenMap.get(nodeId) || [];
+                    findBlockedNodes(children.map((c: any) => c[idField]));
+                }
+            }
+        };
+
+        // 从顶层节点开始查找黑名单节点
+        const topLevelNodeIds = Array.from(rawDataItemMap.keys()).filter((nodeId) => {
+            const rawItem = rawDataItemMap.get(nodeId);
+            return !rawItem.parentId || rawItem.parentId === '' || rawItem.parentId === '0' || rawItem.parentId === 0;
+        });
+        findBlockedNodes(topLevelNodeIds);
+
+        // 过滤掉黑名单节点及其下级
         const menuGroups: MenuGroup[] = Array.from(rawMenuGroupDataItemMap.values())
+            .filter((rawMenuGroupDataItem) => !blockedNodeIds.has(rawMenuGroupDataItem[idField]))
             .map((rawMenuGroupDataItem) => {
                 return buildMenuGroup(rawMenuGroupDataItem);
             });
