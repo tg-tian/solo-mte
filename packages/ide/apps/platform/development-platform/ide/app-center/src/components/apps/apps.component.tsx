@@ -1,7 +1,9 @@
-import { defineComponent, inject, onMounted, Ref, ref, watch } from "vue";
-import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FSearchBox } from "@farris/ui-vue";
+import { defineComponent, inject, onMounted, ref, watch } from "vue";
+import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, FModalService, FPopover, FSearchBox } from "@farris/ui-vue";
 import { AppDomain, AppModule, AppObject, UseAppDomain, UseWorkspace } from "../../composition/type";
 import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
+import CreateAppDomainComponent from './create-app-entity/create-app-domain.component';
+import CreateModuleComponent from './create-app-entity/create-module.component';
 
 import './apps.css';
 
@@ -15,11 +17,12 @@ export default defineComponent({
         const { options } = useWorkspaceComposition;
         const { appDomains, appDomainMap, currentAppDomain, currentAppModule, currentAppObjects, updateAppDomain } = useAppDomainComposition;
         const appListViewRef = ref();
-        // const currentAppDomain = ref();
-        // const currentAppModule = ref();
-        // const currentAppObjects: Ref<AppObject[]> = ref([]);
         const defaultAppDomainIconUrl = '';
         const appWizardComponentRef = ref();
+        const createEntityPopoverRef = ref();
+        const createEntityAnchorRef = ref<HTMLElement | null>(null);
+        const createAppDomainComponentRef = ref();
+        const createModuleComponentRef = ref();
 
         function resetMenuItemSelectionStatus() {
             Array.from(appDomainMap.entries()).forEach(([appDomainId, appDomainInstanceRef]) => {
@@ -64,6 +67,78 @@ export default defineComponent({
             FModalService.show(options);
         }
 
+        function onClickCreateEntityButton() {
+            const anchor = createEntityAnchorRef.value;
+            if (createEntityPopoverRef.value && anchor) {
+                createEntityPopoverRef.value.show(anchor);
+            }
+        }
+
+        function acceptToCreateAppDomain() {
+            if (createAppDomainComponentRef.value) {
+                createAppDomainComponentRef.value.acceptToCreate().then((success: boolean) => {
+                    if (success) {
+                        setTimeout(() => {
+                            updateAppDomain();
+                        }, 100);
+                    }
+                });
+            }
+        }
+
+        function onClickCreateAppDomain() {
+            if (createEntityPopoverRef.value) {
+                createEntityPopoverRef.value.hide();
+            }
+            const options = {
+                title: '创建应用域',
+                width: 540,
+                render: () => <CreateAppDomainComponent ref={createAppDomainComponentRef}></CreateAppDomainComponent>,
+                acceptCallback: acceptToCreateAppDomain
+            } as any;
+            FModalService.show(options);
+        }
+
+        function acceptToCreateModule() {
+            if (createModuleComponentRef.value) {
+                createModuleComponentRef.value.acceptToCreate().then((success: boolean) => {
+                    if (success) {
+                        setTimeout(() => {
+                            updateAppDomain();
+                        }, 100);
+                    }
+                });
+            }
+        }
+
+        function onClickCreateModule() {
+            if (createEntityPopoverRef.value) {
+                createEntityPopoverRef.value.hide();
+            }
+            const options = {
+                title: '创建模块',
+                width: 540,
+                render: () => <CreateModuleComponent ref={createModuleComponentRef} appDomainId={currentAppDomain.value?.id} appDomainName={currentAppDomain.value?.name}></CreateModuleComponent>,
+                acceptCallback: acceptToCreateModule
+            } as any;
+            FModalService.show(options);
+        }
+
+        function renderCreateEntityPopover() {
+            return (
+                <FPopover
+                    ref={createEntityPopoverRef}
+                    placement="right"
+                    showArrow={false}
+                    visible={false}>
+                    <div class="f-create-entity-menu">
+                        <div class="f-create-entity-menu-item" onClick={onClickCreateAppDomain}>创建应用域</div>
+                        <div class="f-create-entity-menu-item" onClick={onClickCreateModule}>创建模块</div>
+                    </div>
+                </FPopover>
+            );
+        }
+
         function renderAppModule(appDomain: AppDomain, { item, index, selectedItem }) {
             return <div onClick={(payload: MouseEvent) => onClickMenuItem(payload, appDomain, item)}>
                 <svg class="top-right-corner" width="10" height="10" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +153,7 @@ export default defineComponent({
 
         function renderAppModules(appDomain: AppDomain, appModules: AppModule[]) {
             const appDomainInstanceRef = appDomainMap.get(appDomain.id);
-            return <FListView ref={appDomainInstanceRef} data={appModules} customClass="f-admin-app-module-list" itemClass="f-admin-app-module-list-item">
+            return <FListView key={`modules-${appDomain.id}`} ref={appDomainInstanceRef} data={appModules} customClass="f-admin-app-module-list" itemClass="f-admin-app-module-list-item">
                 {{ content: ({ item, index, selectedItem }) => renderAppModule(appDomain, { item, index, selectedItem }) }}
             </FListView>;
         }
@@ -86,18 +161,30 @@ export default defineComponent({
         function renderAppDomainNavigation(appDomains: any[]) {
             return <FAccordion customClass="f-admin-app-domain-groups">
                 {appDomains.map((appDomain: AppDomain) => {
-                    return <FAccordionItem customClass="f-admin-app-domain" iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={onClickMenuGroupHeader}>
+                    return <FAccordionItem key={appDomain.id} customClass="f-admin-app-domain" iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={onClickMenuGroupHeader}>
                         {renderAppModules(appDomain, appDomain.modules)}
                     </FAccordionItem>;
                 })}
             </FAccordion>;
         }
 
+        function renderLeftPanel() {
+            return (
+                <div class="f-admin-app-center-left-panel">
+                    {renderAppDomainNavigation(appDomains.value)}
+                    <div class="f-admin-create-entity-bar" ref={createEntityAnchorRef}>
+                        <FButton onClick={onClickCreateEntityButton}>新建</FButton>
+                    </div>
+                    {renderCreateEntityPopover()}
+                </div>
+            );
+        }
+
         function renderAppsListHeader() {
             return (
                 <div class="f-admin-apps-list-header">
                     <span class="f-admin-apps-bread-crumbs">
-                        <span class="f-admin-app-domain-title">{currentAppModule.value?.name}</span>
+                        <span class="f-admin-app-domain-title">{currentAppDomain.value?.name}</span>
                         <span class="f-admin-app-title-splitter">/</span>
                         <span class="f-admin-app-module-title">{currentAppModule.value?.name}</span>
                     </span>
@@ -154,7 +241,7 @@ export default defineComponent({
             return (
                 <FLayout>
                     <FLayoutPane position="left" minWidth={300}>
-                        {renderAppDomainNavigation(appDomains.value)}
+                        {renderLeftPanel()}
                     </FLayoutPane>
                     <FLayoutPane customClass="f-admin-app-center-content" position="center">
                         <FListView ref={appListViewRef} customClass="f-admin-apps-list f-utils-fill-flex-column" data={currentAppObjects.value} header="ContentHeader" view="CardView">

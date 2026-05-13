@@ -24,7 +24,13 @@ export function useAppDomain(): UseAppDomain {
             }
         } else {
             const currentAppDomainId = currentAppDomain.value.id;
-            currentAppDomain.value = (appDomains.value as AppDomain[]).find((appDomain: AppDomain) => appDomain.id === currentAppDomainId);
+            const matchedDomain = (appDomains.value as AppDomain[]).find((appDomain: AppDomain) => appDomain.id === currentAppDomainId);
+            currentAppDomain.value = matchedDomain ?? appDomains.value[0];
+        }
+        if (!currentAppDomain.value?.modules?.length) {
+            currentAppModule.value = undefined;
+            currentAppObjects.value = [];
+            return;
         }
         if (!currentAppModule.value) {
             currentAppModule.value = currentAppDomain.value.modules[0];
@@ -47,7 +53,9 @@ export function useAppDomain(): UseAppDomain {
         rawAppDomainDataItemMap.clear();
         rawAppData.forEach((dataItem: RawAppDataItem) => {
             rawAppDataItemMap.set(dataItem.id, dataItem);
-            if (Number(dataItem.layer) === 2 && dataItem.sysInit !== '1') {
+            const layerNum = Number(dataItem.layer);
+            const sysInitFlag = String((dataItem as Record<string, unknown>).sysInit ?? '');
+            if (layerNum === 2 && sysInitFlag !== '1') {
                 rawAppDomainDataItemMap.set(dataItem.id, dataItem);
             }
         });
@@ -116,6 +124,23 @@ export function useAppDomain(): UseAppDomain {
     }
 
     /**
+     * bolistwithlock 等接口可能返回数组，也可能返回 { items | data | body: [...] }
+     */
+    function normalizeFlatBoList(raw: unknown): RawAppDataItem[] {
+        if (Array.isArray(raw)) {
+            return raw as RawAppDataItem[];
+        }
+        if (raw && typeof raw === 'object') {
+            const o = raw as Record<string, unknown>;
+            const nested = o.items ?? o.data ?? o.body;
+            if (Array.isArray(nested)) {
+                return nested as RawAppDataItem[];
+            }
+        }
+        return [];
+    }
+
+    /**
      * 获取应用信息原始数据
      * @param appSourceUri 功能菜单数据源Url
      * @returns 
@@ -123,11 +148,16 @@ export function useAppDomain(): UseAppDomain {
     function getAppData(appSourceUri: string): Promise<any[]> {
         return new Promise<any[]>((resolve, reject) => {
             axios.get(appSourceUri).then((response) => {
-                resolve(response.data);
+                resolve(normalizeFlatBoList(response.data));
             }, (error) => {
                 resolve([]);
             });
         });
+    }
+
+    function appendRefreshCacheBust(uri: string): string {
+        const sep = uri.includes('?') ? '&' : '?';
+        return `${uri}${sep}_=${Date.now()}`;
     }
 
     /**
@@ -157,7 +187,8 @@ export function useAppDomain(): UseAppDomain {
 
     function updateAppDomain() {
         if (appDomainSourceUri.value) {
-            getAppData(appDomainSourceUri.value).then((rawAppData: any[]) => {
+            const uri = appendRefreshCacheBust(appDomainSourceUri.value);
+            getAppData(uri).then((rawAppData: any[]) => {
                 const appDomains = generateAppDomains(rawAppData);
                 loadAppDomain(appDomains);
                 updateCurrent();
