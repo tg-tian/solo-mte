@@ -5057,7 +5057,7 @@
     {
         "id": "c3a5e21e-d4cd-1daa-e8a3-0f0e53d69331",
         "code": "devicelist",
-        "name": "设备列表",
+        "name": "设备型号列表",
         "parentId": "c2bcb161-00f1-7390-feb5-08421d5529bd",
         "layer": "4",
         "menuType": "SysMenu",

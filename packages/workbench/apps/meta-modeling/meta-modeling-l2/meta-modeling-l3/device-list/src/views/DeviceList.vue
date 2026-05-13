@@ -2,8 +2,8 @@
   <div class="page-container">
     <div class="page-header">
       <div class="page-title-group">
-        <h2 class="page-main-title">设备列表</h2>
-        <p class="page-sub-title">定义物理设备与平台设备模型之间的映射关系及驱动配置</p>
+        <h2 class="page-main-title">设备型号列表</h2>
+        <p class="page-sub-title">定义物理设备与平台设备类型之间的映射关系及驱动配置</p>
       </div>
       <el-button type="primary" class="create-btn" @click="handleCreate">
         <el-icon><Plus /></el-icon>创建设备
@@ -53,7 +53,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备模型" min-width="150" align="center">
+      <el-table-column label="设备类型" min-width="150" align="center">
         <template #default="{ row }">
           {{ getModelName(row.modelId) }}
         </template>
@@ -106,10 +106,10 @@
               <el-option label="浪潮 IOT" value="inspire_iot" />
             </el-select>
           </el-form-item>
-          <el-form-item label="设备模型" prop="modelId">
+          <el-form-item label="设备类型" prop="modelId">
             <el-select 
               v-model="form.modelId" 
-              placeholder="请选择设备模型" 
+              placeholder="请选择设备类型" 
               style="width: 100%"
               filterable
               @change="handleDeviceTypeChange"
@@ -136,7 +136,7 @@
         <el-divider content-position="left">属性映射 (平台属性 -> 物理属性)</el-divider>
         <div class="property-mapping-section">
           <div v-if="!form.propertyMap || Object.keys(form.propertyMap).length === 0" class="empty-state">
-            请先选择设备模型以加载属性
+            请先选择设备类型以加载属性
           </div>
           <div v-else class="mapping-list">
             <div v-for="(value, key) in form.propertyMap" :key="key" class="mapping-item">
@@ -150,7 +150,7 @@
         <el-divider content-position="left">事件映射 (平台事件 -> 物理事件)</el-divider>
         <div class="property-mapping-section">
           <div v-if="!form.eventMap || Object.keys(form.eventMap).length === 0" class="empty-state">
-            请先选择设备模型以加载事件
+            请先选择设备类型以加载事件
           </div>
           <div v-else class="mapping-list">
             <div v-for="(value, key) in form.eventMap" :key="key" class="mapping-item">
@@ -164,7 +164,7 @@
         <el-divider content-position="left">操作实现 (Action Implementation)</el-divider>
         <div class="property-mapping-section">
           <div v-if="!form.actionMap || Object.keys(form.actionMap).length === 0" class="empty-state">
-            请先选择设备模型以加载操作
+            请先选择设备类型以加载操作
           </div>
           <div v-else class="mapping-list">
             <div v-for="(value, key) in form.actionMap" :key="key" class="mapping-item-vertical">
@@ -291,7 +291,7 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
     provider: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-    modelId: [{ required: true, message: '请选择设备模型', trigger: 'change' }],
+    modelId: [{ required: true, message: '请选择设备类型', trigger: 'change' }],
     deviceId: [{ required: true, message: '请输入设备型号', trigger: 'blur' }]
   })
 

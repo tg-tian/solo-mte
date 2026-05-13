@@ -2,9 +2,9 @@
   <div class="device-type-setting">
     <div class="page-header">
       <div class="page-title-group">
-        <h2 class="page-main-title">{{ isEditMode ? (deviceTypeCategory === 'component' ? '编辑组件类型' : '编辑设备模型') : (deviceTypeCategory === 'component' ? '创建组件类型' : '创建设备模型') }}</h2>
-        <p v-if="isEditMode" class="page-sub-title">{{ deviceModelForm.modelName || (deviceTypeCategory === 'component' ? '组件类型详情' : '设备模型详情') }}</p>
-        <p v-else class="page-sub-title">{{ deviceTypeCategory === 'component' ? '定义组件及其属性、操作和事件' : '定义新的物联网设备元模型及其属性、操作和事件' }}</p>
+        <h2 class="page-main-title">{{ isEditMode ? (deviceTypeCategory === 'component' ? '编辑组件类型' : '编辑设备类型') : (deviceTypeCategory === 'component' ? '创建组件类型' : '创建设备类型') }}</h2>
+        <p v-if="isEditMode" class="page-sub-title">{{ deviceModelForm.modelName || (deviceTypeCategory === 'component' ? '组件类型详情' : '设备类型详情') }}</p>
+        <p v-else class="page-sub-title">{{ deviceTypeCategory === 'component' ? '定义组件及其属性、操作和事件' : '定义新的物联网设备类型及其属性、操作和事件' }}</p>
       </div>
       <div class="header-actions">
         <el-button @click="navigateBack">返回列表</el-button>
@@ -27,12 +27,12 @@
         label-position="top">
         <el-row :gutter="32">
           <el-col :span="12">
-            <el-form-item label="模型名称" prop="modelName">
+            <el-form-item label="设备类型名称" prop="modelName">
               <el-input v-model="deviceModelForm.modelName" placeholder="例如：智能空调、工业传感器"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="模型标识符(ID)" prop="modelId">
+            <el-form-item label="设备类型标识符(ID)" prop="modelId">
               <el-input v-model="deviceModelForm.modelId" placeholder="例如：coffeeMaker"></el-input>
             </el-form-item>
           </el-col>
@@ -635,11 +635,11 @@ const deviceTypeCategory = computed(() => {
 // 验证规则
 const basicRules = {
   modelName: [
-    { required: true, message: '请输入模型名称', trigger: 'blur' },
+    { required: true, message: '请输入设备类型名称', trigger: 'blur' },
     { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
   ],
   modelId: [
-    { required: true, message: '请输入模型标识符', trigger: 'blur' },
+    { required: true, message: '请输入设备类型标识符', trigger: 'blur' },
     { pattern: /^[a-zA-Z_][a-zA-Z0-9_]*$/, message: '只能包含英文字母、数字和下划线，且必须以字母或下划线开头', trigger: 'blur' }
   ],
   category: [
@@ -835,11 +835,11 @@ const loadDeviceModelData = async (id: number) => {
         resetModelForm()
       }
     } else {
-      throw new Error('未找到对应的设备模型')
+      throw new Error('未找到对应的设备类型')
     }
   } catch (error) {
-    console.error('加载设备模型数据失败:', error)
-    ElMessage.error('加载设备模型数据失败')
+    console.error('加载设备类型数据失败:', error)
+    ElMessage.error('加载设备类型数据失败')
   }
 }
 
