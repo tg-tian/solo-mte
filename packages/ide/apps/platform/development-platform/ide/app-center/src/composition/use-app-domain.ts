@@ -83,7 +83,8 @@ export function useAppDomain(): UseAppDomain {
      */
     function buildAppModule(rawAppModuleData: RawAppDataItem): AppModule {
         const { id, code, name, description } = rawAppModuleData;
-        const rawAppObjectDataItems = parentIdAndChildrenMap.get(id) || [];
+        const rawAppObjectDataItems = (parentIdAndChildrenMap.get(id) || [])
+            .filter((item: RawAppDataItem) => String((item as Record<string, unknown>).sysInit ?? '') !== '1');
         const apps: AppObject[] = rawAppObjectDataItems.map((rawAppObjectDataItem: RawAppDataItem) => {
             const { id, code, name, description, userId } = rawAppObjectDataItem;
             return { id, code, name, description, userId };
@@ -98,7 +99,8 @@ export function useAppDomain(): UseAppDomain {
      */
     function buildAppDomain(rawAppDomainDataItem: RawAppDataItem): AppDomain {
         const { id, code, name, description } = rawAppDomainDataItem;
-        const rawAppModuleDataItems = parentIdAndChildrenMap.get(id) || [];
+        const rawAppModuleDataItems = (parentIdAndChildrenMap.get(id) || [])
+            .filter((item: RawAppDataItem) => String((item as Record<string, unknown>).sysInit ?? '') !== '1');
         const modules: AppModule[] = rawAppModuleDataItems.map((rawAppModuleData: RawAppDataItem) => {
             return buildAppModule(rawAppModuleData);
         });

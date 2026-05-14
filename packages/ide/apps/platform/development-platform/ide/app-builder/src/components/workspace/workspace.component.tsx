@@ -162,6 +162,8 @@ export default defineComponent({
         provide('f-admin-menu-data', useMenuDataComposition);
 
         provide('f-admin-workspace', useWorkspaceComposition);
+        // 提供当前应用名称供子组件使用
+        provide('f-admin-app-name', computed(() => title.value));
 
         onMounted(() => {
             useAssistantIconComposition.init();
