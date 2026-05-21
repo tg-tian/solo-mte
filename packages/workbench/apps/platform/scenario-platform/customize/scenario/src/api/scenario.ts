@@ -1,5 +1,5 @@
 import request from '../utils/request';
-import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
+import type { AreaRecord, AreaPolygonInfo, DomainOption, PolygonPoint, ScenarioRecord } from '../types/models';
 
 const host = (import.meta as any).env?.VITE_BASE_PATH || '';
 const statusMap: Record<string, string> = {
@@ -16,6 +16,15 @@ const statusMap: Record<string, string> = {
 function normalizeScenario(scenario: Record<string, any>): ScenarioRecord {
   const rawStatus = `${scenario.status ?? ''}`.trim().toLowerCase();
   const status = rawStatus in statusMap ? statusMap[rawStatus] : '0';
+  let polygon: PolygonPoint[] | null = null;
+  if (scenario.polygon) {
+    try {
+      const parsed = typeof scenario.polygon === 'string' ? JSON.parse(scenario.polygon) : scenario.polygon;
+      if (Array.isArray(parsed) && parsed.length >= 3) {
+        polygon = parsed;
+      }
+    } catch { polygon = null; }
+  }
   return {
     sceneId: `${scenario.sceneId ?? scenario.id ?? ''}`,
     sceneName: scenario.sceneName ?? scenario.title ?? '',
@@ -26,7 +35,8 @@ function normalizeScenario(scenario: Record<string, any>): ScenarioRecord {
     longitude: scenario.longitude ?? null,
     latitude: scenario.latitude ?? null,
     imageUrl: scenario.imageUrl ?? '',
-    url: scenario.url
+    url: scenario.url,
+    polygon
   };
 }
 
@@ -39,14 +49,25 @@ function normalizeDomain(domain: Record<string, any>): DomainOption {
 }
 
 function normalizeArea(area: Record<string, any>): AreaRecord {
+  const position = area.position ?? '';
+  let polygon: PolygonPoint[] | null = null;
+  if (position) {
+    try {
+      const parsed = typeof position === 'string' ? JSON.parse(position) : position;
+      if (Array.isArray(parsed) && parsed.length >= 3) {
+        polygon = parsed;
+      }
+    } catch { polygon = null; }
+  }
   return {
     id: `${area.id ?? ''}`,
     name: area.name ?? '',
     sceneId: `${area.sceneId ?? ''}`,
     description: area.description ?? '',
     image: area.image ?? '',
-    position: area.position ?? '',
-    parentId: `${area.parentId ?? '-1'}`
+    position,
+    parentId: `${area.parentId ?? '-1'}`,
+    polygon
   };
 }
 
@@ -62,6 +83,7 @@ export interface SaveScenarioPayload {
     lat: number;
   } | null;
   imageUrl?: string;
+  polygon?: string | null;
 }
 
 export interface PublishScenarioPayload {

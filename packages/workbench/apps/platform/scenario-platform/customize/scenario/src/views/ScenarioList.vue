@@ -147,7 +147,8 @@ const createScenarioModel = ref<ScenarioRecord>({
   longitude: null,
   latitude: null,
   imageUrl: '',
-  url: ''
+  url: '',
+  polygon: []
 });
 
 const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
@@ -257,7 +258,8 @@ function handleCreate() {
     longitude: null,
     latitude: null,
     imageUrl: '',
-    url: ''
+    url: '',
+    polygon: []
   };
   createDialogVisible.value = true;
 }
@@ -280,7 +282,8 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
         payload.scenario.longitude !== null && payload.scenario.longitude !== undefined && payload.scenario.latitude !== null && payload.scenario.latitude !== undefined
           ? { lng: Number(payload.scenario.longitude), lat: Number(payload.scenario.latitude) }
           : null,
-      imageUrl: payload.scenario.imageUrl || ''
+      imageUrl: payload.scenario.imageUrl || '',
+      polygon: payload.scenario.polygon && payload.scenario.polygon.length >= 3 ? JSON.stringify(payload.scenario.polygon) : null
     };
     const result = await createScenario(scenarioPayload);
     const sceneId = `${result?.data?.sceneId ?? result?.data?.id ?? ''}`;
@@ -365,7 +368,8 @@ async function saveScenarioDetail(payload: ScenarioSubmitPayload) {
         payload.scenario.longitude !== null && payload.scenario.longitude !== undefined && payload.scenario.latitude !== null && payload.scenario.latitude !== undefined
           ? { lng: Number(payload.scenario.longitude), lat: Number(payload.scenario.latitude) }
           : null,
-      imageUrl: payload.scenario.imageUrl || ''
+      imageUrl: payload.scenario.imageUrl || '',
+      polygon: payload.scenario.polygon && payload.scenario.polygon.length >= 3 ? JSON.stringify(payload.scenario.polygon) : null
     });
     ElMessage.success('保存成功');
     await refreshScenarios();

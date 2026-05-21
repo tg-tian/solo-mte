@@ -1,3 +1,8 @@
+export interface PolygonPoint {
+  x: number;
+  y: number;
+}
+
 export interface ScenarioRecord {
   sceneId: string;
   sceneName: string;
@@ -9,6 +14,7 @@ export interface ScenarioRecord {
   latitude?: number | null;
   imageUrl?: string;
   url?: string;
+  polygon?: PolygonPoint[] | null;
 }
 
 export interface DomainOption {
@@ -26,4 +32,12 @@ export interface AreaRecord {
   position?: string;
   parentId?: string;
   children?: AreaRecord[];
+  polygon?: PolygonPoint[] | null;
+}
+
+export interface AreaPolygonInfo {
+  id: string;
+  name: string;
+  polygon: PolygonPoint[] | null;
+  color: string;
 }

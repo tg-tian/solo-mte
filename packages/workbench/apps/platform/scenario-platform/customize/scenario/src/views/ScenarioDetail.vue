@@ -96,6 +96,26 @@
 
     <el-card shadow="never" class="detail-card map-card">
       <template #header>
+        <div class="card-header area-header">
+          <span>空间轮廓</span>
+          <div class="header-btn-group">
+            <el-button v-if="canvasEditMode === 'scene'" size="small" @click="stopCanvasEdit">完成编辑</el-button>
+            <el-button v-else size="small" type="primary" @click="startEditScenePolygon">编辑场景轮廓</el-button>
+          </div>
+        </div>
+      </template>
+      <PolygonCanvas
+        :scenePolygon="form.polygon"
+        :areas="areaPolygonInfos"
+        :editMode="canvasEditMode"
+        :editingAreaId="canvasEditingAreaId"
+        @updateScenePolygon="handleScenePolygonUpdate"
+        @updateAreaPolygon="handleAreaPolygonUpdate"
+      />
+    </el-card>
+
+    <el-card shadow="never" class="detail-card map-card">
+      <template #header>
         <div class="card-header">地图定位（百米级）</div>
       </template>
       <div class="map-wrapper">
@@ -124,11 +144,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="description" label="区域描述" min-width="220" />
-        <el-table-column prop="position" label="坐标" min-width="180" />
-        <el-table-column label="操作" width="220" fixed="right">
+        <el-table-column label="操作" width="280" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click.stop="showAreaTree(row)">查看树</el-button>
-            <el-button link type="primary" @click.stop="openEditArea(row)">编辑</el-button>
+            <el-button link type="primary" @click.stop="openEditArea(row)">编辑信息</el-button>
+            <el-button link :type="canvasEditMode === 'area' && canvasEditingAreaId === row.id ? 'warning' : 'primary'" @click.stop="startEditAreaPolygon(row.id)">编辑轮廓</el-button>
             <el-button link type="danger" @click.stop="handleDeleteArea(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -151,8 +171,8 @@
             <el-option v-for="item in parentAreaOptions" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="区域坐标" prop="position">
-          <el-input v-model="areaForm.position" maxlength="200" placeholder='{"x":0,"y":0}' />
+        <el-form-item label="区域轮廓">
+          <div class="area-polygon-tip">区域轮廓在上方空间轮廓画布中编辑，点击区域列表的"编辑轮廓"按钮开始</div>
         </el-form-item>
         <el-form-item label="区域描述" prop="description">
           <el-input v-model="areaForm.description" type="textarea" :rows="3" maxlength="200" />
@@ -210,7 +230,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { Link, Plus } from '@element-plus/icons-vue';
 import { createArea, deleteArea, getAreaList, updateArea, publishScenario, uploadImage, downloadScenarioConfig } from '../api/scenario';
-import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
+import type { AreaPolygonInfo, AreaRecord, DomainOption, PolygonPoint, ScenarioRecord } from '../types/models';
+import PolygonCanvas from '../components/PolygonCanvas.vue';
 
 interface ScenarioSubmitPayload {
   scenario: ScenarioRecord;
@@ -245,7 +266,8 @@ const form = reactive<ScenarioRecord>({
   longitude: null,
   latitude: null,
   imageUrl: '',
-  url: ''
+  url: '',
+  polygon: [] as PolygonPoint[]
 });
 const rules: FormRules = {
   sceneName: [{ required: true, message: '请输入场景名称', trigger: 'blur' }],
@@ -278,6 +300,47 @@ const areaRules: FormRules = {
   name: [{ required: true, message: '请输入区域名称', trigger: 'blur' }]
 };
 const parentAreaOptions = computed(() => areas.value.filter((item) => item.id !== editingAreaId.value));
+
+const canvasEditMode = ref<'scene' | 'area' | 'view'>('view');
+const canvasEditingAreaId = ref('');
+
+const AREA_COLORS = ['#67c23a', '#e6a23c', '#f56c6c', '#9093cb', '#4d98ff', '#ff6b6b', '#6bcba7', '#d4a574'];
+
+const areaPolygonInfos = computed<AreaPolygonInfo[]>(() => {
+  return areas.value.map((area, i) => ({
+    id: area.id,
+    name: area.name,
+    polygon: area.polygon ?? null,
+    color: AREA_COLORS[i % AREA_COLORS.length]
+  }));
+});
+
+function handleScenePolygonUpdate(points: PolygonPoint[]) {
+  form.polygon = points;
+}
+
+function handleAreaPolygonUpdate(areaId: string, points: PolygonPoint[]) {
+  const index = areas.value.findIndex(a => a.id === areaId);
+  if (index >= 0) {
+    areas.value[index].polygon = points;
+    areas.value[index].position = points.length >= 3 ? JSON.stringify(points) : '';
+  }
+}
+
+function startEditScenePolygon() {
+  canvasEditMode.value = 'scene';
+  canvasEditingAreaId.value = '';
+}
+
+function startEditAreaPolygon(areaId: string) {
+  canvasEditMode.value = 'area';
+  canvasEditingAreaId.value = areaId;
+}
+
+function stopCanvasEdit() {
+  canvasEditMode.value = 'view';
+  canvasEditingAreaId.value = '';
+}
 const mapRef = ref<HTMLElement>();
 const mapError = ref('');
 const baiduMapAk = (import.meta as any).env?.VITE_BAIDU_MAP_AK || '';
@@ -500,6 +563,7 @@ function normalizeIncomingScenario(scenario?: ScenarioRecord | null) {
   form.latitude = scenario?.latitude ?? null;
   form.imageUrl = scenario?.imageUrl || '';
   form.url = scenario?.url || '';
+  form.polygon = scenario?.polygon ?? [];
 }
 
 watch(
@@ -544,7 +608,7 @@ function openEditArea(area: AreaRecord) {
   editingAreaId.value = area.id;
   areaForm.name = area.name;
   areaForm.description = area.description || '';
-  areaForm.position = area.position || '';
+  areaForm.position = area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : (area.position || '');
   areaForm.image = area.image || '';
   areaForm.parentId = area.parentId && area.parentId !== '-1' ? area.parentId : null;
   areaDialogVisible.value = true;
@@ -569,18 +633,35 @@ async function submitArea() {
       if (editingAreaId.value) {
         const index = areas.value.findIndex((item) => item.id === editingAreaId.value);
         if (index >= 0) {
-          areas.value[index] = { ...areas.value[index], ...payload, id: editingAreaId.value, sceneId: '' };
+          areas.value[index] = {
+            ...areas.value[index],
+            ...payload,
+            id: editingAreaId.value,
+            sceneId: '',
+            polygon: areas.value[index].polygon,
+            position: areas.value[index].position
+          };
         }
       } else {
         localAreaSeed += 1;
-        areas.value.push({ ...payload, id: `local-${localAreaSeed}`, sceneId: '' });
+        const newId = `local-${localAreaSeed}`;
+        areas.value.push({
+          ...payload,
+          id: newId,
+          sceneId: '',
+          polygon: null,
+          position: ''
+        });
+        startEditAreaPolygon(newId);
       }
     } else {
+      const existingArea = editingAreaId.value ? areas.value.find(a => a.id === editingAreaId.value) : null;
+      const positionValue = existingArea?.position || payload.position;
       const requestPayload = {
         name: payload.name,
         sceneId: Number(form.sceneId),
         description: payload.description,
-        position: payload.position,
+        position: positionValue,
         image: payload.image,
         parentId: payload.parentId !== '-1' ? Number(payload.parentId) : -1
       };
@@ -632,7 +713,8 @@ async function submit() {
       longitude: toHundredMeter(form.longitude),
       latitude: toHundredMeter(form.latitude),
       imageUrl: (form.imageUrl || '').trim(),
-      url: (form.url || '').trim()
+      url: (form.url || '').trim(),
+      polygon: form.polygon
     },
     areas: areas.value.map((item) => ({ ...item }))
   });
@@ -686,5 +768,7 @@ onBeforeUnmount(() => {
 .image-uploader-icon { font-size: 28px; color: #8c939d; text-align: center; }
 .uploaded-image { width: 100%; height: 100%; object-fit: contain; }
 .area-table-image { width: 60px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--el-border-color-lighter); }
+.area-polygon-tip { font-size: 13px; color: #909399; line-height: 1.4; }
+.header-btn-group { display: flex; gap: 8px; }
 @media (max-width: 900px) { .summary-grid { grid-template-columns: 1fr; } }
 </style>
