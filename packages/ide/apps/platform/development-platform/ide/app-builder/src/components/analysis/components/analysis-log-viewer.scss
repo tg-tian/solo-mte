@@ -1,0 +1,187 @@
+// 任务日志查看器样式
+.f-app-analysis-log-viewer {
+    .f-page-header {
+        position: relative;
+        height: 48px;
+        margin-bottom: 1rem !important;
+
+        .f-page-header-base {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .f-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .f-title-logo {
+                    width: 24px;
+                    height: 24px;
+                    background: linear-gradient(135deg, #328bff 0%, #2a87ff 100%);
+                    border-radius: 4px;
+                }
+
+                .f-title-text {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #2D2F33;
+                    margin: 0;
+                }
+            }
+
+            .f-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .btn {
+                    box-shadow: 0 2px 6px 0 rgba(31, 35, 41, 0.06);
+                    border-radius: 6px;
+                }
+
+                .btn-secondary {
+                    background: #FFFFFF;
+                    border: 1px solid rgba(233, 236, 243, 1);
+                    color: #2D2F33;
+
+                    &:hover {
+                        border-color: #388FFF;
+                    }
+                }
+            }
+        }
+
+        .f-page-header-background {
+            background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+            border-radius: 8px;
+            box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+            height: 100%;
+            opacity: 0.66;
+            position: absolute;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+
+    .f-page-main {
+        height: calc(100% - 60px);
+        overflow: hidden;
+    }
+}
+
+// 日志容器
+.log-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    .log-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 100%);
+        border-bottom: 1px solid rgba(42, 135, 255, 0.1);
+
+        .log-task-info {
+            display: flex;
+            align-items: center;
+
+            .task-label {
+                color: rgba(45, 47, 51, 0.65);
+                font-size: 13px;
+            }
+
+            .task-value {
+                color: #2D2F33;
+                font-size: 13px;
+                font-weight: 500;
+            }
+        }
+
+        .log-update-time {
+            color: rgba(45, 47, 51, 0.5);
+            font-size: 12px;
+        }
+    }
+
+    .log-content {
+        flex: 1;
+        overflow: auto;
+        padding: 16px 20px;
+        background: #1e1e1e;
+
+        .log-loading,
+        .log-error {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .log-loading {
+            background: rgba(56, 143, 255, 0.1);
+            color: #388FFF;
+        }
+
+        .log-error {
+            background: rgba(255, 92, 92, 0.1);
+            color: #FF5C5C;
+        }
+
+        .log-text {
+            margin: 0;
+            padding: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #d4d4d4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+    }
+}
+
+// 自动刷新按钮激活状态
+.f-icon-loop {
+    &.active {
+        color: #388FFF;
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// 日志加载动画
+.f-icon-loading {
+    animation: rotate 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -29,44 +29,40 @@ export function useDeviceInfo() {
     }
 
     async function loadDeviceCategories(): Promise<DeviceModel[]> {
-        const baseDevicePath = './flow-contents/device/';
-        const manifestUrl = `${baseDevicePath}manifest.json?v=${(new Date()).getTime()}`;
+        const apiUrl = 'http://139.196.239.110:8080/meta/device-models';
+        const iconMapUrl = `./device-assets/device-icons.json?v=${(new Date()).getTime()}`;
 
         try {
-            const manifestResponse = await axios.get<string[]>(manifestUrl, {
-                timeout: 20 * 1000,
-                headers: { 'Content-Type': 'application/json' },
-            });
-            const deviceNames = manifestResponse.data;
+            const [deviceResponse, iconMapResponse] = await Promise.all([
+                axios.get<any[]>(apiUrl, { timeout: 20 * 1000 }),
+                axios.get<Record<string, string>>(iconMapUrl, {
+                    timeout: 20 * 1000,
+                    headers: { 'Content-Type': 'application/json' },
+                }).catch((error: AxiosError) => {
+                    console.warn('[设备图标映射加载失败]', error.message || '未知网络错误');
+                    return null;
+                }),
+            ]);
 
-            if (!Array.isArray(deviceNames) || !deviceNames.length) {
+            const items = deviceResponse.data;
+            if (!Array.isArray(items)) {
                 return [];
             }
-            const deviceRequestPromises = deviceNames.map(async (deviceName) => {
-                const deviceFileUrl = `${baseDevicePath}${deviceName}.json?v=${(new Date()).getTime()}`;
-                try {
-                    const deviceResponse = await axios.get<any>(deviceFileUrl, {
-                        timeout: 20 * 1000,
-                        headers: { 'Content-Type': 'application/json' },
-                    });
-                    return deviceResponse.data;
-                } catch (deviceError) {
-                    const axiosError = deviceError as AxiosError;
-                    console.warn(
-                        `[设备描述文件加载失败] ${deviceFileUrl}`,
-                        axiosError.message || '未知网络错误',
-                    );
-                    return null;
+
+            const iconMap = iconMapResponse?.data || {};
+            const devices: DeviceModel[] = items.map((item) => {
+                const model: DeviceModel = item.model || item;
+                if (iconMap[model.modelId]) {
+                    model.icon = iconMap[model.modelId];
                 }
+                return model;
             });
 
-            const deviceContents = await Promise.all(deviceRequestPromises);
-            const validDeviceContents = deviceContents.filter((content) => content !== null);
-            return validDeviceContents;
-        } catch (manifestError) {
-            const axiosError = manifestError as AxiosError;
+            return devices;
+        } catch (error) {
+            const axiosError = error as AxiosError;
             console.error(
-                `[设备描述文件加载失败] ${manifestUrl}`,
+                '[设备模型加载失败]',
                 axiosError.message || '未知网络错误',
             );
             return [];

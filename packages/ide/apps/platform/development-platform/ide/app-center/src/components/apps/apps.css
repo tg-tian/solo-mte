@@ -270,3 +270,73 @@
 .f-listview-hover .btn-group {
     visibility: visible;
 }
+
+.f-admin-app-center-left-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.f-admin-app-domain-groups {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.f-admin-create-entity-bar {
+    flex-shrink: 0;
+    padding: 10px 27px;
+}
+
+.f-admin-create-entity-bar .f-btn {
+    background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+    border-radius: 15px;
+    width: 100%;
+    height: 36px;
+    font-size: 14px;
+}
+
+.f-create-entity-menu {
+    padding: 4px 0;
+    min-width: 120px;
+}
+
+.f-create-entity-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.f-create-entity-menu-item:hover {
+    background-color: #f5f7fa;
+}
+
+/* AppDomain 选中状态高亮样式 */
+.f-admin-app-domain-groups .f-admin-app-domain-selected .card-header {
+    background-color: rgba(42, 135, 255, 0.1) !important;
+    border-radius: 4px;
+}
+
+.f-admin-app-domain-groups .f-admin-app-domain-selected .panel-item-title {
+    color: #2a87ff !important;
+    font-weight: 500;
+}
+
+.f-admin-apps-list-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: #999;
+    font-size: 14px;
+}
+
+.f-admin-app-module-list-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    color: #999;
+    font-size: 13px;
+}
