@@ -91,16 +91,22 @@
         <el-form-item label="场景描述" prop="sceneDescription">
           <el-input v-model="form.sceneDescription" type="textarea" :rows="4" maxlength="300" show-word-limit />
         </el-form-item>
+        <el-form-item label="场景空间">
+          <div class="space-edit-row">
+            <span v-if="form.polygon && form.polygon.length >= 3" class="space-status-text">已定义空间（{{ form.polygon.length }}个顶点）</span>
+            <span v-else class="space-status-text">未定义空间</span>
+            <el-button size="small" type="primary" @click="startEditScenePolygon">编辑场景空间</el-button>
+          </div>
+        </el-form-item>
       </el-form>
     </el-card>
 
-    <el-card shadow="never" class="detail-card map-card">
+    <el-card v-if="canvasEditMode !== 'view'" shadow="never" class="detail-card map-card">
       <template #header>
         <div class="card-header area-header">
-          <span>空间轮廓</span>
+          <span>{{ canvasEditMode === 'scene' ? '编辑场景空间' : '编辑区域空间' }}</span>
           <div class="header-btn-group">
-            <el-button v-if="canvasEditMode === 'scene'" size="small" @click="stopCanvasEdit">完成编辑</el-button>
-            <el-button v-else size="small" type="primary" @click="startEditScenePolygon">编辑场景轮廓</el-button>
+            <el-button size="small" @click="stopCanvasEdit">完成编辑</el-button>
           </div>
         </div>
       </template>
@@ -148,7 +154,7 @@
           <template #default="{ row }">
             <el-button link type="primary" @click.stop="showAreaTree(row)">查看树</el-button>
             <el-button link type="primary" @click.stop="openEditArea(row)">编辑信息</el-button>
-            <el-button link :type="canvasEditMode === 'area' && canvasEditingAreaId === row.id ? 'warning' : 'primary'" @click.stop="startEditAreaPolygon(row.id)">编辑轮廓</el-button>
+            <el-button link :type="canvasEditMode === 'area' && canvasEditingAreaId === row.id ? 'warning' : 'primary'" @click.stop="startEditAreaPolygon(row.id)">编辑空间</el-button>
             <el-button link type="danger" @click.stop="handleDeleteArea(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -171,8 +177,8 @@
             <el-option v-for="item in parentAreaOptions" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="区域轮廓">
-          <div class="area-polygon-tip">区域轮廓在上方空间轮廓画布中编辑，点击区域列表的"编辑轮廓"按钮开始</div>
+        <el-form-item label="区域空间">
+          <div class="area-polygon-tip">区域空间在空间画布中编辑，点击区域列表的"编辑空间"按钮开始</div>
         </el-form-item>
         <el-form-item label="区域描述" prop="description">
           <el-input v-model="areaForm.description" type="textarea" :rows="3" maxlength="200" />
@@ -770,5 +776,7 @@ onBeforeUnmount(() => {
 .area-table-image { width: 60px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--el-border-color-lighter); }
 .area-polygon-tip { font-size: 13px; color: #909399; line-height: 1.4; }
 .header-btn-group { display: flex; gap: 8px; }
+.space-edit-row { display: flex; align-items: center; gap: 12px; }
+.space-status-text { font-size: 13px; color: #606266; }
 @media (max-width: 900px) { .summary-grid { grid-template-columns: 1fr; } }
 </style>

@@ -23,9 +23,9 @@ import type { AreaPolygonInfo, PolygonPoint } from '../types/models';
 
 const CANVAS_SIZE = 1000;
 const GRID_INTERVAL = 100;
-const VERTEX_RADIUS = 8;
-const ACTIVE_VERTEX_RADIUS = 12;
-const HIT_RADIUS = 16;
+const VERTEX_RADIUS = 6;
+const ACTIVE_VERTEX_RADIUS = 10;
+const HIT_RADIUS = 14;
 
 const AREA_COLORS = ['#67c23a', '#e6a23c', '#f56c6c', '#9093cb', '#4d98ff', '#ff6b6b', '#6bcba7', '#d4a574'];
 const SCENE_COLOR = '#409eff';
@@ -53,8 +53,6 @@ const editingPoints = ref<PolygonPoint[]>([]);
 const dragging = reactive({
   active: false,
   pointIndex: -1,
-  startX: 0,
-  startY: 0
 });
 
 const currentEditingPolygon = computed<PolygonPoint[] | null>(() => {
@@ -69,12 +67,19 @@ const currentEditingPolygon = computed<PolygonPoint[] | null>(() => {
   return null;
 });
 
-watch(() => [props.editMode, props.editingAreaId, props.scenePolygon, props.areas], () => {
-  editingPoints.value = [];
-  dragging.active = false;
-  dragging.pointIndex = -1;
-  render();
-}, { deep: true });
+// Only reset editingPoints when the edit target actually changes (mode or area id),
+// NOT when polygon data updates (which happens after our own emits).
+watch(
+  () => [props.editMode, props.editingAreaId] as const,
+  () => {
+    editingPoints.value = [];
+    dragging.active = false;
+    dragging.pointIndex = -1;
+    // Sync editingPoints from the new target's existing polygon
+    syncEditingPoints();
+    render();
+  }
+);
 
 watch(currentEditingPolygon, () => {
   render();
@@ -113,11 +118,9 @@ function onMouseDown(e: MouseEvent) {
   const hitIndex = findHitPoint(polygon, pt.x, pt.y);
 
   if (hitIndex >= 0) {
+    syncEditingPoints();
     dragging.active = true;
     dragging.pointIndex = hitIndex;
-    dragging.startX = pt.x;
-    dragging.startY = pt.y;
-    syncEditingPoints();
   }
 }
 
@@ -125,11 +128,13 @@ function onMouseMove(e: MouseEvent) {
   if (!dragging.active) return;
   const pt = screenToLogic(e.clientX, e.clientY);
   editingPoints.value[dragging.pointIndex] = { x: clamp(pt.x), y: clamp(pt.y) };
+  emitCurrentPolygon();
   render();
 }
 
 function onMouseUp(e: MouseEvent) {
   if (!dragging.active) {
+    // Click on empty space → add point
     const pt = screenToLogic(e.clientX, e.clientY);
     const polygon = currentEditingPolygon.value;
     const hitIndex = findHitPoint(polygon, pt.x, pt.y);
@@ -178,9 +183,9 @@ function syncEditingPoints() {
 
 function emitCurrentPolygon() {
   if (props.editMode === 'scene') {
-    emit('updateScenePolygon', editingPoints.value);
+    emit('updateScenePolygon', [...editingPoints.value]);
   } else if (props.editMode === 'area' && props.editingAreaId) {
-    emit('updateAreaPolygon', props.editingAreaId, editingPoints.value);
+    emit('updateAreaPolygon', props.editingAreaId, [...editingPoints.value]);
   }
 }
 
@@ -191,6 +196,7 @@ function clearPoints() {
 }
 
 function undoLastPoint() {
+  syncEditingPoints();
   if (editingPoints.value.length === 0) return;
   editingPoints.value.pop();
   emitCurrentPolygon();
@@ -293,8 +299,7 @@ function drawLabel(ctx: CanvasRenderingContext2D, text: string, points: PolygonP
 
 function drawScenePolygon(ctx: CanvasRenderingContext2D) {
   if (!props.scenePolygon || props.scenePolygon.length === 0) return;
-  const isEditing = props.editMode === 'scene';
-  if (isEditing) return; // edited polygon drawn separately
+  if (props.editMode === 'scene') return;
 
   if (props.scenePolygon.length >= 3) {
     drawPolygonFill(ctx, props.scenePolygon, SCENE_FILL, SCENE_COLOR, 2);
@@ -308,10 +313,9 @@ function drawAreaPolygons(ctx: CanvasRenderingContext2D) {
   for (let i = 0; i < props.areas.length; i++) {
     const area = props.areas[i];
     if (!area.polygon || area.polygon.length === 0) continue;
-    if (props.editMode === 'area' && props.editingAreaId === area.id) continue; // edited separately
+    if (props.editMode === 'area' && props.editingAreaId === area.id) continue;
 
     const color = area.color || AREA_COLORS[i % AREA_COLORS.length];
-    const fill = color.replace(')', ',0.10)').replace('rgb', 'rgba').replace('#', '');
     let fillColor: string;
     try {
       const r = parseInt(color.slice(1,3), 16), g = parseInt(color.slice(3,5), 16), b = parseInt(color.slice(5,7), 16);
@@ -382,6 +386,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .polygon-canvas-wrapper {
   width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 .canvas-toolbar {
   display: flex;
