@@ -101,25 +101,6 @@
       </el-form>
     </el-card>
 
-    <el-card v-if="canvasEditMode !== 'view'" shadow="never" class="detail-card map-card">
-      <template #header>
-        <div class="card-header area-header">
-          <span>{{ canvasEditMode === 'scene' ? '编辑场景空间' : '编辑区域空间' }}</span>
-          <div class="header-btn-group">
-            <el-button size="small" @click="stopCanvasEdit">完成编辑</el-button>
-          </div>
-        </div>
-      </template>
-      <PolygonCanvas
-        :scenePolygon="form.polygon"
-        :areas="areaPolygonInfos"
-        :editMode="canvasEditMode"
-        :editingAreaId="canvasEditingAreaId"
-        @updateScenePolygon="handleScenePolygonUpdate"
-        @updateAreaPolygon="handleAreaPolygonUpdate"
-      />
-    </el-card>
-
     <el-card shadow="never" class="detail-card map-card">
       <template #header>
         <div class="card-header">地图定位（百米级）</div>
@@ -178,7 +159,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="区域空间">
-          <div class="area-polygon-tip">区域空间在空间画布中编辑，点击区域列表的"编辑空间"按钮开始</div>
+          <div class="area-polygon-tip">需先定义场景空间，再点击区域列表的"编辑空间"按钮在弹窗画布中编辑区域</div>
         </el-form-item>
         <el-form-item label="区域描述" prop="description">
           <el-input v-model="areaForm.description" type="textarea" :rows="3" maxlength="200" />
@@ -225,6 +206,27 @@
           <el-button @click="publishDialogVisible = false">暂不处理</el-button>
           <el-button type="primary" :loading="publishSubmitting" @click="publishScene">确认</el-button>
         </div>
+      </template>
+    </el-dialog>
+    <el-dialog
+      v-model="canvasDialogVisible"
+      :title="canvasDialogTitle"
+      width="720px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="!canvasSaving"
+      :show-close="!canvasSaving"
+      destroy-on-close
+    >
+      <PolygonCanvas
+        :scenePolygon="form.polygon"
+        :areas="areaPolygonInfos"
+        :editMode="canvasEditMode"
+        :editingAreaId="canvasEditingAreaId"
+        @updateScenePolygon="handleScenePolygonUpdate"
+        @updateAreaPolygon="handleAreaPolygonUpdate"
+      />
+      <template #footer>
+        <el-button type="primary" :loading="canvasSaving" @click="stopCanvasEdit">完成编辑</el-button>
       </template>
     </el-dialog>
   </div>
@@ -298,7 +300,6 @@ const publishSubmitting = ref(false);
 const areaForm = reactive({
   name: '',
   description: '',
-  position: '',
   image: '',
   parentId: null as string | null
 });
@@ -309,6 +310,7 @@ const parentAreaOptions = computed(() => areas.value.filter((item) => item.id !=
 
 const canvasEditMode = ref<'scene' | 'area' | 'view'>('view');
 const canvasEditingAreaId = ref('');
+const canvasSaving = ref(false);
 
 const AREA_COLORS = ['#67c23a', '#e6a23c', '#f56c6c', '#9093cb', '#4d98ff', '#ff6b6b', '#6bcba7', '#d4a574'];
 
@@ -329,7 +331,6 @@ function handleAreaPolygonUpdate(areaId: string, points: PolygonPoint[]) {
   const index = areas.value.findIndex(a => a.id === areaId);
   if (index >= 0) {
     areas.value[index].polygon = points;
-    areas.value[index].position = points.length >= 3 ? JSON.stringify(points) : '';
   }
 }
 
@@ -339,14 +340,69 @@ function startEditScenePolygon() {
 }
 
 function startEditAreaPolygon(areaId: string) {
+  if (!form.polygon || form.polygon.length < 3) {
+    ElMessage.warning('请先定义场景空间（至少 3 个顶点），再编辑区域空间');
+    return;
+  }
   canvasEditMode.value = 'area';
   canvasEditingAreaId.value = areaId;
 }
 
-function stopCanvasEdit() {
+async function persistAreaPolygonImmediately(areaId: string) {
+  if (isCreateMode.value) return;
+  if (!form.sceneId) return;
+  const area = areas.value.find((a) => a.id === areaId);
+  if (!area) return;
+  if (String(area.id).startsWith('local-')) return;
+
+  const parentIdRaw = `${area.parentId ?? '-1'}`;
+  const polygonValue = area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : '';
+  try {
+    await updateArea(area.id, {
+      name: area.name,
+      sceneId: Number(form.sceneId),
+      description: area.description || '',
+      polygon: polygonValue,
+      image: area.image || '',
+      parentId: parentIdRaw !== '-1' ? Number(parentIdRaw) : -1
+    });
+    ElMessage.success('区域空间已保存');
+  } catch (error: any) {
+    ElMessage.error(error?.response?.data || '区域空间保存失败');
+  }
+}
+
+async function stopCanvasEdit() {
+  if (canvasSaving.value) return;
+  const mode = canvasEditMode.value;
+  const areaId = canvasEditingAreaId.value;
+  if (mode === 'area' && areaId) {
+    canvasSaving.value = true;
+    try {
+      await persistAreaPolygonImmediately(areaId);
+    } finally {
+      canvasSaving.value = false;
+    }
+  } else if (mode === 'scene' && !isCreateMode.value) {
+    ElMessage.info('场景空间修改已暂存，请点击底部"保存"提交');
+  }
   canvasEditMode.value = 'view';
   canvasEditingAreaId.value = '';
 }
+
+const canvasDialogVisible = computed({
+  get: () => canvasEditMode.value !== 'view',
+  set: (v: boolean) => { if (!v) stopCanvasEdit(); }
+});
+
+const canvasDialogTitle = computed(() => {
+  if (canvasEditMode.value === 'scene') return '编辑场景空间';
+  if (canvasEditMode.value === 'area') {
+    const area = areas.value.find(a => a.id === canvasEditingAreaId.value);
+    return area ? `编辑区域空间 - ${area.name}` : '编辑区域空间';
+  }
+  return '';
+});
 const mapRef = ref<HTMLElement>();
 const mapError = ref('');
 const baiduMapAk = (import.meta as any).env?.VITE_BAIDU_MAP_AK || '';
@@ -604,7 +660,6 @@ function openCreateArea() {
   editingAreaId.value = '';
   areaForm.name = '';
   areaForm.description = '';
-  areaForm.position = '';
   areaForm.image = '';
   areaForm.parentId = null;
   areaDialogVisible.value = true;
@@ -614,7 +669,6 @@ function openEditArea(area: AreaRecord) {
   editingAreaId.value = area.id;
   areaForm.name = area.name;
   areaForm.description = area.description || '';
-  areaForm.position = area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : (area.position || '');
   areaForm.image = area.image || '';
   areaForm.parentId = area.parentId && area.parentId !== '-1' ? area.parentId : null;
   areaDialogVisible.value = true;
@@ -630,7 +684,6 @@ async function submitArea() {
       name: areaForm.name.trim(),
       sceneId: form.sceneId,
       description: areaForm.description.trim(),
-      position: areaForm.position.trim(),
       image: areaForm.image.trim(),
       parentId: areaForm.parentId && areaForm.parentId !== '-1' ? `${areaForm.parentId}` : '-1'
     };
@@ -644,8 +697,7 @@ async function submitArea() {
             ...payload,
             id: editingAreaId.value,
             sceneId: '',
-            polygon: areas.value[index].polygon,
-            position: areas.value[index].position
+            polygon: areas.value[index].polygon
           };
         }
       } else {
@@ -655,19 +707,18 @@ async function submitArea() {
           ...payload,
           id: newId,
           sceneId: '',
-          polygon: null,
-          position: ''
+          polygon: null
         });
         startEditAreaPolygon(newId);
       }
     } else {
       const existingArea = editingAreaId.value ? areas.value.find(a => a.id === editingAreaId.value) : null;
-      const positionValue = existingArea?.position || payload.position;
+      const polygonValue = existingArea?.polygon && existingArea.polygon.length >= 3 ? JSON.stringify(existingArea.polygon) : '';
       const requestPayload = {
         name: payload.name,
         sceneId: Number(form.sceneId),
         description: payload.description,
-        position: positionValue,
+        polygon: polygonValue,
         image: payload.image,
         parentId: payload.parentId !== '-1' ? Number(payload.parentId) : -1
       };

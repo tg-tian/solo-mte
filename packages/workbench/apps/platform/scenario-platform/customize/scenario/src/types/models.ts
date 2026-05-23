@@ -29,7 +29,6 @@ export interface AreaRecord {
   sceneId: string;
   description?: string;
   image?: string;
-  position?: string;
   parentId?: string;
   children?: AreaRecord[];
   polygon?: PolygonPoint[] | null;

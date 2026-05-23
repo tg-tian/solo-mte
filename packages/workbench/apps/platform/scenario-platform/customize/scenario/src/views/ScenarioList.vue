@@ -316,7 +316,7 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
             name: area.name,
             sceneId: Number(sceneId),
             description: area.description || '',
-            position: area.position || '',
+            polygon: area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : '',
             image: area.image || '',
             parentId
           });

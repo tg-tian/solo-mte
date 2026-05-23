@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+import { ElMessage } from 'element-plus';
 import type { AreaPolygonInfo, PolygonPoint } from '../types/models';
 
 const CANVAS_SIZE = 1000;
@@ -85,6 +86,14 @@ watch(currentEditingPolygon, () => {
   render();
 }, { deep: true });
 
+watch(() => props.scenePolygon, () => {
+  render();
+}, { deep: true });
+
+watch(() => props.areas, () => {
+  render();
+}, { deep: true });
+
 function getCanvasScale(): number {
   const canvas = canvasRef.value;
   if (!canvas) return 1;
@@ -127,7 +136,9 @@ function onMouseDown(e: MouseEvent) {
 function onMouseMove(e: MouseEvent) {
   if (!dragging.active) return;
   const pt = screenToLogic(e.clientX, e.clientY);
-  editingPoints.value[dragging.pointIndex] = { x: clamp(pt.x), y: clamp(pt.y) };
+  const target = { x: clamp(pt.x), y: clamp(pt.y) };
+  if (!isWithinSceneConstraint(target)) return;
+  editingPoints.value[dragging.pointIndex] = target;
   emitCurrentPolygon();
   render();
 }
@@ -145,7 +156,12 @@ function onMouseUp(e: MouseEvent) {
   }
 
   const pt = screenToLogic(e.clientX, e.clientY);
-  editingPoints.value[dragging.pointIndex] = { x: clamp(pt.x), y: clamp(pt.y) };
+  const target = { x: clamp(pt.x), y: clamp(pt.y) };
+  if (isWithinSceneConstraint(target)) {
+    editingPoints.value[dragging.pointIndex] = target;
+  } else {
+    warnOutside();
+  }
   dragging.active = false;
   dragging.pointIndex = -1;
   emitCurrentPolygon();
@@ -166,8 +182,13 @@ function onDoubleClick(e: MouseEvent) {
 }
 
 function addPoint(pt: PolygonPoint) {
+  const target = { x: clamp(pt.x), y: clamp(pt.y) };
+  if (!isWithinSceneConstraint(target)) {
+    warnOutside();
+    return;
+  }
   syncEditingPoints();
-  editingPoints.value.push({ x: clamp(pt.x), y: clamp(pt.y) });
+  editingPoints.value.push(target);
   emitCurrentPolygon();
   render();
 }
@@ -205,6 +226,38 @@ function undoLastPoint() {
 
 function clamp(v: number): number {
   return Math.max(0, Math.min(CANVAS_SIZE, v));
+}
+
+function isPointInPolygon(p: PolygonPoint, polygon: PolygonPoint[] | null): boolean {
+  if (!polygon || polygon.length < 3) return true;
+  let inside = false;
+  const n = polygon.length;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = polygon[i].x, yi = polygon[i].y;
+    const xj = polygon[j].x, yj = polygon[j].y;
+    const intersect = ((yi > p.y) !== (yj > p.y))
+      && (p.x < ((xj - xi) * (p.y - yi)) / ((yj - yi) || 1e-12) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function isWithinSceneConstraint(p: PolygonPoint): boolean {
+  if (props.editMode !== 'area') return true;
+  if (!props.scenePolygon || props.scenePolygon.length < 3) return false;
+  return isPointInPolygon(p, props.scenePolygon);
+}
+
+let outsideWarnedAt = 0;
+function warnOutside() {
+  const now = Date.now();
+  if (now - outsideWarnedAt < 800) return;
+  outsideWarnedAt = now;
+  if (props.editMode === 'area' && (!props.scenePolygon || props.scenePolygon.length < 3)) {
+    ElMessage.warning('请先定义场景空间，再编辑区域空间');
+  } else {
+    ElMessage.warning('不允许在场景空间外选点');
+  }
 }
 
 function render() {

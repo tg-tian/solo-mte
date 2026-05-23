@@ -49,11 +49,11 @@ function normalizeDomain(domain: Record<string, any>): DomainOption {
 }
 
 function normalizeArea(area: Record<string, any>): AreaRecord {
-  const position = area.position ?? '';
+  const polygonRaw = area.polygon ?? '';
   let polygon: PolygonPoint[] | null = null;
-  if (position) {
+  if (polygonRaw) {
     try {
-      const parsed = typeof position === 'string' ? JSON.parse(position) : position;
+      const parsed = typeof polygonRaw === 'string' ? JSON.parse(polygonRaw) : polygonRaw;
       if (Array.isArray(parsed) && parsed.length >= 3) {
         polygon = parsed;
       }
@@ -65,7 +65,6 @@ function normalizeArea(area: Record<string, any>): AreaRecord {
     sceneId: `${area.sceneId ?? ''}`,
     description: area.description ?? '',
     image: area.image ?? '',
-    position,
     parentId: `${area.parentId ?? '-1'}`,
     polygon
   };
@@ -113,7 +112,7 @@ export interface SaveAreaPayload {
   sceneId: number;
   description?: string;
   image?: string;
-  position?: string;
+  polygon?: string;
   parentId?: number;
 }
 
