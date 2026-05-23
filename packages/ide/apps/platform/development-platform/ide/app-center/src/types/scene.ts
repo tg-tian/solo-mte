@@ -1,3 +1,8 @@
+export interface PolygonPoint {
+  x: number
+  y: number
+}
+
 export interface Scene {
   id: number
   domainId: number
@@ -13,6 +18,7 @@ export interface Scene {
     lng?: number
     lat?: number
   }
+  polygon?: PolygonPoint[] | null
 }
 
 export interface Area {
@@ -20,7 +26,14 @@ export interface Area {
   name: string
   image: string | null
   description: string
-  position: string
+  polygon: PolygonPoint[] | null
   parentId: number | null
   children: Area[]
+}
+
+export interface AreaPolygonInfo {
+  id: string
+  name: string
+  polygon: PolygonPoint[]
+  color?: string
 }

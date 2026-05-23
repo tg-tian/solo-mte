@@ -15,6 +15,27 @@
       <template #header>
         <div class="card-header">
           <div>
+            <div class="card-title">场景空间预览</div>
+            <div class="card-subtitle">展示场景多边形与各区域空间</div>
+          </div>
+        </div>
+      </template>
+      <div class="canvas-preview">
+        <PolygonCanvas
+          :scene-polygon="sceneStore.currentScene?.polygon || null"
+          :areas="areaPolygonInfos"
+          edit-mode="view"
+        />
+        <div v-if="!sceneStore.currentScene?.polygon" class="canvas-empty-tip">
+          当前场景未定义空间多边形，请到场景管理界面配置。
+        </div>
+      </div>
+    </el-card>
+
+    <el-card class="setting-content" shadow="never">
+      <template #header>
+        <div class="card-header">
+          <div>
             <div class="card-title">区域列表</div>
             <div class="card-subtitle">共 {{ areaStore.areas.length }} 个区域</div>
           </div>
@@ -43,7 +64,14 @@
           </el-table-column>
           <el-table-column prop="name" label="区域名称" min-width="180" />
           <el-table-column prop="description" label="区域描述" min-width="220" />
-          <el-table-column prop="position" label="区域位置" min-width="180" />
+          <el-table-column label="区域空间" width="160">
+            <template #default="scope">
+              <el-tag v-if="scope.row.polygon && scope.row.polygon.length >= 3" type="success">
+                已定义（{{ scope.row.polygon.length }} 顶点）
+              </el-tag>
+              <el-tag v-else type="info">未定义</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="父区域" min-width="140">
             <template #default="scope">
               {{ getParentAreaName(scope.row.parentId) }}
@@ -56,9 +84,10 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="180" fixed="right">
+          <el-table-column label="操作" width="260" fixed="right">
             <template #default="scope">
               <el-button link type="primary" @click="openEditDialog(scope.row)">编辑</el-button>
+              <el-button link type="primary" @click="openAreaPolygonDialog(scope.row)">编辑空间</el-button>
               <el-button link type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -95,9 +124,6 @@
         <el-form-item label="区域描述">
           <el-input v-model="areaForm.description" type="textarea" :rows="3" placeholder="请输入区域描述" />
         </el-form-item>
-        <el-form-item label="区域位置">
-          <el-input v-model="areaForm.position" placeholder="请输入区域位置" />
-        </el-form-item>
         <el-form-item label="父区域">
           <el-select v-model="areaForm.parentId" clearable placeholder="不选则为根区域">
             <el-option :value="-1" label="根区域" />
@@ -107,10 +133,35 @@
         <el-form-item label="图片地址">
           <el-input v-model="areaForm.image" placeholder="请输入图片地址（可选）" />
         </el-form-item>
+        <el-form-item v-if="isEdit" label="区域空间">
+          <span class="form-tip">保存后请使用列表中的"编辑空间"按钮调整空间多边形。</span>
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="formDialogVisible = false">取消</el-button>
         <el-button type="primary" :loading="submitting" @click="submitAreaForm">保存</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      v-model="polygonDialogVisible"
+      :title="`编辑区域空间 - ${polygonEditingArea?.name || ''}`"
+      width="720px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="!polygonSaving"
+      :show-close="!polygonSaving"
+      destroy-on-close
+    >
+      <PolygonCanvas
+        v-if="polygonEditingArea"
+        :scene-polygon="sceneStore.currentScene?.polygon || null"
+        :areas="canvasAreasForEdit"
+        edit-mode="area"
+        :editing-area-id="String(polygonEditingArea.id)"
+        @update-area-polygon="onAreaPolygonChanged"
+      />
+      <template #footer>
+        <el-button type="primary" :loading="polygonSaving" @click="closePolygonDialog">完成编辑</el-button>
       </template>
     </el-dialog>
   </div>
@@ -121,7 +172,8 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { useSceneStore } from '../../store/scene'
 import { useAreaStore } from '../../store/area'
-import type { Area } from '../../types/scene'
+import type { Area, AreaPolygonInfo, PolygonPoint } from '../../types/scene'
+import PolygonCanvas from '../PolygonCanvas.vue'
 
 const props = defineProps<{ sceneId: number }>()
 
@@ -136,15 +188,39 @@ const areaFormRef = ref<FormInstance>()
 const areaForm = reactive({
   name: '',
   description: '',
-  position: '',
   parentId: -1 as number | null,
   image: '',
 })
+
+const polygonDialogVisible = ref(false)
+const polygonEditingArea = ref<Area | null>(null)
+const polygonSaving = ref(false)
+const polygonDraft = ref<PolygonPoint[]>([])
 
 const treeProps = {
   label: 'name',
   children: 'children',
 }
+
+const areaPolygonInfos = computed<AreaPolygonInfo[]>(() =>
+  areaStore.areas
+    .filter((a) => a.polygon && a.polygon.length >= 3)
+    .map((a) => ({
+      id: String(a.id),
+      name: a.name,
+      polygon: a.polygon as PolygonPoint[],
+    }))
+)
+
+const canvasAreasForEdit = computed<AreaPolygonInfo[]>(() =>
+  areaStore.areas.map((a) => ({
+    id: String(a.id),
+    name: a.name,
+    polygon: (polygonEditingArea.value && polygonEditingArea.value.id === a.id && polygonDraft.value.length > 0)
+      ? polygonDraft.value
+      : (a.polygon || []) as PolygonPoint[],
+  }))
+)
 
 const areaTree = computed<Area[]>(() => {
   const areaMap = new Map<number, Area>()
@@ -183,7 +259,6 @@ function getParentAreaName(parentId: number | null) {
 function resetAreaForm() {
   areaForm.name = ''
   areaForm.description = ''
-  areaForm.position = ''
   areaForm.parentId = -1
   areaForm.image = ''
 }
@@ -200,10 +275,62 @@ function openEditDialog(row: Area) {
   editingAreaId.value = row.id
   areaForm.name = row.name
   areaForm.description = row.description
-  areaForm.position = row.position
   areaForm.parentId = row.parentId ?? -1
   areaForm.image = row.image || ''
   formDialogVisible.value = true
+}
+
+function openAreaPolygonDialog(row: Area) {
+  polygonEditingArea.value = row
+  polygonDraft.value = (row.polygon || []).map((p) => ({ ...p }))
+  polygonDialogVisible.value = true
+}
+
+function onAreaPolygonChanged(_areaId: string, points: PolygonPoint[]) {
+  polygonDraft.value = points.map((p) => ({ ...p }))
+}
+
+async function closePolygonDialog() {
+  if (!polygonEditingArea.value || !props.sceneId) {
+    polygonDialogVisible.value = false
+    return
+  }
+  const target = polygonEditingArea.value
+  const draft = polygonDraft.value.slice()
+  const original = target.polygon || []
+
+  const changed = !polygonsEqual(original, draft)
+  if (!changed) {
+    polygonDialogVisible.value = false
+    return
+  }
+
+  polygonSaving.value = true
+  try {
+    await areaStore.updateArea(target.id, props.sceneId, {
+      name: target.name,
+      description: target.description,
+      parentId: target.parentId ?? -1,
+      image: target.image || '',
+      polygon: draft.length >= 3 ? draft : null,
+    })
+    await areaStore.fetchAreas(props.sceneId)
+    ElMessage.success('区域空间已保存')
+    polygonDialogVisible.value = false
+  } catch (error) {
+    console.error(error)
+    ElMessage.error('区域空间保存失败')
+  } finally {
+    polygonSaving.value = false
+  }
+}
+
+function polygonsEqual(a: PolygonPoint[], b: PolygonPoint[]) {
+  if (a.length !== b.length) return false
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].x !== b[i].x || a[i].y !== b[i].y) return false
+  }
+  return true
 }
 
 async function submitAreaForm() {
@@ -218,19 +345,24 @@ async function submitAreaForm() {
 
   submitting.value = true
   try {
-    const payload = {
-      name: areaForm.name.trim(),
-      description: areaForm.description.trim(),
-      position: areaForm.position.trim(),
-      parentId: areaForm.parentId ?? -1,
-      image: areaForm.image.trim(),
-    }
-
     if (isEdit.value && editingAreaId.value !== null) {
-      await areaStore.updateArea(editingAreaId.value, props.sceneId, payload)
+      const existing = areaStore.areas.find((a) => a.id === editingAreaId.value)
+      await areaStore.updateArea(editingAreaId.value, props.sceneId, {
+        name: areaForm.name.trim(),
+        description: areaForm.description.trim(),
+        parentId: areaForm.parentId ?? -1,
+        image: areaForm.image.trim(),
+        polygon: existing?.polygon || null,
+      })
       ElMessage.success('区域更新成功')
     } else {
-      await areaStore.createArea(props.sceneId, payload)
+      await areaStore.createArea(props.sceneId, {
+        name: areaForm.name.trim(),
+        description: areaForm.description.trim(),
+        parentId: areaForm.parentId ?? -1,
+        image: areaForm.image.trim(),
+        polygon: null,
+      })
       ElMessage.success('区域创建成功')
     }
 
@@ -246,7 +378,7 @@ async function submitAreaForm() {
 
 async function handleDelete(row: Area) {
   try {
-    await ElMessageBox.confirm(`确定删除区域“${row.name}”吗？`, '提示', { type: 'warning' })
+    await ElMessageBox.confirm(`确定删除区域"${row.name}"吗？`, '提示', { type: 'warning' })
     await areaStore.deleteArea(row.id)
     ElMessage.success('区域删除成功')
     if (props.sceneId) {
@@ -332,6 +464,18 @@ onMounted(async () => {
   font-size: 12px;
 }
 
+.canvas-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.canvas-empty-tip {
+  color: #909399;
+  font-size: 12px;
+}
+
 .area-table-wrap {
   padding: 4px 0;
   overflow-x: auto;
@@ -357,6 +501,11 @@ onMounted(async () => {
 }
 
 .tree-node-id {
+  color: #909399;
+  font-size: 12px;
+}
+
+.form-tip {
   color: #909399;
   font-size: 12px;
 }

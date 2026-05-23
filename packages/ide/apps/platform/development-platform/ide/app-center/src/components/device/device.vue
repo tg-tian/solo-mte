@@ -38,6 +38,14 @@
                   {{ getAreaDisplayName(scope.row) || scope.row?.state?.reported?.location?.name || '' }}
                 </template>
               </el-table-column>
+              <el-table-column label="点位坐标" width="140">
+                <template #default="scope">
+                  <span v-if="Number.isFinite(scope.row.pointX) && Number.isFinite(scope.row.pointY)">
+                    ({{ scope.row.pointX }}, {{ scope.row.pointY }})
+                  </span>
+                  <span v-else class="point-empty">未设置</span>
+                </template>
+              </el-table-column>
               <el-table-column label="更新时间" width="180">
                 <template #default="scope">
                   {{ scope.row?.metadata?.lastUpdated ? new Date(scope.row.metadata.lastUpdated).toLocaleString() : '' }}
@@ -177,6 +185,21 @@
         <el-form-item v-if="isEdit" label="设备位置">
           <el-input :model-value="deviceForm.area?.name || deviceForm.state.reported.location.name" placeholder="请选择所属区域" readonly />
         </el-form-item>
+        <el-form-item v-if="isEdit" label="点位坐标">
+          <div class="point-form-row">
+            <span v-if="Number.isFinite(deviceForm.pointX) && Number.isFinite(deviceForm.pointY)" class="point-display">
+              ({{ deviceForm.pointX }}, {{ deviceForm.pointY }})
+            </span>
+            <span v-else class="point-empty">未设置</span>
+            <el-button type="primary" link @click="openPointDialog">在场景空间中选点</el-button>
+            <el-button
+              v-if="Number.isFinite(deviceForm.pointX) && Number.isFinite(deviceForm.pointY)"
+              type="danger"
+              link
+              @click="clearDevicePoint"
+            >清空</el-button>
+          </div>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -264,6 +287,28 @@
       @save-library-config="submitLibraryConfig"
       @delete="handleDeleteProvider"
     />
+
+    <el-dialog
+      v-model="pointDialogVisible"
+      title="选择设备点位"
+      width="720px"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <PolygonCanvas
+        v-if="pointDialogVisible"
+        :scene-polygon="scenePolygon"
+        :areas="areaPolygonInfos"
+        :device-points="otherDevicePoints"
+        :picked-point="pointPickDraft"
+        edit-mode="point-pick"
+        @update-picked-point="onPointPicked"
+      />
+      <template #footer>
+        <el-button @click="pointDialogVisible = false">取消</el-button>
+        <el-button type="primary" :disabled="!pointPickDraft" @click="confirmPointPick">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -276,7 +321,8 @@ import { useDeviceStore } from '../../store/device'
 import DeviceDiscoveryDialog from './device-discovery-dialog.vue'
 import DeviceProviderDialogs from './device-provider-dialogs.vue'
 import type { Device, ProviderConfig } from '../../types/device'
-import type { Area } from '../../types/scene'
+import type { Area, AreaPolygonInfo, PolygonPoint } from '../../types/scene'
+import PolygonCanvas from '../PolygonCanvas.vue'
 
 const props = defineProps<{ sceneId: number }>()
 
@@ -298,6 +344,8 @@ const state = reactive({
     category: '',
     deviceName: '',
     area: null as Area | null,
+    pointX: null as number | null,
+    pointY: null as number | null,
     state: { reported: { location: { name: '' } }, desired: {} },
     metadata: { lastUpdated: Date.now(), isOnline: true, version: 1 },
   },
@@ -322,6 +370,34 @@ const state = reactive({
 })
 
 const { searchForm, deviceForm, submitting, deviceDialogVisible, isEdit, currentId, selectPageVisible, providerListVisible, providerFormVisible, libraryConfigVisible, providerForm, providerFormEditMode, providerEditingId, mapperLoaderUrl } = toRefs(state)
+
+const pointDialogVisible = ref(false)
+const pointPickDraft = ref<PolygonPoint | null>(null)
+
+const scenePolygon = computed(() => sceneStore.currentScene?.polygon || null)
+
+const areaPolygonInfos = computed<AreaPolygonInfo[]>(() =>
+  areaStore.areas
+    .filter((a) => a.polygon && a.polygon.length >= 3)
+    .map((a) => ({
+      id: String(a.id),
+      name: a.name,
+      polygon: a.polygon as PolygonPoint[],
+    }))
+)
+
+const otherDevicePoints = computed(() => {
+  const list: Array<{ id: string; name?: string; x: number; y: number }> = []
+  for (const device of deviceStore.devices || []) {
+    if (device.deviceId === currentId.value) continue
+    const px = (device as any).pointX
+    const py = (device as any).pointY
+    if (Number.isFinite(px) && Number.isFinite(py)) {
+      list.push({ id: device.deviceId, name: device.deviceName || device.deviceId, x: Number(px), y: Number(py) })
+    }
+  }
+  return list
+})
 
 const deviceRules = {
   deviceName: [
@@ -511,12 +587,16 @@ async function submitLibraryConfig() {
 function handleEdit(row: Device) {
   isEdit.value = true
   currentId.value = row.deviceId
+  const rowPointX = (row as any).pointX
+  const rowPointY = (row as any).pointY
   deviceForm.value = {
     deviceId: row.deviceId || '',
     provider: row.provider || 'MQTT',
     category: row.category || '',
     deviceName: row.deviceName || '',
     area: resolveAreaFromDevice(row),
+    pointX: Number.isFinite(rowPointX) ? Number(rowPointX) : null,
+    pointY: Number.isFinite(rowPointY) ? Number(rowPointY) : null,
     state: {
       reported: { location: { name: row?.state?.reported?.location?.name || '' } },
       desired: row?.state?.desired || {},
@@ -528,6 +608,35 @@ function handleEdit(row: Device) {
     },
   }
   deviceDialogVisible.value = true
+}
+
+function openPointDialog() {
+  if (!scenePolygon.value || scenePolygon.value.length < 3) {
+    ElMessage.warning('当前场景未定义空间多边形，请先到场景管理中配置')
+    return
+  }
+  pointPickDraft.value =
+    Number.isFinite(deviceForm.value.pointX) && Number.isFinite(deviceForm.value.pointY)
+      ? { x: Number(deviceForm.value.pointX), y: Number(deviceForm.value.pointY) }
+      : null
+  pointDialogVisible.value = true
+}
+
+function onPointPicked(point: PolygonPoint | null) {
+  pointPickDraft.value = point ? { ...point } : null
+}
+
+function confirmPointPick() {
+  if (pointPickDraft.value) {
+    deviceForm.value.pointX = pointPickDraft.value.x
+    deviceForm.value.pointY = pointPickDraft.value.y
+  }
+  pointDialogVisible.value = false
+}
+
+function clearDevicePoint() {
+  deviceForm.value.pointX = null
+  deviceForm.value.pointY = null
 }
 
 async function handleDelete(row: Device) {
@@ -554,6 +663,8 @@ async function submitDeviceForm() {
         provider: deviceForm.value.provider,
         category: deviceForm.value.category,
         area: selectedArea,
+        pointX: deviceForm.value.pointX,
+        pointY: deviceForm.value.pointY,
         state: {
           reported: {
             ...(deviceForm.value.state?.reported || {}),
@@ -589,6 +700,8 @@ async function submitDeviceForm() {
         category: deviceForm.value.category,
         isAccessible: true,
         deviceName: deviceForm.value.deviceName,
+        pointX: deviceForm.value.pointX,
+        pointY: deviceForm.value.pointY,
         state: {
           reported: deviceForm.value.state?.reported || {},
           desired: deviceForm.value.state?.desired || {},
@@ -935,6 +1048,22 @@ onBeforeUnmount(() => {
   gap: 8px;
   color: #909399;
   font-size: 12px;
+}
+
+.point-form-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.point-display {
+  color: #303133;
+  font-weight: 500;
+}
+
+.point-empty {
+  color: #909399;
 }
 
 .event-card pre,

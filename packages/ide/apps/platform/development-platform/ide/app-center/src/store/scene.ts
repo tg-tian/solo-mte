@@ -1,6 +1,18 @@
 import { defineStore } from 'pinia'
-import type { Scene } from '../types/scene'
+import type { PolygonPoint, Scene } from '../types/scene'
 import { getSceneById } from '../api/scene'
+
+function parsePolygon(raw: unknown): PolygonPoint[] | null {
+  if (!raw) return null
+  try {
+    const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw
+    if (Array.isArray(parsed) && parsed.length >= 3) {
+      return parsed.map((p: any) => ({ x: Number(p?.x), y: Number(p?.y) }))
+        .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)) as PolygonPoint[]
+    }
+  } catch {}
+  return null
+}
 
 function normalizeScene(sceneData: any): Scene {
   return {
@@ -18,6 +30,7 @@ function normalizeScene(sceneData: any): Scene {
       lng: sceneData.longitude,
       lat: sceneData.latitude,
     },
+    polygon: parsePolygon(sceneData.polygon),
   }
 }
 

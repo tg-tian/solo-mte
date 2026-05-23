@@ -69,6 +69,8 @@ export const useDeviceStore = defineStore('device', {
       if (payload.category !== undefined) target.category = payload.category
       if (payload.metaModel !== undefined) target.metaModel = payload.metaModel
       if (payload.isAccessible !== undefined) target.isAccessible = payload.isAccessible
+      if (payload.pointX !== undefined) target.pointX = payload.pointX
+      if (payload.pointY !== undefined) target.pointY = payload.pointY
 
       target.state = {
         reported: {
