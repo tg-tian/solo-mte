@@ -38,7 +38,7 @@
                   {{ getAreaDisplayName(scope.row) || scope.row?.state?.reported?.location?.name || '' }}
                 </template>
               </el-table-column>
-              <el-table-column label="点位坐标" width="140">
+              <el-table-column label="设备空间位置" width="140">
                 <template #default="scope">
                   <span v-if="Number.isFinite(scope.row.pointX) && Number.isFinite(scope.row.pointY)">
                     ({{ scope.row.pointX }}, {{ scope.row.pointY }})
