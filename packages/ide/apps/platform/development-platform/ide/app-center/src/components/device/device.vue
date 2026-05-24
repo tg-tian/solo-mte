@@ -185,7 +185,7 @@
         <el-form-item v-if="isEdit" label="设备位置">
           <el-input :model-value="deviceForm.area?.name || deviceForm.state.reported.location.name" placeholder="请选择所属区域" readonly />
         </el-form-item>
-        <el-form-item v-if="isEdit" label="点位坐标">
+        <el-form-item v-if="isEdit" label="设备空间位置">
           <div class="point-form-row">
             <span v-if="Number.isFinite(deviceForm.pointX) && Number.isFinite(deviceForm.pointY)" class="point-display">
               ({{ deviceForm.pointX }}, {{ deviceForm.pointY }})
