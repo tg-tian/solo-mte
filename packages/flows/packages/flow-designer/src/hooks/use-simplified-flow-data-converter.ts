@@ -473,7 +473,7 @@ export function useSimplifiedFlowDataConverter() {
                 baseNode.deviceEvent = node.deviceEvent;
                 const eventModel = deviceModelMap.get(node.deviceModelId);
                 const eventDef = eventModel?.events?.[node.deviceEvent];
-                baseNode.outputParams = convertDeviceEventOutputParams(eventDef?.fields);
+                baseNode.inputParams = convertDeviceEventOutputParams(eventDef?.fields);
                 baseNode.inputPorts = [];
                 baseNode.outputPorts = ['output'];
                 break;
@@ -654,7 +654,7 @@ export function useSimplifiedFlowDataConverter() {
                     type: 'deviceEventListen',
                     deviceModelId: node.deviceModelId || '',
                     deviceEvent: node.deviceEvent || '',
-                    outputParams: (node.outputParams || []).map(p => convertParameterToSimpleParam(p)),
+                    outputParams: (node.inputParams || []).map(p => convertParameterToSimpleParam(p)),
                 };
 
             case 'device':
