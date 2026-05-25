@@ -39,6 +39,8 @@ import type {
     SimplifiedParamWithValueAndType,
     SimplifiedBranch,
     SimplifiedCondition,
+    SimplifiedRpcOutputParam,
+    SimplifiedRpcInvokeNode,
 } from './simplified-flow-data-types';
 
 export function useSimplifiedFlowDataConverter() {
@@ -70,6 +72,53 @@ export function useSimplifiedFlowDataConverter() {
             case 'fileID': return 'string';
             case 'list': return 'array';
             default: return 'object';
+        }
+    }
+
+    // #endregion
+
+    // #region 辅助函数：RPC 服务
+
+    interface RpcApiParam {
+        name: string;
+        type: { typeEnum: string };
+    }
+
+    interface RpcApiMethod {
+        serviceId: string;
+        parameters: RpcApiParam[];
+        returnInfo: { type: { typeEnum: string } };
+    }
+
+    async function fetchRpcMethodMap(): Promise<Map<string, RpcApiMethod>> {
+        try {
+            const res = await fetch(
+                'http://139.196.239.110:5174/api/runtime/csb/v1.0/InternalServiceManage/findAllRpcServiceBySu/aim'
+            );
+            if (!res.ok) return new Map();
+            const services: { methods: RpcApiMethod[] }[] = await res.json();
+            const map = new Map<string, RpcApiMethod>();
+            for (const service of services) {
+                for (const method of service.methods || []) {
+                    map.set(method.serviceId, method);
+                }
+            }
+            return map;
+        } catch {
+            return new Map();
+        }
+    }
+
+    /** RPC API typeEnum → TypeRefer */
+    function mapRpcTypeEnum(typeEnum: string): TypeRefer {
+        switch (typeEnum) {
+            case 'STRING': return BasicTypeRefer.StringType;
+            case 'INT':
+            case 'LONG':
+            case 'DOUBLE':
+            case 'FLOAT': return BasicTypeRefer.NumberType;
+            case 'BOOLEAN': return BasicTypeRefer.BooleanType;
+            default: return BasicTypeRefer.ObjectType;
         }
     }
 
@@ -335,7 +384,7 @@ export function useSimplifiedFlowDataConverter() {
     /**
      * 将简化版流程数据转换为原始 FlowNode[] + FlowEdge[]
      */
-    function convertSimplifiedToOriginal(data: SimplifiedFlowData): { nodes: FlowNode[]; edges: FlowEdge[] } {
+    async function convertSimplifiedToOriginal(data: SimplifiedFlowData): Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }> {
         // Step 1: 构建 nodeId → nodeCode 映射
         const nodeIdToCodeMap = new Map<string, string>();
         data.nodes.forEach(node => {
@@ -347,12 +396,15 @@ export function useSimplifiedFlowDataConverter() {
         const deviceModelMap = new Map<string, DeviceModel>();
         deviceCategories.value.forEach((dm: any) => deviceModelMap.set(dm.modelId, dm));
 
+        // 新增：拉取 RPC 服务元数据
+        const rpcMethodMap = await fetchRpcMethodMap();
+
         // Step 2: 转换所有节点
         const allFlowNodes = new Map<string, FlowNode>();
         const parentNodeIds = new Set<string>();
 
         data.nodes.forEach(simplifiedNode => {
-            const flowNode = convertSimplifiedNode(simplifiedNode, nodeIdToCodeMap, deviceModelMap);
+            const flowNode = convertSimplifiedNode(simplifiedNode, nodeIdToCodeMap, deviceModelMap, rpcMethodMap);
             allFlowNodes.set(flowNode.id, flowNode);
             if (simplifiedNode.parentNodeId) {
                 parentNodeIds.add(simplifiedNode.parentNodeId);
@@ -421,6 +473,7 @@ export function useSimplifiedFlowDataConverter() {
         node: SimplifiedNode,
         nodeIdToCodeMap: Map<string, string>,
         deviceModelMap: Map<string, DeviceModel>,
+        rpcMethodMap: Map<string, RpcApiMethod>,
     ): FlowNode {
         const code = `${node.type}_${node.id}`;
         const baseNode: FlowNode = {
@@ -533,6 +586,69 @@ export function useSimplifiedFlowDataConverter() {
                 };
                 baseNode.express = methodExpr;
                 baseNode.outputParams = node.outputParams.map(p => convertSimpleParamToParameter(p));
+                baseNode.inputPorts = ['input'];
+                baseNode.outputPorts = ['output'];
+                break;
+            }
+
+            case 'rpcInvoke': {
+                const rpcNode = node as SimplifiedRpcInvokeNode;
+                baseNode.serviceUnit = 'aim';
+                baseNode.serviceId = rpcNode.serviceId;
+
+                const methodInfo = rpcMethodMap.get(rpcNode.serviceId);
+
+                if (methodInfo) {
+                    // 以 API 返回的完整参数列表为基准，合并 AI 生成的值
+                    baseNode.inputParams = methodInfo.parameters.map(apiParam => {
+                        const simplifiedParam = rpcNode.inputParams.find(p => p.code === apiParam.name);
+                        return {
+                            id: uuid(),
+                            code: apiParam.name,
+                            type: mapRpcTypeEnum(apiParam.type.typeEnum),
+                            valueExpr: simplifiedParam
+                                ? convertSimplifiedValueExpr(simplifiedParam.value, nodeIdToCodeMap)
+                                : undefined,
+                        } as Parameter;
+                    });
+                } else {
+                    // serviceId 未找到，降级处理
+                    baseNode.inputParams = rpcNode.inputParams.map(p => ({
+                        id: uuid(),
+                        code: p.code,
+                        type: BasicTypeRefer.StringType,
+                        valueExpr: convertSimplifiedValueExpr(p.value, nodeIdToCodeMap),
+                    } as Parameter));
+                }
+
+                // outputParams: 带 schema 的对象输出参数
+                baseNode.outputParams = rpcNode.outputParams.map(p => {
+                    const param: Parameter = {
+                        id: uuid(),
+                        code: p.code,
+                        type: mapSimpleTypeToTypeRefer(p.type),
+                        description: p.code === 'result' ? 'RPC调用返回结果' : '',
+                    };
+                    if (p.schema && p.schema.length > 0) {
+                        (param as any).schema = {
+                            id: uuid(),
+                            code: '',
+                            name: '',
+                            description: '',
+                            type: 'object',
+                            properties: p.schema.map(sp => ({
+                                id: uuid(),
+                                code: sp.code,
+                                name: sp.code,
+                                description: '',
+                                type: sp.type,
+                            })),
+                        };
+                        (param as any).realDataType = 'map';
+                    }
+                    return param;
+                });
+
                 baseNode.inputPorts = ['input'];
                 baseNode.outputPorts = ['output'];
                 break;
@@ -711,6 +827,31 @@ export function useSimplifiedFlowDataConverter() {
                         value: convertValueExprToSimplified(p.value, codeToNodeIdMap)!,
                     })),
                     outputParams: (node.outputParams || []).map(p => convertParameterToSimpleParam(p)),
+                };
+            }
+
+            case 'rpcInvoke': {
+                return {
+                    ...base,
+                    type: 'rpcInvoke',
+                    serviceId: node.serviceId || '',
+                    inputParams: (node.inputParams || []).map(
+                        p => convertParameterToSimpleInputParam(p, codeToNodeIdMap),
+                    ),
+                    outputParams: (node.outputParams || []).map(p => {
+                        const result: SimplifiedRpcOutputParam = {
+                            code: p.code,
+                            type: typeReferToString(p.type) || 'object',
+                        };
+                        const schema = (p as any).schema;
+                        if (schema?.properties?.length) {
+                            result.schema = schema.properties.map((sp: any) => ({
+                                code: sp.code,
+                                type: sp.type,
+                            }));
+                        }
+                        return result;
+                    }),
                 };
             }
 
