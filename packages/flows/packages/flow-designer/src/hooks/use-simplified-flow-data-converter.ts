@@ -261,9 +261,11 @@ export function useSimplifiedFlowDataConverter() {
         eventFields: Record<string, DeviceParameter> | undefined,
     ): Parameter[] {
         if (!eventFields) return [];
-        return Object.entries(eventFields).map(([fieldCode, deviceParam]) =>
-            DeviceUtils.convertDeviceParameter2Parameter(fieldCode, deviceParam),
-        );
+        return Object.entries(eventFields)
+            .filter(([fieldCode]) => fieldCode !== 'deviceId')
+            .map(([fieldCode, deviceParam]) =>
+                DeviceUtils.convertDeviceParameter2Parameter(fieldCode, deviceParam),
+            );
     }
 
     // #endregion
@@ -473,7 +475,10 @@ export function useSimplifiedFlowDataConverter() {
                 baseNode.deviceEvent = node.deviceEvent;
                 const eventModel = deviceModelMap.get(node.deviceModelId);
                 const eventDef = eventModel?.events?.[node.deviceEvent];
-                baseNode.inputParams = convertDeviceEventOutputParams(eventDef?.fields);
+                baseNode.inputParams = [
+                    { id: 'deviceId', code: 'deviceId', type: BasicTypeRefer.StringType },
+                    ...convertDeviceEventOutputParams(eventDef?.fields),
+                ];
                 baseNode.inputPorts = [];
                 baseNode.outputPorts = ['output'];
                 break;
@@ -488,6 +493,9 @@ export function useSimplifiedFlowDataConverter() {
                 baseNode.inputParams = convertDeviceInputParams(
                     node.inputParams, action?.arguments, nodeIdToCodeMap,
                 );
+                baseNode.outputParams = [
+                    { id: 'deviceId', code: 'deviceId', type: BasicTypeRefer.StringType },
+                ];
                 baseNode.inputPorts = ['input'];
                 baseNode.outputPorts = ['output'];
                 break;
@@ -654,7 +662,9 @@ export function useSimplifiedFlowDataConverter() {
                     type: 'deviceEventListen',
                     deviceModelId: node.deviceModelId || '',
                     deviceEvent: node.deviceEvent || '',
-                    outputParams: (node.inputParams || []).map(p => convertParameterToSimpleParam(p)),
+                    outputParams: (node.inputParams || [])
+                        .filter(p => p.code !== 'deviceId')
+                        .map(p => convertParameterToSimpleParam(p)),
                 };
 
             case 'device':
