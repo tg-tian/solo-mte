@@ -78,6 +78,15 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
         afterReloadFlow?.();
     }
 
+    // 调试用：暴露应用到画布的方法到 window，供控制台直接调用
+    try {
+        const target = window.top || window;
+        (target as any).__applySimplifiedFlowData = applySimplifiedFlowData;
+    } catch {
+        // 跨域时 window.top 不可访问，降级到当前 window
+        (window as any).__applySimplifiedFlowData = applySimplifiedFlowData;
+    }
+
     /**
      * 处理用户点击"应用"按钮
      */
