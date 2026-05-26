@@ -93,7 +93,7 @@ export function useSimplifiedFlowDataConverter() {
     async function fetchRpcMethodMap(): Promise<Map<string, RpcApiMethod>> {
         try {
             const res = await fetch(
-                'http://139.196.239.110:5174/api/runtime/csb/v1.0/InternalServiceManage/findAllRpcServiceBySu/aim'
+                '/api/runtime/csb/v1.0/InternalServiceManage/findAllRpcServiceBySu/aim'
             );
             if (!res.ok) return new Map();
             const services: { methods: RpcApiMethod[] }[] = await res.json();
