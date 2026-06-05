@@ -220,17 +220,25 @@
           <el-empty v-else description="无属性" />
         </el-card>
 
-        <el-card v-if="currentDevice?.metaModel?.actions" shadow="never">
+        <el-card shadow="never">
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <el-button
-              v-for="(action, actionName) in currentDevice.metaModel.actions"
-              :key="String(actionName)"
-              type="primary"
-              plain
-              @click="handleAction(String(actionName), action)"
+              type="success"
+              @click="openFaceRecognitionTest"
             >
-              {{ actionName }}
+              人脸识别测试
             </el-button>
+            <template v-if="currentDevice?.metaModel?.actions">
+              <el-button
+                v-for="(action, actionName) in currentDevice.metaModel.actions"
+                :key="String(actionName)"
+                type="primary"
+                plain
+                @click="handleAction(String(actionName), action)"
+              >
+                {{ actionName }}
+              </el-button>
+            </template>
           </div>
         </el-card>
       </div>
@@ -766,6 +774,10 @@ function getEventType(event: any) {
   if (typeof payload.name === 'string' && payload.name) return payload.name
   const keys = Object.keys(payload)
   return keys[0] || 'unknown'
+}
+
+function openFaceRecognitionTest() {
+  window.open('https://139.196.239.110:9000/', '_blank')
 }
 
 async function handleAction(actionName: string, action: any) {
