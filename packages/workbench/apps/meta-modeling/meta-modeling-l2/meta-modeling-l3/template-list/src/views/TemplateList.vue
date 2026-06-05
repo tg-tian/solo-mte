@@ -110,6 +110,7 @@
         placeholder="输入关键词搜索模板..."
         clearable
         @keyup.enter="handleImportSearch"
+        style="margin-bottom: 12px"
       >
         <template #append>
           <el-button @click="handleImportSearch">搜索</el-button>
@@ -119,31 +120,36 @@
       <el-table
         v-loading="templateStore.loading"
         :data="templateStore.externalTemplates"
-        style="width: 100%; margin-top: 16px"
+        max-height="320"
+        style="width: 100%"
         highlight-current-row
         @current-change="handleCurrentChange"
       >
+        <el-table-column prop="template_id" label="模板ID" width="90" />
         <el-table-column prop="name" label="模板名称" width="160" />
-        <el-table-column prop="template_index" label="索引标识" width="180" show-overflow-tooltip />
-        <el-table-column label="领域" width="100">
+        <el-table-column label="领域" width="90">
           <template #default="{ row }"><span>{{ tagVal(row.tags, 'domain') }}</span></template>
         </el-table-column>
-        <el-table-column label="Schema" width="120">
+        <el-table-column label="Schema" width="110">
           <template #default="{ row }"><span>{{ tagVal(row.tags, 'schema') }}</span></template>
         </el-table-column>
-        <el-table-column label="模板类型" width="110">
+        <el-table-column label="模板类型" width="100">
           <template #default="{ row }"><span>{{ tagVal(row.tags, 'template_type') }}</span></template>
         </el-table-column>
-        <el-table-column label="功能标签" width="140" show-overflow-tooltip>
-          <template #default="{ row }"><span>{{ tagVal(row.tags, 'function') }}</span></template>
-        </el-table-column>
-        <el-table-column prop="submitter" label="提交者" width="100"></el-table-column>
-        <el-table-column prop="template_description" label="描述" width="200" show-overflow-tooltip />
+        <el-table-column prop="submitter" label="提交者" width="90"></el-table-column>
+        <el-table-column prop="template_description" label="描述" min-width="200" show-overflow-tooltip />
       </el-table>
 
-      <div class="load-more" v-if="importPage < templateStore.externalTotalPages">
-        <el-button link @click="loadMore" :loading="templateStore.loading">加载更多</el-button>
-      </div>
+      <el-pagination
+        v-if="templateStore.externalTotalPages > 1"
+        v-model:current-page="importPage"
+        :page-size="importPerPage"
+        :total="templateStore.externalTotalPages * importPerPage"
+        layout="prev, pager, next"
+        small
+        style="margin-top: 12px; justify-content: center"
+        @current-change="handleImportPageChange"
+      />
 
       <template #footer>
         <el-button @click="importDialogVisible = false">取消</el-button>
@@ -180,6 +186,7 @@ const { searchForm, selectedTemplate } = toRefs(state)
 const importDialogVisible = ref(false)
 const importKeyword = ref('')
 const importPage = ref(1)
+const importPerPage = 10
 const selectedExternalTemplate = ref<Template | null>(null)
 
 /** 从 tags 对象中提取单个标签值 */
@@ -261,12 +268,12 @@ async function onImportDialogOpen() {
 
 async function handleImportSearch() {
   importPage.value = 1
-  await templateStore.searchExternal(importKeyword.value, 1)
+  await templateStore.searchExternal(importKeyword.value, 1, importPerPage)
 }
 
-async function loadMore() {
-  importPage.value += 1
-  await templateStore.searchExternal(importKeyword.value, importPage.value)
+async function handleImportPageChange(page: number) {
+  importPage.value = page
+  await templateStore.searchExternal(importKeyword.value, page, importPerPage)
 }
 
 function handleCurrentChange(row: Template | null) {
@@ -305,7 +312,6 @@ async function handleImport() {
 .search-form .el-form-item { margin-bottom: 0; margin-right: 0 }
 .premium-table { border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) }
 .model-name-text { font-weight: 500; color: #303133 }
-.load-more { margin-top: 12px; text-align: center }
 :deep(.el-table__row) { transition: background-color 0.3s ease }
 :deep(.el-table__row:hover > td.el-table__cell) { background-color: #f0f7ff !important }
 :deep(.el-button--link) { font-weight: 500 }
