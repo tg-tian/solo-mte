@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia'
 import { Template } from '../types/models'
-import { getTemplates, getTemplateById, createTemplate, updateTemplate, deleteTemplate } from '../api/template'
+import { getTemplates, getTemplateById, createTemplate, updateTemplate, deleteTemplate, importTemplate, searchExternalTemplates } from '../api/template'
 
 export const useTemplateStore = defineStore('template', {
   state: () => ({
     templates: [] as Template[],
     allTemplates: [] as Template[],
     currentTemplate: null as Template | null,
+    externalTemplates: [] as Template[],
+    externalTotalPages: 0,
     loading: false
   }),
-  
+
   actions: {
     async fetchAllTemplates() {
       this.loading = true
@@ -31,17 +33,17 @@ export const useTemplateStore = defineStore('template', {
     async fetchTemplates() {
       this.loading = true
       try {
-          const res: any = await getTemplates()
-          if (res.data && res.status === 200) {
-              this.templates = res.data
-          }
+        const res: any = await getTemplates()
+        if (res.data && res.status === 200) {
+          this.templates = res.data
+        }
       } catch (error) {
-          console.error('Failed to fetch templates:', error)
+        console.error('Failed to fetch templates:', error)
       } finally {
-          this.loading = false
+        this.loading = false
       }
-  },
-    
+    },
+
     async fetchTemplateById(id: number) {
       this.loading = true
       try {
@@ -56,7 +58,7 @@ export const useTemplateStore = defineStore('template', {
         this.loading = false
       }
     },
-    
+
     async createTemplate(templateData: Template) {
       this.loading = true
       try {
@@ -72,7 +74,7 @@ export const useTemplateStore = defineStore('template', {
         this.loading = false
       }
     },
-    
+
     async updateTemplate(id: number, templateData: Template) {
       this.loading = true
       try {
@@ -89,7 +91,7 @@ export const useTemplateStore = defineStore('template', {
         this.loading = false
       }
     },
-    
+
     async deleteTemplate(id: number) {
       this.loading = true
       try {
@@ -105,6 +107,31 @@ export const useTemplateStore = defineStore('template', {
       } finally {
         this.loading = false
       }
+    },
+
+    /** 搜索外部模板库 */
+    async searchExternal(keyword: string, page = 1, per = 20) {
+      this.loading = true
+      try {
+        const result = await searchExternalTemplates({ q_tag_fuzzy: keyword, page, per })
+        this.externalTemplates = result.data || []
+        this.externalTotalPages = result.page_info?.total_pages || 0
+      } catch (e) {
+        console.error('搜索外部模板库失败:', e)
+        this.externalTemplates = []
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /** 从外部模板库导入到本地 */
+    async importExternal(externalTemplateId: number) {
+      const res = await importTemplate(externalTemplateId)
+      if (res.status === 200) {
+        await this.fetchAllTemplates()
+        return res.data as Template
+      }
+      throw new Error(res.data || '导入失败')
     }
   }
 })

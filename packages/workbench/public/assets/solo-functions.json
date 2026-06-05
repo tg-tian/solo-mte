@@ -393,7 +393,7 @@
     {
         "id": "DomainLCDP",
         "code": "domain-platform",
-        "name": "领域平台",
+        "name": "领域定制",
         "parentId": "CustomizeLCDP",
         "layer": "2",
         "menuType": "",

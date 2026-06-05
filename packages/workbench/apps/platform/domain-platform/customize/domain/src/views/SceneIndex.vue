@@ -9,7 +9,7 @@
           场景列表 
           <span v-if="currentDomain" class="page-sub-title" style="display:inline; margin-left: 8px;">- {{ currentDomain.domainName }}</span>
         </h2>
-        <p class="page-sub-title">管理领域平台内的具体应用场景和部署节点</p>
+        <p class="page-sub-title">管理领域定制内的具体应用场景和部署节点</p>
       </div>
     </div>
     

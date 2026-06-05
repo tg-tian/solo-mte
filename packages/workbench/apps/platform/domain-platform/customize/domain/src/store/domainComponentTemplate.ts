@@ -11,14 +11,14 @@ export const useDomainComponentTemplateStore = defineStore('domainComponentTempl
     hasMore: true
   }),
   actions: {
-    async fetchTemplates(domainId: number) {
-      if (!domainId) {
+    async fetchTemplates(domainCode: string) {
+      if (!domainCode) {
         this.templates = [];
         return;
       }
       this.loading = true;
       try {
-        const res = await getDomainTemplates(domainId);
+        const res = await getDomainTemplates(domainCode);
         if (res.status === 200) {
           this.templates = res.data;
         }
@@ -26,45 +26,36 @@ export const useDomainComponentTemplateStore = defineStore('domainComponentTempl
         this.loading = false;
       }
     },
-    async fetchAllTemplates(page: number, query?: Record<string, any>) {
+    async fetchAllTemplates(params?: Record<string, any>) {
       this.loading = true;
       try {
-        const res = await getTemplates({
-          name_or_category_or_description_or_domain_or_tags_or_code_key_word_string_cont:
-            query?.name_or_category_or_description_or_domain_or_tags_or_code_key_word_string_cont || '',
-          name_cont: query?.name_cont || '',
-          category_cont: query?.category_cont || '',
-          description_cont: query?.description_cont || '',
-          domain_cont: query?.domain_cont || '',
-          tags_cont: query?.tags_cont || '',
-          code_key_word_string_cont: query?.code_key_word_string_cont || ''
-        }, page);
+        const res = await getTemplates(params);
         if (res.status === 200) {
-          const rows = (res.data?.data || []).filter((item: TemplateRecord) => item.category !== '领域模板');
-          this.allTemplates = page === 1 ? rows : [...this.allTemplates, ...rows];
-          this.hasMore = rows.length > 0;
+          this.allTemplates = res.data || [];
+          this.hasMore = false;
         }
       } finally {
         this.loading = false;
       }
     },
-    async bindingTemplates(domainId: number, templateId: number) {
+    async bindingTemplates(domainCode: string, templateIds: number[]) {
       this.loading = true;
       try {
-        const res = await bindingTemplates(domainId, templateId);
-        if (res.status === 200) {
-          await this.fetchTemplates(domainId);
-          return true;
+        for (const templateId of templateIds) {
+          await bindingTemplates(domainCode, templateId);
         }
+        await this.fetchTemplates(domainCode);
+        return true;
+      } catch {
         return false;
       } finally {
         this.loading = false;
       }
     },
-    async unbindingTemplates(domainId: number, templateId: number) {
-      const res = await unbindingTemplates(domainId, templateId);
+    async unbindingTemplates(domainCode: string, templateId: number) {
+      const res = await unbindingTemplates(domainCode, templateId);
       if (res.status === 200) {
-        await this.fetchTemplates(domainId);
+        await this.fetchTemplates(domainCode);
         return true;
       }
       return false;

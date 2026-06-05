@@ -1,39 +1,37 @@
 import request from '../utils/request';
-import type { TemplateRecord } from '../types/models';
 
-const templateApiBase = (import.meta as any).env?.VITE_TEMPLATE_API_BASE || `${window.location.origin}/templates.json`;
-
-export function getTemplates(query: Record<string, any>, page: number) {
-  return request.get(templateApiBase, {
-    params: {
-      page,
-      query
-    }
-  });
+/** 获取所有模板列表（从元建模后端） */
+export function getTemplates(params?: Record<string, any>) {
+  return request.get('/templates', { params });
 }
 
-export function getDomainTemplates(domainId: number) {
-  return request.get('/templates/domain', { params: { domainId } });
+/** 获取领域已绑定的模板列表 */
+export function getDomainTemplates(domainCode: string) {
+  return request.get('/templates/domain', { params: { domainCode } });
 }
 
-export function bindingTemplates(domainId: number, templateId: number) {
+/** 领域绑定模板 */
+export function bindingTemplates(domainCode: string, templateId: number) {
   return request.post('/templates/binding', {
-    domainId,
+    domainCode,
     templateId
   });
 }
 
-export function unbindingTemplates(domainId: number, templateId: number) {
+/** 领域取消绑定模板 */
+export function unbindingTemplates(domainCode: string, templateId: number) {
   return request.post('/templates/unbinding', {
-    domainId,
+    domainCode,
     templateId
   });
 }
 
+/** 领域模板库保存模板 */
 export function saveTemplate(data: Record<string, any>) {
-  return request.post(templateApiBase, data);
+  return request.post('/templates', data);
 }
 
-export function updateTemplate(id: number, data: Record<string, any>) {
-  return request.put(`${templateApiBase.replace(/\.json$/, '')}/${id}.json`, data);
+/** 领域模板库更新模板 */
+export function updateTemplate(templateId: number, data: Record<string, any>) {
+  return request.put(`/templates/${templateId}`, data);
 }

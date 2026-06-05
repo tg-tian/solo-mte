@@ -75,8 +75,8 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="模型模板组" name="template" v-if="isEditMode || isFromTemplate">
-          <DomainTemplate :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+        <el-tab-pane label="领域模板" name="template" v-if="isEditMode || isFromTemplate">
+          <DomainTemplate :domain-code="domainForm.code" :is-from-template="isFromTemplate" />
         </el-tab-pane>
 
         <el-tab-pane label="设备模型库" name="model" v-if="isEditMode || isFromTemplate">
