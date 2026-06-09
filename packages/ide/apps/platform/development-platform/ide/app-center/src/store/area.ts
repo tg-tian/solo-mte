@@ -3,7 +3,12 @@ import type { Area, PolygonPoint } from '../types/scene'
 import { getAreas, createArea, updateArea, deleteArea } from '../api/area'
 import request from '../utils/request'
 
-function resolveImageUrl(image?: string | null) {
+/**
+ * Resolve a relative image path to an absolute URL for display purposes only.
+ * The raw path is preserved in the Pinia store so that the edit form shows
+ * the original value and no prefix accumulation occurs on re-fetch.
+ */
+export function resolveImageUrl(image?: string | null) {
   if (!image) {
     return null
   }
@@ -42,7 +47,7 @@ function normalizeArea(areaData: any): Area {
   return {
     id: Number(areaData?.id ?? 0),
     name: areaData?.name ?? '',
-    image: resolveImageUrl(areaData?.image ?? areaData?.imageUrl ?? null),
+    image: areaData?.image ?? areaData?.imageUrl ?? null,
     description: areaData?.description ?? '',
     polygon: parsePolygon(areaData?.polygon),
     parentId:

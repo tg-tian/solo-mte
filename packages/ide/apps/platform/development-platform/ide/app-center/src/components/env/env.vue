@@ -53,10 +53,10 @@
             <template #default="scope">
               <el-image
                 v-if="scope.row.image"
-                :src="scope.row.image"
+                :src="resolveImageUrl(scope.row.image) || scope.row.image"
                 fit="cover"
                 class="area-image"
-                :preview-src-list="[scope.row.image]"
+                :preview-src-list="[resolveImageUrl(scope.row.image) || scope.row.image]"
                 preview-teleported
               />
               <el-empty v-else :image-size="32" description="无图片" />
@@ -171,7 +171,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { useSceneStore } from '../../store/scene'
-import { useAreaStore } from '../../store/area'
+import { useAreaStore, resolveImageUrl } from '../../store/area'
 import type { Area, AreaPolygonInfo, PolygonPoint } from '../../types/scene'
 import PolygonCanvas from '../PolygonCanvas.vue'
 
