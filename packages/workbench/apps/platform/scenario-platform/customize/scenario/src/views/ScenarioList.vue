@@ -286,7 +286,7 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
       polygon: payload.scenario.polygon && payload.scenario.polygon.length >= 3 ? JSON.stringify(payload.scenario.polygon) : null
     };
     const result = await createScenario(scenarioPayload);
-    const sceneId = `${result?.data?.sceneId ?? result?.data?.id ?? ''}`;
+    const sceneId = `${result?.data?.sceneId ?? ''}`;
 
     if (sceneId && payload.areas.length) {
       const pendingAreas = payload.areas.map((area) => ({ ...area }));

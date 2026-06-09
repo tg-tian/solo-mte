@@ -16,7 +16,7 @@ function parsePolygon(raw: unknown): PolygonPoint[] | null {
 
 function normalizeScene(sceneData: any): Scene {
   return {
-    id: sceneData.sceneId || sceneData.id,
+    id: sceneData.sceneId,
     domainId: sceneData.domainId,
     name: sceneData.sceneName || sceneData.name,
     description: sceneData.sceneDescription || sceneData.description || '',

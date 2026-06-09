@@ -26,7 +26,7 @@ function normalizeScenario(scenario: Record<string, any>): ScenarioRecord {
     } catch { polygon = null; }
   }
   return {
-    sceneId: `${scenario.sceneId ?? scenario.id ?? ''}`,
+    sceneId: `${scenario.sceneId ?? ''}`,
     sceneName: scenario.sceneName ?? scenario.title ?? '',
     sceneCode: scenario.sceneCode ?? scenario.code ?? '',
     sceneDescription: scenario.sceneDescription ?? scenario.description ?? '',

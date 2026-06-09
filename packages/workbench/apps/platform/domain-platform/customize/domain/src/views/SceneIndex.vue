@@ -113,7 +113,7 @@ async function fetchScenes() {
 
 function normalizeScenes(list: any[]) {
   return list.map((item) => ({
-    id: `${item.sceneId ?? item.id ?? ''}`,
+    id: `${item.sceneId ?? ''}`,
     code: item.sceneCode ?? item.code ?? '',
     name: item.sceneName ?? item.name ?? '',
     description: item.sceneDescription ?? item.description ?? '',
