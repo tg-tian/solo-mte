@@ -223,6 +223,7 @@
         <el-card shadow="never">
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <el-button
+              v-if="currentDevice?.category === 'camera'"
               type="success"
               @click="openFaceRecognitionTest"
             >
