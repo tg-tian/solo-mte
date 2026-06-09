@@ -260,6 +260,7 @@
 .f-app-card-footer {
     display: flex;
     flex-direction: row-reverse;
+    align-items: center;
     margin-top: 14px;
 }
 
@@ -350,6 +351,14 @@
 }
 .f-app-card-publish-btn:hover {
     color: #2a87ff;
+}
+
+/* Publish status text in card footer */
+.f-app-card-publish-status {
+    color: #b0b8c8;
+    font-size: 12px;
+    padding: 0 4px;
+    margin-right: auto;
 }
 
 /* Git "..." button in card footer */

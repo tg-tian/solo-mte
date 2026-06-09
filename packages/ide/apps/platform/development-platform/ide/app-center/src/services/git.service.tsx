@@ -138,6 +138,15 @@ export class GitService {
 
     // ========== Publish ==========
 
+    async fetchPublishStatus(): Promise<string[]> {
+        try {
+            const res = await axios.get('http://139.196.239.110:26789/status');
+            return res.data?.history || [];
+        } catch {
+            return [];
+        }
+    }
+
     async handlePublish(boPath: string): Promise<void> {
         FLoadingService.show({ message: '正在发布，请稍候...' });
         try {

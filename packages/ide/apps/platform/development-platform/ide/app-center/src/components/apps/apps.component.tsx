@@ -32,6 +32,17 @@ export default defineComponent({
         const gitPopoverRef = ref<any>();
         const gitOperations = ref<Array<{ icon: string; name: string; id: string }>>([]);
         const currentGitBoPath = ref('');
+        const publishedPaths = ref<Set<string>>(new Set());
+
+        async function refreshPublishStatus() {
+            const paths = await gitService.fetchPublishStatus();
+            publishedPaths.value = new Set(paths);
+        }
+
+        function isPublished(appObject: AppObject): boolean {
+            const boPath = buildBoPath(appObject);
+            return publishedPaths.value.has(boPath);
+        }
 
         function getActiveAppDomain() {
             return currentAppDomain.value || (appDomains.value.length ? appDomains.value[0] : null);
@@ -251,6 +262,7 @@ export default defineComponent({
             event.stopPropagation();
             const boPath = buildBoPath(appObject);
             await gitService.handlePublish(boPath);
+            await refreshPublishStatus();
         }
 
         function onGitMenuClick(gitOperation: { icon: string; name: string; id: string }) {
@@ -384,15 +396,14 @@ export default defineComponent({
                             <i class="f-icon f-icon-home-operation"></i>
                         </div>
                         <div class="f-app-card-publish-btn" onClick={(e: MouseEvent) => handlePublishClick(e, item)}>发布</div>
+                        <div class="f-app-card-publish-status">{isPublished(item) ? '已发布' : '未发布'}</div>
                     </div>
                 </div>
             );
         }
 
         onMounted(() => {
-            // if (appDomains.value.length && appDomains.value[0].modules.length) {
-            //     updateAppObjects(appDomains.value[0], appDomains.value[0].modules[0]);
-            // }
+            refreshPublishStatus();
         });
 
         return () => {
