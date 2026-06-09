@@ -1,9 +1,10 @@
-import { defineComponent, inject, onMounted, ref, watch } from "vue";
-import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, F_MODAL_SERVICE_TOKEN, FPopover, FSearchBox } from "@farris/ui-vue";
+import { defineComponent, inject, onMounted, provide, ref, watch } from "vue";
+import { FAccordion, FAccordionItem, FButton, FLayout, FLayoutPane, FListView, F_MODAL_SERVICE_TOKEN, FPopover, FSearchBox, F_NOTIFY_SERVICE_TOKEN, FNotifyService } from "@farris/ui-vue";
 import { AppDomain, AppModule, AppObject, UseAppDomain, UseWorkspace } from "../../composition/type";
 import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 import CreateAppDomainComponent from './create-app-entity/create-app-domain.component';
 import CreateModuleComponent from './create-app-entity/create-module.component';
+import { GitService } from '../../services/git.service';
 
 import './apps.css';
 
@@ -13,6 +14,9 @@ export default defineComponent({
     emits: [],
     setup() {
         const modalService = inject(F_MODAL_SERVICE_TOKEN, null);
+        const notifyService = inject(F_NOTIFY_SERVICE_TOKEN) as typeof FNotifyService;
+        const gitService = new GitService(modalService, notifyService);
+        provide('f-app-center-git-service', gitService);
         const useAppDomainComposition = inject('f-app-center-app-domain') as UseAppDomain;
         const useWorkspaceComposition = inject('f-app-center-workspace') as UseWorkspace;
         const { options } = useWorkspaceComposition;
@@ -25,6 +29,9 @@ export default defineComponent({
         const createAppDomainComponentRef = ref();
         const createModuleComponentRef = ref();
         const modalInstanceRef = ref<any>();
+        const gitPopoverRef = ref<any>();
+        const gitOperations = ref<Array<{ icon: string; name: string; id: string }>>([]);
+        const currentGitBoPath = ref('');
 
         function getActiveAppDomain() {
             return currentAppDomain.value || (appDomains.value.length ? appDomains.value[0] : null);
@@ -184,6 +191,58 @@ export default defineComponent({
             modalInstanceRef.value = modalRef?.modalRef?.value;
         }
 
+        function buildBoPath(appObject: AppObject): string {
+            const domainCode = currentAppDomain.value?.code || '';
+            const moduleCode = currentAppModule.value?.code || '';
+            return `/${domainCode}/${moduleCode}/${appObject.code}`;
+        }
+
+        async function handleGitClick(event: MouseEvent, appObject: AppObject) {
+            event.stopPropagation();
+            const target = event.currentTarget as HTMLElement;
+            const boPath = buildBoPath(appObject);
+            currentGitBoPath.value = boPath;
+            try {
+                const res: any = await gitService.checkIsGitProject(boPath);
+                if (res && !res.gitConfig) {
+                    gitOperations.value = [];
+                    if (gitPopoverRef.value) {
+                        gitPopoverRef.value.hide();
+                    }
+                    const FMessageBoxService = (await import('@farris/ui-vue')).FMessageBoxService;
+                    FMessageBoxService.question(
+                        '系统尚未配置认证信息，请先点击【确定】按钮配置认证信息',
+                        '',
+                        () => { gitService.handleRepo(); }
+                    );
+                } else if (res && res.exit && res.addr && res.addr === boPath) {
+                    if (!res.gitUrl) {
+                        gitOperations.value = gitService.getGitOperations(2);
+                    } else {
+                        gitOperations.value = gitService.getGitOperations(3);
+                    }
+                    gitPopoverRef.value?.show(target);
+                } else {
+                    gitOperations.value = gitService.getGitOperations(1);
+                    gitPopoverRef.value?.show(target);
+                }
+            } catch (e: any) {
+                if (gitPopoverRef.value) {
+                    gitPopoverRef.value.hide();
+                }
+                if (e?.response?.data?.Message) {
+                    notifyService.error({ message: e.response.data.Message });
+                }
+            }
+        }
+
+        function onGitMenuClick(gitOperation: { icon: string; name: string; id: string }) {
+            if (gitPopoverRef.value) {
+                gitPopoverRef.value.hide();
+            }
+            gitService.handleGitOperation(gitOperation, currentGitBoPath.value);
+        }
+
         function renderCreateEntityPopover() {
             return (
                 <FPopover
@@ -194,6 +253,25 @@ export default defineComponent({
                     <div class="f-create-entity-menu">
                         <div class="f-create-entity-menu-item" onClick={onClickCreateAppDomain}>创建应用域</div>
                         <div class="f-create-entity-menu-item" onClick={onClickCreateModule}>创建模块</div>
+                    </div>
+                </FPopover>
+            );
+        }
+
+        function renderGitPopover() {
+            return (
+                <FPopover
+                    ref={gitPopoverRef}
+                    placement="auto"
+                    showArrow={false}
+                    visible={false}>
+                    <div class="f-git-menu">
+                        {gitOperations.value.map(op => (
+                            <div class="f-git-menu-item" onClick={() => onGitMenuClick(op)}>
+                                <span class="f-git-menu-item-icon">{op.icon}</span>
+                                <span>{op.name}</span>
+                            </div>
+                        ))}
                     </div>
                 </FPopover>
             );
@@ -284,7 +362,10 @@ export default defineComponent({
                         </div>
                         <span class="bage f-app-favor"><i class="f-icon f-icon-star"></i></span>
                     </div>
-                    <div class="f-app-card-footer f-btn-group">
+                    <div class="f-app-card-footer f-btn-group" onClick={(e: MouseEvent) => e.stopPropagation()}>
+                        <div class="f-app-card-git-btn" onClick={(e: MouseEvent) => handleGitClick(e, item)}>
+                            <i class="f-icon f-icon-home-operation"></i>
+                        </div>
                     </div>
                 </div>
             );
@@ -310,6 +391,7 @@ export default defineComponent({
                                 empty: () => <div class="f-admin-apps-list-empty">暂无应用，请点击「新建应用」创建</div>
                             }}
                         </FListView>
+                        {renderGitPopover()}
                     </FLayoutPane>
                 </FLayout>
             );

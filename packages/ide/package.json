@@ -28,6 +28,7 @@
         "@tgapk/lowcode-common": "^1.0.0",
         "@ubml/common": "1.0.0-beta.1",
         "axios": "^1.12.2",
+        "jsencrypt": "^3.3.2",
         "element-plus": "^2.9.7",
         "js-cookie": "^3.0.5",
         "monaco-editor": "^0.52.2",
