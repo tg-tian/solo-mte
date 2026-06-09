@@ -1,5 +1,6 @@
 import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
+import { FLoadingService } from '@farris/ui-vue';
 
 const PUBLIC_KEY = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8Uvi7YbPGxof2p7NGneZGfwGhMOhWrj/Jk6bjDS87jCQ0uEQ7PquzVbgWLMV0eyFzAOBiHMT+Gy9q5x7aPpskm7CnMwPgjlXt1xVENOM/fXtAl908dG+UadbzZvUWV68KBF14Q8JOZ3kyUo9jzsn0Ro0tzORDVH6WnasdVcPBHQIDAQAB';
 
@@ -135,6 +136,25 @@ export class GitService {
         return axios.post('/api/dev/main/v1.0/git/repoconfig', sendData).then(res => res.data);
     }
 
+    // ========== Publish ==========
+
+    async handlePublish(boPath: string): Promise<void> {
+        FLoadingService.show({ message: '正在发布，请稍候...' });
+        try {
+            const res = await axios.post('http://139.196.239.110:26789/publish', { path: boPath });
+            FLoadingService.close();
+            if (res.data && res.data.ok) {
+                this.notifyService.success({ message: '发布成功' });
+            } else {
+                this.notifyService.error({ message: res.data?.error || '发布失败' });
+            }
+        } catch (e: any) {
+            FLoadingService.close();
+            const errMsg = e?.response?.data?.error || '发布失败';
+            this.notifyService.error({ message: errMsg });
+        }
+    }
+
     // ========== Orchestration methods ==========
 
     async handleInitGit(boPath: string, remoteUrl: string): Promise<void> {
@@ -228,22 +248,35 @@ export class GitService {
     }
 
     handleDeleteUrl(boPath: string, name: string): Promise<boolean> {
+        const that = this;
         return new Promise((resolve) => {
-            import('@farris/ui-vue').then(({ FMessageBoxService }) => {
-                FMessageBoxService.question('是否删除该远程仓库配置？', '', () => {
-                    this.gitRemoteDelete(boPath, name).then(() => {
-                        this.notifyService.success({ message: '删除该远程仓库成功' });
-                        resolve(true);
-                    }).catch(e => {
-                        this.notifyService.error({ message: e?.response?.data?.Message || '删除该远程仓库失败' });
-                        resolve(false);
-                    });
-                }, () => { resolve(false); });
-            }).catch(() => {
-                this.gitRemoteDelete(boPath, name).then(() => {
-                    this.notifyService.success({ message: '删除该远程仓库成功' });
-                    resolve(true);
-                }).catch(() => { resolve(false); });
+            const modalRef: any = that.modalService?.open({
+                title: '提示',
+                width: 420,
+                fitContent: true,
+                showHeader: false,
+                showButtons: true,
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => { modalRef?.close(); resolve(false); } },
+                    {
+                        text: '确定', class: 'btn btn-primary', handle: () => {
+                            modalRef?.close();
+                            that.gitRemoteDelete(boPath, name).then(() => {
+                                that.notifyService.success({ message: '删除该远程仓库成功' });
+                                resolve(true);
+                            }).catch((e: any) => {
+                                that.notifyService.error({ message: e?.response?.data?.Message || '删除该远程仓库失败' });
+                                resolve(false);
+                            });
+                        }
+                    }
+                ],
+                render: () => (
+                    <div style="display: flex; align-items: center; padding: 20px;">
+                        <span class="f-icon f-icon-warning" style="font-size: 26px; margin-right: 12px; color: #f0ad4e;"></span>
+                        <span>是否删除该远程仓库配置？</span>
+                    </div>
+                )
             });
         });
     }

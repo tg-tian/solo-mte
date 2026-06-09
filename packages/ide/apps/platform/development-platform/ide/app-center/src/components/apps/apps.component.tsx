@@ -209,12 +209,23 @@ export default defineComponent({
                     if (gitPopoverRef.value) {
                         gitPopoverRef.value.hide();
                     }
-                    const FMessageBoxService = (await import('@farris/ui-vue')).FMessageBoxService;
-                    FMessageBoxService.question(
-                        '系统尚未配置认证信息，请先点击【确定】按钮配置认证信息',
-                        '',
-                        () => { gitService.handleRepo(); }
-                    );
+                    const modalRef: any = modalService?.open({
+                        title: '提示',
+                        width: 420,
+                        fitContent: true,
+                        showHeader: false,
+                        showButtons: true,
+                        buttons: [
+                            { text: '取消', class: 'btn btn-secondary', handle: () => modalRef?.close() },
+                            { text: '确定', class: 'btn btn-primary', handle: () => { modalRef?.close(); gitService.handleRepo(); } }
+                        ],
+                        render: () => (
+                            <div style="display: flex; align-items: center; padding: 20px;">
+                                <span class="f-icon f-icon-warning" style="font-size: 26px; margin-right: 12px; color: #f0ad4e;"></span>
+                                <span>系统尚未配置认证信息，请先点击【确定】按钮配置认证信息</span>
+                            </div>
+                        )
+                    });
                 } else if (res && res.exit && res.addr && res.addr === boPath) {
                     if (!res.gitUrl) {
                         gitOperations.value = gitService.getGitOperations(2);
@@ -234,6 +245,12 @@ export default defineComponent({
                     notifyService.error({ message: e.response.data.Message });
                 }
             }
+        }
+
+        async function handlePublishClick(event: MouseEvent, appObject: AppObject) {
+            event.stopPropagation();
+            const boPath = buildBoPath(appObject);
+            await gitService.handlePublish(boPath);
         }
 
         function onGitMenuClick(gitOperation: { icon: string; name: string; id: string }) {
@@ -366,6 +383,7 @@ export default defineComponent({
                         <div class="f-app-card-git-btn" onClick={(e: MouseEvent) => handleGitClick(e, item)}>
                             <i class="f-icon f-icon-home-operation"></i>
                         </div>
+                        <div class="f-app-card-publish-btn" onClick={(e: MouseEvent) => handlePublishClick(e, item)}>发布</div>
                     </div>
                 </div>
             );

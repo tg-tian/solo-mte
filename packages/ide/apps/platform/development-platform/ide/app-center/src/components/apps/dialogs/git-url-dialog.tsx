@@ -92,7 +92,7 @@ export default defineComponent({
                             <span>URL</span>
                         </div>
                         <div class="ide-git-input">
-                            <FInputGroup v-model={remoteUrl} placeholder="请填写远程仓库地址http(s)://"></FInputGroup>
+                            <FInputGroup modelValue={remoteUrl.value} onUpdate:modelValue={(v: string) => remoteUrl.value = v} placeholder="请填写远程仓库地址http(s)://"></FInputGroup>
                         </div>
                     </div>
                 )}
@@ -103,7 +103,7 @@ export default defineComponent({
                             <span>分支</span>
                         </div>
                         <div class="ide-git-input">
-                            <FInputGroup v-model={branch}></FInputGroup>
+                            <FInputGroup modelValue={branch.value} onUpdate:modelValue={(v: string) => branch.value = v}></FInputGroup>
                         </div>
                     </div>
                 )}
@@ -112,7 +112,7 @@ export default defineComponent({
                         <div class="ide-git-group">
                             <div class="ide-git-label"><span>名称</span></div>
                             <div class="ide-git-input">
-                                <FInputGroup v-model={name} disabled={true}></FInputGroup>
+                                <FInputGroup modelValue={name.value} onUpdate:modelValue={(v: string) => name.value = v} disabled={true}></FInputGroup>
                             </div>
                             <div class="ide-git-delete" onClick={handleDelete}>
                                 {name.value ? <span class="f-icon f-icon-delete"></span> : null}
@@ -121,13 +121,13 @@ export default defineComponent({
                         <div class="ide-git-group" style="margin-top: 8px;">
                             <div class="ide-git-label"><span>URL</span></div>
                             <div class="ide-git-input">
-                                <FInputGroup v-model={remoteUrl} disabled={true}></FInputGroup>
+                                <FInputGroup modelValue={remoteUrl.value} onUpdate:modelValue={(v: string) => remoteUrl.value = v} disabled={true}></FInputGroup>
                             </div>
                         </div>
                         <div class="ide-git-group" style="margin-top: 8px;">
                             <div class="ide-git-label"><span>分支</span></div>
                             <div class="ide-git-input">
-                                <FInputGroup v-model={branch} disabled={true}></FInputGroup>
+                                <FInputGroup modelValue={branch.value} onUpdate:modelValue={(v: string) => branch.value = v} disabled={true}></FInputGroup>
                             </div>
                         </div>
                         <div class="ide-git-vertify" style="margin-top: 8px;">

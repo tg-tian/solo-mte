@@ -341,6 +341,17 @@
     font-size: 13px;
 }
 
+/* Publish button in card footer */
+.f-app-card-publish-btn {
+    cursor: pointer;
+    color: #4DABF7;
+    font-size: 13px;
+    padding: 0 8px;
+}
+.f-app-card-publish-btn:hover {
+    color: #2a87ff;
+}
+
 /* Git "..." button in card footer */
 .f-app-card-git-btn {
     cursor: pointer;

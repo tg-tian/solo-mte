@@ -61,7 +61,7 @@ export default defineComponent({
                         <span>用户名</span>
                     </div>
                     <div class="ide-git-input">
-                        <FInputGroup v-model={username} placeholder=""></FInputGroup>
+                        <FInputGroup modelValue={username.value} onUpdate:modelValue={(v: string) => username.value = v} placeholder=""></FInputGroup>
                     </div>
                 </div>
                 <div class="ide-git-group" style="margin-top: 8px;">
@@ -70,7 +70,7 @@ export default defineComponent({
                         <span>密码</span>
                     </div>
                     <div class="ide-git-input">
-                        <FInputGroup type="password" v-model={password} placeholder={placeholder.value} onInput={onPasswordChange}></FInputGroup>
+                        <FInputGroup type="password" modelValue={password.value} onUpdate:modelValue={(v: string) => password.value = v} placeholder={placeholder.value} onInput={onPasswordChange}></FInputGroup>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e8ebf1;">
