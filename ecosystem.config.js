@@ -1,8 +1,15 @@
 // 共享：VS Code Server 监听端口（与 start-server.sh 一致）
 const vscodePort = process.env.VSCODE_PORT || '8000';
 // 浏览器访问的 authority（host:port）。部署前可 export，例如 VITE_VSCODE_REMOTE_AUTHORITY=203.0.113.10:8000
+
+// --------------------------------------------------------------------------
+// const viteVsCodeAuthority =
+//   process.env.VITE_VSCODE_REMOTE_AUTHORITY || `localhost:${vscodePort}`;
+// --------------------------------------------------------------------------
+
+// 默认走 nginx :8443 → VS Code Server :8000，避免浏览器直连 localhost:8000 导致 WebSocket 1006
 const viteVsCodeAuthority =
-  process.env.VITE_VSCODE_REMOTE_AUTHORITY || `localhost:${vscodePort}`;
+  process.env.VITE_VSCODE_REMOTE_AUTHORITY || `139.196.239.110:8443`;
 
 module.exports = {
   apps: [
