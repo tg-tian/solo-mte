@@ -1,4 +1,4 @@
-import { defineConfig, type ViteDevServer } from 'vite';
+import { defineConfig, loadEnv, type ViteDevServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import type { IncomingMessage, ServerResponse } from 'http';
@@ -164,7 +164,14 @@ const ideBuiltinExtensionsDir = path.resolve(
     'apps/platform/development-platform/ide/extensions'
 );
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, __dirname, '');
+    const port = parseInt(env.VITE_PORT || '5174');
+    const apiPort = env.VITE_API_PORT || '5200';
+    const apiTarget = `http://localhost:${apiPort}`;
+    const apiWsTarget = `ws://localhost:${apiPort}`;
+
+    return {
     plugins: [
         extensionPublicPassthrough([
             path.resolve(__dirname, 'public', 'extensions'),
@@ -182,7 +189,7 @@ export default defineConfig({
     ],
     server: {
         host: '0.0.0.0',
-        port: 5174,
+        port,
         proxy: {
             "/__localfs": {
                 target: "http://localhost:3456",
@@ -190,28 +197,28 @@ export default defineConfig({
                 secure: false
             },
             "/api": {
-                target: "http://localhost:5200",
+                target: apiTarget,
                 changeOrigin: true,
                 secure: false
             },
             '/api/dev/main/v1.0/lcm-log/ws': {
-                target: 'ws://localhost:5200', // 后端 WebSocket 地址
+                target: apiWsTarget, // 后端 WebSocket 地址
                 changeOrigin: true, // 允许跨域
                 ws: true, // 启用 WebSocket 代理
             },
             "/platform": {
-                target: "http://localhost:5200",
+                target: apiTarget,
                 changeOrigin: true,
                 secure: false
             },
             /**
-             * /apps 默认走运行时 (5200)；
-             * 以 /apps/platform/development-platform 开头的 IDE 子应用页面与资源须由本机 Vite(5174) 处理，不能交给 5200。
+             * /apps 默认走运行时；
+             * 以 /apps/platform/development-platform 开头的 IDE 子应用页面与资源须由本机 Vite 处理，不能交给后端。
              * 用 bypass 跳过代理：须 **返回 string**（会写回 req.url 并 next），由 Vite 处理。
              * 注意：当前 Vite 若 return false 会错误地执行 res.end(404)，把 404 当 chunk 写出并报错。
              */
             '/apps': {
-                target: 'http://localhost:5200',
+                target: apiTarget,
                 changeOrigin: true,
                 secure: false,
                 bypass(req) {
@@ -222,7 +229,7 @@ export default defineConfig({
                 },
             },
             "/runtime": {
-                target: "http://localhost:5200",
+                target: apiTarget,
                 changeOrigin: true,
                 secure: false
             },
@@ -289,4 +296,5 @@ export default defineConfig({
     optimizeDeps: {
         include: ['@ubml/common']
     }
+    };
 });

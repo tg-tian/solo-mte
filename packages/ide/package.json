@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite --config ./vite.config.dev.ts",
+        "dev:runtime": "vite --config ./vite.config.dev.ts --mode runtime",
         "build": "vue-tsc --noEmit && vite build --config ./vite.config.build.ts",
         "preview": "vite preview --config ./vite.config.dev.ts",
         "build:system": "farris-cli build -c ./vite.config.build.ts",

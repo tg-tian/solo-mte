@@ -46,6 +46,24 @@ module.exports = {
       time: true
     },
     {
+      name: 'solo-ide-runtime',
+      cwd: '/root/solo-mte/packages/ide',
+      script: 'node_modules/vite/bin/vite.js',
+      args: '--config ./vite.config.dev.ts --mode runtime',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '4G',
+      env: {
+        NODE_ENV: 'development',
+        VITE_VSCODE_REMOTE_AUTHORITY: viteVsCodeAuthority
+      },
+      error_file: '/root/solo-mte/logs/ide-runtime-error.log',
+      out_file: '/root/solo-mte/logs/ide-runtime-out.log',
+      log_file: '/root/solo-mte/logs/ide-runtime-combined.log',
+      time: true
+    },
+    {
       name: 'solo-workbench',
       cwd: '/root/solo-mte/packages/workbench',
       script: 'node_modules/vite/bin/vite.js',
