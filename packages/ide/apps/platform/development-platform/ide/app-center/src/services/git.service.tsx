@@ -148,6 +148,7 @@ export class GitService {
     }
 
     async handlePublish(boPath: string, boId: string): Promise<void> {
+        const that = this;
         FLoadingService.show({ message: '正在发布，请稍候...' });
         try {
             const res = await axios.post('http://139.196.239.110:26789/publish',
@@ -157,12 +158,52 @@ export class GitService {
             FLoadingService.close();
             if (res.data && res.data.ok) {
                 this.notifyService.success({ message: '发布成功' });
+                that.confirmRestart();
             } else {
                 this.notifyService.error({ message: res.data?.error || '发布失败' });
             }
         } catch (e: any) {
             FLoadingService.close();
             const errMsg = e?.response?.data?.error || '发布失败';
+            this.notifyService.error({ message: errMsg });
+        }
+    }
+
+    private confirmRestart(): void {
+        const that = this;
+        const modalRef: any = that.modalService?.open({
+            title: '提示',
+            width: 440,
+            fitContent: true,
+            showHeader: false,
+            showButtons: true,
+            buttons: [
+                { text: '否', class: 'btn btn-secondary', handle: () => modalRef?.close() },
+                {
+                    text: '是', class: 'btn btn-primary', handle: () => {
+                        modalRef?.close();
+                        that.handleRestart();
+                    }
+                }
+            ],
+            render: () => (
+                <div style="padding: 20px;">
+                    <div style="font-size: 15px; margin-bottom: 8px;">发布成功，是否重启运行环境？</div>
+                    <div style="font-size: 13px; color: #999;">首次发布或后端变更时，需要重启才能生效。</div>
+                </div>
+            )
+        });
+    }
+
+    private async handleRestart(): Promise<void> {
+        FLoadingService.show({ message: '正在重启运行环境，请稍候...' });
+        try {
+            await axios.post('http://139.196.239.110:26789/restart');
+            FLoadingService.close();
+            this.notifyService.success({ message: '运行环境正在重启' });
+        } catch (e: any) {
+            FLoadingService.close();
+            const errMsg = e?.response?.data?.error || '重启失败';
             this.notifyService.error({ message: errMsg });
         }
     }
