@@ -157,7 +157,6 @@ export class GitService {
             );
             FLoadingService.close();
             if (res.data && res.data.ok) {
-                this.notifyService.success({ message: '发布成功' });
                 that.confirmRestart();
             } else {
                 this.notifyService.error({ message: res.data?.error || '发布失败' });
