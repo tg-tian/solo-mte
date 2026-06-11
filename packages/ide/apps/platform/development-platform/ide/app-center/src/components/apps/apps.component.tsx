@@ -297,7 +297,7 @@ export default defineComponent({
                     <div class="f-git-menu">
                         {gitOperations.value.map(op => (
                             <div class="f-git-menu-item" onClick={() => onGitMenuClick(op)}>
-                                <span class="f-git-menu-item-icon">{op.icon}</span>
+                                <img class="f-git-menu-item-icon" src={op.icon} />
                                 <span>{op.name}</span>
                             </div>
                         ))}

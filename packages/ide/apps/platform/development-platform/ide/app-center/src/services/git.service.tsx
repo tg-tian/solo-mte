@@ -20,22 +20,23 @@ export class GitService {
     }
 
     getGitOperations(status: number): GitOperation[] {
+        const iconBase = '/assets/img/git-';
         if (status === 1) {
             return [
-                { icon: '\u{1F4E6}', name: '初始化仓库', id: 'initGit' },
-                { icon: '\u{2B07}️', name: '导入远程仓库', id: 'importGit' }
+                { icon: iconBase + 'initGit.svg', name: '初始化仓库', id: 'initGit' },
+                { icon: iconBase + 'importGit.svg', name: '导入远程仓库', id: 'importGit' }
             ];
         } else if (status === 2) {
             return [
-                { icon: '\u{2795}', name: '添加远程仓库', id: 'addRemote' }
+                { icon: iconBase + 'addRemote.svg', name: '添加远程仓库', id: 'addRemote' }
             ];
         } else if (status === 3) {
             return [
-                { icon: '\u{1F441}', name: '查看远程仓库', id: 'viewRemote' },
-                { icon: '\u{2B07}️', name: '拉取', id: 'pull' },
-                { icon: '\u{2714}️', name: '提交', id: 'commit' },
-                { icon: '\u{2B06}️', name: '推送', id: 'push' },
-                { icon: '\u{21A9}️', name: '撤销', id: 'revert' }
+                { icon: iconBase + 'viewRemote.svg', name: '查看远程仓库', id: 'viewRemote' },
+                { icon: iconBase + 'pull.svg', name: '拉取', id: 'pull' },
+                { icon: iconBase + 'commit.svg', name: '提交', id: 'commit' },
+                { icon: iconBase + 'push.svg', name: '推送', id: 'push' },
+                { icon: iconBase + 'revert.svg', name: '撤销', id: 'revert' }
             ];
         }
         return [];
