@@ -140,17 +140,20 @@ export class GitService {
 
     async fetchPublishStatus(): Promise<string[]> {
         try {
-            const res = await axios.get('http://139.196.239.110:26789/status');
+            const res = await axios.get('http://139.196.239.110:26789/status', { withCredentials: true });
             return res.data?.history || [];
         } catch {
             return [];
         }
     }
 
-    async handlePublish(boPath: string): Promise<void> {
+    async handlePublish(boPath: string, boId: string): Promise<void> {
         FLoadingService.show({ message: '正在发布，请稍候...' });
         try {
-            const res = await axios.post('http://139.196.239.110:26789/publish', { path: boPath });
+            const res = await axios.post('http://139.196.239.110:26789/publish',
+                { path: boPath, boId },
+                { withCredentials: true }
+            );
             FLoadingService.close();
             if (res.data && res.data.ok) {
                 this.notifyService.success({ message: '发布成功' });

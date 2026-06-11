@@ -261,7 +261,7 @@ export default defineComponent({
         async function handlePublishClick(event: MouseEvent, appObject: AppObject) {
             event.stopPropagation();
             const boPath = buildBoPath(appObject);
-            await gitService.handlePublish(boPath);
+            await gitService.handlePublish(boPath, appObject.id);
             await refreshPublishStatus();
         }
 
