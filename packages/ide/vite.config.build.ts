@@ -3,48 +3,52 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { resolve } from 'path';
 
+const APP_ENTRIES = {
+    main: resolve(__dirname, 'index.html'),
+    appBoard: resolve(__dirname, 'apps/platform/development-platform/ide/app-board/index.html'),
+    appBuilder: resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
+    appCenter: resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html'),
+    appPreview: resolve(__dirname, 'apps/platform/development-platform/ide/app-preview/index.html'),
+    appView: resolve(__dirname, 'apps/platform/development-platform/ide/app-view/index.html'),
+};
+
+// CSS 根据来源模块路径分配到对应子目录
+const APP_CSS_DIRS = [
+    'apps/platform/development-platform/ide/app-board',
+    'apps/platform/development-platform/ide/app-builder',
+    'apps/platform/development-platform/ide/app-center',
+    'apps/platform/development-platform/ide/app-preview',
+    'apps/platform/development-platform/ide/app-view',
+];
+
 // https://vitejs.dev/config/
 export default defineConfig({
     base: '/',
     build: {
         rollupOptions: {
-            input: {
-                // main: resolve(__dirname, 'index.html'),
-                'apps/platform/development-platform/ide/app-builder/index': resolve(__dirname, 'apps/platform/development-platform/ide/app-builder/index.html'),
-                'apps/platform/development-platform/ide/app-center/index': resolve(__dirname, 'apps/platform/development-platform/ide/app-center/index.html')
-            },
+            input: APP_ENTRIES,
             output: {
                 assetFileNames: (assetInfo) => {
-                    // 根据资源来源分别输出到不同目录
                     if (assetInfo.name?.endsWith('.css')) {
-                        console.log(assetInfo);
-                        // 通过 facadeModuleId 或 source 来判断样式来源
                         const moduleId = (assetInfo as any).facadeModuleId || '';
-                        const source = assetInfo.source?.toString() || '';
-                        
-                        // 判断是否为 app-builder 的样式
-                        if (moduleId.includes('app-builder') || source.includes('app-builder')) {
-                            return 'apps/platform/development-platform/ide/app-builder/[name].[hash].[ext]';
-                        }
-                        
-                        // 判断是否为 app-center 的样式
-                        if (moduleId.includes('app-center') || source.includes('app-center')) {
-                            return 'apps/platform/development-platform/ide/app-center/[name].[hash].[ext]';
+                        for (const dir of APP_CSS_DIRS) {
+                            if (moduleId.includes(dir)) {
+                                return `${dir}/[name].[hash].[ext]`;
+                            }
                         }
                     }
-                    
-                    // 其他资源输出到 assets 目录
                     return 'assets/[name].[hash].[ext]';
                 },
-                chunkFileNames: '[name].[hash].js',
-                entryFileNames: '[name].[hash].js'
-            }
-        }
+                chunkFileNames: 'apps/platform/development-platform/ide/[name].[hash].js',
+                entryFileNames: 'apps/platform/development-platform/ide/[name].[hash].js',
+            },
+        },
     },
     plugins: [vue(), vueJsx()],
     resolve: {
         alias: {
-            // "@farris/ui-vue": resolve(__dirname, './node_modules/@farris/ui-vue'),
-        }
-    }
+            '@': resolve(__dirname, '../'),
+            '@ubml/common': resolve(__dirname, 'node_modules/@ubml/common'),
+        },
+    },
 });
