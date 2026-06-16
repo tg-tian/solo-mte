@@ -29,7 +29,9 @@ export function useDeviceInfo() {
     }
 
     async function loadDeviceCategories(): Promise<DeviceModel[]> {
-        const apiUrl = 'http://139.196.239.110:8080/meta/device-models';
+        const apiUrl = location.protocol === 'https:'
+            ? '/solo-mte-8080/meta/device-models'
+            : 'http://139.196.239.110:8080/meta/device-models';
         const iconMapUrl = `./device-assets/device-icons.json?v=${(new Date()).getTime()}`;
 
         try {

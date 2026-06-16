@@ -141,7 +141,7 @@ export class GitService {
 
     async fetchPublishStatus(): Promise<string[]> {
         try {
-            const res = await axios.get('http://139.196.239.110:26789/status', { withCredentials: true });
+            const res = await axios.get('/solo-mte-publish/status', { withCredentials: true });
             return res.data?.history || [];
         } catch {
             return [];
@@ -152,7 +152,7 @@ export class GitService {
         const that = this;
         FLoadingService.show({ message: '正在发布，请稍候...' });
         try {
-            const res = await axios.post('http://139.196.239.110:26789/publish',
+            const res = await axios.post('/solo-mte-publish/publish',
                 { path: boPath, boId },
                 { withCredentials: true }
             );
@@ -198,7 +198,7 @@ export class GitService {
     private async handleRestart(): Promise<void> {
         FLoadingService.show({ message: '正在重启运行环境，请稍候...' });
         try {
-            await axios.post('http://139.196.239.110:26789/restart');
+            await axios.post('/solo-mte-publish/restart');
             FLoadingService.close();
             this.notifyService.success({ message: '运行环境正在重启' });
         } catch (e: any) {
