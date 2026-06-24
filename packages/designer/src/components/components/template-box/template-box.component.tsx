@@ -7,6 +7,7 @@ import {
   Ref,
   onMounted,
 } from "vue";
+import axios from "axios";
 import { mockData, TemplateEntity } from "./entity";
 import { templateBoxProps, TemplateBoxProps } from "./template-box.props";
 import "./template-box.scss";
@@ -30,11 +31,43 @@ export default defineComponent({
     const modalInstance = ref();
     /** 已选的模板列表 */
     const templateList: Ref<Array<TemplateEntity>> = ref([]);
+    /** 模板保存、查询url地址 */
+    const templateUrl = '/api/platform/common/v1.0/widgets-template';
 
     onMounted(() => {
-      // mock数据
-      // templateList.value = mockData;
+      loadSavedTemplates();
     });
+
+    /** 从服务端加载已保存的模板 */
+    async function loadSavedTemplates() {
+      try {
+        const response = await axios.get(`${templateUrl}/getTemplates`);
+        const data = response.data;
+        let templates: Array<TemplateEntity> = [];
+        if (Array.isArray(data)) {
+          templates = data;
+        } else if (Array.isArray(data?.templates)) {
+          templates = data.templates;
+        } else if (Array.isArray(data?.data)) {
+          templates = data.data;
+        }
+        templateList.value = templates;
+        useFormSchema["customTemplates"] = templateList.value;
+      } catch (error) {
+        // console.error('加载模板失败', error);
+        notifyService.warning('加载模板失败，请检查服务状态。');
+      }
+    }
+
+    /** 保存全量模板到服务端 */
+    async function saveTemplates() {
+      try {
+        await axios.post(`${templateUrl}/saveTemplates`, { templates: templateList.value });
+      } catch (error) {
+        // console.error('保存模板失败', error);
+        notifyService.warning('保存模板失败，请检查服务状态。');
+      }
+    }
 
     // 关闭弹窗
     function closeModal() {
@@ -68,6 +101,7 @@ export default defineComponent({
       });
 
       useFormSchema["customTemplates"] = templateList.value;
+      saveTemplates();
       closeModal();
     }
     function renderModalComponent() {
