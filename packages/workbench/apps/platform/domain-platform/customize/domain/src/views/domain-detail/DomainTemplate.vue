@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useDomainComponentTemplateStore } from '../../store/domainComponentTemplate';
 import type { TemplateRecord } from '../../types/models';
@@ -91,11 +91,16 @@ function tagVal(tags: Record<string, string[]> | string | undefined, key: string
   return obj[key]?.join(', ') || ''
 }
 
-onMounted(async () => {
-  if (!props.isFromTemplate && props.domainCode) {
-    await templateStore.fetchTemplates(props.domainCode);
-  }
-});
+watch(
+  () => [props.domainCode, props.isFromTemplate] as const,
+  async ([domainCode, isFromTemplate]) => {
+    if (isFromTemplate) {
+      return;
+    }
+    await templateStore.fetchTemplates(domainCode);
+  },
+  { immediate: true }
+);
 
 async function openDialog() {
   dialogVisible.value = true;
