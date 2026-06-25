@@ -44,6 +44,37 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="32">
+          <el-col :span="24">
+            <el-form-item label="模型图标（SVG Base64）" prop="modelIcon">
+              <div class="icon-editor">
+                <div class="icon-preview">
+                  <img v-if="modelIconDataUrl" :src="modelIconDataUrl" alt="" />
+                  <span v-else>SVG</span>
+                </div>
+                <div class="icon-controls">
+                  <div class="icon-actions">
+                    <el-upload
+                      accept=".svg,image/svg+xml"
+                      :auto-upload="false"
+                      :show-file-list="false"
+                      :on-change="handleIconFileChange"
+                    >
+                      <el-button>选择 SVG</el-button>
+                    </el-upload>
+                    <el-button :disabled="!deviceModelForm.modelIcon" @click="clearModelIcon">清除</el-button>
+                  </div>
+                  <el-input
+                    v-model="deviceModelForm.modelIcon"
+                    type="textarea"
+                    :rows="3"
+                    placeholder="粘贴 SVG 的 Base64 编码，或上传 .svg 文件自动转换"
+                  />
+                </div>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-card>
 
@@ -497,7 +528,8 @@ const state = reactive({
     modelId: '',
     modelName: '',
     category: '',
-    provider: undefined
+    provider: undefined,
+    modelIcon: ''
   } as Partial<DeviceModel> & { modelId?: string },
   modelForm: {
     modelName: '',
@@ -608,6 +640,14 @@ const outputList = computed(() => {
   }))
 })
 
+const modelIconDataUrl = computed(() => {
+  const value = deviceModelForm.value.modelIcon
+  if (!value) return ''
+  return value.startsWith('data:image/svg+xml;base64,')
+    ? value
+    : `data:image/svg+xml;base64,${value}`
+})
+
 // 确定是否是编辑模式（优先使用 props，否则使用路由参数）
 const isEditMode = computed(() => {
   if (props.mode !== undefined) {
@@ -686,6 +726,36 @@ const handleParamTypeChange = (type: string) => {
   }
 }
 
+const encodeSvgToBase64 = (svgText: string) => {
+  const bytes = new TextEncoder().encode(svgText)
+  let binary = ''
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte)
+  })
+  return btoa(binary)
+}
+
+const handleIconFileChange = (uploadFile: any) => {
+  const raw = uploadFile.raw
+  if (!raw) return
+  if (raw.type && raw.type !== 'image/svg+xml' && !raw.name?.toLowerCase().endsWith('.svg')) {
+    ElMessage.error('请选择 SVG 文件')
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = () => {
+    deviceModelForm.value.modelIcon = encodeSvgToBase64(String(reader.result || ''))
+  }
+  reader.onerror = () => {
+    ElMessage.error('读取 SVG 文件失败')
+  }
+  reader.readAsText(raw)
+}
+
+const clearModelIcon = () => {
+  deviceModelForm.value.modelIcon = ''
+}
+
 
 
 // 获取事件类型文本和标签类型
@@ -741,7 +811,8 @@ const resetDeviceModelForm = () => {
     modelName: '',
     modelId: '',
     category: '',
-    provider: undefined
+    provider: undefined,
+    modelIcon: ''
   }
 }
 
@@ -821,6 +892,7 @@ const loadDeviceModelData = async (id: number) => {
       deviceModelForm.value.modelName = deviceModel.modelName || ''
       deviceModelForm.value.category = deviceModel.category || ''
       deviceModelForm.value.modelId = deviceModel.model ? (deviceModel.model as any).modelId : ''
+      deviceModelForm.value.modelIcon = deviceModel.modelIcon || ''
       
       // 加载模型数据
       if (deviceModel.model) {
@@ -1119,6 +1191,47 @@ const submitParamForm = async () => {
 
 .basic-info-card {
   margin-bottom: 20px;
+}
+
+.icon-editor {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.icon-preview {
+  width: 72px;
+  min-height: 72px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a8abb2;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.icon-preview img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.icon-controls {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.icon-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .model-section {

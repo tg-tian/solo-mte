@@ -41,6 +41,14 @@
       class="premium-table"
       :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
     >
+      <el-table-column label="图标" width="90" align="center">
+        <template #default="{ row }">
+          <div class="model-icon-cell">
+            <img v-if="getModelIconDataUrl(row.modelIcon)" :src="getModelIconDataUrl(row.modelIcon)" alt="" />
+            <span v-else class="model-icon-placeholder">-</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="modelId" label="设备类型ID" width="150" align="center">
         <template #default="{ row }">
           <el-tag size="small" effect="plain">{{ row.model?.modelId || '-' }}</el-tag>
@@ -134,6 +142,13 @@ const formattedDeviceModels = computed(() => {
     }
   })
 })
+
+const getModelIconDataUrl = (modelIcon?: string) => {
+  if (!modelIcon) return ''
+  return modelIcon.startsWith('data:image/svg+xml;base64,')
+    ? modelIcon
+    : `data:image/svg+xml;base64,${modelIcon}`
+}
 
 onMounted(() => {
   handleSearch()
@@ -283,6 +298,29 @@ const handleDelete = (row: DeviceModel) => {
 .model-name-text {
   font-weight: 500;
   color: #303133;
+}
+
+.model-icon-cell {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.model-icon-cell img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.model-icon-placeholder {
+  color: #c0c4cc;
+  font-size: 13px;
 }
 
 .pagination-container {

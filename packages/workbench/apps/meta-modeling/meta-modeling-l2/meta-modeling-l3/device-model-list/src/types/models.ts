@@ -5,6 +5,7 @@ export interface DeviceModel {
     modelName: string;
     provider?: string;
     category: string;
+    modelIcon?: string;
     createTime?: string;
     updateTime?: string;
     model: BaseDeviceModel;
