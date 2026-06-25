@@ -261,7 +261,7 @@ export default defineComponent({
         async function handlePublishClick(event: MouseEvent, appObject: AppObject) {
             event.stopPropagation();
             const boPath = buildBoPath(appObject);
-            await gitService.handlePublish(boPath);
+            await gitService.handlePublish(boPath, appObject.id);
             await refreshPublishStatus();
         }
 
@@ -297,7 +297,7 @@ export default defineComponent({
                     <div class="f-git-menu">
                         {gitOperations.value.map(op => (
                             <div class="f-git-menu-item" onClick={() => onGitMenuClick(op)}>
-                                <span class="f-git-menu-item-icon">{op.icon}</span>
+                                <img class="f-git-menu-item-icon" src={op.icon} />
                                 <span>{op.name}</span>
                             </div>
                         ))}

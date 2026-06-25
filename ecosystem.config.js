@@ -1,8 +1,15 @@
 // 共享：VS Code Server 监听端口（与 start-server.sh 一致）
 const vscodePort = process.env.VSCODE_PORT || '8000';
 // 浏览器访问的 authority（host:port）。部署前可 export，例如 VITE_VSCODE_REMOTE_AUTHORITY=203.0.113.10:8000
+
+// --------------------------------------------------------------------------
+// const viteVsCodeAuthority =
+//   process.env.VITE_VSCODE_REMOTE_AUTHORITY || `localhost:${vscodePort}`;
+// --------------------------------------------------------------------------
+
+// 默认走 nginx :8443 → VS Code Server :8000，避免浏览器直连 localhost:8000 导致 WebSocket 1006
 const viteVsCodeAuthority =
-  process.env.VITE_VSCODE_REMOTE_AUTHORITY || `localhost:${vscodePort}`;
+  process.env.VITE_VSCODE_REMOTE_AUTHORITY || `139.196.239.110:8443`;
 
 module.exports = {
   apps: [
@@ -43,6 +50,24 @@ module.exports = {
       error_file: '/root/solo-mte/logs/ide-error.log',
       out_file: '/root/solo-mte/logs/ide-out.log',
       log_file: '/root/solo-mte/logs/ide-combined.log',
+      time: true
+    },
+    {
+      name: 'solo-ide-runtime',
+      cwd: '/root/solo-mte/packages/ide',
+      script: 'node_modules/vite/bin/vite.js',
+      args: '--config ./vite.config.dev.ts --mode runtime',
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '4G',
+      env: {
+        NODE_ENV: 'development',
+        VITE_VSCODE_REMOTE_AUTHORITY: viteVsCodeAuthority
+      },
+      error_file: '/root/solo-mte/logs/ide-runtime-error.log',
+      out_file: '/root/solo-mte/logs/ide-runtime-out.log',
+      log_file: '/root/solo-mte/logs/ide-runtime-combined.log',
       time: true
     },
     {

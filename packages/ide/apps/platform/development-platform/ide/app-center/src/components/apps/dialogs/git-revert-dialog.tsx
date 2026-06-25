@@ -40,7 +40,7 @@ export default defineComponent({
         }
 
         return () => (
-            <div style="padding: 0 16px;">
+            <div style="padding: 0 16px 16px 16px;">
                 <div style="display: flex; align-items: center; padding: 16px;">
                     <span class="f-icon f-icon-warning" style="font-size: 26px; margin-right: 12px; color: #f0ad4e;"></span>
                     <span>当前操作会撤销并丢弃当前所有修改，并将文件还原到修改前状态。</span>

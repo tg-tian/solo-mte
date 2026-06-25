@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="19px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>导入</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="18" height="18"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-498.000000, -254.000000)">
+            <g id="导入" transform="translate(498.000000, 254.500000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="矩形备份-6"></g>
+                <g id="编组" mask="url(#mask-2)" stroke="#585959" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2">
+                    <g transform="translate(3.000000, 1.500000)" id="路径">
+                        <path d="M11.8181818,7.01704545 L11.8181818,3.69318182 L8.49431818,0 L0.738636364,0 C0.33069858,0 0,0.33069858 0,0.738636364 L0,14.0340909 C0,14.4420398 0.33069858,14.7727273 0.738636364,14.7727273 L5.17045455,14.7727273"></path>
+                        <polyline points="8.49431818 10.7102273 6.64772727 12.5568182 8.49431818 14.4034091"></polyline>
+                        <polyline points="6.64772727 12.5568182 12.5568182 12.5568182 12.5568182 9.60227273"></polyline>
+                        <polyline points="8.125 0 8.125 3.69318182 11.8181818 3.69318182"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

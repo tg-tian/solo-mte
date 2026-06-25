@@ -38,7 +38,7 @@ export default defineComponent({
         }
 
         return () => (
-            <div style="padding: 0 16px;">
+            <div style="padding: 0 16px 16px 16px;">
                 <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e8ebf1; margin-bottom: 16px;">
                     <h5 style="margin: 0; font-size: 16px; font-weight: 500;">提交信息</h5>
                     <span class="f-icon f-icon-close" style="cursor: pointer;" onClick={close}></span>

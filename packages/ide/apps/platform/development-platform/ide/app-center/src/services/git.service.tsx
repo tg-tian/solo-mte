@@ -20,22 +20,23 @@ export class GitService {
     }
 
     getGitOperations(status: number): GitOperation[] {
+        const iconBase = '/assets/img/git-';
         if (status === 1) {
             return [
-                { icon: '\u{1F4E6}', name: '初始化仓库', id: 'initGit' },
-                { icon: '\u{2B07}️', name: '导入远程仓库', id: 'importGit' }
+                { icon: iconBase + 'initGit.svg', name: '初始化仓库', id: 'initGit' },
+                { icon: iconBase + 'importGit.svg', name: '导入远程仓库', id: 'importGit' }
             ];
         } else if (status === 2) {
             return [
-                { icon: '\u{2795}', name: '添加远程仓库', id: 'addRemote' }
+                { icon: iconBase + 'addRemote.svg', name: '添加远程仓库', id: 'addRemote' }
             ];
         } else if (status === 3) {
             return [
-                { icon: '\u{1F441}', name: '查看远程仓库', id: 'viewRemote' },
-                { icon: '\u{2B07}️', name: '拉取', id: 'pull' },
-                { icon: '\u{2714}️', name: '提交', id: 'commit' },
-                { icon: '\u{2B06}️', name: '推送', id: 'push' },
-                { icon: '\u{21A9}️', name: '撤销', id: 'revert' }
+                { icon: iconBase + 'viewRemote.svg', name: '查看远程仓库', id: 'viewRemote' },
+                { icon: iconBase + 'pull.svg', name: '拉取', id: 'pull' },
+                { icon: iconBase + 'commit.svg', name: '提交', id: 'commit' },
+                { icon: iconBase + 'push.svg', name: '推送', id: 'push' },
+                { icon: iconBase + 'revert.svg', name: '撤销', id: 'revert' }
             ];
         }
         return [];
@@ -140,26 +141,69 @@ export class GitService {
 
     async fetchPublishStatus(): Promise<string[]> {
         try {
-            const res = await axios.get('http://139.196.239.110:26789/status');
+            const res = await axios.get('/solo-mte-publish/status', { withCredentials: true });
             return res.data?.history || [];
         } catch {
             return [];
         }
     }
 
-    async handlePublish(boPath: string): Promise<void> {
+    async handlePublish(boPath: string, boId: string): Promise<void> {
+        const that = this;
         FLoadingService.show({ message: '正在发布，请稍候...' });
         try {
-            const res = await axios.post('http://139.196.239.110:26789/publish', { path: boPath });
+            const res = await axios.post('/solo-mte-publish/publish',
+                { path: boPath, boId },
+                { withCredentials: true }
+            );
             FLoadingService.close();
             if (res.data && res.data.ok) {
-                this.notifyService.success({ message: '发布成功' });
+                that.confirmRestart();
             } else {
                 this.notifyService.error({ message: res.data?.error || '发布失败' });
             }
         } catch (e: any) {
             FLoadingService.close();
             const errMsg = e?.response?.data?.error || '发布失败';
+            this.notifyService.error({ message: errMsg });
+        }
+    }
+
+    private confirmRestart(): void {
+        const that = this;
+        const modalRef: any = that.modalService?.open({
+            title: '提示',
+            width: 440,
+            fitContent: true,
+            showHeader: false,
+            showButtons: true,
+            buttons: [
+                { text: '否', class: 'btn btn-secondary', handle: () => modalRef?.close() },
+                {
+                    text: '是', class: 'btn btn-primary', handle: () => {
+                        modalRef?.close();
+                        that.handleRestart();
+                    }
+                }
+            ],
+            render: () => (
+                <div style="padding: 20px;">
+                    <div style="font-size: 15px; margin-bottom: 8px;">发布成功，是否重启运行环境？</div>
+                    <div style="font-size: 13px; color: #999;">首次发布或后端变更时，需要重启才能生效。</div>
+                </div>
+            )
+        });
+    }
+
+    private async handleRestart(): Promise<void> {
+        FLoadingService.show({ message: '正在重启运行环境，请稍候...' });
+        try {
+            await axios.post('/solo-mte-publish/restart');
+            FLoadingService.close();
+            this.notifyService.success({ message: '运行环境正在重启' });
+        } catch (e: any) {
+            FLoadingService.close();
+            const errMsg = e?.response?.data?.error || '重启失败';
             this.notifyService.error({ message: errMsg });
         }
     }
