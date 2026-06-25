@@ -1,0 +1,310 @@
+.f-app-deploy-config {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    > .f-admin-main-header {
+        flex-shrink: 0;
+    }
+
+    > .f-admin-main-content {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .f-page-header {
+        position: relative;
+        height: 48px;
+        margin-bottom: 0 !important;
+        flex-shrink: 0;
+
+        .f-page-header-base {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .f-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                .btn {
+                    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+                    border-radius: 15px;
+                }
+
+                .btn-secondary {
+                    background: #FFFFFF;
+                    border: 1px solid rgba(233, 236, 243, 1);
+                    box-shadow: 0px 2px 6px 0px rgba(31, 35, 41, 0.06);
+                    border-radius: 6px;
+                    color: #2D2F33;
+
+                    &:hover {
+                        border-color: #388FFF;
+                    }
+                }
+            }
+        }
+
+        .f-page-header-background {
+            background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+            box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+            height: 100%;
+            opacity: 0.66;
+            position: absolute;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+
+    .f-page-main {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 0;
+    }
+}
+
+.git-btn {
+    display: inline-flex;
+    align-items: center;
+
+    span {
+        line-height: 16px;
+    }
+}
+
+.deploy-section {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+    padding: 20px 24px;
+}
+
+.deploy-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8ebf1;
+
+    .deploy-section-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: #303e55;
+        margin: 0;
+    }
+
+    .deploy-section-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .deploy-delete-link {
+        color: #f56c6c;
+        cursor: pointer;
+        font-size: 13px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.deploy-btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    display: block;
+    object-fit: cover;
+}
+
+.deploy-section-body {
+    font-size: 13px;
+    color: #303e55;
+}
+
+.deploy-info-row {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.deploy-info-label {
+    width: 100px;
+    flex-shrink: 0;
+    color: #7a8dae;
+    font-size: 13px;
+}
+
+.deploy-info-value {
+    flex: 1;
+    color: #303e55;
+    word-break: break-all;
+}
+
+.deploy-empty {
+    text-align: center;
+    padding: 10px 16px 32px;
+
+    .deploy-empty-icon {
+        font-size: 40px;
+        color: #c0c4cc;
+        margin-bottom: 8px;
+
+        span {
+            font-size: 40px !important;
+        }
+    }
+
+    .deploy-empty-text {
+        color: #606266;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .deploy-empty-hint {
+        color: #909399;
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+}
+
+.deploy-form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    &.is-top {
+        align-items: flex-start;
+    }
+
+    .deploy-form-label {
+        width: 100px;
+        flex-shrink: 0;
+        text-align: right;
+        padding-right: 12px;
+        color: #303e55;
+        font-size: 13px;
+
+        .required {
+            color: #f56c6c;
+            margin-right: 4px;
+        }
+    }
+
+    .deploy-form-control {
+        flex: 1;
+
+        input, textarea {
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #303e55;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+
+            &:focus {
+                border-color: #2a87ff;
+            }
+
+            &:disabled {
+                background: #f5f7fa;
+                color: #909399;
+            }
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+    }
+}
+
+.deploy-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #e8ebf1;
+}
+
+.deploy-inline-result {
+    margin-top: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.deploy-inline-result-success {
+    background: #f0f9eb;
+    color: #67c23a;
+    border: 1px solid #c2e7b0;
+}
+
+.deploy-inline-result-error {
+    background: #fef0f0;
+    color: #f56c6c;
+    border: 1px solid #fbc4c4;
+}
+
+.deploy-auth-warning {
+    background: #fff6e6;
+    border: 1px solid #ffb84d;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #b88100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    .deploy-auth-warning-action {
+        color: #2a87ff;
+        cursor: pointer;
+        font-weight: 500;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.deploy-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .deploy-checkbox-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 13px;
+        color: #303e55;
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+    }
+}
