@@ -4,6 +4,7 @@ import FApps from './components/apps/apps.component'
 import FWelcome from './components/welcome/welcome.component'
 import Env from './components/env/env.vue'
 import Device from './components/device/device.vue'
+import FAppDeployConfig from './components/deploy-config/deploy-config.vue'
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
@@ -11,7 +12,7 @@ import { useWorkspace } from "./composition/use-workspace";
 import './style.css';
 
 
-type ViewKey = 'start' | 'my-apps' | 'env' | 'device'
+type ViewKey = 'start' | 'my-apps' | 'deploy-config' | 'env' | 'device'
 
 export default defineComponent({
   name: 'FAAppCenter',
@@ -28,6 +29,7 @@ export default defineComponent({
     const navData = [
       { id: 'start', text: '开始' },
       { id: 'my-apps', text: '我的应用' },
+      { id: 'deploy-config', text: '部署配置' },
       { id: 'env', text: '我的环境' },
       { id: 'device', text: '我的物理设备' },
     ]
@@ -57,6 +59,7 @@ export default defineComponent({
     });
     const shouldShowWelcome = computed(() => currentView.value === 'start')
     const shouldShowAppsView = computed(() => currentView.value === 'my-apps')
+    const shouldShowDeployConfig = computed(() => currentView.value === 'deploy-config')
     const shouldShowEnv = computed(() => currentView.value === 'env')
     const shouldShowDevice = computed(() => currentView.value === 'device')
 
@@ -129,6 +132,7 @@ export default defineComponent({
           <div class="f-page-main">
             {shouldShowWelcome.value && <FWelcome>Welcome</FWelcome>}
             {shouldShowAppsView.value && <FApps>AppList</FApps>}
+            {shouldShowDeployConfig.value && <FAppDeployConfig />}
             {shouldShowEnv.value && sceneId.value && <Env sceneId={sceneId.value} />}
             {shouldShowDevice.value && sceneId.value && <Device sceneId={sceneId.value} />}
           </div>

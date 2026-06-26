@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, onMounted, ref } from 'vue';
+import { defineComponent, inject, onMounted, ref } from 'vue';
 import { FButton, F_NOTIFY_SERVICE_TOKEN, FNotifyService } from '@farris/ui-vue';
 import { DeployConfigProps, deployConfigProps } from './deploy-config.props';
 import { UseWorkspace } from '../../composition/types';
@@ -6,6 +6,7 @@ import {
     checkIsGitProject,
     extractErrorMessage,
     getGitRepoConfig,
+    getPublishServerConfig,
     gitClone,
     gitCommit,
     gitInit,
@@ -18,7 +19,7 @@ import {
     updateGitRepoConfig,
     RemoteInfo
 } from './service';
-import { ActiveOperation, OperationStatus, PublishServerConfig, QualityChecksConfig, RepoState } from './types';
+import { ActiveOperation, OperationStatus, PublishServerConfig, PublishServerConfigResponse, DB_TYPE_NAME_MAP, RepoState } from './types';
 
 const GIT_ICON_BASE = '/assets/img/git-';
 
@@ -54,66 +55,34 @@ export default defineComponent({
         const formSubmitting = ref(false);
         let revertTimer: any = null;
 
-        // === 发布服务器段 (mock) ===
-        const PUBLISH_SERVER_DEFAULT: PublishServerConfig = {
-            address: '139.196.239.110',
-            path: '/home/BaseEnvironment/igix2508B',
-            port: '5220'
-        };
-        const publishServer = ref<PublishServerConfig>({ ...PUBLISH_SERVER_DEFAULT });
-        const publishServerSaved = ref<PublishServerConfig>({ ...PUBLISH_SERVER_DEFAULT });
-        const publishServerSaving = ref(false);
+        // === 发布服务器段（只读） ===
+        const publishConfig = ref<PublishServerConfig | null>(null);
+        const publishIsComplete = ref<boolean>(false);
+        const publishMissingHint = ref<string>('');
+        const publishLoading = ref<boolean>(false);
 
-        const publishServerDirty = computed(() => {
-            return publishServer.value.address !== publishServerSaved.value.address
-                || publishServer.value.path !== publishServerSaved.value.path
-                || publishServer.value.port !== publishServerSaved.value.port;
-        });
-
-        function resetPublishServer() {
-            publishServer.value = { ...publishServerSaved.value };
-        }
-
-        async function savePublishServer() {
-            if (!publishServer.value.address.trim() || !publishServer.value.path.trim() || !publishServer.value.port.trim()) {
-                notifyService.warning({ message: '请填写完整的发布服务器信息' });
-                return;
+        async function loadPublishServerConfig() {
+            publishLoading.value = true;
+            try {
+                const res = await getPublishServerConfig();
+                publishConfig.value = res.config;
+                publishIsComplete.value = !!res.isComplete;
+                publishMissingHint.value = res.missingHint || '';
+            } catch (e) {
+                publishConfig.value = null;
+                publishIsComplete.value = false;
+                publishMissingHint.value = '';
+            } finally {
+                publishLoading.value = false;
             }
-            publishServerSaving.value = true;
-            await new Promise(resolve => setTimeout(resolve, 500));
-            publishServerSaved.value = { ...publishServer.value };
-            publishServerSaving.value = false;
-            notifyService.success({ message: '已保存' });
         }
 
-        // === 质量检查段 (mock) ===
-        const QUALITY_CHECKS_DEFAULT: QualityChecksConfig = {
-            baseFramework: true,
-            dependencyInjection: true,
-            webEndpoints: true,
-            persistenceFramework: false
-        };
-        const qualityChecks = ref<QualityChecksConfig>({ ...QUALITY_CHECKS_DEFAULT });
-        const qualityChecksSaved = ref<QualityChecksConfig>({ ...QUALITY_CHECKS_DEFAULT });
-        const qualityChecksSaving = ref(false);
-
-        const qualityChecksDirty = computed(() => {
-            return qualityChecks.value.baseFramework !== qualityChecksSaved.value.baseFramework
-                || qualityChecks.value.dependencyInjection !== qualityChecksSaved.value.dependencyInjection
-                || qualityChecks.value.webEndpoints !== qualityChecksSaved.value.webEndpoints
-                || qualityChecks.value.persistenceFramework !== qualityChecksSaved.value.persistenceFramework;
-        });
-
-        function resetQualityChecks() {
-            qualityChecks.value = { ...qualityChecksSaved.value };
+        function openAppCenter() {
+            window.open('/apps/platform/development-platform/ide/app-center/index.html', '_blank');
         }
 
-        async function saveQualityChecks() {
-            qualityChecksSaving.value = true;
-            await new Promise(resolve => setTimeout(resolve, 500));
-            qualityChecksSaved.value = { ...qualityChecks.value };
-            qualityChecksSaving.value = false;
-            notifyService.success({ message: '已保存' });
+        function getDbTypeName(dbType: number): string {
+            return DB_TYPE_NAME_MAP[dbType] || `类型${dbType}`;
         }
 
         async function loadRepoState() {
@@ -144,8 +113,15 @@ export default defineComponent({
             }
         }
 
+        async function loadAll() {
+            await Promise.all([
+                loadRepoState(),
+                loadPublishServerConfig(),
+            ]);
+        }
+
         onMounted(() => {
-            loadRepoState();
+            loadAll();
         });
 
         // === Form helpers ===
@@ -704,82 +680,76 @@ export default defineComponent({
                         <h5 class="deploy-section-title">发布服务器</h5>
                     </div>
                     <div class="deploy-section-body">
-                        <div class="deploy-form-row">
-                            <div class="deploy-form-label"><span class="required">*</span>服务器地址</div>
-                            <div class="deploy-form-control">
-                                <input type="text" value={publishServer.value.address} onInput={(e: any) => publishServer.value.address = e.target.value} />
-                            </div>
-                        </div>
-                        <div class="deploy-form-row">
-                            <div class="deploy-form-label"><span class="required">*</span>部署路径</div>
-                            <div class="deploy-form-control">
-                                <input type="text" value={publishServer.value.path} onInput={(e: any) => publishServer.value.path = e.target.value} />
-                            </div>
-                        </div>
-                        <div class="deploy-form-row">
-                            <div class="deploy-form-label"><span class="required">*</span>端口</div>
-                            <div class="deploy-form-control">
-                                <input type="text" value={publishServer.value.port} onInput={(e: any) => publishServer.value.port = e.target.value} />
-                            </div>
-                        </div>
-                        <div class="deploy-form-actions">
-                            <FButton type="secondary" onClick={resetPublishServer} disabled={!publishServerDirty.value || publishServerSaving.value}>取消</FButton>
-                            <FButton type="primary" onClick={savePublishServer} disabled={!publishServerDirty.value || publishServerSaving.value}>
-                                {publishServerSaving.value ? '保存中...' : '保存'}
-                            </FButton>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+                        {publishLoading.value && (
+                            <div style="text-align: center; padding: 24px; color: #999;">加载中...</div>
+                        )}
 
-        function renderQualityChecksSection() {
-            return (
-                <div class="deploy-section">
-                    <div class="deploy-section-header">
-                        <h5 class="deploy-section-title">质量检查</h5>
-                    </div>
-                    <div class="deploy-section-body">
-                        <div class="deploy-checkbox-group">
-                            <label class="deploy-checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    checked={qualityChecks.value.baseFramework}
-                                    onChange={(e: any) => qualityChecks.value.baseFramework = e.target.checked}
-                                />
-                                <span>基础框架特性分析</span>
-                            </label>
-                            <label class="deploy-checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    checked={qualityChecks.value.dependencyInjection}
-                                    onChange={(e: any) => qualityChecks.value.dependencyInjection = e.target.checked}
-                                />
-                                <span>依赖注入分析</span>
-                            </label>
-                            <label class="deploy-checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    checked={qualityChecks.value.webEndpoints}
-                                    onChange={(e: any) => qualityChecks.value.webEndpoints = e.target.checked}
-                                />
-                                <span>Web端点配置分析</span>
-                            </label>
-                            <label class="deploy-checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    checked={qualityChecks.value.persistenceFramework}
-                                    onChange={(e: any) => qualityChecks.value.persistenceFramework = e.target.checked}
-                                />
-                                <span>持久化框架特性分析</span>
-                            </label>
-                        </div>
-                        <div class="deploy-form-actions">
-                            <FButton type="secondary" onClick={resetQualityChecks} disabled={!qualityChecksDirty.value || qualityChecksSaving.value}>取消</FButton>
-                            <FButton type="primary" onClick={saveQualityChecks} disabled={!qualityChecksDirty.value || qualityChecksSaving.value}>
-                                {qualityChecksSaving.value ? '保存中...' : '保存'}
-                            </FButton>
-                        </div>
+                        {!publishLoading.value && publishConfig.value === null && (
+                            <div class="deploy-empty">
+                                <div class="deploy-empty-text">尚未配置运行环境信息</div>
+                                <div class="deploy-empty-hint">
+                                    请前往
+                                    <span class="deploy-link" onClick={openAppCenter}>应用中心 → 部署配置</span>
+                                    完成配置
+                                </div>
+                            </div>
+                        )}
+
+                        {!publishLoading.value && publishConfig.value !== null && (
+                            <div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">主机地址</div>
+                                    <div class="deploy-info-value">{publishConfig.value.host || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">SSH 端口</div>
+                                    <div class="deploy-info-value">{publishConfig.value.sshPort || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">SSH 用户名</div>
+                                    <div class="deploy-info-value">{publishConfig.value.sshUsername || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">安装根目录</div>
+                                    <div class="deploy-info-value">{publishConfig.value.runtimeRoot || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">访问地址</div>
+                                    <div class="deploy-info-value">{publishConfig.value.runtimeUrl || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">数据库类型</div>
+                                    <div class="deploy-info-value">{getDbTypeName(publishConfig.value.dbType)}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">数据库服务器</div>
+                                    <div class="deploy-info-value">{publishConfig.value.dbHost || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">数据库端口</div>
+                                    <div class="deploy-info-value">{publishConfig.value.dbPort || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">数据库名</div>
+                                    <div class="deploy-info-value">{publishConfig.value.dbName || '-'}</div>
+                                </div>
+                                <div class="deploy-info-row">
+                                    <div class="deploy-info-label">数据库账号</div>
+                                    <div class="deploy-info-value">{publishConfig.value.dbUsername || '-'}</div>
+                                </div>
+
+                                {!publishIsComplete.value && (
+                                    <div class="deploy-publish-warning">
+                                        <div class="deploy-publish-warning-hint">⚠ {publishMissingHint.value || '配置不完整'}</div>
+                                        <div class="deploy-publish-warning-action">
+                                            请前往
+                                            <span class="deploy-link" onClick={openAppCenter}>应用中心 → 部署配置</span>
+                                            完成配置
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             );
@@ -795,7 +765,7 @@ export default defineComponent({
                                 <h4 class="f-title-text">{title}</h4>
                             </div>
                             <div class="f-toolbar">
-                                <FButton type="secondary" onClick={loadRepoState}>刷新</FButton>
+                                <FButton type="secondary" onClick={loadAll}>刷新</FButton>
                             </div>
                         </nav>
                         <div class="f-page-header-background"></div>
@@ -803,7 +773,6 @@ export default defineComponent({
                     <div class="f-page-main">
                         {renderRepoSection()}
                         {renderPublishServerSection()}
-                        {renderQualityChecksSection()}
                     </div>
                 </div>
             </div>

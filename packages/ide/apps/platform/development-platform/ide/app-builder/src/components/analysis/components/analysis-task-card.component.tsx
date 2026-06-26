@@ -1,7 +1,7 @@
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { FButton } from "@farris/ui-vue";
 import { analysisTaskCardProps, AnalysisTaskCardProps } from "./analysis-task-card.props";
-import { createTask, AnalysisOptions } from "../service";
+import { createTask, AnalysisOptions, getQualityConfig, type QualityChecksConfig } from "../service";
 
 export default defineComponent({
     name: 'FAppAnalysisTaskCard',
@@ -23,6 +23,44 @@ export default defineComponent({
         const dependencyInjectionEnabled = ref<boolean>(true);
         const webEndpointsEnabled = ref<boolean>(true);
         const persistenceFrameworkEnabled = ref<boolean>(false);
+
+        const defaultOptions = ref<QualityChecksConfig>({
+            baseFramework: true,
+            dependencyInjection: true,
+            webEndpoints: true,
+            persistenceFramework: false,
+        });
+
+        const isQualityModified = computed(() => {
+            return (
+                baseFrameworkEnabled.value !== defaultOptions.value.baseFramework ||
+                dependencyInjectionEnabled.value !== defaultOptions.value.dependencyInjection ||
+                webEndpointsEnabled.value !== defaultOptions.value.webEndpoints ||
+                persistenceFrameworkEnabled.value !== defaultOptions.value.persistenceFramework
+            );
+        });
+
+        function onRestoreDefaults() {
+            baseFrameworkEnabled.value = defaultOptions.value.baseFramework;
+            dependencyInjectionEnabled.value = defaultOptions.value.dependencyInjection;
+            webEndpointsEnabled.value = defaultOptions.value.webEndpoints;
+            persistenceFrameworkEnabled.value = defaultOptions.value.persistenceFramework;
+        }
+
+        onMounted(async () => {
+            try {
+                const res = await getQualityConfig();
+                if (res?.config) {
+                    defaultOptions.value = { ...res.config };
+                    baseFrameworkEnabled.value = res.config.baseFramework;
+                    dependencyInjectionEnabled.value = res.config.dependencyInjection;
+                    webEndpointsEnabled.value = res.config.webEndpoints;
+                    persistenceFrameworkEnabled.value = res.config.persistenceFramework;
+                }
+            } catch (e) {
+                console.warn('加载质量检查默认值失败，使用代码默认值', e);
+            }
+        });
 
         // 步骤信息
         const steps = computed(() => [
@@ -185,7 +223,14 @@ export default defineComponent({
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">分析选项</label>
+                                    <label class="form-label">
+                                        分析选项
+                                        {isQualityModified.value && (
+                                            <button class="restore-defaults-btn" type="button" onClick={onRestoreDefaults}>
+                                                恢复默认
+                                            </button>
+                                        )}
+                                    </label>
                                     <div class="checkbox-group">
                                         <label class="checkbox-item">
                                             <input 

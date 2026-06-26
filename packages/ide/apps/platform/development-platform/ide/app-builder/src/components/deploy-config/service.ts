@@ -1,5 +1,6 @@
 import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
+import type { PublishServerConfigResponse } from './types';
 
 const PUBLIC_KEY = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8Uvi7YbPGxof2p7NGneZGfwGhMOhWrj/Jk6bjDS87jCQ0uEQ7PquzVbgWLMV0eyFzAOBiHMT+Gy9q5x7aPpskm7CnMwPgjlXt1xVENOM/fXtAl908dG+UadbzZvUWV68KBF14Q8JOZ3kyUo9jzsn0Ro0tzORDVH6WnasdVcPBHQIDAQAB';
 
@@ -79,4 +80,8 @@ export function rsaEncrypt(info: string): string {
 
 export function extractErrorMessage(e: any, fallback: string): string {
     return e?.response?.data?.Message || e?.response?.data?.message || fallback;
+}
+
+export function getPublishServerConfig(): Promise<PublishServerConfigResponse> {
+    return axios.get('/solo-mte-publish/config').then(res => res.data);
 }

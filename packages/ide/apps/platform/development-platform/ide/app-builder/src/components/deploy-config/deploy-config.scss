@@ -308,3 +308,35 @@
         }
     }
 }
+
+.deploy-link {
+    color: #2a87ff;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.deploy-publish-warning {
+    margin-top: 16px;
+    padding: 12px;
+    background: #fef0f0;
+    border: 1px solid #fbc4c4;
+    border-radius: 4px;
+    color: #f56c6c;
+    font-size: 13px;
+
+    .deploy-publish-warning-hint {
+        margin-bottom: 4px;
+    }
+
+    .deploy-publish-warning-action {
+        font-size: 12px;
+    }
+
+    .deploy-link {
+        color: #2a87ff;
+    }
+}

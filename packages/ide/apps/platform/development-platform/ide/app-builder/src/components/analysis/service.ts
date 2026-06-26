@@ -1,3 +1,16 @@
+import axios from 'axios';
+
+export interface QualityChecksConfig {
+    baseFramework: boolean;
+    dependencyInjection: boolean;
+    webEndpoints: boolean;
+    persistenceFramework: boolean;
+}
+
+export function getQualityConfig(): Promise<{ ok: boolean; config: QualityChecksConfig }> {
+    return axios.get('/solo-mte-publish/quality-config').then(res => res.data);
+}
+
 /**
  * 分析工具 API 服务层
  * 基于 APIFox 文档: https://app.apifox.com/project/6222436
