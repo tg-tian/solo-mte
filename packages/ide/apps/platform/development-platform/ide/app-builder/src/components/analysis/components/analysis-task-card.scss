@@ -403,8 +403,10 @@
     font-weight: 400;
     cursor: pointer;
     transition: border-color 0.2s;
+    outline: none;
 
     &:hover {
         border-color: #2a87ff;
+        color: #ffffff;
     }
 }

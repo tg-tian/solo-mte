@@ -32,16 +32,22 @@ export default defineComponent({
         const gitPopoverRef = ref<any>();
         const gitOperations = ref<Array<{ icon: string; name: string; id: string }>>([]);
         const currentGitBoPath = ref('');
-        const publishedPaths = ref<Set<string>>(new Set());
+        const publishedBoIds = ref<Set<string>>(new Set());
+        const offlineBoIds = ref<Set<string>>(new Set());
 
         async function refreshPublishStatus() {
-            const paths = await gitService.fetchPublishStatus();
-            publishedPaths.value = new Set(paths);
+            const { published, offline } = await gitService.fetchPublishStatus();
+            publishedBoIds.value = published;
+            offlineBoIds.value = offline;
         }
 
-        function isPublished(appObject: AppObject): boolean {
-            const boPath = buildBoPath(appObject);
-            return publishedPaths.value.has(boPath);
+        type AppStatus = 'unpublished' | 'published' | 'offline';
+
+        function getAppStatus(appObject: AppObject): AppStatus {
+            const boId = appObject.id;
+            if (offlineBoIds.value.has(boId)) return 'offline';
+            if (publishedBoIds.value.has(boId)) return 'published';
+            return 'unpublished';
         }
 
         function getActiveAppDomain() {
@@ -265,6 +271,20 @@ export default defineComponent({
             await refreshPublishStatus();
         }
 
+        async function handleOfflineClick(event: MouseEvent, appObject: AppObject) {
+            event.stopPropagation();
+            const boId = appObject.id;
+            const ok = await gitService.offlineApp(boId);
+            if (ok) await refreshPublishStatus();
+        }
+
+        async function handleOnlineClick(event: MouseEvent, appObject: AppObject) {
+            event.stopPropagation();
+            const boId = appObject.id;
+            const ok = await gitService.onlineApp(boId);
+            if (ok) await refreshPublishStatus();
+        }
+
         function onGitMenuClick(gitOperation: { icon: string; name: string; id: string }) {
             if (gitPopoverRef.value) {
                 gitPopoverRef.value.hide();
@@ -379,6 +399,8 @@ export default defineComponent({
         }
 
         function renderAppCard({ item, index, selectedItem }) {
+            const status = getAppStatus(item);
+            const statusLabel = ({ unpublished: '未发布', published: '已发布', offline: '已下线' } as Record<AppStatus, string>)[status];
             return (
                 <div class="f-app-card f-template-card-row" onClick={() => onClickAppCard(item)}>
                     <div class="f-app-card-header listview-item-content">
@@ -391,12 +413,23 @@ export default defineComponent({
                         </div>
                         <span class="bage f-app-favor"><i class="f-icon f-icon-star"></i></span>
                     </div>
-                    <div class="f-app-card-footer f-btn-group" onClick={(e: MouseEvent) => e.stopPropagation()}>
-                        <div class="f-app-card-git-btn" onClick={(e: MouseEvent) => handleGitClick(e, item)}>
-                            <i class="f-icon f-icon-home-operation"></i>
+                    <div class="f-app-card-footer" onClick={(e: MouseEvent) => e.stopPropagation()}>
+                        <div class={['f-app-card-status', `f-app-card-status--${status}`]}>
+                            <span class="f-app-card-status-dot"></span>
+                            <span class="f-app-card-status-text">{statusLabel}</span>
                         </div>
-                        <div class="f-app-card-publish-btn" onClick={(e: MouseEvent) => handlePublishClick(e, item)}>发布</div>
-                        <div class="f-app-card-publish-status">{isPublished(item) ? '已发布' : '未发布'}</div>
+                        <div class="f-app-card-actions">
+                            {status === 'published' && (
+                                <button type="button" class="f-app-card-btn f-app-card-btn--offline" onClick={(e: MouseEvent) => handleOfflineClick(e, item)}>下线</button>
+                            )}
+                            {status === 'offline' && (
+                                <button type="button" class="f-app-card-btn f-app-card-btn--online" onClick={(e: MouseEvent) => handleOnlineClick(e, item)}>上线</button>
+                            )}
+                            <button type="button" class="f-app-card-btn f-app-card-btn--publish" onClick={(e: MouseEvent) => handlePublishClick(e, item)}>发布</button>
+                            <button type="button" class="f-app-card-btn f-app-card-btn--icon" onClick={(e: MouseEvent) => handleGitClick(e, item)} aria-label="GIT 操作">
+                                <i class="f-icon f-icon-home-operation"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             );

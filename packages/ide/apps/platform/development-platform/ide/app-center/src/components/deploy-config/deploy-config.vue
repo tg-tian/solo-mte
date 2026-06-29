@@ -17,53 +17,67 @@
 
       <el-form label-width="120px" class="deploy-form">
         <div class="form-group-title">SSH 连接</div>
-        <el-form-item label="主机地址" required>
-          <el-input v-model="publishForm.host" placeholder="例如 139.196.239.110" />
-        </el-form-item>
-        <el-form-item label="SSH 端口" required>
-          <el-input-number v-model="publishForm.sshPort" :min="1" :max="65535" controls-position="right" class="full-width" />
-        </el-form-item>
-        <el-form-item label="SSH 用户名" required>
-          <el-input v-model="publishForm.sshUsername" placeholder="例如 root" />
-        </el-form-item>
-        <el-form-item label="SSH 密码">
-          <el-input v-model="publishForm.sshPassword" type="password" placeholder="不改请留空" show-password />
-        </el-form-item>
+        <div class="form-row">
+          <el-form-item label="主机地址" required>
+            <el-input v-model="publishForm.host" placeholder="发布服务器 IP 或域名" />
+          </el-form-item>
+          <el-form-item label="SSH 端口" required>
+            <el-input-number v-model="publishForm.sshPort" :min="1" :max="65535" controls-position="right" class="full-width port-input" />
+          </el-form-item>
+        </div>
+        <div class="form-row">
+          <el-form-item label="SSH 用户名" required>
+            <el-input v-model="publishForm.sshUsername" placeholder="SSH 登录用户名" />
+          </el-form-item>
+          <el-form-item label="SSH 密码">
+            <el-input v-model="publishForm.sshPassword" type="password" placeholder="******" show-password />
+          </el-form-item>
+        </div>
 
         <div class="form-group-title">运行环境</div>
-        <el-form-item label="安装根目录" required>
-          <el-input v-model="publishForm.runtimeRoot" placeholder="例如 /home/BaseEnvironment/igix2508B" />
-        </el-form-item>
-        <el-form-item label="访问地址" required>
-          <el-input v-model="publishForm.runtimeUrl" placeholder="例如 http://139.196.239.110:5220" />
-        </el-form-item>
+        <div class="form-row">
+          <el-form-item label="安装根目录" required>
+            <el-input v-model="publishForm.runtimeRoot" placeholder="运行环境安装根目录路径" />
+          </el-form-item>
+          <el-form-item label="访问地址" required>
+            <el-input v-model="publishForm.runtimeUrl" placeholder="运行环境 HTTP 访问地址" />
+          </el-form-item>
+        </div>
 
         <div class="form-group-title">数据库</div>
-        <el-form-item label="数据库类型" required>
-          <el-select v-model="publishForm.dbType" placeholder="请选择" class="full-width" @change="onDbTypeChange">
-            <el-option
-              v-for="t in DATABASE_TYPES"
-              :key="t.value"
-              :label="`${t.name}（默认端口 ${t.defaultPort}）`"
-              :value="t.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="数据库服务器">
-          <el-input v-model="publishForm.dbHost" :placeholder="`默认 ${DEFAULT_DB_HOST}`" />
-        </el-form-item>
-        <el-form-item label="数据库端口">
-          <el-input-number v-model="publishForm.dbPort" :min="1" :max="65535" controls-position="right" class="full-width" :placeholder="`默认 ${dbPortDefault}`" />
-        </el-form-item>
-        <el-form-item label="数据库名" required>
-          <el-input v-model="publishForm.dbName" />
-        </el-form-item>
-        <el-form-item label="数据库账号" required>
-          <el-input v-model="publishForm.dbUsername" />
-        </el-form-item>
-        <el-form-item label="数据库密码">
-          <el-input v-model="publishForm.dbPassword" type="password" placeholder="不改请留空" show-password />
-        </el-form-item>
+        <div class="form-row">
+          <el-form-item label="数据库类型" required>
+            <el-select v-model="publishForm.dbType" placeholder="请选择" class="full-width" @change="onDbTypeChange">
+              <el-option
+                v-for="t in DATABASE_TYPES"
+                :key="t.value"
+                :label="t.name"
+                :value="t.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="数据库服务器">
+            <el-input v-model="publishForm.dbHost" :placeholder="`默认 ${DEFAULT_DB_HOST}`" />
+          </el-form-item>
+        </div>
+        <div class="form-row">
+          <el-form-item label="数据库端口">
+            <el-input-number v-model="publishForm.dbPort" :min="1" :max="65535" controls-position="right" class="full-width port-input" :placeholder="`默认 ${dbPortDefault}`" />
+          </el-form-item>
+          <el-form-item label="数据库名" required>
+            <el-input v-model="publishForm.dbName" />
+          </el-form-item>
+        </div>
+        <div class="form-row">
+          <el-form-item label="数据库账号" required>
+            <el-input v-model="publishForm.dbUsername" />
+          </el-form-item>
+          <el-form-item label="数据库密码">
+            <el-input v-model="publishForm.dbPassword" type="password" placeholder="******" show-password />
+          </el-form-item>
+        </div>
+
+        <div v-if="missingHint" class="missing-hint">{{ missingHint }}</div>
       </el-form>
     </el-card>
 
@@ -141,6 +155,7 @@ const publishForm = reactive<PublishFormState>({
 const publishSaved = ref<PublishFormState | null>(null);
 const publishSaving = ref(false);
 const publicKey = ref('');
+const missingHint = ref('');
 
 const dbPortDefault = computed(() => getDbTypeDefaultPort(publishForm.dbType));
 
@@ -207,6 +222,7 @@ async function loadPublishConfig() {
   try {
     const res = await getPublishServerConfig();
     publicKey.value = res.publicKey || '';
+    missingHint.value = res.missingHint || '';
     applyConfigToForm(res.config);
   } catch (e: any) {
     ElMessage.error(e?.response?.data?.error || '加载发布服务器配置失败');
@@ -347,12 +363,31 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 600;
   color: #303133;
+  margin-bottom: 0 !important;
 }
 
 .deploy-form {
-  max-width: 720px;
+  max-width: 1400px;
 }
 
+/* ---- Responsive 2-column rows ---- */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-row :deep(.el-form-item) {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* ---- Group titles ---- */
 .form-group-title {
   font-size: 13px;
   font-weight: 600;
@@ -366,8 +401,23 @@ onMounted(() => {
   margin-top: 0;
 }
 
+/* ---- Port inputs: left-align ---- */
+.port-input :deep(.el-input__inner) {
+  text-align: left;
+}
+
 .full-width {
   width: 100%;
+}
+
+/* ---- Missing hint ---- */
+.missing-hint {
+  color: #f56c6c;
+  font-size: 13px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(245, 108, 108, 0.06);
+  border-radius: 4px;
 }
 
 .placeholder {
@@ -385,5 +435,15 @@ onMounted(() => {
 .quality-checkboxes :deep(.el-checkbox__label) {
   font-size: 13px;
   color: #303133;
+}
+
+:deep(.el-card__header) {
+  border-bottom: none !important;
+  padding: 0 !important;
+}
+
+:deep(.form-row) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 </style>

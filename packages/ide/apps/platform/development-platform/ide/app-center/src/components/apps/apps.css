@@ -253,8 +253,9 @@
 
 .f-app-card-footer {
     display: flex;
-    flex-direction: row-reverse;
     align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     margin-top: 14px;
 }
 
@@ -264,6 +265,102 @@
 
 .f-listview-hover .btn-group {
     visibility: visible;
+}
+
+/* ===== Status Badge ===== */
+.f-app-card-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 11px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+}
+.f-app-card-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    flex-shrink: 0;
+}
+.f-app-card-status--unpublished {
+    color: #8a93a5;
+    background-color: rgba(138, 147, 165, 0.12);
+}
+.f-app-card-status--published {
+    color: #2bb673;
+    background-color: rgba(43, 182, 115, 0.12);
+}
+.f-app-card-status--offline {
+    color: #e89b3a;
+    background-color: rgba(232, 155, 58, 0.14);
+}
+
+/* ===== Action Buttons ===== */
+.f-app-card-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.f-app-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+.f-app-card-btn:focus {
+    outline: none;
+}
+.f-app-card-btn--publish {
+    color: #2a87ff;
+    border-color: #c8dffc;
+}
+.f-app-card-btn--publish:hover {
+    background-color: rgba(42, 135, 255, 0.08);
+    border-color: #2a87ff;
+}
+.f-app-card-btn--offline {
+    color: #e89b3a;
+    border-color: #f5dab8;
+}
+.f-app-card-btn--offline:hover {
+    background-color: rgba(232, 155, 58, 0.1);
+    border-color: #e89b3a;
+}
+.f-app-card-btn--online {
+    color: #2bb673;
+    border-color: #b9e6cd;
+}
+.f-app-card-btn--online:hover {
+    background-color: rgba(43, 182, 115, 0.1);
+    border-color: #2bb673;
+}
+.f-app-card-btn--icon {
+    width: 26px;
+    padding: 0;
+    color: #7a8dae;
+    border-color: transparent;
+}
+.f-app-card-btn--icon:hover {
+    background-color: rgba(42, 135, 255, 0.08);
+    color: #2a87ff;
+}
+.f-app-card-btn--icon i {
+    font-size: 16px;
+    line-height: 1;
 }
 
 .f-admin-app-center-left-panel {
@@ -334,40 +431,6 @@
     padding: 20px 0;
     color: #999;
     font-size: 13px;
-}
-
-/* Publish button in card footer */
-.f-app-card-publish-btn {
-    cursor: pointer;
-    color: #4DABF7;
-    font-size: 13px;
-    padding: 0 8px;
-}
-.f-app-card-publish-btn:hover {
-    color: #2a87ff;
-}
-
-/* Publish status text in card footer */
-.f-app-card-publish-status {
-    color: #b0b8c8;
-    font-size: 12px;
-    padding: 0 4px;
-    margin-right: auto;
-}
-
-/* Git "..." button in card footer */
-.f-app-card-git-btn {
-    cursor: pointer;
-    color: #7a8dae;
-    font-size: 18px;
-    padding: 0 4px;
-    transition: color 0.2s;
-}
-.f-app-card-git-btn:hover {
-    color: #2a87ff;
-}
-.f-listview-hover .f-app-card-git-btn {
-    visibility: visible;
 }
 
 /* Git popover menu */
