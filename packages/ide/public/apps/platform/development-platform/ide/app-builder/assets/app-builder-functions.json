@@ -88,5 +88,20 @@
         "pinyin": null,
         "simpinyin": null,
         "child": null
+    },
+    {
+        "id": "deploy-config",
+        "code": "DeployConfig",
+        "name": "部署配置",
+        "parentId": "0",
+        "layer": "1",
+        "menuType": "",
+        "funcType": "1",
+        "menuPath": "",
+        "icon": "./assets/icon/SystemFoundation.svg",
+        "description": null,
+        "pinyin": null,
+        "simpinyin": null,
+        "child": null
     }
 ]

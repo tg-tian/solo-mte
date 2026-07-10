@@ -391,3 +391,22 @@
         }
     }
 }
+
+.restore-defaults-btn {
+    margin-left: 12px;
+    padding: 2px 10px;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    color: #2a87ff;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    outline: none;
+
+    &:hover {
+        border-color: #2a87ff;
+        color: #ffffff;
+    }
+}

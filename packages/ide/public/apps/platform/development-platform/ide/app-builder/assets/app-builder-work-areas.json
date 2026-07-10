@@ -53,6 +53,11 @@
         "name": "质量保障"
     },
     {
+        "id": "deploy-config",
+        "code": "deploy-config",
+        "name": "部署配置"
+    },
+    {
         "id": "default",
         "code": "default",
         "name": "default",

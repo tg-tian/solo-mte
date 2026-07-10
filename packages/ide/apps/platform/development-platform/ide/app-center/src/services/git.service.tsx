@@ -139,12 +139,48 @@ export class GitService {
 
     // ========== Publish ==========
 
-    async fetchPublishStatus(): Promise<string[]> {
+    async fetchPublishStatus(): Promise<{ published: Set<string>; offline: Set<string> }> {
         try {
             const res = await axios.get('/solo-mte-publish/status', { withCredentials: true });
-            return res.data?.history || [];
+            const status = res.data?.status;
+            return {
+                published: new Set(status?.published || []),
+                offline: new Set(status?.offline || []),
+            };
         } catch {
-            return [];
+            return { published: new Set(), offline: new Set() };
+        }
+    }
+
+    async offlineApp(boId: string): Promise<boolean> {
+        try {
+            const res = await axios.post('/solo-mte-publish/offline', { boId }, { withCredentials: true });
+            if (res.data?.ok) {
+                this.notifyService.success({ message: '应用已下线' });
+                return true;
+            } else {
+                this.notifyService.error({ message: res.data?.error || '下线失败' });
+                return false;
+            }
+        } catch (e: any) {
+            this.notifyService.error({ message: e?.response?.data?.error || '下线失败' });
+            return false;
+        }
+    }
+
+    async onlineApp(boId: string): Promise<boolean> {
+        try {
+            const res = await axios.post('/solo-mte-publish/online', { boId }, { withCredentials: true });
+            if (res.data?.ok) {
+                this.notifyService.success({ message: '应用已上线' });
+                return true;
+            } else {
+                this.notifyService.error({ message: res.data?.error || '上线失败' });
+                return false;
+            }
+        } catch (e: any) {
+            this.notifyService.error({ message: e?.response?.data?.error || '上线失败' });
+            return false;
         }
     }
 

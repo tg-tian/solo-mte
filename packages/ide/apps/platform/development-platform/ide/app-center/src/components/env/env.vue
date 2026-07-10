@@ -509,4 +509,9 @@ onMounted(async () => {
   color: #909399;
   font-size: 12px;
 }
+
+:deep(.el-card__header) {
+  border-bottom: none !important;
+  padding: 0 !important;
+}
 </style>

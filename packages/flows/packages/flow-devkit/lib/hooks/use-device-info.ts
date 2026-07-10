@@ -3,6 +3,24 @@ import type { DeviceModel, DeviceInstance } from '@farris/flow-devkit/types';
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 
+function getModelIconDataUrl(modelIcon?: string): string {
+    if (!modelIcon) return '';
+    if (modelIcon.startsWith('data:')) return modelIcon;
+
+    let mimeType = 'image/svg+xml';
+    if (modelIcon.startsWith('iVBORw')) {
+        mimeType = 'image/png';
+    } else if (modelIcon.startsWith('/9j/')) {
+        mimeType = 'image/jpeg';
+    } else if (modelIcon.startsWith('R0lGOD')) {
+        mimeType = 'image/gif';
+    } else if (modelIcon.startsWith('UklGR')) {
+        mimeType = 'image/webp';
+    }
+
+    return `data:${mimeType};base64,${modelIcon}`;
+}
+
 let deviceCategoriesPromise: Promise<DeviceModel[]> | undefined;
 const deviceCategories = ref<DeviceModel[]>([]);
 
@@ -32,31 +50,18 @@ export function useDeviceInfo() {
         const apiUrl = location.protocol === 'https:'
             ? '/solo-mte-8080/meta/device-models'
             : 'http://139.196.239.110:8080/meta/device-models';
-        const iconMapUrl = `./device-assets/device-icons.json?v=${(new Date()).getTime()}`;
 
         try {
-            const [deviceResponse, iconMapResponse] = await Promise.all([
-                axios.get<any[]>(apiUrl, { timeout: 20 * 1000 }),
-                axios.get<Record<string, string>>(iconMapUrl, {
-                    timeout: 20 * 1000,
-                    headers: { 'Content-Type': 'application/json' },
-                }).catch((error: AxiosError) => {
-                    console.warn('[设备图标映射加载失败]', error.message || '未知网络错误');
-                    return null;
-                }),
-            ]);
+            const deviceResponse = await axios.get<any[]>(apiUrl, { timeout: 20 * 1000 });
 
             const items = deviceResponse.data;
             if (!Array.isArray(items)) {
                 return [];
             }
 
-            const iconMap = iconMapResponse?.data || {};
             const devices: DeviceModel[] = items.map((item) => {
                 const model: DeviceModel = item.model || item;
-                if (iconMap[model.modelId]) {
-                    model.icon = iconMap[model.modelId];
-                }
+                model.icon = getModelIconDataUrl(item.modelIcon);
                 return model;
             });
 
