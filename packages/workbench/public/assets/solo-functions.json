@@ -375,22 +375,6 @@
         "child": null
     },
     {
-      
-        "id": "TemplateList",
-        "code": "template-list",
-        "name": "模板列表",
-        "parentId": "MetaModelingLevel3",
-        "layer": "4",
-        "menuType": "",
-        "funcType": "1",
-        "menuPath": "apps/meta-modeling/meta-modeling-l2/meta-modeling-l3/template-list/index.html",
-        "icon": "./assets/icon/SystemFoundation.svg",
-        "description": null,
-        "pinyin": null,
-        "simpinyin": null,
-        "child": null
-    },
-    {
         "id": "DomainLCDP",
         "code": "domain-platform",
         "name": "领域定制",

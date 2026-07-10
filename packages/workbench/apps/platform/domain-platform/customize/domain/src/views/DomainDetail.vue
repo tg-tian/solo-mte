@@ -82,10 +82,6 @@
         <el-tab-pane label="设备模型库" name="model" v-if="isEditMode || isFromTemplate">
           <DomainDeviceModel :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
         </el-tab-pane>
-
-        <el-tab-pane label="领域组件" name="component" v-if="isEditMode || isFromTemplate">
-          <DomainComponent :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
-        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -110,7 +106,6 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import DomainTemplate from './domain-detail/DomainTemplate.vue';
 import DomainDeviceModel from './domain-detail/DomainDeviceModel.vue';
-import DomainComponent from './domain-detail/DomainComponent.vue';
 import { useDomainStore } from '../store/domain';
 import { useDomainComponentTemplateStore } from '../store/domainComponentTemplate';
 import { useDomainTemplateStore } from '../store/domainTemplate';

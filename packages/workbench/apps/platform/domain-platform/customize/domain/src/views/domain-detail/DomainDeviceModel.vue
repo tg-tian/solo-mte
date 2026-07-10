@@ -6,7 +6,12 @@
 
     <el-empty v-if="displayDeviceModels.length === 0" description="该领域尚未绑定任何设备模型" />
 
-    <el-table v-else v-loading="deviceModelStore.loading" :data="displayDeviceModels">
+    <el-table
+      v-else
+      v-loading="deviceModelStore.loading"
+      :data="displayDeviceModels"
+      max-height="calc(100vh - 280px)"
+    >
       <el-table-column label="模型编码" width="200">
         <template #default="{ row }">
           <code>{{ row.displayCode }}</code>

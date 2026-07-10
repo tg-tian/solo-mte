@@ -11,6 +11,7 @@
       v-loading="templateStore.loading"
       :data="boundTemplates"
       style="width: 100%"
+      max-height="calc(100vh - 280px)"
     >
       <el-table-column prop="template_id" label="模板ID" width="100" />
       <el-table-column prop="name" label="模板名称" min-width="180" />
@@ -29,24 +30,48 @@
     </el-table>
 
     <el-dialog v-model="dialogVisible" title="添加领域模板" width="900px">
+      <el-input
+        v-model="searchKeyword"
+        placeholder="输入关键词搜索模板库..."
+        clearable
+        @keyup.enter="handleSearch"
+        style="margin-bottom: 12px"
+      >
+        <template #append>
+          <el-button @click="handleSearch">搜索</el-button>
+        </template>
+      </el-input>
 
       <el-table
         v-loading="templateStore.loading"
-        :data="filteredTemplates"
+        :data="selectableExternalTemplates"
         style="width: 100%"
+        max-height="360"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="48" />
-        <el-table-column prop="template_id" label="模板ID" width="100" />
-        <el-table-column prop="name" label="模板名称" min-width="180" />
-        <el-table-column label="领域" width="100">
+        <el-table-column prop="template_id" label="模板ID" width="90" />
+        <el-table-column prop="name" label="模板名称" min-width="160" />
+        <el-table-column label="领域" width="90">
           <template #default="{ row }">{{ tagVal(row.tags, 'domain') }}</template>
         </el-table-column>
-        <el-table-column label="模板类型" width="110">
+        <el-table-column label="模板类型" width="100">
           <template #default="{ row }">{{ tagVal(row.tags, 'template_type') }}</template>
         </el-table-column>
-        <el-table-column prop="template_description" label="描述" min-width="220" show-overflow-tooltip />
+        <el-table-column prop="submitter" label="提交者" width="90" />
+        <el-table-column prop="template_description" label="描述" min-width="200" show-overflow-tooltip />
       </el-table>
+
+      <el-pagination
+        v-if="templateStore.externalTotalPages > 1"
+        v-model:current-page="searchPage"
+        :page-size="searchPerPage"
+        :total="templateStore.externalTotalPages * searchPerPage"
+        layout="prev, pager, next"
+        small
+        style="margin-top: 12px; justify-content: center"
+        @current-change="handlePageChange"
+      />
 
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -72,12 +97,15 @@ const props = defineProps<{
 const templateStore = useDomainComponentTemplateStore();
 const dialogVisible = ref(false);
 const selectedTemplateIds = ref<number[]>([]);
+const searchKeyword = ref('');
+const searchPage = ref(1);
+const searchPerPage = 10;
 
 const boundTemplates = computed(() => templateStore.templates || []);
 
-const filteredTemplates = computed(() => {
+const selectableExternalTemplates = computed(() => {
   const boundIds = boundTemplates.value.map((item) => item.template_id);
-  return (templateStore.allTemplates || []).filter((item) => !boundIds.includes(item.template_id));
+  return (templateStore.externalTemplates || []).filter((item) => !boundIds.includes(item.template_id));
 });
 
 function tagVal(tags: Record<string, string[]> | string | undefined, key: string): string {
@@ -104,8 +132,21 @@ watch(
 
 async function openDialog() {
   dialogVisible.value = true;
+  searchKeyword.value = '';
+  searchPage.value = 1;
   selectedTemplateIds.value = [];
-  await templateStore.fetchAllTemplates();
+  await handleSearch();
+}
+
+async function handleSearch() {
+  searchPage.value = 1;
+  await templateStore.searchExternal(searchKeyword.value, 1, searchPerPage);
+}
+
+async function handlePageChange(page: number) {
+  searchPage.value = page;
+  selectedTemplateIds.value = [];
+  await templateStore.searchExternal(searchKeyword.value, page, searchPerPage);
 }
 
 function handleSelectionChange(rows: TemplateRecord[]) {
@@ -115,12 +156,11 @@ function handleSelectionChange(rows: TemplateRecord[]) {
 async function addTemplate() {
   try {
     if (props.isFromTemplate) {
-      const selectedRows = templateStore.allTemplates.filter(
-        (item) => selectedTemplateIds.value.includes(item.template_id!)
-      );
-      templateStore.setTemplates([...templateStore.templates, ...selectedRows]);
+      const ok = await templateStore.importTemplatesForStaging(selectedTemplateIds.value);
+      if (!ok) throw new Error('staging failed');
     } else if (props.domainCode) {
-      await templateStore.bindingTemplates(props.domainCode, selectedTemplateIds.value);
+      const ok = await templateStore.importAndBindTemplates(props.domainCode, selectedTemplateIds.value);
+      if (!ok) throw new Error('bind failed');
     }
     ElMessage.success('成功添加模板到当前领域');
     dialogVisible.value = false;
