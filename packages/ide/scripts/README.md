@@ -14,7 +14,7 @@
 
 ---
 
-## 四个脚本分别做什么
+## 五个脚本分别做什么
 
 ### sp-install.sh — 环境初始化
 
@@ -50,11 +50,21 @@
 
 ---
 
+### sp-templates.sh — 自定义模板部署
+
+这一步负责把场景压缩包里的 `templates.json` 转换成低代码平台运行时需要的模板文件。
+
+它会筛选页面级模板和控件级模板：页面级模板写入 `farris-vue-form-templates`，控件级模板合并到 `farris-designer/assets/widget-templates.json`。
+
+**这一步完成后**：表单向导能看到自定义页面模板，设计器模板面板能看到自定义控件片段。
+
+---
+
 ### sp-all.sh — 一键部署
 
-这个脚本把上面三个步骤串联起来，按顺序自动执行。
+这个脚本把上面四个步骤串联起来，按顺序自动执行。
 
-它会先初始化环境，然后导入数据，最后部署配置。整个过程只需要提供场景压缩包路径和前端目标目录两个参数，其余全部自动完成。
+它会先初始化环境，然后导入数据，再部署自定义模板，最后部署配置并重启前端。整个过程需要提供场景压缩包路径、前端配置目标目录和公共 Web 目录三个参数，其余全部自动完成。
 
 ---
 
@@ -66,9 +76,11 @@
 
 **sp-import.sh** 依赖 sp-install.sh 的输出——MySQL 和后端服务必须先启动，它才能导入数据。如果跳过这一步直接运行 sp-deploy.sh，前端虽然能加载配置文件，但通过 sceneId 去后端查询时会发现数据库里没有对应的场景数据。
 
+**sp-templates.sh** 依赖压缩包中的 `templates.json`，它不依赖数据库，但需要在 sp-deploy.sh 重启前端之前执行，这样重启后模板文件也已经就绪。
+
 **sp-deploy.sh** 在概念上可以独立运行（它不需要数据库），但实际使用时必须在 sp-import.sh 之后——因为只有数据已经导入，前端加载配置后查询到的 sceneId 才在数据库里有对应的记录。
 
-简单来说：install 搭台子，import 放数据，deploy 让前端看到数据。三个环节缺一不可。
+简单来说：install 搭台子，import 放数据，templates 放模板，deploy 让前端看到数据。四个环节一起构成完整部署。
 
 ---
 
@@ -77,13 +89,13 @@
 ### 一键部署（最常见）
 
 ```bash
-./sp-all.sh <场景压缩包路径> <前端目标目录>
+./sp-all.sh <场景压缩包路径> <前端配置目标目录> <公共Web目录>
 ```
 
 例如：
 
 ```bash
-./sp-all.sh /root/LCTechPark.zip /root/solo-mte/packages/ide/apps/platform/development-platform/ide/app-center
+./sp-all.sh /root/LCTechPark.zip /root/solo-mte/packages/ide/apps/platform/development-platform/ide/app-center /root/web/platform/common/web
 ```
 
 如果不传参数，脚本会交互式提示输入。
@@ -97,7 +109,10 @@
 # 第二步：导入数据
 ./sp-import.sh /root/LCTechPark.zip
 
-# 第三步：部署配置
+# 第三步：部署自定义模板
+./sp-templates.sh /root/LCTechPark.zip /root/web/platform/common/web
+
+# 第四步：部署配置
 ./sp-deploy.sh /root/LCTechPark.zip /root/solo-mte/packages/ide/apps/platform/development-platform/ide/app-center
 ```
 
