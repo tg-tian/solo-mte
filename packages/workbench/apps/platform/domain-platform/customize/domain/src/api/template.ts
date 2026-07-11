@@ -50,12 +50,22 @@ export async function searchExternalTemplates(params: {
   per?: number;
   q_tag_fuzzy?: string;
   schema?: string;
+  domain?: string;
+  template_type?: string;
+  language_framework?: string;
+  file_extension?: string;
+  function?: string;
 }): Promise<{ data: TemplateRecord[]; page_info: { total_count: number; total_pages: number } }> {
   const url = new URL('/templates', EXTERNAL_API_BASE);
   if (params.page) url.searchParams.set('page', String(params.page));
   if (params.per) url.searchParams.set('per', String(params.per));
   if (params.q_tag_fuzzy) url.searchParams.set('q[tag_fuzzy]', params.q_tag_fuzzy);
   if (params.schema) url.searchParams.set('schema', params.schema);
+  if (params.domain) url.searchParams.set('domain', params.domain);
+  if (params.template_type) url.searchParams.set('template_type', params.template_type);
+  if (params.language_framework) url.searchParams.set('language_framework', params.language_framework);
+  if (params.file_extension) url.searchParams.set('file_extension', params.file_extension);
+  if (params.function) url.searchParams.set('function', params.function);
 
   const res = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`外部模板库请求失败: ${res.status}`);
