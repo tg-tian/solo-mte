@@ -1,3 +1,35 @@
+export interface TemplateTags {
+  schema: string[];
+  language_framework: string[];
+  file_extension: string[];
+  domain: string[];
+  template_type: string[];
+  function: string[];
+}
+
+export interface TemplateSource {
+  /** 模板ID */
+  id: number;
+  /** 模板名称 */
+  name: string;
+  /** 模板索引标识 */
+  template_index: string;
+  /** 模板描述 */
+  template_description: string;
+  /** 模板代码内容（HTML字符串） */
+  code_file: string;
+  file_name: string | null;
+  example_image_url: string | null;
+  code_url: string | null;
+  repository_url: string | null;
+  file_source: string | null;
+  submitter: string | null;
+  license: string;
+  created_at: string;
+  updated_at: string;
+  tags: TemplateTags;
+}
+
 export interface TemplateEntity {
     id?: string;
     name: string;
