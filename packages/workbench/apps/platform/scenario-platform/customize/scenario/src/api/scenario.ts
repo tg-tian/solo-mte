@@ -1,7 +1,10 @@
 import request from '../utils/request';
 import type { AreaRecord, AreaPolygonInfo, DomainOption, PolygonPoint, ScenarioRecord } from '../types/models';
 
-const host = (import.meta as any).env?.VITE_BASE_PATH || '';
+// HTTPS 走 nginx 代理，HTTP 直连 8080（兼容 dev 模式）
+const host = typeof location !== 'undefined' && location.protocol === 'https:'
+  ? '/solo-mte-8080'
+  : ((import.meta as any).env?.VITE_BASE_PATH || '');
 const statusMap: Record<string, string> = {
   '0': '0',
   '1': '1',

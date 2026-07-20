@@ -4,7 +4,7 @@ import { FunctionItem, UseConfig } from "./types";
 export function useResolveFunctionUrl(config: UseConfig) {
 
     function fallbackResolveFunctionUri(item: FunctionItem): string {
-        return `/apps/${item.appDomain}/${item.appModule}/${item.appGroup}/${item.code}/index.html`;
+        return `/apps/workbench/apps/${item.appDomain}/${item.appModule}/${item.appGroup}/${item.code}/index.html`;
     }
 
     /**

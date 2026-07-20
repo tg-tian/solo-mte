@@ -409,7 +409,10 @@ const baiduMapAk = (import.meta as any).env?.VITE_BAIDU_MAP_AK || '';
 let mapInstance: any = null;
 let mapMarker: any = null;
 let mapCircle: any = null;
-const host = ((import.meta as any).env?.VITE_BASE_PATH || '').replace(/\/$/, '');
+// HTTPS 走 nginx 代理，HTTP 直连 8080（兼容 dev 模式）
+const host = typeof location !== 'undefined' && location.protocol === 'https:'
+  ? '/solo-mte-8080'
+  : ((import.meta as any).env?.VITE_BASE_PATH || '').replace(/\/$/, '');
 
 function normalizeImagePath(path: string) {
   if (!path) return '';
