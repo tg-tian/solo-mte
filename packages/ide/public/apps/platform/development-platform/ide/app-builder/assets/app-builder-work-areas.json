@@ -43,11 +43,6 @@
         "name": "菜单管理"
     },
     {
-        "id": "variables",
-        "code": "variables",
-        "name": "全局变量"
-    },
-    {
         "id": "analysis",
         "code": "analysis",
         "name": "质量保障"
