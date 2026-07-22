@@ -38,6 +38,7 @@ export default defineComponent({
 		};
 		const useWorkspaceComposition = inject("f-admin-workspace") as UseWorkspace;
 		const { options } = useWorkspaceComposition;
+		const showPublishStatus = ref(false);
 		appPath.value = options.path;
 		const useProfileComposition = useProfile();
 		useProfileComposition.getProfile().then((profile) => {
@@ -110,13 +111,13 @@ export default defineComponent({
 										required={true}
 										v-model={appPath.value}
 									></FDynamicFormGroup>
-									<FDynamicFormGroup
+									{showPublishStatus.value && <FDynamicFormGroup
 										id="app-status-combo-list"
 										class="col-12"
 										editor={appStatusEditorOptions}
 										label="发布情况"
 										required={true}
-									></FDynamicFormGroup>
+									></FDynamicFormGroup>}
 									<div class="col-12 f-profile-toolbar">
 										<div>
 											<FButton>保存</FButton>
