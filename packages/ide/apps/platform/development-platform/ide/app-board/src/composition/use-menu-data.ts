@@ -5,7 +5,7 @@ import { ref } from 'vue';
 /**
  * 需要屏蔽的菜单编号黑名单，屏蔽这些编号的节点及其下级
  */
-const MENU_CODE_BLACKLIST = ['SysPub', 'Bpms', 'HIP', 'Cms', 'inIoT', 'Epp', 'OC', 'BP09', 'emc', 'ChatBot_Factory', 'AgentCenter', 'KnowledgeBase', 'ai-capacity-open', 'ai-capacity-supervisor', 'aicknowledgegraph', 'AiComponent', 'ModelsManager', 'ProcessOrchestration'];
+const MENU_CODE_BLACKLIST = ['SysPub', 'Bpms', 'HIP', 'Cms', 'inIoT', 'Epp', 'OC', 'BP09', 'emc', 'ingpt', 'ChatBot_Factory', 'AgentCenter', 'KnowledgeBase', 'ai-capacity-open', 'ai-capacity-supervisor', 'aicknowledgegraph', 'AiComponent', 'ModelsManager', 'ProcessOrchestration'];
 
 export function useMenuData(): UseMenuData {
     const idField = 'id';
