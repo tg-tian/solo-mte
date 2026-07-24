@@ -353,15 +353,7 @@ export default defineComponent({
             });
         }
 
-        async function executeDeleteApp(path: string, boId: string) {
-            const ok = await appDeleteService.deleteApp(path, boId);
-            if (ok) {
-                await refreshPublishStatus();
-            }
-            updateAppDomain();
-        }
-
-        function showDeleteDomainOrModuleDialog(entityType: string, entityName: string, boId: string) {
+        function showDeleteDomainOrModuleDialog(entityType: string, entityName: string, boId: string, isModuleDelete: boolean, domainId?: string) {
             const modalRef: any = modalService?.open({
                 title: '',
                 width: 420,
@@ -375,7 +367,7 @@ export default defineComponent({
                         class: 'btn btn-danger',
                         handle: () => {
                             modalRef?.close();
-                            executeDeleteDomainOrModule(boId);
+                            executeDeleteDomainOrModule(boId, isModuleDelete, domainId);
                         }
                     }
                 ],
@@ -393,11 +385,28 @@ export default defineComponent({
             });
         }
 
-        async function executeDeleteDomainOrModule(boId: string) {
+        async function executeDeleteDomainOrModule(boId: string, isModuleDelete: boolean, domainId?: string) {
             const ok = await appDeleteService.deleteBusinessObject(boId);
-            if (ok) {
-                updateAppDomain();
+            if (!ok) return;
+            await updateAppDomain();
+            // 删除模块后需要手动更新对应域的模块列表 FListView，因为 FListView 不响应 data prop 变更
+            if (isModuleDelete && domainId) {
+                const appDomainInstanceRef = appDomainMap.get(domainId);
+                if (appDomainInstanceRef?.value) {
+                    const domain = (appDomains.value as AppDomain[]).find(d => d.id === domainId);
+                    if (domain) {
+                        appDomainInstanceRef.value.updateDataSource(domain.modules);
+                    }
+                }
             }
+        }
+
+        async function executeDeleteApp(path: string, boId: string) {
+            const ok = await appDeleteService.deleteApp(path, boId);
+            if (ok) {
+                await refreshPublishStatus();
+            }
+            await updateAppDomain();
         }
 
         function handleAppDomainDeleteClick(appDomain: AppDomain) {
@@ -406,7 +415,7 @@ export default defineComponent({
                 notifyService.warning({ message: `应用域「${appDomain.name}」下存在模块，请先删除所有模块后再删除应用域。` });
                 return;
             }
-            showDeleteDomainOrModuleDialog('应用域', appDomain.name, appDomain.id);
+            showDeleteDomainOrModuleDialog('应用域', appDomain.name, appDomain.id, false);
         }
 
         function handleModuleDeleteClick(appDomain: AppDomain, appModule: AppModule) {
@@ -415,7 +424,7 @@ export default defineComponent({
                 notifyService.warning({ message: `模块「${appModule.name}」下存在应用，请先删除所有应用后再删除模块。` });
                 return;
             }
-            showDeleteDomainOrModuleDialog('模块', appModule.name, appModule.id);
+            showDeleteDomainOrModuleDialog('模块', appModule.name, appModule.id, true, appDomain.id);
         }
 
         function renderCreateEntityPopover() {
@@ -489,10 +498,10 @@ export default defineComponent({
 
         function renderAppDomainNavigation() {
             return <FAccordion customClass="f-admin-app-domain-groups">
-                {appDomains.value.map((appDomain: AppDomain) => {
+                {appDomains.value.map((appDomain: AppDomain, index: number) => {
                     const isSelected = currentAppDomain.value?.id === appDomain.id;
                     const customClass = `f-admin-app-domain${isSelected ? ' f-admin-app-domain-selected' : ''}`;
-                    return <FAccordionItem key={appDomain.id} customClass={customClass} iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={() => onClickMenuGroupHeader(appDomain)}>
+                    return <FAccordionItem key={appDomain.id} customClass={customClass} iconUri={defaultAppDomainIconUrl} title={appDomain.name} active={index === 0} onClickHeader={() => onClickMenuGroupHeader(appDomain)}>
                         {{
                             head: () => (
                                 <i class="f-icon f-icon-delete f-delete-icon f-domain-delete-icon"
