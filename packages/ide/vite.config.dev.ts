@@ -80,6 +80,11 @@ function nodeModulesPassthrough(nodeModulesRoots: string[]) {
                 const raw = req.url?.split('?')[0] ?? '';
                 if (!raw.startsWith('/node_modules/')) return next();
                 const rel = decodeURIComponent(raw.slice('/node_modules/'.length));
+                const ext = path.extname(rel).toLowerCase();
+
+                if (rel.startsWith('.vite/') || rel.startsWith('vite/') || ext === '.css') {
+                    return next();
+                }
 
                 const tryRoot = (i: number): void => {
                     if (i >= roots.length) return next();
