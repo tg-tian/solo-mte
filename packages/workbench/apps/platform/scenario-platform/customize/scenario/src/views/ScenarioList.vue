@@ -151,7 +151,8 @@ const createScenarioModel = ref<ScenarioRecord>({
   polygon: []
 });
 
-const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
+// IDE 同在 5200 平台，从 origin root 绝对路径跳转
+const appCenterPath = '';
 
 const filteredScenarios = computed(() => {
   return store.scenarios.filter((item) => {

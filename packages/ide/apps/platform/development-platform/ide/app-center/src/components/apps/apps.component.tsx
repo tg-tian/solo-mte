@@ -5,6 +5,7 @@ import AppWizardComponent from '../wizard/app-wizard/app-wizard.component';
 import CreateAppDomainComponent from './create-app-entity/create-app-domain.component';
 import CreateModuleComponent from './create-app-entity/create-module.component';
 import { GitService } from '../../services/git.service';
+import { AppDeleteService } from '../../services/app-delete.service';
 
 import './apps.css';
 
@@ -16,6 +17,7 @@ export default defineComponent({
         const modalService = inject(F_MODAL_SERVICE_TOKEN, null);
         const notifyService = inject(F_NOTIFY_SERVICE_TOKEN) as typeof FNotifyService;
         const gitService = new GitService(modalService, notifyService);
+        const appDeleteService = new AppDeleteService(notifyService);
         provide('f-app-center-git-service', gitService);
         const useAppDomainComposition = inject('f-app-center-app-domain') as UseAppDomain;
         const useWorkspaceComposition = inject('f-app-center-workspace') as UseWorkspace;
@@ -32,6 +34,7 @@ export default defineComponent({
         const gitPopoverRef = ref<any>();
         const gitOperations = ref<Array<{ icon: string; name: string; id: string }>>([]);
         const currentGitBoPath = ref('');
+        const currentDeleteAppObject = ref<AppObject | null>(null);
         const publishedBoIds = ref<Set<string>>(new Set());
         const offlineBoIds = ref<Set<string>>(new Set());
 
@@ -219,6 +222,7 @@ export default defineComponent({
             const target = event.currentTarget as HTMLElement;
             const boPath = buildBoPath(appObject);
             currentGitBoPath.value = boPath;
+            currentDeleteAppObject.value = appObject;
             try {
                 const res: any = await gitService.checkIsGitProject(boPath);
                 if (res && !res.gitConfig) {
@@ -292,6 +296,137 @@ export default defineComponent({
             gitService.handleGitOperation(gitOperation, currentGitBoPath.value);
         }
 
+        function handleAppDeleteClickFromPopover() {
+            if (gitPopoverRef.value) {
+                gitPopoverRef.value.hide();
+            }
+            const appObject = currentDeleteAppObject.value;
+            if (!appObject || !modalService) return;
+            showDeleteAppConfirmDialog(appObject);
+        }
+
+        function showDeleteAppConfirmDialog(appObject: AppObject) {
+            const appName = appObject.name;
+            const confirmInputValue = ref('');
+            const boPath = buildBoPath(appObject);
+
+            const modalRef: any = modalService?.open({
+                title: '',
+                width: 460,
+                fitContent: true,
+                showHeader: false,
+                showButtons: true,
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => modalRef?.close() },
+                    {
+                        text: '确认删除',
+                        class: 'btn btn-danger',
+                        handle: () => {
+                            if (confirmInputValue.value !== appName) {
+                                notifyService.warning({ message: '请输入正确的应用名称' });
+                                return;
+                            }
+                            modalRef?.close();
+                            executeDeleteApp(boPath, appObject.id);
+                        }
+                    }
+                ],
+                render: () => (
+                    <div class="f-delete-confirm-body">
+                        <div class="f-delete-confirm-header">
+                            <i class="f-icon f-icon-warning f-delete-confirm-icon"></i>
+                            <span class="f-delete-confirm-title">永久删除应用</span>
+                        </div>
+                        <div class="f-delete-confirm-message">
+                            您即将删除应用「{appName}」。这是永久性操作，所有工程文件都将被删除，不可撤销。
+                        </div>
+                        <div class="f-delete-confirm-input-label">请输入应用名称以确认：</div>
+                        <input
+                            class="f-delete-confirm-input"
+                            type="text"
+                            placeholder={appName}
+                            value={confirmInputValue.value}
+                            onInput={(e: Event) => { confirmInputValue.value = (e.target as HTMLInputElement).value; }}
+                        />
+                    </div>
+                )
+            });
+        }
+
+        function showDeleteDomainOrModuleDialog(entityType: string, entityName: string, boId: string, isModuleDelete: boolean, domainId?: string) {
+            const modalRef: any = modalService?.open({
+                title: '',
+                width: 420,
+                fitContent: true,
+                showHeader: false,
+                showButtons: true,
+                buttons: [
+                    { text: '取消', class: 'btn btn-secondary', handle: () => modalRef?.close() },
+                    {
+                        text: '确认删除',
+                        class: 'btn btn-danger',
+                        handle: () => {
+                            modalRef?.close();
+                            executeDeleteDomainOrModule(boId, isModuleDelete, domainId);
+                        }
+                    }
+                ],
+                render: () => (
+                    <div class="f-delete-confirm-body">
+                        <div class="f-delete-confirm-header">
+                            <i class="f-icon f-icon-warning f-delete-confirm-icon"></i>
+                            <span class="f-delete-confirm-title">删除{entityType}</span>
+                        </div>
+                        <div class="f-delete-confirm-message">
+                            您即将删除{entityType}「{entityName}」。这是永久性操作且不可撤销。
+                        </div>
+                    </div>
+                )
+            });
+        }
+
+        async function executeDeleteDomainOrModule(boId: string, isModuleDelete: boolean, domainId?: string) {
+            const ok = await appDeleteService.deleteBusinessObject(boId);
+            if (!ok) return;
+            await updateAppDomain();
+            // 删除模块后需要手动更新对应域的模块列表 FListView，因为 FListView 不响应 data prop 变更
+            if (isModuleDelete && domainId) {
+                const appDomainInstanceRef = appDomainMap.get(domainId);
+                if (appDomainInstanceRef?.value) {
+                    const domain = (appDomains.value as AppDomain[]).find(d => d.id === domainId);
+                    if (domain) {
+                        appDomainInstanceRef.value.updateDataSource(domain.modules);
+                    }
+                }
+            }
+        }
+
+        async function executeDeleteApp(path: string, boId: string) {
+            const ok = await appDeleteService.deleteApp(path, boId);
+            if (ok) {
+                await refreshPublishStatus();
+            }
+            await updateAppDomain();
+        }
+
+        function handleAppDomainDeleteClick(appDomain: AppDomain) {
+            if (!modalService) return;
+            if (appDomain.modules.length > 0) {
+                notifyService.warning({ message: `应用域「${appDomain.name}」下存在模块，请先删除所有模块后再删除应用域。` });
+                return;
+            }
+            showDeleteDomainOrModuleDialog('应用域', appDomain.name, appDomain.id, false);
+        }
+
+        function handleModuleDeleteClick(appDomain: AppDomain, appModule: AppModule) {
+            if (!modalService) return;
+            if (appModule.apps.length > 0) {
+                notifyService.warning({ message: `模块「${appModule.name}」下存在应用，请先删除所有应用后再删除模块。` });
+                return;
+            }
+            showDeleteDomainOrModuleDialog('模块', appModule.name, appModule.id, true, appDomain.id);
+        }
+
         function renderCreateEntityPopover() {
             return (
                 <FPopover
@@ -315,20 +450,39 @@ export default defineComponent({
                     showArrow={false}
                     visible={false}>
                     <div class="f-git-menu">
-                        {gitOperations.value.map(op => (
-                            <div class="f-git-menu-item" onClick={() => onGitMenuClick(op)}>
-                                <img class="f-git-menu-item-icon" src={op.icon} />
-                                <span>{op.name}</span>
-                            </div>
-                        ))}
+                        {gitOperations.value.length > 0 && (
+                            <>
+                                <div class="f-popover-menu-section">
+                                    <span class="f-popover-menu-section-title">GIT操作</span>
+                                </div>
+                                {gitOperations.value.map(op => (
+                                    <div class="f-git-menu-item" onClick={() => onGitMenuClick(op)}>
+                                        <img class="f-git-menu-item-icon" src={op.icon} />
+                                        <span>{op.name}</span>
+                                    </div>
+                                ))}
+                                <hr class="f-popover-menu-divider" />
+                            </>
+                        )}
+                        <div class="f-popover-menu-section">
+                            <span class="f-popover-menu-section-title">危险操作</span>
+                        </div>
+                        <div class="f-git-menu-item f-popover-menu-item--danger" onClick={handleAppDeleteClickFromPopover}>
+                            <i class="f-icon f-icon-delete f-git-menu-item-icon"></i>
+                            <span>删除应用</span>
+                        </div>
                     </div>
                 </FPopover>
             );
         }
 
         function renderAppModule(appDomain: AppDomain, { item, index, selectedItem }) {
+            const appModule = item as AppModule;
             return <div onClick={(payload: MouseEvent) => onClickMenuItem(payload, appDomain, item)}>
                 <span>{item.name}</span>
+                <i class="f-icon f-icon-delete f-delete-icon f-module-delete-icon"
+                    onClick={(e: MouseEvent) => { e.stopPropagation(); handleModuleDeleteClick(appDomain, appModule); }}>
+                </i>
             </div>;
         }
 
@@ -344,11 +498,18 @@ export default defineComponent({
 
         function renderAppDomainNavigation() {
             return <FAccordion customClass="f-admin-app-domain-groups">
-                {appDomains.value.map((appDomain: AppDomain) => {
+                {appDomains.value.map((appDomain: AppDomain, index: number) => {
                     const isSelected = currentAppDomain.value?.id === appDomain.id;
                     const customClass = `f-admin-app-domain${isSelected ? ' f-admin-app-domain-selected' : ''}`;
-                    return <FAccordionItem key={appDomain.id} customClass={customClass} iconUri={defaultAppDomainIconUrl} title={appDomain.name} onClickHeader={() => onClickMenuGroupHeader(appDomain)}>
-                        {renderAppModules(appDomain, appDomain.modules)}
+                    return <FAccordionItem key={appDomain.id} customClass={customClass} iconUri={defaultAppDomainIconUrl} title={appDomain.name} active={index === 0} onClickHeader={() => onClickMenuGroupHeader(appDomain)}>
+                        {{
+                            head: () => (
+                                <i class="f-icon f-icon-delete f-delete-icon f-domain-delete-icon"
+                                    onClick={(e: MouseEvent) => { e.stopPropagation(); handleAppDomainDeleteClick(appDomain); }}>
+                                </i>
+                            ),
+                            default: () => renderAppModules(appDomain, appDomain.modules)
+                        }}
                     </FAccordionItem>;
                 })}
             </FAccordion>;
@@ -426,7 +587,7 @@ export default defineComponent({
                                 <button type="button" class="f-app-card-btn f-app-card-btn--online" onClick={(e: MouseEvent) => handleOnlineClick(e, item)}>上线</button>
                             )}
                             <button type="button" class="f-app-card-btn f-app-card-btn--publish" onClick={(e: MouseEvent) => handlePublishClick(e, item)}>发布</button>
-                            <button type="button" class="f-app-card-btn f-app-card-btn--icon" onClick={(e: MouseEvent) => handleGitClick(e, item)} aria-label="GIT 操作">
+                            <button type="button" class="f-app-card-btn f-app-card-btn--icon" onClick={(e: MouseEvent) => handleGitClick(e, item)} aria-label="更多操作">
                                 <i class="f-icon f-icon-home-operation"></i>
                             </button>
                         </div>

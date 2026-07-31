@@ -187,15 +187,16 @@ export function useAppDomain(): UseAppDomain {
         });
     }
 
-    function updateAppDomain() {
+    function updateAppDomain(): Promise<void> {
         if (appDomainSourceUri.value) {
             const uri = appendRefreshCacheBust(appDomainSourceUri.value);
-            getAppData(uri).then((rawAppData: any[]) => {
+            return getAppData(uri).then((rawAppData: any[]) => {
                 const appDomains = generateAppDomains(rawAppData);
                 loadAppDomain(appDomains);
                 updateCurrent();
             });
         }
+        return Promise.resolve();
     }
 
     return { appDomains, appDomainMap, currentAppDomain, currentAppModule, currentAppObjects, generateAppDomain, setAppDomainSourceUri, updateAppDomain };

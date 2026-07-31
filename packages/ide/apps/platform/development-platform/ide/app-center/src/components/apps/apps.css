@@ -39,14 +39,18 @@
 }
 
 .f-admin-app-domain-groups .card-header {
-    padding: 1px 0.875rem 1px 0 !important;
+    display: flex;
+    align-items: center;
+    padding: 8px 0.875rem 8px 0.5rem !important;
     background-color: transparent !important;
-    /* padding-left: 0 !important; */
 }
 
 .f-admin-app-domain-groups .card-header > .panel-item-title {
     display: flex;
     float: none;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
 }
 
 .f-admin-app-domain-groups .card-header > .panel-item-title > span {
@@ -60,6 +64,24 @@
 
 .f-admin-app-domain-groups .card-header > .panel-item-title > .panel-item-title-image {
     margin-right: 8px;
+}
+
+/* Domain delete icon inside head slot: hidden by default, shown on header hover */
+.f-admin-app-domain-groups .card-header > .panel-item-title > .f-domain-delete-icon {
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-right: 4px;
+}
+.f-admin-app-domain-groups .card-header:hover > .panel-item-title > .f-domain-delete-icon {
+    opacity: 1;
+}
+
+.f-admin-app-domain-groups .card-header > .panel-item-tool {
+    display: none;
+}
+
+.f-admin-app-domain-groups .card-header > .panel-item-clear {
+    display: none;
 }
 
 .f-admin-app-domain-groups .card-body {
@@ -407,7 +429,10 @@
 /* AppDomain 选中状态高亮样式 */
 .f-admin-app-domain-groups .f-admin-app-domain-selected .card-header {
     background-color: rgba(42, 135, 255, 0.1) !important;
-    border-radius: 4px;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .f-admin-app-domain-groups .f-admin-app-domain-selected .panel-item-title {
@@ -490,4 +515,107 @@
 }
 .ide-git-vertify span:hover {
     text-decoration: underline;
+}
+
+/* ===== Delete Icon (Tree Nodes) ===== */
+.f-delete-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    color: #7a8dae;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 0.15s, background-color 0.15s;
+}
+.f-delete-icon:hover {
+    color: #f56c6c;
+    background-color: rgba(245, 108, 108, 0.08);
+}
+
+/* Module list item: delete icon hidden by default, shown on item hover */
+.f-admin-app-module-list-item .f-module-delete-icon {
+    opacity: 0;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: opacity 0.15s, color 0.15s, background-color 0.15s;
+}
+.f-admin-app-module-list-item:hover .f-module-delete-icon {
+    opacity: 1;
+}
+
+/* ===== Popover Menu Grouping ===== */
+.f-popover-menu-section {
+    padding: 8px 16px 4px;
+}
+.f-popover-menu-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #303e55;
+    line-height: 20px;
+}
+.f-popover-menu-divider {
+    margin: 4px 0;
+    border: none;
+    border-top: 1px solid #e8ebf1;
+}
+
+/* ===== Danger Menu Item ===== */
+.f-popover-menu-item--danger {
+    color: #f56c6c !important;
+}
+.f-popover-menu-item--danger:hover {
+    background-color: rgba(245, 108, 108, 0.08) !important;
+}
+
+/* ===== Delete Confirm Dialog ===== */
+.f-delete-confirm-body {
+    padding: 24px 24px 20px;
+}
+.f-delete-confirm-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.f-delete-confirm-icon {
+    font-size: 22px;
+    color: #f56c6c;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+.f-delete-confirm-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #303e55;
+    line-height: 1.4;
+}
+.f-delete-confirm-message {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+.f-delete-confirm-input-label {
+    font-size: 13px;
+    color: #8a93a5;
+    margin-bottom: 8px;
+}
+.f-delete-confirm-input {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.f-delete-confirm-input:focus {
+    border-color: #2a87ff;
+    box-shadow: 0 0 0 2px rgba(42, 135, 255, 0.12);
 }
