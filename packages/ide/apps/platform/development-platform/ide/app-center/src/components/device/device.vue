@@ -225,7 +225,6 @@
             <el-button
               v-if="currentDevice?.category === 'camera'"
               type="success"
-              :disabled="currentDevice?.state?.reported?.configured !== true"
               @click="openFaceRecognitionTest"
             >
               人脸识别测试
@@ -263,12 +262,7 @@
           <el-select v-else-if="argDef.type === 'enum'" v-model="actionFormModel[argName]" placeholder="请选择">
             <el-option v-for="opt in argDef.enumValues" :key="opt" :label="opt" :value="opt" />
           </el-select>
-          <el-input
-            v-else
-            v-model="actionFormModel[argName]"
-            :type="isSensitiveActionArgument(String(argName)) ? 'password' : 'text'"
-            :show-password="isSensitiveActionArgument(String(argName))"
-          />
+          <el-input v-else v-model="actionFormModel[argName]" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -759,10 +753,6 @@ function formatValue(val: unknown) {
   return String(val)
 }
 
-function isSensitiveActionArgument(name: string) {
-  return /(secret|password|token)/i.test(name)
-}
-
 function formatTime(val?: number | null) {
   return val !== null && val !== undefined ? new Date(val).toLocaleString() : '-'
 }
@@ -788,12 +778,7 @@ function getEventType(event: any) {
 }
 
 function openFaceRecognitionTest() {
-  if (currentDevice.value?.state?.reported?.configured !== true) {
-    ElMessage.warning('请先配置百度云识别凭据')
-    return
-  }
-  const testUrl = import.meta.env.VITE_CAMERA_TEST_URL || 'http://127.0.0.1:9000/'
-  window.open(testUrl, '_blank', 'noopener,noreferrer')
+  window.open('https://139.196.239.110:9000/', '_blank')
 }
 
 async function handleAction(actionName: string, action: any) {
