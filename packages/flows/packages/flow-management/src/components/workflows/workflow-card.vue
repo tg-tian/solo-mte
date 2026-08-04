@@ -1,5 +1,5 @@
 <template>
-  <div class="smart-service-card">
+  <div class="smart-service-card" @click="handleCardClick">
     <!-- 卡片头部 -->
     <div class="card-header">
       <div class="header-content">
@@ -27,19 +27,19 @@
         <span>{{ getWorkflowCategoryLabel(data.kind) }}</span>
       </div>
       <div class="card-actions">
-        <button class="action-btn" @click="handleEdit">
+        <button class="action-btn" @click.stop="handleEdit">
           <img src="@/assets/images/edit.svg" alt="" title="编辑">
         </button>
 
-        <button class="action-btn" @click="handleCopy">
+        <button class="action-btn" @click.stop="handleCopy">
           <img src="@/assets/images/copy.svg" alt="" title="复制">
         </button>
 
-        <button class="action-btn" @click="handleDelete">
+        <button class="action-btn" @click.stop="handleDelete">
           <img src="@/assets/images/delete.svg" alt="" title="删除">
         </button>
 
-        <button class="publish-btn" @click="handlePublish">
+        <button class="publish-btn" @click.stop="handlePublish">
           <img src="@/assets/images/publish.svg" alt="" title="发布">
         </button>
       </div>
@@ -102,6 +102,11 @@ const typeIcon = computed(() => {
   const category = WORKFLOW_CATEGORIES.value.find(cat => cat.value === props.data.kind);
   return category?.icon || '';
 });
+
+// 处理卡片点击（打开设计器）
+const handleCardClick = () => {
+  emit('edit', props.data.id, props.data.name);
+};
 
 // 处理编辑按钮点击
 const handleEdit = () => {
