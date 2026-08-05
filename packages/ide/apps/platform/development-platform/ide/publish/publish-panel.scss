@@ -1,0 +1,162 @@
+.f-publish-panel-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-publish-panel {
+    width: 440px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 24px 24px 16px;
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+
+        &--fail {
+            color: #e74c3c;
+        }
+    }
+
+    &-progress {
+        margin-bottom: 16px;
+
+        &-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+
+        &-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: #2a87ff;
+            transition: width 0.3s ease;
+        }
+    }
+
+    &-stages {
+        margin-bottom: 16px;
+    }
+
+    &-stage {
+        /* 图标绝对定位的参照容器 */
+        position: relative;
+        padding: 6px 0;
+        color: #999;
+
+        &-text {
+            /* 为图标腾出固定空间:22px 图标 + 10px 间距;所有文本左边界由此对齐,与图标内容无关 */
+            padding-left: 32px;
+            font-size: 14px;
+            color: #333;
+            line-height: 22px;
+        }
+
+        &-icon {
+            /* 绝对定位到文本让出空间的中心(left 16px = 32px/2),transform 按自身尺寸居中,
+               保证任意图标(✓/✗/转圈/空占位)的中心都落在同一点上,垂直方向同理 */
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #bbb;
+
+            &--done {
+                color: #52c41a;
+            }
+
+            &--fail {
+                color: #e74c3c;
+            }
+
+            &--current {
+                color: #2a87ff;
+            }
+        }
+    }
+
+    &-error {
+        background: #fff2f0;
+        border: 1px solid #ffccc7;
+        border-radius: 4px;
+        padding: 10px 12px;
+        margin-bottom: 16px;
+
+        &-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 4px;
+        }
+
+        &-text {
+            font-size: 13px;
+            color: #666;
+            word-break: break-all;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+    }
+
+    &-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &-close-btn {
+        padding: 6px 20px;
+        font-size: 13px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        background: #fff;
+        color: #333;
+        cursor: pointer;
+
+        &:hover {
+            border-color: #2a87ff;
+            color: #2a87ff;
+        }
+    }
+}
+
+.f-publish-spinner {
+    /* 图标容器为绝对定位(center 对齐),宽高任意,中心由 translate(-50%,-50%) 决定,正圆即可 */
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(42, 135, 255, 0.2);
+    border-top-color: #2a87ff;
+    border-radius: 50%;
+    animation: f-publish-spin 0.8s linear infinite;
+}
+
+@keyframes f-publish-spin {
+    /* 动画期间 transform 会被 keyframes 完全接管,必须带上定位用的 translate,否则元素会从
+       居中位置跳回左上角锚点(表现为向右下移动再复位) */
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}

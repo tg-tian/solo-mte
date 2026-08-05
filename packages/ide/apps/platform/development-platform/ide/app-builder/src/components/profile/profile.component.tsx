@@ -9,6 +9,8 @@ import { ProfileProps, profileProps } from "./profile.props";
 import { UsePreview } from "./compositon/use-preview";
 import { UseWorkspace } from "../../composition/types";
 import { useProfile } from "./compositon/use-profile";
+import { useStandardPublish } from "../../../../publish/use-standard-publish.composition";
+import PublishPanel from "../../../../publish/publish-panel.component";
 import app from "apps/platform/development-platform/ide/app-center/src/app";
 
 export default defineComponent({
@@ -44,6 +46,8 @@ export default defineComponent({
 		useProfileComposition.getProfile().then((profile) => {
 			appName.value = profile.name;
 		});
+		const publishComposition = useStandardPublish();
+		const usePreviewComposition = UsePreview(publishComposition);
 
 		function renderTitleArea() {
 			return (
@@ -55,18 +59,17 @@ export default defineComponent({
 		}
 
 		function preview() {
-			const usePreview = UsePreview();
-			usePreview.preview(useWorkspaceComposition.options);
+			usePreviewComposition.preview(useWorkspaceComposition.options);
 		}
 
 		function renderToolbar() {
 			return (
 				<div class="f-toolbar">
-					<FButton type="secondary" onClick={preview}>
+					<FButton onClick={preview}>
 						预览
 					</FButton>
-					<FButton type="secondary">编辑代码</FButton>
-					<FButton>发布</FButton>
+					{false && <FButton type="secondary">编辑代码</FButton>}
+					{false && <FButton>发布</FButton>}
 				</div>
 			);
 		}
@@ -79,9 +82,9 @@ export default defineComponent({
 							<div class="f-app-builder-main-tabs-title">应用信息</div>
 							<div class="f-app-builder-main-tabs-content"></div>
 							<div class="f-app-builder-main-tabs-toolbar">
-								<FButton type="secondary" onClick={preview}>预览</FButton>
-								<FButton type="secondary">编辑代码</FButton>
-								<FButton>发布</FButton>
+								<FButton onClick={preview}>预览</FButton>
+								{false && <FButton type="secondary">编辑代码</FButton>}
+								{false && <FButton>发布</FButton>}
 
 							</div>
 							<div class="f-app-builder-main-tabs-background"></div>
@@ -108,7 +111,7 @@ export default defineComponent({
 										id="app-deploy-path-input-group"
 										class="col-12"
 										label="应用路径"
-										required={true}
+										editor={{ readonly: true }}
 										v-model={appPath.value}
 									></FDynamicFormGroup>
 									{showPublishStatus.value && <FDynamicFormGroup
@@ -129,6 +132,11 @@ export default defineComponent({
 							</FSection>
 						</div>
 					</div>
+					<PublishPanel
+						visible={publishComposition.panelVisible.value}
+						progress={publishComposition.progressInfo.value}
+						onClose={publishComposition.closePanel}
+					></PublishPanel>
 				</div>
 			);
 		};
