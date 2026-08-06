@@ -74,6 +74,9 @@ export default defineComponent({
             title.value = result.appName;
             currentAppLocation.value = `${result.location}${result.path}`;
         });
+        useWorkspaceComposition.onAppNameChanged((name: string) => {
+            title.value = name;
+        });
         const useUserInfoComposition = useUserInfo();
         const userInfoInitialized = useUserInfoComposition.initialize();
         userInfoInitialized.then((result: UserInfo) => {
