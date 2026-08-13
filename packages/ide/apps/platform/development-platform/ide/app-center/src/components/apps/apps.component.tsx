@@ -6,6 +6,8 @@ import CreateAppDomainComponent from './create-app-entity/create-app-domain.comp
 import CreateModuleComponent from './create-app-entity/create-module.component';
 import { GitService } from '../../services/git.service';
 import { AppDeleteService } from '../../services/app-delete.service';
+import { useStandardPublish } from '../../../../publish/use-standard-publish.composition';
+import PublishPanel from '../../../../publish/publish-panel.component';
 
 import './apps.css';
 
@@ -37,6 +39,7 @@ export default defineComponent({
         const currentDeleteAppObject = ref<AppObject | null>(null);
         const publishedBoIds = ref<Set<string>>(new Set());
         const offlineBoIds = ref<Set<string>>(new Set());
+        const publishComposition = useStandardPublish();
 
         async function refreshPublishStatus() {
             const { published, offline } = await gitService.fetchPublishStatus();
@@ -271,6 +274,12 @@ export default defineComponent({
         async function handlePublishClick(event: MouseEvent, appObject: AppObject) {
             event.stopPropagation();
             const boPath = buildBoPath(appObject);
+            // 先执行标准产品发布(编译前后端产物并部署),成功后才执行迁移;失败则保持面板显示错误信息,不迁移
+            const publishInfo = await publishComposition.startPublish(boPath);
+            if (!publishInfo.result) {
+                return;
+            }
+            publishComposition.closePanel();
             await gitService.handlePublish(boPath, appObject.id);
             await refreshPublishStatus();
         }
@@ -616,6 +625,11 @@ export default defineComponent({
                         </FListView>
                         {renderGitPopover()}
                     </FLayoutPane>
+                    <PublishPanel
+                        visible={publishComposition.panelVisible.value}
+                        progress={publishComposition.progressInfo.value}
+                        onClose={publishComposition.closePanel}
+                    ></PublishPanel>
                 </FLayout>
             );
         };

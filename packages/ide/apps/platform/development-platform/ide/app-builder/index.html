@@ -37,6 +37,26 @@
         #vscode-container .codicon[class*='codicon-'] {
             font-family: 'codicon' !important;
         }
+        /*
+         * 修复 Java 代码满屏删除线：
+         * 远程 Java 语言服务器（JDT LS）在退化状态下会把大量语义 token 错误标记为 deprecated，
+         * Monaco 据此给 token 加 .mtks（text-decoration: line-through）。
+         * 这是渲染层的兜底：无论配置是否生效，一律取消 .mtks 的删除线。
+         * 不影响其它文本修饰（颜色/加粗/斜体），只去掉删除线。
+         */
+        #vscode-container .mtks {
+            text-decoration: none !important;
+        }
+        /*
+         * 修复 Java 注释白字白底（隐形）：
+         * 损坏的 Java LS 语义 token 还会把注释的前景色调成白色（实测为 .mtk2 { color:#ffffff }，
+         * 标准浅色主题的 colorMap 里并没有 #ffffff）。配置层（含用户设置）在本远程环境下不生效，
+         * 因此沿用渲染层兜底：强制这类白色 token 继承编辑器默认前景色（浅色主题下为深色）。
+         * 仅作用于 #vscode-container 内的 token 类，不影响编辑器其它功能。
+         */
+        #vscode-container .mtk2 {
+            color: inherit !important;
+        }
     </style>
     <script type="module" src="/assets/system.js"></script>
     <script src="/vscode/nls.messages.js"></script>
