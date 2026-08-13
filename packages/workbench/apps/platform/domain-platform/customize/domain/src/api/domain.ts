@@ -4,6 +4,7 @@ import type { DomainFormData, DomainRecord } from '../types/models';
 const domainSourceUri = '/domains';
 
 export interface CreateDomainPayload {
+  domainId: number;
   code: string;
   name: string;
   description: string;
@@ -59,7 +60,7 @@ export function normalizeDomain(domain: Record<string, any>): DomainRecord {
 }
 
 function toCreatePayload(data: DomainFormData | UpdateDomainPayload) {
-  return {
+  const payload: Record<string, any> = {
     code: data.code,
     name: data.name,
     description: data.description,
@@ -70,6 +71,10 @@ function toCreatePayload(data: DomainFormData | UpdateDomainPayload) {
     dslStandard: data.dslStandard,
     url: data.url
   };
+  if ('domainId' in data) {
+    payload.domainId = Number(data.domainId);
+  }
+  return payload;
 }
 
 export async function getDomainList() {

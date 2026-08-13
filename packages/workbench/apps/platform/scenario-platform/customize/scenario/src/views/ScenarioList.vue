@@ -273,6 +273,7 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
   createSubmitting.value = true;
   try {
     const scenarioPayload = {
+      sceneId: Number(payload.scenario.sceneId),
       code: payload.scenario.sceneCode,
       name: payload.scenario.sceneName,
       description: payload.scenario.sceneDescription || '',
@@ -314,6 +315,7 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
               : Number(rawParentId);
 
           const areaResult = await createArea({
+            id: Number(area.id),
             name: area.name,
             sceneId: Number(sceneId),
             description: area.description || '',
@@ -359,6 +361,7 @@ async function saveScenarioDetail(payload: ScenarioSubmitPayload) {
   try {
     const targetStatus = payload.scenario.status === '1' ? '1' : '0';
     await updateScenario(payload.scenario.sceneId, {
+      sceneId: Number(payload.scenario.sceneId),
       code: payload.scenario.sceneCode,
       name: payload.scenario.sceneName,
       description: payload.scenario.sceneDescription || '',

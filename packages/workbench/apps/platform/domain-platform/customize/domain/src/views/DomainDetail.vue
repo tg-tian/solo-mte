@@ -26,17 +26,22 @@
         <el-tab-pane label="基本信息" name="basic">
           <el-form :model="domainForm" :rules="rules" ref="domainFormRef" label-position="top">
             <el-row :gutter="24">
-              <el-col :span="8">
+              <el-col v-if="!isEditMode" :span="6">
+                <el-form-item label="领域ID" prop="domainId">
+                  <el-input v-model="domainForm.domainId" maxlength="18" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="领域编码" prop="code">
                   <el-input v-model="domainForm.code" :disabled="isEditMode" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="领域名称" prop="name">
                   <el-input v-model="domainForm.name" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="DSL 标准" prop="dslStandard">
                   <el-select v-model="domainForm.dslStandard" style="width: 100%">
                     <el-option label="默认不限" value="default" />
@@ -136,6 +141,7 @@ const submitting = ref(false);
 const publishDialogVisible = ref(false);
 const domainFormRef = ref<FormInstance>();
 const domainForm = reactive<DomainFormData>({
+  domainId: '',
   code: '',
   name: '',
   description: '',
@@ -149,6 +155,10 @@ const domainForm = reactive<DomainFormData>({
 });
 
 const rules: FormRules = {
+  domainId: [
+    { required: true, message: '请输入领域ID', trigger: 'blur' },
+    { pattern: /^[1-9]\d*$/, message: '领域ID必须为正整数', trigger: 'blur' }
+  ],
   code: [{ required: true, message: '请输入编码', trigger: 'blur' }],
   name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
   description: [{ required: true, message: '请输入描述', trigger: 'blur' }]
@@ -175,6 +185,7 @@ onMounted(async () => {
 
 function resetFormData() {
   Object.assign(domainForm, {
+    domainId: '',
     code: props.domainCode || '',
     name: props.domainName || '',
     description: '',
@@ -201,6 +212,7 @@ async function initForm() {
     return;
   }
   Object.assign(domainForm, {
+    domainId: data.domainId || '',
     code: data.domainCode || '',
     name: data.domainName || '',
     description: data.domainDescription || '',

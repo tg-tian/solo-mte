@@ -42,17 +42,22 @@
       </template>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="96px">
         <el-row :gutter="16">
-          <el-col :span="8">
+          <el-col v-if="isCreateMode" :span="6">
+            <el-form-item label="场景ID" prop="sceneId">
+              <el-input v-model="form.sceneId" maxlength="18" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="isCreateMode ? 6 : 8">
             <el-form-item label="场景名称" prop="sceneName">
               <el-input v-model="form.sceneName" maxlength="50" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="isCreateMode ? 6 : 8">
             <el-form-item label="场景编码" prop="sceneCode">
               <el-input v-model="form.sceneCode" maxlength="50" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="isCreateMode ? 6 : 8">
             <el-form-item label="所属领域" prop="domainId">
               <el-select v-model="form.domainId" style="width: 100%">
                 <el-option v-for="item in domains" :key="item.domainId" :label="item.domainName" :value="item.domainId" />
@@ -149,6 +154,9 @@
 
     <el-dialog v-model="areaDialogVisible" :title="editingAreaId ? '编辑区域' : '新增区域'" width="520px" destroy-on-close>
       <el-form ref="areaFormRef" :model="areaForm" :rules="areaRules" label-width="88px">
+        <el-form-item v-if="!editingAreaId" label="区域ID" prop="id">
+          <el-input v-model="areaForm.id" maxlength="18" />
+        </el-form-item>
         <el-form-item label="区域名称" prop="name">
           <el-input v-model="areaForm.name" maxlength="50" />
         </el-form-item>
@@ -218,7 +226,7 @@
       destroy-on-close
     >
       <PolygonCanvas
-        :scenePolygon="form.polygon"
+        :scenePolygon="form.polygon ?? null"
         :areas="areaPolygonInfos"
         :editMode="canvasEditMode"
         :editingAreaId="canvasEditingAreaId"
@@ -278,6 +286,10 @@ const form = reactive<ScenarioRecord>({
   polygon: [] as PolygonPoint[]
 });
 const rules: FormRules = {
+  sceneId: [
+    { required: true, message: '请输入场景ID', trigger: 'blur' },
+    { pattern: /^[1-9]\d*$/, message: '场景ID必须为正整数', trigger: 'blur' }
+  ],
   sceneName: [{ required: true, message: '请输入场景名称', trigger: 'blur' }],
   sceneCode: [
     { required: true, message: '请输入场景编码', trigger: 'blur' },
@@ -298,12 +310,17 @@ const selectedAreaName = ref('');
 const publishDialogVisible = ref(false);
 const publishSubmitting = ref(false);
 const areaForm = reactive({
+  id: '',
   name: '',
   description: '',
   image: '',
   parentId: null as string | null
 });
 const areaRules: FormRules = {
+  id: [
+    { required: true, message: '请输入区域ID', trigger: 'blur' },
+    { pattern: /^[1-9]\d*$/, message: '区域ID必须为正整数', trigger: 'blur' }
+  ],
   name: [{ required: true, message: '请输入区域名称', trigger: 'blur' }]
 };
 const parentAreaOptions = computed(() => areas.value.filter((item) => item.id !== editingAreaId.value));
@@ -353,12 +370,11 @@ async function persistAreaPolygonImmediately(areaId: string) {
   if (!form.sceneId) return;
   const area = areas.value.find((a) => a.id === areaId);
   if (!area) return;
-  if (String(area.id).startsWith('local-')) return;
-
   const parentIdRaw = `${area.parentId ?? '-1'}`;
   const polygonValue = area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : '';
   try {
     await updateArea(area.id, {
+      id: Number(area.id),
       name: area.name,
       sceneId: Number(form.sceneId),
       description: area.description || '',
@@ -454,7 +470,6 @@ async function customUploadImage(options: any, target: 'scenario' | 'area') {
 }
 
 let mapScriptPromise: Promise<void> | null = null;
-let localAreaSeed = 0;
 
 async function refreshAreas() {
   if (isCreateMode.value) {
@@ -661,6 +676,7 @@ watch(
 
 function openCreateArea() {
   editingAreaId.value = '';
+  areaForm.id = '';
   areaForm.name = '';
   areaForm.description = '';
   areaForm.image = '';
@@ -670,6 +686,7 @@ function openCreateArea() {
 
 function openEditArea(area: AreaRecord) {
   editingAreaId.value = area.id;
+  areaForm.id = area.id;
   areaForm.name = area.name;
   areaForm.description = area.description || '';
   areaForm.image = area.image || '';
@@ -684,6 +701,7 @@ async function submitArea() {
   areaSubmitting.value = true;
   try {
     const payload = {
+      id: areaForm.id.trim(),
       name: areaForm.name.trim(),
       sceneId: form.sceneId,
       description: areaForm.description.trim(),
@@ -704,20 +722,19 @@ async function submitArea() {
           };
         }
       } else {
-        localAreaSeed += 1;
-        const newId = `local-${localAreaSeed}`;
         areas.value.push({
           ...payload,
-          id: newId,
+          id: payload.id,
           sceneId: '',
           polygon: null
         });
-        startEditAreaPolygon(newId);
+        startEditAreaPolygon(payload.id);
       }
     } else {
       const existingArea = editingAreaId.value ? areas.value.find(a => a.id === editingAreaId.value) : null;
       const polygonValue = existingArea?.polygon && existingArea.polygon.length >= 3 ? JSON.stringify(existingArea.polygon) : '';
       const requestPayload = {
+        id: Number(editingAreaId.value || payload.id),
         name: payload.name,
         sceneId: Number(form.sceneId),
         description: payload.description,

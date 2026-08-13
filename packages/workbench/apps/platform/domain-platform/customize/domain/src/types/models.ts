@@ -13,6 +13,7 @@ export interface DomainRecord {
 }
 
 export interface DomainFormData {
+  domainId: string;
   code: string;
   name: string;
   description: string;

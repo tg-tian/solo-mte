@@ -74,6 +74,7 @@ function normalizeArea(area: Record<string, any>): AreaRecord {
 }
 
 export interface SaveScenarioPayload {
+  sceneId: number;
   code: string;
   name: string;
   description: string;
@@ -111,6 +112,7 @@ export interface PublishScenarioPayload {
 }
 
 export interface SaveAreaPayload {
+  id: number;
   name: string;
   sceneId: number;
   description?: string;
