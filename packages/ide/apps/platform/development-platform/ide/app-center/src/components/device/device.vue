@@ -778,7 +778,8 @@ function getEventType(event: any) {
 }
 
 function openFaceRecognitionTest() {
-  window.open('https://139.196.239.110:9000/', '_blank')
+  const port = currentDevice.value?.metaModel?.modelId === 'configurableCamera' ? 9000 : 9002
+  window.open(`https://139.196.239.110:${port}/`, '_blank')
 }
 
 async function handleAction(actionName: string, action: any) {
