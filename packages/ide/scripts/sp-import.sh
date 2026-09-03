@@ -44,20 +44,28 @@ unzip -o "$ZIP_FILE" -d "$EXTRACT_DIR"
 echo "✓ 解压完成到目录: $EXTRACT_DIR"
 
 echo "========== 步骤 3: 导入 SQL 文件到数据库 =========="
-SQL_FILES=($(find "$EXTRACT_DIR" -path "*/sql/*.sql" -o -name "*.sql" -type f | head -5))
+TABLE_COUNT=$(docker exec -i "$DOCKER_MYSQL" mysql -N -B -u "$DB_USER" -p"$DB_PASS" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$DB_NAME';")
+SQL_RESULT="已导入数据库基础表结构"
 
-if [ ${#SQL_FILES[@]} -eq 0 ]; then
-    echo "❌ 错误: 未找到 SQL 文件"
-    exit 1
+if [ "$TABLE_COUNT" -gt 0 ]; then
+    SQL_RESULT="已跳过，数据库中已有 $TABLE_COUNT 张表"
+    echo "检测到数据库中已有 $TABLE_COUNT 张表，跳过 SQL 导入"
+else
+    SQL_FILES=($(find "$EXTRACT_DIR" -path "*/sql/*.sql" -o -name "*.sql" -type f | head -5))
+
+    if [ ${#SQL_FILES[@]} -eq 0 ]; then
+        echo "❌ 错误: 未找到 SQL 文件"
+        exit 1
+    fi
+
+    echo "找到的 SQL 文件:"
+    for file in "${SQL_FILES[@]}"; do echo "   - $file"; done
+
+    SQL_FILE="${SQL_FILES[0]}"
+    echo "正在导入 SQL 文件: $SQL_FILE"
+    docker exec -i "$DOCKER_MYSQL" mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < "$SQL_FILE"
+    echo "✓ 数据库 SQL 导入完成"
 fi
-
-echo "找到的 SQL 文件:"
-for file in "${SQL_FILES[@]}"; do echo "   - $file"; done
-
-SQL_FILE="${SQL_FILES[0]}"
-echo "正在导入 SQL 文件: $SQL_FILE"
-docker exec -i "$DOCKER_MYSQL" mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < "$SQL_FILE"
-echo "✓ 数据库 SQL 导入完成"
 
 echo "========== 步骤 4: 调用后端接口导入数据 =========="
 echo "上传压缩包到后端接口: $BACKEND_URL"
@@ -76,6 +84,6 @@ echo "✓ 后端数据导入成功"
 
 echo "========== 完成! =========="
 echo ""
-echo "✅ SQL 导入: 已导入数据库基础表结构"
+echo "✅ SQL 导入: $SQL_RESULT"
 echo "✅ 数据导入: 已通过后端接口完成场景数据导入"
 echo ""
