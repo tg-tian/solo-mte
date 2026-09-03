@@ -60,11 +60,11 @@
 
 ---
 
-### sp-all.sh — 一键部署
+### sp-initialize.sh — 场景初始化
 
-这个脚本把上面四个步骤串联起来，按顺序自动执行。
+这个脚本把场景初始化需要的步骤串联起来，按顺序自动执行。
 
-它会先初始化环境，然后导入数据，再部署自定义模板，最后部署配置并重启前端。整个过程需要提供场景压缩包路径、前端配置目标目录和公共 Web 目录三个参数，其余全部自动完成。
+它会导入数据、部署自定义模板，最后部署运行时场景配置。整个过程只需要提供场景压缩包路径，其他路径使用脚本里的固定默认值。
 
 ---
 
@@ -89,13 +89,13 @@
 ### 一键部署（最常见）
 
 ```bash
-./sp-all.sh <场景压缩包路径> <前端配置目标目录> <公共Web目录>
+./sp-initialize.sh <场景压缩包路径>
 ```
 
 例如：
 
 ```bash
-./sp-all.sh /root/LCTechPark.zip /root/solo-mte/packages/ide/apps/platform/development-platform/ide/app-center /root/web/platform/common/web
+./sp-initialize.sh /root/LCTechPark.zip
 ```
 
 如果不传参数，脚本会交互式提示输入。
@@ -110,17 +110,17 @@
 ./sp-import.sh /root/LCTechPark.zip
 
 # 第三步：部署自定义模板
-./sp-templates.sh /root/LCTechPark.zip /root/web/platform/common/web
+./sp-templates.sh /root/LCTechPark.zip
 
 # 第四步：部署配置
-./sp-deploy.sh /root/LCTechPark.zip /root/solo-mte/packages/ide/apps/platform/development-platform/ide/app-center
+./sp-deploy.sh /root/LCTechPark.zip
 ```
 
 ### 常见场景
 
 如果只是想更新场景配置（比如改了区域树结构，数据库不需要重新导入），只运行 sp-deploy.sh 就可以了。
 
-如果数据库出了问题需要从头来过，运行 sp-all.sh 即可，它会自动清空并重建整个环境。
+如果需要按当前场景包重新初始化，运行 sp-initialize.sh 即可。
 
 如果只是想重新导入数据（比如换了一个场景包），先运行 sp-install.sh 重置环境，再运行 sp-import.sh 导入新数据，最后运行 sp-deploy.sh 部署配置。
 

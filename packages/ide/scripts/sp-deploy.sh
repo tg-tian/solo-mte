@@ -3,8 +3,12 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-IDE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-CONFIG_DIR="$IDE_ROOT/apps/platform/development-platform/ide/app-center"
+CONFIG_RELATIVE_DIR="apps/platform/development-platform/ide/app-center"
+CONFIG_FILE_NAME="scene.config"
+WEB_ROOTS=(
+    /home/BaseEnvironment/igix2508/web
+    /home/BaseEnvironment/igix2508B/web
+)
 
 if [ "$#" -ne 1 ]; then
     echo "Usage: bash scripts/sp-deploy.sh <scene.zip>"
@@ -38,7 +42,7 @@ fi
 jq empty "$SCENE_JSON"
 
 SCENE_ID="$(jq -r '.sceneData.sceneId' "$SCENE_JSON")"
-SCENE_CODE="$(jq -r '.sceneData.code' "$SCENE_JSON")"
+SCENE_CODE="$(jq -r '.sceneData.code // ""' "$SCENE_JSON")"
 
 case "$SCENE_ID" in
     ''|null|*[!0-9]*)
@@ -47,17 +51,12 @@ case "$SCENE_ID" in
         ;;
 esac
 
-case "$SCENE_CODE" in
-    ''|null|*[!A-Za-z0-9._-]*)
-        echo "Error: sceneData.code must be a safe file name"
-        exit 1
-        ;;
-esac
+for web_root in "${WEB_ROOTS[@]}"; do
+    CONFIG_DIR="$web_root/$CONFIG_RELATIVE_DIR"
+    mkdir -p "$CONFIG_DIR"
+    cp "$SCENE_JSON" "$CONFIG_DIR/$CONFIG_FILE_NAME"
+    echo "Config copied: $CONFIG_DIR/$CONFIG_FILE_NAME"
+done
 
-mkdir -p "$CONFIG_DIR"
-rm -f "$CONFIG_DIR"/*.config
-cp "$SCENE_JSON" "$CONFIG_DIR/$SCENE_CODE.config"
-
-echo "Config copied: $CONFIG_DIR/$SCENE_CODE.config"
 echo "sceneId: $SCENE_ID"
 echo "sceneCode: $SCENE_CODE"

@@ -1,21 +1,21 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
+
+TARGET_WEB_ROOT="/home/BaseEnvironment/igix2508/web/platform/common/web"
 
 # ====== 自定义模板部署脚本 ======
 # 职责：解压压缩包 → 读取 templates.json → 部署页面级模板和控件级模板
 
-# ====== 必需参数 ======
-if [ -z "$1" ]; then
-    read -rp "请输入场景元信息压缩包路径 (例如 /root/LCTechPark.zip): " ZIP_FILE
-else
-    ZIP_FILE="$1"
+if [ "$#" -gt 1 ]; then
+    echo "Usage: bash scripts/sp-templates.sh <scene.zip>"
+    exit 1
 fi
 
-if [ -z "$2" ]; then
-    read -rp "请输入公共 Web 目标目录 (例如 /root/web/platform/common/web): " TARGET_WEB_ROOT
-else
-    TARGET_WEB_ROOT="$2"
+# ====== 必需参数 ======
+ZIP_FILE="${1:-}"
+if [ -z "$ZIP_FILE" ]; then
+    read -rp "请输入场景元信息压缩包路径 (例如 /root/LCTechPark.zip): " ZIP_FILE
 fi
 
 # ====== 参数校验 ======
@@ -27,11 +27,6 @@ if [ ! -f "$ZIP_FILE" ]; then
     echo "❌ 错误: 压缩包不存在: $ZIP_FILE"
     exit 1
 fi
-if [ -z "$TARGET_WEB_ROOT" ]; then
-    echo "❌ 错误: 公共 Web 目标目录不能为空"
-    exit 1
-fi
-
 if ! command -v unzip >/dev/null 2>&1; then
     echo "❌ 错误: 需要 unzip 来解压压缩包，请先安装: apt install unzip"
     exit 1
