@@ -43,7 +43,7 @@ export default defineComponent({
     return () => {
       return (
         <iframe
-          src="https://lctemplates.gitlink.org.cn/templates?iframe=1&schema=inBuilder&domain=通用"
+          src="https://lctemplates.gitlink.org.cn/templates?iframe=1&schema=inBuilder&q[category_eq]=通用"
           id="template-iframe"
           ref={iframeRef}
           width="100%"
