@@ -201,6 +201,17 @@ export default defineConfig(({ mode }) => {
                 changeOrigin: true,
                 secure: false
             },
+            /**
+             * 发布服务（solo-app-publish，端口 26789）：页面里的 /solo-mte-publish/* 转发过去，
+             * 与生产环境 nginx 的 location /solo-mte-publish/ 行为一致（去掉前缀）。
+             * 本地未启动发布服务时，相关接口会报连接失败。
+             */
+            "/solo-mte-publish": {
+                target: "http://localhost:26789",
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/solo-mte-publish/, "")
+            },
             "/api": {
                 target: apiTarget,
                 changeOrigin: true,

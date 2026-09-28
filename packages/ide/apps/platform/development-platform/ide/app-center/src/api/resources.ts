@@ -40,6 +40,38 @@ export interface CurrentUser {
     name?: string;
 }
 
+/** REST 配置的请求方法 */
+export type RestMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+/** REST 配置的认证方式 */
+export type RestAuthType = 'none' | 'apiKey' | 'bearer';
+/** ApiKey 的携带位置 */
+export type ApiKeyPlacement = 'header' | 'query';
+
+/** 一条集成REST配置（列表接口不返回密钥，只有 hasApiKeyValue / hasBearerToken） */
+export interface RestConfigItem {
+    id: string;
+    code: string;
+    name: string;
+    visibility: MailVisibility;
+    url: string;
+    method: RestMethod;
+    authType: RestAuthType;
+    apiKeyPlacement?: ApiKeyPlacement;
+    apiKeyName?: string;
+    headersText?: string;
+    contentType?: string;
+    timeoutMs?: number;
+    description?: string;
+    ownerId?: string;
+    ownerUserId?: string;
+    ownerCode?: string;
+    ownerName?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    hasApiKeyValue?: boolean;
+    hasBearerToken?: boolean;
+}
+
 /** 取当前登录用户信息；页面用它的 id 做「个人配置」的归属判断 */
 export function getCurrentUser(): Promise<CurrentUser> {
     return axios.get('/api/runtime/sys/v1.0/userinfos?infoType=user').then((res) => res.data);
@@ -64,6 +96,29 @@ export function saveMailConfig(payload: Record<string, any>, publicKey: string):
 /** 删除邮件配置（仅创建者） */
 export function deleteMailConfig(id: string, userId: string): Promise<{ ok: boolean }> {
     return axios.post(`${BASE}/resources/mail/delete`, { id, userId }).then((res) => res.data);
+}
+
+/** 列出当前用户可见的 REST 配置：公共 + 本人的个人配置 */
+export function listRestConfigs(userId: string): Promise<{ ok: boolean; configs: RestConfigItem[] }> {
+    return axios.get(`${BASE}/resources/rest`, { params: { userId } }).then((res) => res.data);
+}
+
+/** 新建/更新 REST 配置。apiKeyValue / bearerToken 传明文，这里负责加密后再发送；留空表示不修改 */
+export function saveRestConfig(payload: Record<string, any>, publicKey: string): Promise<{ ok: boolean; config: RestConfigItem }> {
+    const body = { ...payload };
+    for (const field of ['apiKeyValue', 'bearerToken']) {
+        if (body[field]) {
+            body[field] = rsaEncryptWithKey(String(body[field]), publicKey);
+        } else {
+            delete body[field];
+        }
+    }
+    return axios.post(`${BASE}/resources/rest`, body).then((res) => res.data);
+}
+
+/** 删除 REST 配置（仅创建者） */
+export function deleteRestConfig(id: string, userId: string): Promise<{ ok: boolean }> {
+    return axios.post(`${BASE}/resources/rest/delete`, { id, userId }).then((res) => res.data);
 }
 
 /** 取服务端 RSA 公钥（与部署配置共用同一对密钥） */
