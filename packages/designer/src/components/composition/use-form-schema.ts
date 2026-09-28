@@ -1,5 +1,5 @@
 import { cloneDeep, mergeWith } from "lodash-es";
-import { FormBindingType, FormComponent, FormMetaDataModule, FormMetadaDataDom, FormSchema, FormSchemaEntity, FormSchemaEntityField, FormVariable, FormVariableCategory, FormVariableTypes, FormViewModel, FormViewModelField, FormWebCmd, MetadataDto, UseFormSchema, FormExpression, ExternalFormMetadata } from "../types";
+import { FormBindingType, FormComponent, FormMetaDataModule, FormMetadaDataDom, FormOptions, FormSchema, FormSchemaEntity, FormSchemaEntityField, FormVariable, FormVariableCategory, FormVariableTypes, FormViewModel, FormViewModelField, FormWebCmd, MetadataDto, UseFormSchema, FormExpression, ExternalFormMetadata } from "../types";
 import { NodeType, Node } from "../types/events-editor";
 import { inject } from "vue";
 import { DgControl, LookupSchemaRepositoryToken, schemaMap } from "@farris/ui-vue";
@@ -1275,6 +1275,95 @@ export function useFormSchema(): UseFormSchema {
     function getExternalComponents(): any[] {
         return formSchema?.module?.externalComponents || [];
     }
+
+    /**
+     * 获取表单规则
+     * @remarks ui-vue 的控件属性面板（如表格）会读取、更新表单规则，缺少该方法会导致属性面板报错
+     */
+    function getFormRules(): any[] {
+        formSchema.module.formRules = formSchema.module.formRules || [];
+        return formSchema.module.formRules || [];
+    }
+
+    /**
+     * 更新表单规则
+     */
+    function setFormRules(value: any) {
+        formSchema.module.formRules = value;
+    }
+
+    /**
+     * 获取表单配置
+     */
+    function getOptions(): FormOptions | undefined {
+        return formSchema.options;
+    }
+
+    /**
+     * 解析控件可配置的事件集合
+     */
+    function resolveComponentEvents(schemaMapParam: any, componentSchema: any) {
+        if (!componentSchema || !schemaMapParam) {
+            return {};
+        }
+        const eventMap = Object.assign({}, schemaMapParam[componentSchema.type]?.events || {});
+        if ((componentSchema.type === 'form-group' || componentSchema.type === 'table-td') && componentSchema.editor) {
+            const editorType = componentSchema.editor.type;
+            Object.assign(eventMap, schemaMapParam[editorType]?.events);
+        }
+        return eventMap;
+    }
+
+    /**
+     * 记录当前表单是否为组合类表单（外部容器表单、弹窗表单）
+     */
+    function recordIsComposedForm() {
+        const externalFormCount = externalFormSchema.size;
+        const modalFormCount = formSchema.module.externalComponents?.length || 0;
+
+        formSchema.module.isComposedForm = externalFormCount > 0 || modalFormCount > 0;
+    }
+
+    /**
+     * 查询表单中的外部容器控件
+     */
+    function queryControlByPredicate(formMetadataDom: FormMetadaDataDom): any {
+        const controlsToScan: any = [...formMetadataDom.module.components];
+        while (controlsToScan.length) {
+            const control = controlsToScan.pop();
+            if (control?.type === DgControl['external-container']?.type) {
+                return control;
+            }
+            if (Array.isArray(control?.contents)) {
+                controlsToScan.push(...control.contents);
+            }
+        }
+    }
+
+    /**
+     * 检查表单是否为组合类表单
+     * @param formMetadataDom 表单schema结构
+     */
+    function checkIfComposedForm(formMetadataDom: FormMetadaDataDom): boolean {
+        if (!formMetadataDom?.module) {
+            return false;
+        }
+        // 若表单元数据内部存在isComposedForm属性，则直接返回结果值
+        if (Object.prototype.hasOwnProperty.call(formMetadataDom.module, 'isComposedForm')) {
+            return !!formMetadataDom.module.isComposedForm;
+        }
+        // 版本较低的表单中，没有记录isComposedForm属性，所以需要遍历查找控件(弹窗表单和外部容器表单)
+        const externalComponents = formMetadataDom.module.externalComponents || [];
+        const modalComponents = externalComponents.filter((externalComponent: any) => externalComponent?.type === 'modal');
+        if (modalComponents.length) {
+            return true;
+        }
+
+        if (queryControlByPredicate(formMetadataDom)) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 检查组件是否在侧边栏中，在侧边栏中的字段可以与非侧边栏中的字段重复。
      */
@@ -1362,6 +1451,12 @@ export function useFormSchema(): UseFormSchema {
         removeCommunicationInComponent,
         getExternalComponents,
         checkComponentExistInDrawer,
+        getFormRules,
+        setFormRules,
+        getOptions,
+        resolveComponentEvents,
+        recordIsComposedForm,
+        checkIfComposedForm,
         
         getPageIdByComponentId
     };
