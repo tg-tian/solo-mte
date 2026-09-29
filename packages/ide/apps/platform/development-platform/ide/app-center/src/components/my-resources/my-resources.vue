@@ -11,8 +11,7 @@
 
       <div v-if="userError" class="error-hint">{{ userError }}</div>
       <p class="card-desc">
-        在这里维护发邮件用的服务器配置：为每个配置起一个「编号」，在表单里调用「按列表发送邮件」时填写该编号即可；
-        选「公共」所有人都能用，选「个人」只有自己能用。
+        在这里维护发邮件用的服务器配置：为每个配置起一个「编号」，在表单里调用「按列表发送邮件」时填写该编号即可。
       </p>
 
       <el-table
@@ -61,9 +60,8 @@
       </template>
 
       <p class="card-desc">
-        在这里登记第三方开放接口（腾讯、飞书、微信公众号等）：为每个接口起一个「编号」，后端代码里调用
-        <code>PubRestClient.call("编号", 参数)</code> 即可，接口地址与 ApiKey 由平台按配置自动拼接，代码里不写地址、不写密钥；
-        选「公共」所有人都能用，选「个人」只有自己能用。
+        在这里登记第三方开放接口（腾讯、飞书、微信公众号等）：为每个接口起一个「编号」，在代码里传「编号 + 参数」即可
+        （后端、前端代码都支持，写法见新建弹框里的示例），接口地址与 ApiKey 由平台按配置自动拼接，代码里不写地址、不写密钥。
       </p>
 
       <el-table
@@ -126,8 +124,8 @@
 
         <el-form-item label="可见性">
           <el-radio-group v-model="form.visibility">
-            <el-radio value="public">公共（所有人都能使用）</el-radio>
-            <el-radio value="private">个人（只有自己能用）</el-radio>
+            <el-radio value="public">公共（所有人可见）</el-radio>
+            <el-radio value="private">个人（仅自己可见）</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -141,14 +139,14 @@
         </div>
 
         <div class="form-row">
-          <el-form-item label="SSL" required>
+          <el-form-item label="SSL">
             <el-switch v-model="form.ssl" />
-            <span class="field-tip">QQ/163 等邮箱用授权码 + 465 端口时打开</span>
           </el-form-item>
           <el-form-item label="发信账号" required>
             <el-input v-model="form.account" placeholder="例如 xxx@163.com" />
           </el-form-item>
         </div>
+        <div class="form-note">提示：QQ、163 等邮箱用授权码 + 465 端口时，需要打开 SSL。</div>
 
         <el-form-item label="密码/授权码" :required="!editing">
           <el-input
@@ -195,8 +193,8 @@
 
         <el-form-item label="可见性">
           <el-radio-group v-model="restForm.visibility">
-            <el-radio value="public">公共（所有人都能使用）</el-radio>
-            <el-radio value="private">个人（只有自己能用）</el-radio>
+            <el-radio value="public">公共（所有人可见）</el-radio>
+            <el-radio value="private">个人（仅自己可见）</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -213,8 +211,8 @@
 
         <el-form-item label="请求地址" required>
           <el-input v-model="restForm.url" placeholder="例如 https://api.example.com/v1/users/{userId}" />
-          <span class="field-tip">地址里可以写 {参数名} 占位符，调用时用同名参数替换</span>
         </el-form-item>
+        <div class="form-note">地址里可以写 {参数名} 占位符，调用时用同名参数替换。</div>
 
         <el-form-item label="认证方式">
           <el-select v-model="restForm.authType" class="auth-select">
@@ -274,8 +272,19 @@
         </div>
 
         <div class="call-hint">
-          <div class="call-hint-title">在后端代码里这样调用</div>
-          <pre class="call-hint-code">{{ restCallSample }}</pre>
+          <div class="call-hint-title">在代码里这样调用</div>
+          <el-tabs v-model="callSampleTab" class="call-hint-tabs">
+            <el-tab-pane label="后端代码" name="backend">
+              <div class="call-hint-label">① 工程 pom 中加入依赖：</div>
+              <pre class="call-hint-code">{{ restClientDependency }}</pre>
+              <div class="call-hint-label">② BE 动作等 Java 代码里调用：</div>
+              <pre class="call-hint-code">{{ backendCallSample }}</pre>
+            </el-tab-pane>
+            <el-tab-pane label="前端代码" name="frontend">
+              <div class="call-hint-label">表单控制器的 TS 方法里调用：</div>
+              <pre class="call-hint-code">{{ frontendCallSample }}</pre>
+            </el-tab-pane>
+          </el-tabs>
           <div class="call-hint-tip">
             GET/DELETE 的参数会拼到查询串；POST/PUT/PATCH 的参数作为请求体；地址里的 {参数名} 会用同名参数替换。
             认证信息由平台按上面的配置自动携带，代码里不用写 ApiKey。
@@ -380,14 +389,34 @@ const restDialogVisible = ref(false);
 const restEditing = ref<RestConfigItem | null>(null);
 const restSaving = ref(false);
 const restForm = reactive<RestFormState>(emptyRestForm());
+const callSampleTab = ref<'backend' | 'frontend'>('backend');
 
-const restCallSample = computed(() => {
+/** 后端用到的依赖（展示在示例里，方便直接抄进 pom） */
+const restClientDependency = [
+    '<dependency>',
+    '  <groupId>com.inspur.gs</groupId>',
+    '  <artifactId>pubcmp-rest-client</artifactId>',
+    '  <version>1.0.0</version>',
+    '</dependency>',
+].join('\n');
+
+const backendCallSample = computed(() => {
     const code = restForm.code.trim() || '编号';
     return [
         'Map<String, Object> params = new HashMap<>();',
         'params.put("参数名", "参数值");          // 按第三方接口的要求填写',
         `String body = PubRestClient.call("${code}", params);`,
-        '// body 就是第三方接口返回的响应内容',
+    ].join('\n');
+});
+
+const frontendCallSample = computed(() => {
+    const code = restForm.code.trim() || '编号';
+    return [
+        "import { CommonRestService } from '@farris/command-services-vue';",
+        '',
+        '// 在表单控制器的 TS 方法里',
+        'const restService = this.injector.get<CommonRestService>(CommonRestService);',
+        `const body = await restService.call('${code}', { 参数名: '参数值' });`,
     ].join('\n');
 });
 
@@ -761,15 +790,6 @@ onMounted(() => {
     line-height: 20px;
 }
 
-.card-desc code {
-    padding: 1px 6px;
-    border-radius: 4px;
-    background: #f2f3f5;
-    color: #2a87ff;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 12px;
-}
-
 .error-hint {
     color: #f56c6c;
     font-size: 13px;
@@ -783,6 +803,8 @@ onMounted(() => {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    /* 顶部对齐：同一行里某项变高时，另一项不会被挤到中间 */
+    align-items: start;
 }
 
 .form-row :deep(.el-form-item) {
@@ -808,10 +830,12 @@ onMounted(() => {
     width: 260px;
 }
 
-.field-tip {
-    margin-left: 8px;
+/* 表单里的整行小提示（跟在某一行下面，与输入框左对齐；整行占满，不会出现单字换行） */
+.form-note {
+    margin: -8px 0 16px 120px;
     font-size: 12px;
     color: #909399;
+    line-height: 18px;
 }
 
 .mail-form :deep(.el-form-item) {
@@ -831,6 +855,28 @@ onMounted(() => {
     font-weight: 600;
     color: #606266;
     margin-bottom: 8px;
+}
+
+/* 调用示例的两个页签（后端 / 前端），收紧一下默认间距，避免弹框太长 */
+.call-hint-tabs :deep(.el-tabs__header) {
+    margin: 0 0 8px;
+}
+
+.call-hint-tabs :deep(.el-tabs__item) {
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+}
+
+/* 示例里的小标题（如：① 工程 pom 中加入依赖） */
+.call-hint-label {
+    margin: 6px 0 6px;
+    font-size: 12px;
+    color: #606266;
+}
+
+.call-hint-label:first-child {
+    margin-top: 0;
 }
 
 .call-hint-code {
