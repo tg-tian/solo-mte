@@ -212,7 +212,7 @@
         <el-form-item label="请求地址" required>
           <el-input v-model="restForm.url" placeholder="例如 https://api.example.com/v1/users/{userId}" />
         </el-form-item>
-        <div class="form-note">地址里可以写 {参数名} 占位符，调用时用同名参数替换。</div>
+        <div class="form-note">地址、自定义请求头、ApiKey/Bearer 的值里可以写 {参数名} 占位符，调用时用同名参数替换。</div>
 
         <el-form-item label="认证方式">
           <el-select v-model="restForm.authType" class="auth-select">
@@ -228,11 +228,15 @@
               <el-radio-group v-model="restForm.apiKeyPlacement">
                 <el-radio value="header">请求头</el-radio>
                 <el-radio value="query">查询参数</el-radio>
+                <el-radio value="body">请求体</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="参数名称">
               <el-input v-model="restForm.apiKeyName" placeholder="例如 X-Api-Key 或 key" />
             </el-form-item>
+          </div>
+          <div v-if="restForm.apiKeyPlacement === 'body'" class="form-note">
+            选「请求体」时，密钥会作为 JSON 请求体的一个字段发送（POST/PUT/PATCH）；GET/DELETE 没有请求体，会自动改为查询参数。
           </div>
           <el-form-item label="密钥值">
             <el-input
@@ -286,7 +290,7 @@
             </el-tab-pane>
           </el-tabs>
           <div class="call-hint-tip">
-            GET/DELETE 的参数会拼到查询串；POST/PUT/PATCH 的参数作为请求体；地址里的 {参数名} 会用同名参数替换。
+            GET/DELETE 的参数会拼到查询串；POST/PUT/PATCH 的参数作为请求体；地址、请求头、认证值里的 {参数名} 会用同名参数替换。
             认证信息由平台按上面的配置自动携带，代码里不用写 ApiKey。
           </div>
         </div>
@@ -340,7 +344,7 @@ interface RestFormState {
     url: string;
     method: RestMethod;
     authType: RestAuthType;
-    apiKeyPlacement: 'header' | 'query';
+    apiKeyPlacement: 'header' | 'query' | 'body';
     apiKeyName: string;
     apiKeyValue: string;
     bearerToken: string;
@@ -518,7 +522,7 @@ function methodTagType(method: string): 'primary' | 'success' | 'info' | 'warnin
 
 function authText(row: RestConfigItem): string {
     if (row.authType === 'apiKey') {
-        const where = row.apiKeyPlacement === 'query' ? '查询参数' : '请求头';
+        const where = row.apiKeyPlacement === 'query' ? '查询参数' : row.apiKeyPlacement === 'body' ? '请求体' : '请求头';
         return `ApiKey（${where}：${row.apiKeyName || '未命名'}）`;
     }
     if (row.authType === 'bearer') {

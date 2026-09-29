@@ -44,8 +44,8 @@ export interface CurrentUser {
 export type RestMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 /** REST 配置的认证方式 */
 export type RestAuthType = 'none' | 'apiKey' | 'bearer';
-/** ApiKey 的携带位置 */
-export type ApiKeyPlacement = 'header' | 'query';
+/** ApiKey 的携带位置：header=请求头，query=查询参数，body=请求体（POST/PUT/PATCH 进 JSON 请求体，GET/DELETE 兜底为查询串） */
+export type ApiKeyPlacement = 'header' | 'query' | 'body';
 
 /** 一条集成REST配置（列表接口不返回密钥，只有 hasApiKeyValue / hasBearerToken） */
 export interface RestConfigItem {
