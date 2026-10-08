@@ -76,6 +76,16 @@ export default defineComponent({
         const controlCreatorService = designerContext.useControlCreator(schemaService);
         provide('controlCreatorUtils', controlCreatorService);
         provide('formMetadataConverter', new FormMetadataConverter());
+
+        // 注册弹窗代码视图服务
+        // 说明：新版 ui-vue 的属性面板会向该服务写入 openCodeEditor、closeCallback 等标记，
+        // 未提供时配置控件属性（表格格式、按钮命令等）会报错，此处提供兼容对象
+        const dialogCodeView: any = {
+            openCodeEditor: false,
+            closeCallback: () => { },
+            open: () => undefined
+        };
+        provide('dialogCodeView', dialogCodeView);
         const { eventBetweenDesignerAndCodeView } = commandBuilderService;
         const { useFormMetadataService } = designerContext;
         const useFormMetadataComposition = useFormMetadataService(props, useFormSchemaComposition, schemaService);

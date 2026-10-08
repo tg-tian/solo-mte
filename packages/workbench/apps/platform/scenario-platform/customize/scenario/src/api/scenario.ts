@@ -1,7 +1,10 @@
 import request from '../utils/request';
-import type { AreaRecord, DomainOption, ScenarioRecord } from '../types/models';
+import type { AreaRecord, AreaPolygonInfo, DomainOption, PolygonPoint, ScenarioRecord } from '../types/models';
 
-const host = (import.meta as any).env?.VITE_BASE_PATH || '';
+// HTTPS 走 nginx 代理，HTTP 直连 8080（兼容 dev 模式）
+const host = typeof location !== 'undefined' && location.protocol === 'https:'
+  ? '/solo-mte-8080'
+  : ((import.meta as any).env?.VITE_BASE_PATH || '');
 const statusMap: Record<string, string> = {
   '0': '0',
   '1': '1',
@@ -16,8 +19,17 @@ const statusMap: Record<string, string> = {
 function normalizeScenario(scenario: Record<string, any>): ScenarioRecord {
   const rawStatus = `${scenario.status ?? ''}`.trim().toLowerCase();
   const status = rawStatus in statusMap ? statusMap[rawStatus] : '0';
+  let polygon: PolygonPoint[] | null = null;
+  if (scenario.polygon) {
+    try {
+      const parsed = typeof scenario.polygon === 'string' ? JSON.parse(scenario.polygon) : scenario.polygon;
+      if (Array.isArray(parsed) && parsed.length >= 3) {
+        polygon = parsed;
+      }
+    } catch { polygon = null; }
+  }
   return {
-    sceneId: `${scenario.sceneId ?? scenario.id ?? ''}`,
+    sceneId: `${scenario.sceneId ?? ''}`,
     sceneName: scenario.sceneName ?? scenario.title ?? '',
     sceneCode: scenario.sceneCode ?? scenario.code ?? '',
     sceneDescription: scenario.sceneDescription ?? scenario.description ?? '',
@@ -26,7 +38,8 @@ function normalizeScenario(scenario: Record<string, any>): ScenarioRecord {
     longitude: scenario.longitude ?? null,
     latitude: scenario.latitude ?? null,
     imageUrl: scenario.imageUrl ?? '',
-    url: scenario.url
+    url: scenario.url,
+    polygon
   };
 }
 
@@ -39,18 +52,29 @@ function normalizeDomain(domain: Record<string, any>): DomainOption {
 }
 
 function normalizeArea(area: Record<string, any>): AreaRecord {
+  const polygonRaw = area.polygon ?? '';
+  let polygon: PolygonPoint[] | null = null;
+  if (polygonRaw) {
+    try {
+      const parsed = typeof polygonRaw === 'string' ? JSON.parse(polygonRaw) : polygonRaw;
+      if (Array.isArray(parsed) && parsed.length >= 3) {
+        polygon = parsed;
+      }
+    } catch { polygon = null; }
+  }
   return {
     id: `${area.id ?? ''}`,
     name: area.name ?? '',
     sceneId: `${area.sceneId ?? ''}`,
     description: area.description ?? '',
     image: area.image ?? '',
-    position: area.position ?? '',
-    parentId: `${area.parentId ?? '-1'}`
+    parentId: `${area.parentId ?? '-1'}`,
+    polygon
   };
 }
 
 export interface SaveScenarioPayload {
+  sceneId: number;
   code: string;
   name: string;
   description: string;
@@ -62,6 +86,7 @@ export interface SaveScenarioPayload {
     lat: number;
   } | null;
   imageUrl?: string;
+  polygon?: string | null;
 }
 
 export interface PublishScenarioPayload {
@@ -87,11 +112,12 @@ export interface PublishScenarioPayload {
 }
 
 export interface SaveAreaPayload {
+  id: number;
   name: string;
   sceneId: number;
   description?: string;
   image?: string;
-  position?: string;
+  polygon?: string;
   parentId?: number;
 }
 

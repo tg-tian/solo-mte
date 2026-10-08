@@ -111,8 +111,9 @@ export class JsonSchemaUtils {
         }
         switch (schema.type) {
             case JsonSchemaBasicType.String: return BasicTypeRefer.StringType;
-            case JsonSchemaBasicType.Boolean: return BasicTypeRefer.BooleanType;
+            case JsonSchemaBasicType.Integer: return BasicTypeRefer.IntegerType;
             case JsonSchemaBasicType.Number: return BasicTypeRefer.NumberType;
+            case JsonSchemaBasicType.Boolean: return BasicTypeRefer.BooleanType;
             case JsonSchemaBasicType.Object: return BasicTypeRefer.ObjectType;
             case JsonSchemaBasicType.Array: {
                 const itemTypeRefer = this.getTypeRefer(schema.items) ?? BasicTypeRefer.StringType;

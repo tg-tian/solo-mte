@@ -57,7 +57,7 @@ export interface UseAppDomain {
 
     setAppDomainSourceUri: (dataUri: string) => void;
 
-    updateAppDomain: () => void;
+    updateAppDomain: () => Promise<void>;
 }
 
 export interface AppConfigOptions {

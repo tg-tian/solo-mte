@@ -2,9 +2,9 @@
   <div class="device-type-setting">
     <div class="page-header">
       <div class="page-title-group">
-        <h2 class="page-main-title">{{ isEditMode ? (deviceTypeCategory === 'component' ? '编辑组件类型' : '编辑设备模型') : (deviceTypeCategory === 'component' ? '创建组件类型' : '创建设备模型') }}</h2>
-        <p v-if="isEditMode" class="page-sub-title">{{ deviceModelForm.modelName || (deviceTypeCategory === 'component' ? '组件类型详情' : '设备模型详情') }}</p>
-        <p v-else class="page-sub-title">{{ deviceTypeCategory === 'component' ? '定义组件及其属性、操作和事件' : '定义新的物联网设备元模型及其属性、操作和事件' }}</p>
+        <h2 class="page-main-title">{{ isEditMode ? (deviceTypeCategory === 'component' ? '编辑组件类型' : '编辑设备类型') : (deviceTypeCategory === 'component' ? '创建组件类型' : '创建设备类型') }}</h2>
+        <p v-if="isEditMode" class="page-sub-title">{{ deviceModelForm.modelName || (deviceTypeCategory === 'component' ? '组件类型详情' : '设备类型详情') }}</p>
+        <p v-else class="page-sub-title">{{ deviceTypeCategory === 'component' ? '定义组件及其属性、操作和事件' : '定义新的物联网设备类型及其属性、操作和事件' }}</p>
       </div>
       <div class="header-actions">
         <el-button @click="navigateBack">返回列表</el-button>
@@ -27,12 +27,12 @@
         label-position="top">
         <el-row :gutter="32">
           <el-col :span="12">
-            <el-form-item label="模型名称" prop="modelName">
+            <el-form-item label="设备类型名称" prop="modelName">
               <el-input v-model="deviceModelForm.modelName" placeholder="例如：智能空调、工业传感器"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="模型标识符(ID)" prop="modelId">
+            <el-form-item label="设备类型标识符(ID)" prop="modelId">
               <el-input v-model="deviceModelForm.modelId" placeholder="例如：coffeeMaker"></el-input>
             </el-form-item>
           </el-col>
@@ -41,6 +41,37 @@
           <el-col :span="12">
             <el-form-item label="所属品类" prop="category">
               <el-input v-model="deviceModelForm.category" placeholder="例如：coffer"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="32">
+          <el-col :span="24">
+            <el-form-item label="模型图标（SVG Base64）" prop="modelIcon">
+              <div class="icon-editor">
+                <div class="icon-preview">
+                  <img v-if="modelIconDataUrl" :src="modelIconDataUrl" alt="" />
+                  <span v-else>SVG</span>
+                </div>
+                <div class="icon-controls">
+                  <div class="icon-actions">
+                    <el-upload
+                      accept=".svg,image/svg+xml"
+                      :auto-upload="false"
+                      :show-file-list="false"
+                      :on-change="handleIconFileChange"
+                    >
+                      <el-button>选择 SVG</el-button>
+                    </el-upload>
+                    <el-button :disabled="!deviceModelForm.modelIcon" @click="clearModelIcon">清除</el-button>
+                  </div>
+                  <el-input
+                    v-model="deviceModelForm.modelIcon"
+                    type="textarea"
+                    :rows="3"
+                    placeholder="粘贴 SVG 的 Base64 编码，或上传 .svg 文件自动转换"
+                  />
+                </div>
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
@@ -497,7 +528,8 @@ const state = reactive({
     modelId: '',
     modelName: '',
     category: '',
-    provider: undefined
+    provider: undefined,
+    modelIcon: ''
   } as Partial<DeviceModel> & { modelId?: string },
   modelForm: {
     modelName: '',
@@ -608,6 +640,14 @@ const outputList = computed(() => {
   }))
 })
 
+const modelIconDataUrl = computed(() => {
+  const value = deviceModelForm.value.modelIcon
+  if (!value) return ''
+  return value.startsWith('data:image/svg+xml;base64,')
+    ? value
+    : `data:image/svg+xml;base64,${value}`
+})
+
 // 确定是否是编辑模式（优先使用 props，否则使用路由参数）
 const isEditMode = computed(() => {
   if (props.mode !== undefined) {
@@ -635,11 +675,11 @@ const deviceTypeCategory = computed(() => {
 // 验证规则
 const basicRules = {
   modelName: [
-    { required: true, message: '请输入模型名称', trigger: 'blur' },
+    { required: true, message: '请输入设备类型名称', trigger: 'blur' },
     { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
   ],
   modelId: [
-    { required: true, message: '请输入模型标识符', trigger: 'blur' },
+    { required: true, message: '请输入设备类型标识符', trigger: 'blur' },
     { pattern: /^[a-zA-Z_][a-zA-Z0-9_]*$/, message: '只能包含英文字母、数字和下划线，且必须以字母或下划线开头', trigger: 'blur' }
   ],
   category: [
@@ -684,6 +724,36 @@ const handleParamTypeChange = (type: string) => {
   } else if (type === 'enum') {
     paramForm.value.enumValues = ['']
   }
+}
+
+const encodeSvgToBase64 = (svgText: string) => {
+  const bytes = new TextEncoder().encode(svgText)
+  let binary = ''
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte)
+  })
+  return btoa(binary)
+}
+
+const handleIconFileChange = (uploadFile: any) => {
+  const raw = uploadFile.raw
+  if (!raw) return
+  if (raw.type && raw.type !== 'image/svg+xml' && !raw.name?.toLowerCase().endsWith('.svg')) {
+    ElMessage.error('请选择 SVG 文件')
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = () => {
+    deviceModelForm.value.modelIcon = encodeSvgToBase64(String(reader.result || ''))
+  }
+  reader.onerror = () => {
+    ElMessage.error('读取 SVG 文件失败')
+  }
+  reader.readAsText(raw)
+}
+
+const clearModelIcon = () => {
+  deviceModelForm.value.modelIcon = ''
 }
 
 
@@ -741,7 +811,8 @@ const resetDeviceModelForm = () => {
     modelName: '',
     modelId: '',
     category: '',
-    provider: undefined
+    provider: undefined,
+    modelIcon: ''
   }
 }
 
@@ -821,6 +892,7 @@ const loadDeviceModelData = async (id: number) => {
       deviceModelForm.value.modelName = deviceModel.modelName || ''
       deviceModelForm.value.category = deviceModel.category || ''
       deviceModelForm.value.modelId = deviceModel.model ? (deviceModel.model as any).modelId : ''
+      deviceModelForm.value.modelIcon = deviceModel.modelIcon || ''
       
       // 加载模型数据
       if (deviceModel.model) {
@@ -835,11 +907,11 @@ const loadDeviceModelData = async (id: number) => {
         resetModelForm()
       }
     } else {
-      throw new Error('未找到对应的设备模型')
+      throw new Error('未找到对应的设备类型')
     }
   } catch (error) {
-    console.error('加载设备模型数据失败:', error)
-    ElMessage.error('加载设备模型数据失败')
+    console.error('加载设备类型数据失败:', error)
+    ElMessage.error('加载设备类型数据失败')
   }
 }
 
@@ -886,9 +958,9 @@ const submitForm = async () => {
 
         if (isEditMode.value && deviceModelId.value) {
           // 更新设备模型 (包含模型)
-          const { modelId, ...rest } = deviceModelForm.value
           const deviceModelData = {
-            ...rest,
+            ...deviceModelForm.value,
+            modelId: deviceModelForm.value.modelId,
             model: modelForm.value
           } as DeviceModel
           await deviceModelStore.updateDeviceModel(deviceModelId.value, deviceModelData)
@@ -903,9 +975,10 @@ const submitForm = async () => {
           }
         } else {
           // 创建设备模型 - 明确排除 id 字段，让数据库自动生成
-          const { id, modelId, ...createData } = deviceModelForm.value
+          const { id, ...createData } = deviceModelForm.value
           const deviceModelData = {
             ...createData,
+            modelId: deviceModelForm.value.modelId,
             type: deviceTypeCategory.value, // 根据来源页面设置 type 字段
             model: modelForm.value
           } as any as DeviceModel
@@ -1118,6 +1191,47 @@ const submitParamForm = async () => {
 
 .basic-info-card {
   margin-bottom: 20px;
+}
+
+.icon-editor {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.icon-preview {
+  width: 72px;
+  min-height: 72px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a8abb2;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.icon-preview img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.icon-controls {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.icon-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .model-section {

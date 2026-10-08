@@ -9,7 +9,7 @@
           场景列表 
           <span v-if="currentDomain" class="page-sub-title" style="display:inline; margin-left: 8px;">- {{ currentDomain.domainName }}</span>
         </h2>
-        <p class="page-sub-title">管理领域平台内的具体应用场景和部署节点</p>
+        <p class="page-sub-title">管理领域定制内的具体应用场景和部署节点</p>
       </div>
     </div>
     
@@ -81,7 +81,8 @@ const searchForm = reactive({
 });
   
 const currentDomain = computed(() => domainStore.currentDomain);
-const appCenterPath = (import.meta as any).env?.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
+// IDE 同在 5200 平台，从 origin root 绝对路径跳转
+const appCenterPath = '';
   
 const filteredScenes = computed(() => {
   return scenes.value
@@ -113,7 +114,7 @@ async function fetchScenes() {
 
 function normalizeScenes(list: any[]) {
   return list.map((item) => ({
-    id: `${item.sceneId ?? item.id ?? ''}`,
+    id: `${item.sceneId ?? ''}`,
     code: item.sceneCode ?? item.code ?? '',
     name: item.sceneName ?? item.name ?? '',
     description: item.sceneDescription ?? item.description ?? '',

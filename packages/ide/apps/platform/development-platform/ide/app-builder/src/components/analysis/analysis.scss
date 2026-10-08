@@ -8,8 +8,15 @@
             position: absolute;
             z-index: 1;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
             .f-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
                 .btn {
                     box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
                     border-radius: 15px;
@@ -18,6 +25,18 @@
 
                 .btn-primary {
                     background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+                }
+
+                .btn-secondary {
+                    background: #FFFFFF;
+                    border: 1px solid rgba(233, 236, 243, 1);
+                    box-shadow: 0px 2px 6px 0px rgba(31, 35, 41, 0.06);
+                    border-radius: 6px;
+                    color: #2D2F33;
+
+                    &:hover {
+                        border-color: #388FFF;
+                    }
                 }
             }
         }
@@ -36,70 +55,198 @@
 
     .f-page-main {
         height: 100%;
+        overflow: auto;
+    }
+}
 
-        .f-app-analysis-task {
-            background-image: linear-gradient(0deg, #F7FBFF 0%, #FFFFFF 100%);
-            border: 1px solid rgba(42, 135, 255, 0.1);
-            border-radius: 6px;
-            display: flex;
-            margin-bottom: 10px;
+// 任务列表容器样式
+.f-task-list-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
 
-            >div {
-                padding: 24px 20px 10px;
+    .task-list-header {
+        display: grid;
+        // 移除任务ID列，调整各列宽度，增加分析选项列宽度
+        grid-template-columns: 150px 100px 1fr 160px 100px 120px;
+        background: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 100%);
+        border-bottom: 1px solid rgba(42, 135, 255, 0.1);
+        padding: 12px 16px;
+        font-weight: 500;
+        font-size: 13px;
+        color: rgba(45, 47, 51, 0.8);
+        min-width: 900px;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+
+        .header-cell {
+            padding: 0 8px;
+        }
+    }
+
+    .task-list-body {
+        min-width: 900px;
+
+        .task-row {
+            display: grid;
+            // 移除任务ID列: 100px 1fr 120px 100px 180px 150px 150px 100px
+            // 新列: 任务名称(小) 关联应用 分析选项(宽) 提交时间 状态 操作
+            grid-template-columns: 150px 100px 1fr 160px 100px 120px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(42, 135, 255, 0.05);
+            transition: background-color 0.2s ease;
+            align-items: center;
+
+            &:hover {
+                background: rgba(247, 251, 255, 0.8);
             }
 
-            label {
-                color: rgba(45, 47, 51, 0.65);
-                display: block;
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .header-cell {
+                padding: 0 8px;
                 font-size: 13px;
-                font-weight: 400;
-                margin-bottom: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            .analysis-creation-time {
-                div {
-                    font-size: 13px;
-                    color: #58CACC;
-                    letter-spacing: 0.56px;
-                    font-weight: 400;
+            .task-id {
+                display: none; // 隐藏任务ID列
+
+                .task-id-text {
+                    color: #388FFF;
+                    font-weight: 500;
                 }
             }
 
-            .analysis-completed-time {
-                div {
-                    font-size: 13px;
-                    color: #5FC875;
-                    letter-spacing: 0.56px;
+            .task-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                .task-name-text {
+                    color: #2D2F33;
                     font-weight: 400;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
             }
 
-            .analysis-target-app {
-                span {
-                    font-size: 13px;
+            .task-app {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                .task-app-text {
                     color: #2A87FF;
-                    letter-spacing: 0.56px;
                     font-weight: 400;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
             }
 
-            .analysis-options {
-                span {
+            .task-version {
+                .task-version-text {
+                    color: rgba(45, 47, 51, 0.7);
+                    font-size: 12px;
+                }
+            }
+
+            .task-options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                min-width: 160px;
+
+                .option-tag {
                     background: rgba(89, 161, 255, 0.10);
                     border: 0.8px solid rgba(56, 143, 255, 0.8);
                     border-radius: 11px;
                     color: #388FFF;
-                    font-size: 12px;
-                    text-align: left;
-                    font-weight: 500;
-                    padding: 0px 8px;
-                    margin-right: 6px;
+                    font-size: 11px;
+                    padding: 2px 6px;
+                    white-space: nowrap;
                 }
             }
 
-            .analysis-status {
-                flex: 1;
+            .task-time {
+                .time-text {
+                    display: flex;
+                    flex-direction: column;
+                    color: #58CACC;
+                    font-size: 12px;
+
+                    .time-detail {
+                        font-size: 11px;
+                        opacity: 0.8;
+                    }
+                }
             }
+
+            .task-status {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .status-badge {
+                    display: inline-block;
+                    padding: 2px 8px;
+                    border-radius: 8px;
+                    font-size: 11px;
+                    text-align: center;
+
+                    &.status-completed {
+                        background: rgba(95, 200, 117, 0.1);
+                        color: #5FC875;
+                    }
+
+                    &.status-running {
+                        background: rgba(56, 143, 255, 0.1);
+                        color: #388FFF;
+                    }
+
+                    &.status-pending {
+                        background: rgba(45, 47, 51, 0.05);
+                        color: rgba(45, 47, 51, 0.5);
+                    }
+                }
+            }
+
+            .task-actions {
+                .action-buttons {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+
+                    .btn-link {
+                        color: #388FFF;
+                        padding: 4px;
+
+                        &:hover {
+                            color: #2a87ff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .empty-content {
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(45, 47, 51, 0.5);
+
+        p {
+            margin: 16px 0;
+            font-size: 14px;
         }
     }
 }

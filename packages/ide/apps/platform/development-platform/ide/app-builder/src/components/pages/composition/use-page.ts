@@ -12,7 +12,9 @@ export function usePage(): UsePage {
 
     const frameworkData = [
         { code: 'All', name: '全部', active: false },
-        { code: 'Interface', name: '界面', types: ['Form', 'MobileForm', 'HelpMetadata', 'GSPBusinessEntity'], active: true }
+        { code: 'Interface', name: '界面', types: ['Form', 'MobileForm', 'HelpMetadata', 'GSPBusinessEntity', 'cmp', 'Component', 'WebCommand', 'BEMgrComponent', 'BEComponent',
+            'DeterminationComponent', 'ValidationComponent', 'UDTValidComponent', 'UDTDtmComponent', 'VMComponent',
+            'CommonComponent', 'WebComponent', 'WebServiceComponent', 'SourceCodeMetadata'], active: true }
     ];
     const metadataTypeData = [
         { code: 'All', name: '全部', active: false },
@@ -28,15 +30,20 @@ export function usePage(): UsePage {
                 'Component', 'WebCommand', 'BEMgrComponent', 'BEComponent',
                 'DeterminationComponent', 'ValidationComponent', 'UDTValidComponent', 'UDTDtmComponent', 'VMComponent',
                 'CommonComponent', 'WebComponent', 'WebServiceComponent', 'SourceCodeMetadata'
-            ]
+            ], active: true
         },
         { code: 'res', name: '资源', types: ['ResourceMetadata'] },
         { code: 'api', name: 'Api', types: ['ExternalApi', 'InternalApi', 'Event', 'Action', 'PubSub'] },
         { code: 'DBO', name: '数据对象', types: ['DBO'] },
     ];
 
+    const cmpMetadataTypes =
+        metadataTypeData.find((entry) => entry.code === 'cmp')?.types ?? [];
+
     const state = {
-        types: ['Form', 'MobileForm', 'HelpMetadata', 'GSPBusinessEntity']
+        types: ['Form', 'MobileForm', 'HelpMetadata', 'GSPBusinessEntity', 'Component', 'WebCommand', 'BEMgrComponent', 'BEComponent',
+            'DeterminationComponent', 'ValidationComponent', 'UDTValidComponent', 'UDTDtmComponent', 'VMComponent',
+            'CommonComponent', 'WebComponent', 'WebServiceComponent', 'SourceCodeMetadata'],
     };
 
     function createPage() { }

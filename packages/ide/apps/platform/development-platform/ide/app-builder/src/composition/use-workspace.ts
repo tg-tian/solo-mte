@@ -46,5 +46,18 @@ export function useWorkspace(useFunctionInstanceComposition: UseFunctionInstance
         useFunctionInstanceComposition.openFile(path);
     }
 
-    return { options, initialize, open };
+    let _appNameChangedCallback: ((name: string) => void) | null = null;
+
+    function onAppNameChanged(callback: (name: string) => void) {
+        _appNameChangedCallback = callback;
+    }
+
+    function updateAppName(name: string) {
+        options.appName = name;
+        if (_appNameChangedCallback) {
+            _appNameChangedCallback(name);
+        }
+    }
+
+    return { options, initialize, open, updateAppName, onAppNameChanged };
 }   

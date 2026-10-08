@@ -84,6 +84,13 @@ export default defineComponent({
                     'workbench.tree.renderIndentGuides': 'always',
                     // Node 21+ 自带全局 navigator；不开启时 VS Code 会用 getter 拦截并抛 PendingMigrationError，Cline 等扩展会误触
                     'extensions.supportNodeGlobalNavigator': true,
+                    // 语义高亮开关：
+                    // 远程 Java 语言服务器（JDT LS）在退化的工程解析状态下，会把大量 token 错误标记为
+                    // deprecated（Monaco 渲染成满屏删除线 .mtks），并把注释覆盖成白字白底。
+                    // 语言级 '[java]' override 在远程（REH）环境里不生效，改设全局关闭语义高亮；
+                    // TextMate 语法高亮（关键词/字符串/注释配色）完全不受影响。
+                    // 若日后 Java LS 修复，可改回 true 恢复语义着色。
+                    'editor.semanticHighlighting.enabled': false,
                 },
 
                 // Code-OSS / 自建 Web Workbench 未内置微软 Marketplace；通过 Open VSX 在扩展视图里搜索安装

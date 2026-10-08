@@ -26,17 +26,22 @@
         <el-tab-pane label="基本信息" name="basic">
           <el-form :model="domainForm" :rules="rules" ref="domainFormRef" label-position="top">
             <el-row :gutter="24">
-              <el-col :span="8">
+              <el-col v-if="!isEditMode" :span="6">
+                <el-form-item label="领域ID" prop="domainId">
+                  <el-input v-model="domainForm.domainId" maxlength="18" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="领域编码" prop="code">
                   <el-input v-model="domainForm.code" :disabled="isEditMode" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="领域名称" prop="name">
                   <el-input v-model="domainForm.name" />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="!isEditMode ? 6 : 8">
                 <el-form-item label="DSL 标准" prop="dslStandard">
                   <el-select v-model="domainForm.dslStandard" style="width: 100%">
                     <el-option label="默认不限" value="default" />
@@ -75,16 +80,12 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="模型模板组" name="template" v-if="isEditMode || isFromTemplate">
-          <DomainTemplate :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+        <el-tab-pane label="领域模板" name="template" v-if="isEditMode || isFromTemplate">
+          <DomainTemplate :domain-code="domainForm.code" :is-from-template="isFromTemplate" />
         </el-tab-pane>
 
         <el-tab-pane label="设备模型库" name="model" v-if="isEditMode || isFromTemplate">
-          <DomainDeviceType :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
-        </el-tab-pane>
-
-        <el-tab-pane label="领域组件" name="component" v-if="isEditMode || isFromTemplate">
-          <DomainComponent :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
+          <DomainDeviceModel :domain-id="domainIdValue" :is-from-template="isFromTemplate" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -109,12 +110,11 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import DomainTemplate from './domain-detail/DomainTemplate.vue';
-import DomainDeviceType from './domain-detail/DomainDeviceType.vue';
-import DomainComponent from './domain-detail/DomainComponent.vue';
+import DomainDeviceModel from './domain-detail/DomainDeviceModel.vue';
 import { useDomainStore } from '../store/domain';
 import { useDomainComponentTemplateStore } from '../store/domainComponentTemplate';
 import { useDomainTemplateStore } from '../store/domainTemplate';
-import { useDeviceTypeStore } from '../store/deviceType';
+import { useDeviceModelStore } from '../store/deviceModel';
 import { useComponentStore } from '../store/component';
 import { downloadDomain } from '../api/domain';
 import type { DomainFormData } from '../types/models';
@@ -133,7 +133,7 @@ const emit = defineEmits<{
 const domainStore = useDomainStore();
 const domainTemplateStore = useDomainTemplateStore();
 const domainComponentTemplateStore = useDomainComponentTemplateStore();
-const deviceTypeStore = useDeviceTypeStore();
+const deviceModelStore = useDeviceModelStore();
 const componentStore = useComponentStore();
 
 const activeTab = ref('basic');
@@ -141,6 +141,7 @@ const submitting = ref(false);
 const publishDialogVisible = ref(false);
 const domainFormRef = ref<FormInstance>();
 const domainForm = reactive<DomainFormData>({
+  domainId: '',
   code: '',
   name: '',
   description: '',
@@ -154,6 +155,10 @@ const domainForm = reactive<DomainFormData>({
 });
 
 const rules: FormRules = {
+  domainId: [
+    { required: true, message: '请输入领域ID', trigger: 'blur' },
+    { pattern: /^[1-9]\d*$/, message: '领域ID必须为正整数', trigger: 'blur' }
+  ],
   code: [{ required: true, message: '请输入编码', trigger: 'blur' }],
   name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
   description: [{ required: true, message: '请输入描述', trigger: 'blur' }]
@@ -180,6 +185,7 @@ onMounted(async () => {
 
 function resetFormData() {
   Object.assign(domainForm, {
+    domainId: '',
     code: props.domainCode || '',
     name: props.domainName || '',
     description: '',
@@ -192,7 +198,7 @@ function resetFormData() {
     domainTemplateId: null
   });
   domainComponentTemplateStore.setTemplates([]);
-  deviceTypeStore.setDeviceTypes([]);
+  deviceModelStore.setDeviceModels([]);
   componentStore.setComponents([]);
 }
 
@@ -206,6 +212,7 @@ async function initForm() {
     return;
   }
   Object.assign(domainForm, {
+    domainId: data.domainId || '',
     code: data.domainCode || '',
     name: data.domainName || '',
     description: data.domainDescription || '',
@@ -248,7 +255,7 @@ async function submitForm() {
         await domainStore.createDomainFromTemplate(
           domainForm,
           domainComponentTemplateStore.templates,
-          deviceTypeStore.deviceTypes,
+          deviceModelStore.deviceModels,
           componentStore.components
         );
         ElMessage.success('从模板创建成功');

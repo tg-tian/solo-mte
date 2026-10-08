@@ -147,10 +147,12 @@ const createScenarioModel = ref<ScenarioRecord>({
   longitude: null,
   latitude: null,
   imageUrl: '',
-  url: ''
+  url: '',
+  polygon: []
 });
 
-const appCenterPath = import.meta.env.VITE_APP_CENTER_PATH || 'http://139.196.239.110:5174';
+// IDE 同在 5200 平台，从 origin root 绝对路径跳转
+const appCenterPath = '';
 
 const filteredScenarios = computed(() => {
   return store.scenarios.filter((item) => {
@@ -257,7 +259,8 @@ function handleCreate() {
     longitude: null,
     latitude: null,
     imageUrl: '',
-    url: ''
+    url: '',
+    polygon: []
   };
   createDialogVisible.value = true;
 }
@@ -270,6 +273,7 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
   createSubmitting.value = true;
   try {
     const scenarioPayload = {
+      sceneId: Number(payload.scenario.sceneId),
       code: payload.scenario.sceneCode,
       name: payload.scenario.sceneName,
       description: payload.scenario.sceneDescription || '',
@@ -280,10 +284,11 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
         payload.scenario.longitude !== null && payload.scenario.longitude !== undefined && payload.scenario.latitude !== null && payload.scenario.latitude !== undefined
           ? { lng: Number(payload.scenario.longitude), lat: Number(payload.scenario.latitude) }
           : null,
-      imageUrl: payload.scenario.imageUrl || ''
+      imageUrl: payload.scenario.imageUrl || '',
+      polygon: payload.scenario.polygon && payload.scenario.polygon.length >= 3 ? JSON.stringify(payload.scenario.polygon) : null
     };
     const result = await createScenario(scenarioPayload);
-    const sceneId = `${result?.data?.sceneId ?? result?.data?.id ?? ''}`;
+    const sceneId = `${result?.data?.sceneId ?? ''}`;
 
     if (sceneId && payload.areas.length) {
       const pendingAreas = payload.areas.map((area) => ({ ...area }));
@@ -310,10 +315,11 @@ async function submitCreate(payload: ScenarioSubmitPayload) {
               : Number(rawParentId);
 
           const areaResult = await createArea({
+            id: Number(area.id),
             name: area.name,
             sceneId: Number(sceneId),
             description: area.description || '',
-            position: area.position || '',
+            polygon: area.polygon && area.polygon.length >= 3 ? JSON.stringify(area.polygon) : '',
             image: area.image || '',
             parentId
           });
@@ -355,6 +361,7 @@ async function saveScenarioDetail(payload: ScenarioSubmitPayload) {
   try {
     const targetStatus = payload.scenario.status === '1' ? '1' : '0';
     await updateScenario(payload.scenario.sceneId, {
+      sceneId: Number(payload.scenario.sceneId),
       code: payload.scenario.sceneCode,
       name: payload.scenario.sceneName,
       description: payload.scenario.sceneDescription || '',
@@ -365,7 +372,8 @@ async function saveScenarioDetail(payload: ScenarioSubmitPayload) {
         payload.scenario.longitude !== null && payload.scenario.longitude !== undefined && payload.scenario.latitude !== null && payload.scenario.latitude !== undefined
           ? { lng: Number(payload.scenario.longitude), lat: Number(payload.scenario.latitude) }
           : null,
-      imageUrl: payload.scenario.imageUrl || ''
+      imageUrl: payload.scenario.imageUrl || '',
+      polygon: payload.scenario.polygon && payload.scenario.polygon.length >= 3 ? JSON.stringify(payload.scenario.polygon) : null
     });
     ElMessage.success('保存成功');
     await refreshScenarios();

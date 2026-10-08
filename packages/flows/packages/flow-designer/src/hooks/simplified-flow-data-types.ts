@@ -54,6 +54,19 @@ export interface SimplifiedParamWithValueAndType {
     value: SimplifiedValueExpr;
 }
 
+/** object 类型输出参数的子字段定义 */
+export interface SimplifiedSchemaProperty {
+    code: string;
+    type: string;
+}
+
+/** RPC 节点输出参数（带可选 schema） */
+export interface SimplifiedRpcOutputParam {
+    code: string;
+    type: string;
+    schema?: SimplifiedSchemaProperty[];
+}
+
 // #endregion
 
 // #region 选择器相关
@@ -153,6 +166,14 @@ export interface SimplifiedMethodInvokeNode extends SimplifiedNodeBase {
     outputParams: SimplifiedParamWithCode[];
 }
 
+/** RPC调用节点 */
+export interface SimplifiedRpcInvokeNode extends SimplifiedNodeBase {
+    type: 'rpcInvoke';
+    serviceId: string;
+    inputParams: SimplifiedParamWithValue[];
+    outputParams: SimplifiedRpcOutputParam[];
+}
+
 /** 简化版节点联合类型 */
 export type SimplifiedNode =
     | SimplifiedVariableDefNode
@@ -161,7 +182,8 @@ export type SimplifiedNode =
     | SimplifiedDeviceCallNode
     | SimplifiedSelectorNode
     | SimplifiedLoopNode
-    | SimplifiedMethodInvokeNode;
+    | SimplifiedMethodInvokeNode
+    | SimplifiedRpcInvokeNode;
 
 // #endregion
 

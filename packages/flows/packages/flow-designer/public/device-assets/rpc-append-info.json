@@ -1,0 +1,41 @@
+[
+  {
+    "className": "com.inspur.gs.ingpt.aim.aimservice.aimservice.back.CoffeeOrderService",
+    "description": "咖啡订单服务",
+    "methods": {
+      "saveCoffeeOrder": {
+        "description": "保存咖啡订单（调用咖啡机制作咖啡后，将订单信息保存到后台）",
+        "parameters": {
+          "personId": "人员ID（预约咖啡的人员ID）",
+          "personName": "人员姓名",
+          "machineID": "被调用咖啡机的设备ID（deviceId）",
+          "meetingRoom": "会议室（制作完成后的配送目的地）"
+        }
+      },
+      "getCoffeeOrder": {
+        "description": "根据设备ID查询咖啡订单信息",
+        "parameters": {
+          "deviceId": "咖啡机的设备ID（查询该设备上一个制作完成但未配送的咖啡订单）"
+        },
+        "returnSchema": [
+          {
+            "code": "order_id",
+            "type": "string",
+            "description": "订单ID（待配送的咖啡订单）"
+          },
+          {
+            "code": "meeting_room",
+            "type": "string",
+            "description": "会议室（配送目的地）"
+          }
+        ]
+      },
+      "orderComplete": {
+        "description": "完成咖啡订单（配送完毕后，需要将订单标记完成）",
+        "parameters": {
+          "orderId": "订单ID"
+        }
+      }
+    }
+  }
+]

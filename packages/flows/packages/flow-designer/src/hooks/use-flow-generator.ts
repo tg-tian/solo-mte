@@ -4,7 +4,9 @@ import type { SimplifiedFlowData } from './simplified-flow-data-types';
 /** 调试开关：true 使用 mock 数据，false 调用真实接口 */
 const USE_MOCK = false;
 
-const FLOW_API_URL = 'http://101.201.65.66:8081/api/v1/workflow/generate';
+const FLOW_API_URL = location.protocol === 'https:'
+    ? '/solo-mte-gen-flow-8081/api/v1/workflow/generate'
+    : 'http://101.201.65.66:8081/api/v1/workflow/generate';
 
 export interface FlowGeneratorResult {
     data: SimplifiedFlowData;

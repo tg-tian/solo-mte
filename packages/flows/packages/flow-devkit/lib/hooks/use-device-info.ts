@@ -3,6 +3,24 @@ import type { DeviceModel, DeviceInstance } from '@farris/flow-devkit/types';
 import axios from 'axios';
 import type { AxiosError } from 'axios';
 
+function getModelIconDataUrl(modelIcon?: string): string {
+    if (!modelIcon) return '';
+    if (modelIcon.startsWith('data:')) return modelIcon;
+
+    let mimeType = 'image/svg+xml';
+    if (modelIcon.startsWith('iVBORw')) {
+        mimeType = 'image/png';
+    } else if (modelIcon.startsWith('/9j/')) {
+        mimeType = 'image/jpeg';
+    } else if (modelIcon.startsWith('R0lGOD')) {
+        mimeType = 'image/gif';
+    } else if (modelIcon.startsWith('UklGR')) {
+        mimeType = 'image/webp';
+    }
+
+    return `data:${mimeType};base64,${modelIcon}`;
+}
+
 let deviceCategoriesPromise: Promise<DeviceModel[]> | undefined;
 const deviceCategories = ref<DeviceModel[]>([]);
 
@@ -29,44 +47,29 @@ export function useDeviceInfo() {
     }
 
     async function loadDeviceCategories(): Promise<DeviceModel[]> {
-        const baseDevicePath = './flow-contents/device/';
-        const manifestUrl = `${baseDevicePath}manifest.json?v=${(new Date()).getTime()}`;
+        const apiUrl = location.protocol === 'https:'
+            ? '/solo-mte-8080/meta/device-models'
+            : 'http://139.196.239.110:8080/meta/device-models';
 
         try {
-            const manifestResponse = await axios.get<string[]>(manifestUrl, {
-                timeout: 20 * 1000,
-                headers: { 'Content-Type': 'application/json' },
-            });
-            const deviceNames = manifestResponse.data;
+            const deviceResponse = await axios.get<any[]>(apiUrl, { timeout: 20 * 1000 });
 
-            if (!Array.isArray(deviceNames) || !deviceNames.length) {
+            const items = deviceResponse.data;
+            if (!Array.isArray(items)) {
                 return [];
             }
-            const deviceRequestPromises = deviceNames.map(async (deviceName) => {
-                const deviceFileUrl = `${baseDevicePath}${deviceName}.json?v=${(new Date()).getTime()}`;
-                try {
-                    const deviceResponse = await axios.get<any>(deviceFileUrl, {
-                        timeout: 20 * 1000,
-                        headers: { 'Content-Type': 'application/json' },
-                    });
-                    return deviceResponse.data;
-                } catch (deviceError) {
-                    const axiosError = deviceError as AxiosError;
-                    console.warn(
-                        `[设备描述文件加载失败] ${deviceFileUrl}`,
-                        axiosError.message || '未知网络错误',
-                    );
-                    return null;
-                }
+
+            const devices: DeviceModel[] = items.map((item) => {
+                const model: DeviceModel = item.model || item;
+                model.icon = getModelIconDataUrl(item.modelIcon);
+                return model;
             });
 
-            const deviceContents = await Promise.all(deviceRequestPromises);
-            const validDeviceContents = deviceContents.filter((content) => content !== null);
-            return validDeviceContents;
-        } catch (manifestError) {
-            const axiosError = manifestError as AxiosError;
+            return devices;
+        } catch (error) {
+            const axiosError = error as AxiosError;
             console.error(
-                `[设备描述文件加载失败] ${manifestUrl}`,
+                '[设备模型加载失败]',
                 axiosError.message || '未知网络错误',
             );
             return [];

@@ -59,8 +59,8 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
     /**
      * 将简化版流程数据应用到设计器画布
      */
-    function applySimplifiedFlowData(simplifiedData: SimplifiedFlowData) {
-        const { nodes, edges } = convertSimplifiedToOriginal(simplifiedData);
+    async function applySimplifiedFlowData(simplifiedData: SimplifiedFlowData) {
+        const { nodes, edges } = await convertSimplifiedToOriginal(simplifiedData);
         const flowMetadata: FlowMetadata = {
             id: uuid(),
             kind: 'eventflow',
@@ -78,12 +78,21 @@ export function useAiChatPanel(afterReloadFlow?: (() => void)): UseAiChatPanel {
         afterReloadFlow?.();
     }
 
+    // 调试用：暴露应用到画布的方法到 window，供控制台直接调用
+    try {
+        const target = window.top || window;
+        (target as any).__applySimplifiedFlowData = applySimplifiedFlowData;
+    } catch {
+        // 跨域时 window.top 不可访问，降级到当前 window
+        (window as any).__applySimplifiedFlowData = applySimplifiedFlowData;
+    }
+
     /**
      * 处理用户点击"应用"按钮
      */
-    function handleUserAuthConfirm(event: UserAuthConfirmEvent) {
+    async function handleUserAuthConfirm(event: UserAuthConfirmEvent) {
         if (event.optionId === 'apply' && pendingFlowData.value) {
-            applySimplifiedFlowData(pendingFlowData.value);
+            await applySimplifiedFlowData(pendingFlowData.value);
             pendingFlowData.value = null;
 
             const confirmMessage: Message = {

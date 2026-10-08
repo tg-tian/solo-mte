@@ -1,5 +1,5 @@
 import { markRaw } from 'vue';
-import { type NodeDefinition, BuiltinNodeType, BasicTypeRefer, ValidateUtils } from '@farris/flow-devkit'
+import { type NodeDefinition, BuiltinNodeType, ValidateUtils } from '@farris/flow-devkit'
 import { NodeProperty } from './property-config';
 import { exceptionIcon } from '@flow-designer/assets/images';
 import NodeComponent from './node.component.vue';
@@ -49,7 +49,7 @@ export const EXCEPTION_NODE: NodeDefinition = {
             errors.push('请选择异常级别');
         }
         return ValidateUtils.mergeNodeValidationResult(
-          { errors: errors.map(message => ({ message })) },
+            { errors: errors.map(message => ({ message })) },
         );
     }
 };

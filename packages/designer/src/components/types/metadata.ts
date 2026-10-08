@@ -109,6 +109,12 @@ export interface FormMetaDataModule {
 
     /** 组件通讯 */
     communications?: Array<Communication>;
+
+    /** 表单规则（表格等控件的设计期校验规则） */
+    formRules?: any[];
+
+    /** 是否组合类表单（外部容器表单、弹窗表单） */
+    isComposedForm?: boolean;
 }
 
 export interface FormMetadaDataDom {
@@ -254,6 +260,24 @@ export interface UseFormSchema {
     getExternalComponents: () => any[];
     checkComponentExistInDrawer: (componentId: string) => boolean;
     getPageIdByComponentId: (componentId: string) => string | undefined;
+
+    /** 获取表单规则（表格等控件的设计期校验规则） */
+    getFormRules: () => any[];
+
+    /** 更新表单规则 */
+    setFormRules: (value: any) => void;
+
+    /** 获取表单配置（options） */
+    getOptions: () => FormOptions | undefined;
+
+    /** 解析控件可配置的事件集合 */
+    resolveComponentEvents: (schemaMap: any, componentSchema: any) => any;
+
+    /** 记录当前表单是否为组合类表单 */
+    recordIsComposedForm: () => void;
+
+    /** 检查指定表单元数据是否为组合类表单 */
+    checkIfComposedForm: (formMetadataDom: FormMetadaDataDom) => boolean;
 }
 
 export interface UseSchemaService {

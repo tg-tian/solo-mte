@@ -60,9 +60,9 @@
         "child": null
     },
     {
-        "id": "variables",
-        "code": "Variables",
-        "name": "全局变量",
+        "id": "analysis",
+        "code": "Analysis",
+        "name": "质量保障",
         "parentId": "0",
         "layer": "1",
         "menuType": "",
@@ -75,9 +75,9 @@
         "child": null
     },
     {
-        "id": "analysis",
-        "code": "Analysis",
-        "name": "质量保障",
+        "id": "deploy-config",
+        "code": "DeployConfig",
+        "name": "部署配置",
         "parentId": "0",
         "layer": "1",
         "menuType": "",

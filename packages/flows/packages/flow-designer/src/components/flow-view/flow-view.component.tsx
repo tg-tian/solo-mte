@@ -17,6 +17,7 @@ import {
     useChatflow,
     useLayout,
     useAiChatPanel,
+    useTemplateSearch,
     FLOW_DESIGNER_PROPS_KEY,
 } from '@flow-designer/hooks';
 import { flowViewProps } from './flow-view.props';
@@ -60,6 +61,7 @@ export default defineComponent({
         }
 
         const { renderAiChatPanel } = useAiChatPanel(afterReloadFlow);
+        useTemplateSearch(afterReloadFlow);
 
         const { onDragOver, onDrop, onDragLeave } = useDragNewNode();
 

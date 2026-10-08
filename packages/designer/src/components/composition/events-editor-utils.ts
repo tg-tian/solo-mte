@@ -200,15 +200,20 @@ export function useEventsEditorUtils(commandService: UseFormCommandService, form
         }
         if (relatedBoundList.length) {
             const communicationIds: string[] = [];
-            relatedBoundList.map(boundCommunication => {
-                if (boundCommunication.communication) {
-                    communicationIds.push(`communication:${boundCommunication.communication.id}`);
-                    deleteActionItem(data.id, event.label);
-                    return;
-                }
+            relatedBoundList.forEach(boundCommunication => {
+                // 交互面板传出的是通讯数组（命令类交互为空数组），需要按数组解析；
+                // 空数组不能按已配置通讯处理，否则会覆盖掉刚写入的命令值
+                const { communication } = boundCommunication;
+                const communicationList = communication ? (Array.isArray(communication) ? communication : [communication]) : [];
+                communicationList.forEach(communicationItem => {
+                    if (communicationItem?.id) {
+                        communicationIds.push(`communication:${communicationItem.id}`);
+                    }
+                });
             });
             if (communicationIds.length) {
                 data[event.label] = communicationIds.join(';');
+                deleteActionItem(data.id, event.label);
             }
         }
     }

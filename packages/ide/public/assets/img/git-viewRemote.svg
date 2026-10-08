@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>查看</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="18" height="18"></rect>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-263.000000, -217.000000)">
+            <g id="查看" transform="translate(263.000000, 217.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="矩形备份"></g>
+                <g id="编组" mask="url(#mask-2)" stroke="#585959" stroke-width="1.03409091">
+                    <g transform="translate(2.000000, 3.000000)">
+                        <path d="M0,0.689393939 C0,0.308652008 0.308652008,0 0.689393939,0 L4.82575758,0 L6.54924242,2.06818182 L12.4090909,2.06818182 C12.7898432,2.06818182 13.0984848,2.37682348 13.0984848,2.75757576 L13.0984848,11.719697 C13.0984848,12.1004492 12.7898432,12.4090909 12.4090909,12.4090909 L0.689393939,12.4090909 C0.308652008,12.4090909 0,12.1004492 0,11.719697 L0,0.689393939 Z" id="路径" stroke-linejoin="round"></path>
+                        <circle id="椭圆形" cx="5.85984848" cy="6.89393939" r="2.06818182"></circle>
+                        <line x1="7.58333333" y1="8.27272727" x2="9.30681818" y2="9.65151515" id="路径" stroke-linecap="round" stroke-linejoin="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

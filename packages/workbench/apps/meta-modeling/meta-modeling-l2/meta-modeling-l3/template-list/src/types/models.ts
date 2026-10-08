@@ -9,14 +9,17 @@ export interface PropertyDefinition {
 }
 
 export interface Template {
-    id?: number;
     template_id?: number;
     name: string;
-    description: string;
-    category: string;
-    tags: string;
-    domain: string;
-    image_url: string;
-    describing_the_model: string;
-    url: string;
+    template_index?: string;
+    template_description?: string;
+    example_image_url?: string;
+    code_url?: string;
+    repository_url?: string;
+    file_source?: string;
+    submitter?: string;
+    license?: string;
+    tags?: Record<string, string[]> | string;
+    created_at?: string;
+    updated_at?: string;
 }

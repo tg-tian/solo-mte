@@ -35,6 +35,9 @@
         "apps/**/*.d.ts",
         "apps/**/*.tsx",
         "apps/**/*.vue"
+    ],
+    "exclude": [
+        "apps/platform/development-platform/ide/extensions"
     ]
     // "references": [{ "path": "./tsconfig.node.json" }]
 }

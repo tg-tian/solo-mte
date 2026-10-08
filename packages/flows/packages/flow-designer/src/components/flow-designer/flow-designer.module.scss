@@ -51,3 +51,18 @@
         animation-duration: 0.7s;
     }
 }
+
+.f-page-header {
+    &__right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: right;
+        flex: 1 1 0;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+    }
+
+    &__divider {
+        margin: 0 5px;
+    }
+}

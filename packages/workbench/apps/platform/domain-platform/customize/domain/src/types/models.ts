@@ -13,6 +13,7 @@ export interface DomainRecord {
 }
 
 export interface DomainFormData {
+  domainId: string;
   code: string;
   name: string;
   description: string;
@@ -26,19 +27,22 @@ export interface DomainFormData {
 }
 
 export interface TemplateRecord {
-  id: number;
   template_id?: number;
   name: string;
-  category?: string;
-  description?: string;
-  domain?: string;
-  tags?: string;
-  image_url?: string;
-  describing_the_model?: string;
-  url?: string;
+  template_index?: string;
+  template_description?: string;
+  example_image_url?: string;
+  code_url?: string;
+  repository_url?: string;
+  file_source?: string;
+  submitter?: string;
+  license?: string;
+  tags?: Record<string, string[]> | string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface DeviceTypeRecord {
+export interface DeviceModelRecord {
   id: number;
   modelId?: string;
   modelName?: string;

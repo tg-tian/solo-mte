@@ -6,6 +6,7 @@ import { ValueExpressUtils, JsonSchemaUtils } from '@farris/flow-devkit/utils';
 import { useBem } from '@farris/flow-devkit/utils';
 import { getNodeVariables, getWritableNodeVariables } from '@farris/flow-devkit/composition';
 import { useTypeDetails } from '@farris/flow-devkit/composition';
+import { nodeRegistry } from '@farris/flow-devkit/composition';
 
 interface TreeNodeData {
   /** 所属节点 */
@@ -281,7 +282,9 @@ export function useVarTab(props: ValueExpressionInputProps) {
   }
 
   function renderNodeRow(node: FlowNodeInstance) {
-    const iconUrl = node.metadata.icon || '';
+    const nodeDefinition = nodeRegistry.get(node.type || '');
+    const getNodeIconUrl = nodeDefinition?.getNodeIconUrl;
+    const iconUrl = getNodeIconUrl?.(node.data) || node.metadata?.icon || '';
     const nodeName = node.data.name || node.metadata.label || '未命名';
     return (
       <div class={bem('var-row')}>

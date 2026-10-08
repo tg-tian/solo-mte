@@ -57,14 +57,35 @@ export default defineComponent({
       return params.value.some((param) => JsonSchemaUtils.canEditJsonSchema(param.type) && !param.readOnly);
     });
 
-    const hasDeleteButtonColumn = computed<boolean>(() => !props.readonly);
-
     const hasDetailExpandButtonColumn = computed<boolean>(() => {
       if (props.readonly || props.hideDetailExpandButton) {
         return false;
       }
       return params.value.some((param) => !param.readOnly);
     });
+
+    const shouldShowAddButton = computed<boolean>(() => {
+      if (typeof props.operationOptions?.showAddBtn === 'boolean') {
+        return props.operationOptions.showAddBtn;
+      }
+      return !props.readonly;
+    });
+
+    const shouldShowDeleteBtn = computed<boolean>(() => {
+      if (typeof props.operationOptions?.showDeleteBtn === 'boolean') {
+        return props.operationOptions.showDeleteBtn;
+      }
+      return !props.readonly;
+    });
+
+    const shouldShowTypeEditor = computed<boolean>(() => {
+      if (typeof props.operationOptions?.paramTypeEditable === 'boolean') {
+        return props.operationOptions.paramTypeEditable;
+      }
+      return !props.readonly;
+    });
+
+    const hasDeleteButtonColumn = computed<boolean>(() => shouldShowDeleteBtn.value);
 
     function createNewParam(): Parameter {
       return {
@@ -216,13 +237,14 @@ export default defineComponent({
       </>;
     }
 
-    function renderParamTypeSelector(rowData: RowData, readonly: boolean) {
+    function renderParamTypeSelector(rowData: RowData, readonly: boolean, showTypeEditor: boolean) {
       const { parameter, schema, level } = rowData;
+
       if (!schema) {
         return (
           <TypeSelector
             modelValue={parameter.type}
-            readonly={readonly}
+            readonly={!showTypeEditor}
             onUpdate:modelValue={(newType) => onUpdateParamType(parameter, newType)}
           />
         );
@@ -249,13 +271,16 @@ export default defineComponent({
       const nodeData = item.data as TreeNodeData;
       const nodeValue = item.value as string;
       const rowData = nodeData.rowData;
-      const { parameter, level } = rowData;
+      const { parameter, level, schema } = rowData;
       const columnsStyle = useColumnsStyle(level);
 
       const isParamReadonly = props.readonly || parameter.readOnly === true;
       const showDetailExpandButton = !isParamReadonly && !props.hideDetailExpandButton;
       const showAddSubLevelButton = !isParamReadonly && !props.hideAddSubLevelButton && canAddSubLevel(rowData);
-      const showDeleteButton = !isParamReadonly;
+      // 主项类型编辑控制
+      const showTypeEditor = !isParamReadonly && (!!schema || shouldShowTypeEditor.value);
+      // 主项删除按钮控制
+      const showDeleteButton = !isParamReadonly && (!!schema || shouldShowDeleteBtn.value);
       const showDetail = showDetailExpandButton && detailExpandedNodeValues.has(nodeValue);
 
       return (
@@ -265,7 +290,7 @@ export default defineComponent({
               {renderParamCodeInput(rowData, isParamReadonly)}
             </div>
             <div class={bem('input-item')} style={columnsStyle.type}>
-              {renderParamTypeSelector(rowData, isParamReadonly)}
+              {renderParamTypeSelector(rowData, isParamReadonly, showTypeEditor)}
             </div>
             {showDetailExpandButton ? (
               <div class={[bem('tool-btn'), showDetail && 'active']}
@@ -314,7 +339,7 @@ export default defineComponent({
     }
 
     function renderAddButton() {
-      if (props.readonly) {
+      if (!shouldShowAddButton.value) {
         return;
       }
       return (

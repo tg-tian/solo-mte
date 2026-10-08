@@ -37,6 +37,8 @@ export default defineComponent({
 
         const initialized = ref(false);
         const activeSummaryId = ref('');
+        const showMenuType = ref(false);
+        const showParamsSettings = ref(false);
 
         function getDefaultGroupFromCurrentBo(): { groupId: string; groupName: string } {
             const groupId = String(options.boId || '').trim();
@@ -394,7 +396,7 @@ export default defineComponent({
                         onInput={(event: Event) => { form.menuName = (event.target as HTMLInputElement).value; }}
                     />
                 )}
-                {renderFormField('菜单类型', true, () =>
+                {showMenuType.value && renderFormField('菜单类型', true, () =>
                     <div class="menu-radio-group">
                         <label class={{ 'menu-radio': true, 'checked': form.menuType === 'SysMenu' }}>
                             <input
@@ -422,7 +424,7 @@ export default defineComponent({
                         </label>
                     </div>
                 )}
-                {renderParamsTable(readonly)}
+                {showParamsSettings.value && renderParamsTable(readonly)}
                 <div class="menu-form-footer">
                     {!state.published && (
                         <button class="menu-btn menu-btn-default" type="button" onClick={onClickCancelDraft}>

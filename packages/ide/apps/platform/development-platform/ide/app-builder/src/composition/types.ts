@@ -162,6 +162,10 @@ export interface UseWorkspace {
     initialize: () => Promise<any>;
 
     open: (url: string) => void;
+
+    updateAppName: (name: string) => void;
+
+    onAppNameChanged: (callback: (name: string) => void) => void;
 }
 export interface UseIde {
 

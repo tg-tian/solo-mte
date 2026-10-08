@@ -7,7 +7,7 @@ import { useLayout, useValidate, useVerifyDetailsPanel, useTrialRunPanel, useAiC
 import { useNotify } from '@farris/flow-devkit';
 import { default as LayoutIcon } from './assets/toolbar/layout.svg';
 import { default as ThumbnailIcon } from './assets/toolbar/thumbnail.svg';
-import { default as AiChatIcon } from './assets/toolbar/ai-chat.svg';
+import { default as AiChatIcon } from './assets/toolbar/chat.svg';
 
 import css from './toolbar.module.scss';
 

@@ -1,7 +1,15 @@
 import axios from 'axios'
 
+// HTTPS 走 nginx 代理，HTTP 直连 8080（兼容 dev 模式）
+const getBaseURL = (): string => {
+  if (typeof location !== 'undefined' && location.protocol === 'https:') {
+    return '/solo-mte-8080';
+  }
+  return (import.meta.env.VITE_BASE_PATH as string) || 'http://127.0.0.1:8080';
+};
+
 const service = axios.create({
-  baseURL: import.meta.env.VITE_BASE_PATH as string,
+  baseURL: getBaseURL(),
   timeout: 99999
 })
 

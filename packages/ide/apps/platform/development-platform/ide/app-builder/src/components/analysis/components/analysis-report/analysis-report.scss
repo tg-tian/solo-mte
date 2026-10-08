@@ -1,0 +1,601 @@
+.f-app-analysis-report {
+    .f-page-header {
+        position: relative;
+        height: 48px;
+        margin-bottom: 1rem !important;
+
+        .f-page-header-base {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .f-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                .toolbar-search {
+                    .input-group {
+                        min-width: 280px;
+                        
+                        .input-group-text {
+                            background: #fff;
+                            border-right: none;
+                        }
+                        
+                        .form-control {
+                            border-left: none;
+                            min-width: 200px;
+                        }
+                    }
+                }
+
+                .btn {
+                    box-shadow: 0 4px 10px 0 rgba(69, 144, 255, 0.25);
+                    border-radius: 15px;
+                    margin: 0 6px;
+                }
+
+                .btn-primary {
+                    background-image: linear-gradient(-51deg, #328bff 0%, #2a87ff 100%);
+                }
+            }
+        }
+
+        .f-page-header-background {
+            background-image: linear-gradient(180deg, rgba(221, 236, 255, 0.9) 0%, rgba(249, 252, 255, 0.9) 63%);
+            border-radius: 8px;
+            box-shadow: 0 1px 10px 0 rgba(90, 102, 133, 0.05);
+            height: 100%;
+            opacity: 0.66;
+            position: absolute;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+
+    .f-page-main {
+        height: calc(100% - 60px);
+        overflow: auto;
+    }
+}
+
+// 报告列表样式
+.f-report-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+    padding: 10px;
+
+    .f-report-card {
+        background-image: linear-gradient(0deg, #F7FBFF 0%, #FFFFFF 100%);
+        border: 1px solid rgba(42, 135, 255, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+            box-shadow: 0 4px 16px rgba(42, 135, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .report-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+
+            .report-card-title {
+                h4 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #2D2F33;
+                    margin: 0 0 8px 0;
+                    line-height: 1.4;
+                }
+
+                .report-status {
+                    display: inline-block;
+                    padding: 2px 10px;
+                    border-radius: 10px;
+                    font-size: 12px;
+                    font-weight: 400;
+
+                    &.status-completed {
+                        background: rgba(95, 200, 117, 0.1);
+                        color: #5FC875;
+                        border: 1px solid rgba(95, 200, 117, 0.3);
+                    }
+
+                    &.status-generating {
+                        background: rgba(56, 143, 255, 0.1);
+                        color: #388FFF;
+                        border: 1px solid rgba(56, 143, 255, 0.3);
+                    }
+
+                    &.status-failed {
+                        background: rgba(255, 92, 92, 0.1);
+                        color: #FF5C5C;
+                        border: 1px solid rgba(255, 92, 92, 0.3);
+                    }
+                }
+            }
+
+            .report-card-actions {
+                .btn-link {
+                    color: #388FFF;
+                    padding: 4px;
+
+                    &:hover {
+                        color: #2a87ff;
+                    }
+                }
+            }
+        }
+
+        .report-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(42, 135, 255, 0.1);
+
+            .meta-item {
+                font-size: 13px;
+
+                .meta-label {
+                    color: rgba(45, 47, 51, 0.65);
+                }
+
+                .meta-value {
+                    color: #2A87FF;
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .report-card-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+
+            .stat-item {
+                text-align: center;
+                padding: 12px 8px;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.5);
+
+                .stat-count {
+                    display: block;
+                    font-size: 20px;
+                    font-weight: 600;
+                    margin-bottom: 4px;
+                }
+
+                .stat-label {
+                    font-size: 12px;
+                    color: rgba(45, 47, 51, 0.65);
+                }
+
+                &.stat-errors {
+                    .stat-count {
+                        color: #FF5C5C;
+                    }
+                }
+
+                &.stat-warnings {
+                    .stat-count {
+                        color: #FFB74D;
+                    }
+                }
+
+                &.stat-suggestions {
+                    .stat-count {
+                        color: #388FFF;
+                    }
+                }
+
+                &.stat-rate {
+                    .f-progress {
+                        margin: 8px 0 4px;
+                    }
+                }
+            }
+        }
+
+        .report-card-footer {
+            .report-time {
+                font-size: 12px;
+                color: rgba(45, 47, 51, 0.5);
+            }
+        }
+    }
+
+    .empty-content {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(45, 47, 51, 0.5);
+
+        p {
+            margin-top: 16px;
+            font-size: 14px;
+        }
+    }
+}
+
+// 报告详情样式
+.f-report-detail {
+    padding: 0 20px;
+
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(42, 135, 255, 0.1);
+
+        .btn-link {
+            color: #388FFF;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            &:hover {
+                color: #2a87ff;
+            }
+        }
+
+        .detail-actions {
+            .btn-secondary {
+                background: #FFFFFF;
+                border: 1px solid rgba(233, 236, 243, 1);
+                box-shadow: 0px 2px 6px 0px rgba(31, 35, 41, 0.06);
+                border-radius: 6px;
+                color: #2D2F33;
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    border-color: #388FFF;
+                }
+            }
+        }
+    }
+
+    .detail-content {
+        padding: 24px 0;
+
+        .detail-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+
+            h2 {
+                font-size: 20px;
+                font-weight: 500;
+                color: #2D2F33;
+                margin: 0;
+            }
+
+            .report-status-badge {
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 13px;
+                font-weight: 400;
+
+                &.status-completed {
+                    background: rgba(95, 200, 117, 0.1);
+                    color: #5FC875;
+                    border: 1px solid rgba(95, 200, 117, 0.3);
+                }
+
+                &.status-generating {
+                    background: rgba(56, 143, 255, 0.1);
+                    color: #388FFF;
+                    border: 1px solid rgba(56, 143, 255, 0.3);
+                }
+
+                &.status-failed {
+                    background: rgba(255, 92, 92, 0.1);
+                    color: #FF5C5C;
+                    border: 1px solid rgba(255, 92, 92, 0.3);
+                }
+            }
+        }
+
+        .detail-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: rgba(247, 251, 255, 0.5);
+            border-radius: 8px;
+
+            .meta-row {
+                display: flex;
+                font-size: 14px;
+
+                .meta-label {
+                    color: rgba(45, 47, 51, 0.65);
+                    min-width: 80px;
+                }
+
+                .meta-value {
+                    color: #2D2F33;
+                }
+            }
+        }
+
+        .detail-tabs {
+            // 原生 Tab 样式
+            .nav-tabs {
+                display: flex;
+                gap: 0;
+                border-bottom: 1px solid rgba(42, 135, 255, 0.1);
+                margin-bottom: 20px;
+
+                .nav-tab-item {
+                    padding: 12px 24px;
+                    font-size: 14px;
+                    color: rgba(45, 47, 51, 0.65);
+                    cursor: pointer;
+                    border-bottom: 2px solid transparent;
+                    transition: all 0.2s ease;
+                    user-select: none;
+
+                    &:hover {
+                        color: #388FFF;
+                    }
+
+                    &.active {
+                        color: #388FFF;
+                        border-bottom-color: #388FFF;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .tab-content {
+                .tab-pane {
+                    display: none;
+
+                    &.active {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 概览统计样式
+.f-report-overview {
+    padding: 20px 0;
+
+    .overview-header {
+        margin-bottom: 20px;
+
+        h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2D2F33;
+            margin: 0;
+        }
+    }
+
+    .overview-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(42, 135, 255, 0.1);
+
+            .stat-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+            }
+
+            .stat-info {
+                display: flex;
+                flex-direction: column;
+
+                .stat-number {
+                    font-size: 24px;
+                    font-weight: 600;
+                    line-height: 1.2;
+                }
+
+                .stat-name {
+                    font-size: 13px;
+                    color: rgba(45, 47, 51, 0.65);
+                    margin-top: 4px;
+                }
+            }
+
+            &.stat-total {
+                .stat-icon {
+                    background: rgba(56, 143, 255, 0.1);
+                    color: #388FFF;
+                }
+                .stat-number {
+                    color: #388FFF;
+                }
+            }
+
+            &.stat-errors {
+                .stat-icon {
+                    background: rgba(255, 92, 92, 0.1);
+                    color: #FF5C5C;
+                }
+                .stat-number {
+                    color: #FF5C5C;
+                }
+            }
+
+            &.stat-warnings {
+                .stat-icon {
+                    background: rgba(255, 183, 77, 0.1);
+                    color: #FFB74D;
+                }
+                .stat-number {
+                    color: #FFB74D;
+                }
+            }
+
+            &.stat-suggestions {
+                .stat-icon {
+                    background: rgba(56, 143, 255, 0.1);
+                    color: #388FFF;
+                }
+                .stat-number {
+                    color: #388FFF;
+                }
+            }
+
+            &.stat-rate {
+                .stat-icon {
+                    background: rgba(95, 200, 117, 0.1);
+                    color: #5FC875;
+                }
+                .stat-number {
+                    color: #5FC875;
+                }
+            }
+        }
+    }
+}
+
+// 详细列表样式
+.f-details-list {
+    padding: 20px 0;
+
+    .detail-item {
+        background: #FFFFFF;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 16px;
+        border: 1px solid rgba(42, 135, 255, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+        &.item-type-error {
+            border-left: 4px solid #FF5C5C;
+            
+            .item-type-badge {
+                background: rgba(255, 92, 92, 0.1);
+                color: #FF5C5C;
+                border: 1px solid rgba(255, 92, 92, 0.3);
+            }
+        }
+
+        &.item-type-warning {
+            border-left: 4px solid #FFB74D;
+            
+            .item-type-badge {
+                background: rgba(255, 183, 77, 0.1);
+                color: #FFB74D;
+                border: 1px solid rgba(255, 183, 77, 0.3);
+            }
+        }
+
+        &.item-type-info {
+            border-left: 4px solid #388FFF;
+            
+            .item-type-badge {
+                background: rgba(56, 143, 255, 0.1);
+                color: #388FFF;
+                border: 1px solid rgba(56, 143, 255, 0.3);
+            }
+        }
+
+        &.item-type-suggestion {
+            border-left: 4px solid #5FC875;
+            
+            .item-type-badge {
+                background: rgba(95, 200, 117, 0.1);
+                color: #5FC875;
+                border: 1px solid rgba(95, 200, 117, 0.3);
+            }
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+
+            .item-type-badge {
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .item-name {
+                font-size: 15px;
+                font-weight: 500;
+                color: #2D2F33;
+                margin: 0;
+            }
+        }
+
+        .item-description {
+            font-size: 14px;
+            color: rgba(45, 47, 51, 0.8);
+            margin: 0 0 12px 0;
+            line-height: 1.6;
+        }
+
+        .item-suggestion {
+            font-size: 13px;
+            color: #2D2F33;
+            background: rgba(89, 161, 255, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+
+            strong {
+                color: #388FFF;
+            }
+        }
+
+        .item-location {
+            font-size: 12px;
+            color: rgba(45, 47, 51, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(42, 135, 255, 0.1);
+        }
+    }
+
+    .empty-content {
+        text-align: center;
+        padding: 40px;
+        color: rgba(45, 47, 51, 0.5);
+    }
+}

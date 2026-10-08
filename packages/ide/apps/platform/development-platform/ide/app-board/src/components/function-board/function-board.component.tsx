@@ -1,4 +1,4 @@
-import { defineComponent, inject, ref, computed, nextTick, watch } from "vue";
+import { defineComponent, inject, ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from "vue";
 import { functionBoardProps } from "./function-board.props";
 import { FunctionGroup, MenuGroup, MenuGroupItem, UseMenuData } from "../../composition/types";
 import { FListView } from "@farris/ui-vue";
@@ -48,6 +48,8 @@ export default defineComponent({
         const topOfPostion = 0;
         // 记录菜单列的滚动偏移量，用于实现下方的滚动效果
         const offsetY = ref(0);
+        // 已下线应用 boId 集合
+        const offlineBoIds = ref<Set<string>>(new Set());
 
         const functionGroupsStyle = computed(() => {
             return {
@@ -64,7 +66,7 @@ export default defineComponent({
 
         function flattenFunctionGroups(menuItems: MenuGroupItem[]): FlattenFunctionGroup[] {
             return menuItems.reduce((results: FlattenFunctionGroup[], menuGroupItem: MenuGroupItem) => {
-                const groups = menuGroupItem.functionGroups || [];
+                const groups = (menuGroupItem.functionGroups || []).filter(g => !offlineBoIds.value.has(g.id));
                 const mappedGroups = groups.map((functionGroup) => {
                     return {
                         ...functionGroup,
@@ -166,6 +168,47 @@ export default defineComponent({
             const focusedMenuGroup = latestMenuGroups.find((menuGroup) => menuGroup.id === activeFunctionNavId.value) || latestMenuGroups[0];
             loadFunctionGroupsByMenuGroup(focusedMenuGroup);
         }, { immediate: true });
+
+        let statusTimer: ReturnType<typeof setTimeout> | null = null;
+
+        async function pollAppStatus() {
+            try {
+                const res = await fetch(`/apps/solo-mte-app-status.json?t=${Date.now()}`);
+                const data = await res.json();
+                const newOffline = new Set<string>(data?.offline || []);
+                // 仅在离线列表变化时刷新
+                if (!setsEqual(offlineBoIds.value, newOffline)) {
+                    offlineBoIds.value = newOffline;
+                    const focusedMenuGroup = menuData.value.find((menuGroup) => menuGroup.id === activeFunctionNavId.value) || menuData.value[0];
+                    if (focusedMenuGroup) {
+                        loadFunctionGroupsByMenuGroup(focusedMenuGroup);
+                    }
+                }
+            } catch {
+                // 文件不存在或读取失败，不进行过滤
+            }
+            statusTimer = setTimeout(pollAppStatus, 3000);
+        }
+
+        function setsEqual(a: Set<string>, b: Set<string>): boolean {
+            if (a.size !== b.size) return false;
+            for (const item of a) {
+                if (!b.has(item)) return false;
+            }
+            return true;
+        }
+
+        onMounted(() => {
+            pollAppStatus();
+        });
+
+        onBeforeUnmount(() => {
+            if (statusTimer !== null) {
+                clearTimeout(statusTimer);
+                statusTimer = null;
+            }
+        });
+
         function renderFunctionItems() {
             return <div ref={functionListViewWrapperRef} style={functionGroupsStyle.value} onWheel={onWheel}>
                 <FListView ref={functionListViewRef} data={currentFunctionItems.value} group={group} view="CardView" customClass="f-admin-function-groups">

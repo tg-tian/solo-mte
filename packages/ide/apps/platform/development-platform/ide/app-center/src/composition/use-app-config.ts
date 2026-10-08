@@ -1,20 +1,13 @@
 import axios from "axios";
 import { AppConfigOptions, UseAppConfig } from "./type";
 
-const scenarioConfigModules = import.meta.glob('../../*.config', {
-    eager: true,
-    query: '?raw',
-    import: 'default'
-}) as Record<string, string>;
-
 export function useAppConfig(): UseAppConfig {
     // Farris Admin 全局配置对象资源地址
-    // 默认配置选项: 加载本地菜单和页面资源
     const defaultConfigFileUrl = '/assets/app-config-default.json';
+    const scenarioConfigFileUrl = '/apps/platform/development-platform/ide/app-center/scene.config';
     const defaultTitle = 'SOLO - 场景低代码开发平台';
-    // inBuilder配置选项: 可加载UBML低代码产品发行版inBuilder的菜单和页面数据, 启动inBuilder运行环境后，即可使用此配置文件加载数据
-    // const defaultConfigFileUrl = './assets/config-for-inBuilder.json';
-    // 全局配置对象接口
+
+    // 全局配置对象
     const options: AppConfigOptions = {
         /** 功能菜单数据Url */
         appDataSourceUri: '',
@@ -37,37 +30,32 @@ export function useAppConfig(): UseAppConfig {
         }
     }
 
-    function findFirstScenarioConfig() {
-        const matchedPaths = Object.keys(scenarioConfigModules)
-            .filter((item) => item.toLowerCase().endsWith('.config'))
-            .sort((a, b) => a.localeCompare(b, 'zh-CN'));
-
-        if (!matchedPaths.length) {
-            return null;
-        }
-
-        const rawContent = scenarioConfigModules[matchedPaths[0]];
-        if (!rawContent) {
-            return null;
-        }
-
+    async function loadScenarioConfig(): Promise<any> {
         try {
-            return JSON.parse(rawContent);
-        } catch (error) {
-            console.warn('[app-center] 配置文件解析失败:', matchedPaths[0], error);
-            return null;
+            const response = await axios.get(`${scenarioConfigFileUrl}?t=${Date.now()}`, { responseType: 'text' });
+            if (response.data) {
+                console.log('[app-center] 加载场景配置:', scenarioConfigFileUrl);
+                return JSON.parse(response.data);
+            }
+        } catch {
+            console.log('[app-center] 场景配置加载失败，将使用默认配置');
         }
+        return null;
     }
 
     async function initialize() {
+        // ① 加载默认配置文件
         try {
             const defaultResponse = await axios.get(defaultConfigFileUrl);
             applyConfig(defaultResponse.data);
         } catch (error) {
-            // ignore default config read failure and keep fallback values
+            // 默认配置读取失败时保持 fallback 值，不影响后续流程
         }
 
-        const scenarioConfig = findFirstScenarioConfig();
+        // ② 运行时从部署目录加载场景配置；文件不存在时保持默认配置
+        const scenarioConfig = await loadScenarioConfig();
+
+        // ③ 场景配置文件中的 sceneData 会覆盖默认值，提供 sceneId 等关键参数
         if (scenarioConfig) {
             applyConfig(scenarioConfig);
         }

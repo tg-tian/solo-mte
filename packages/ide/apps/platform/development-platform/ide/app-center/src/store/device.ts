@@ -69,6 +69,8 @@ export const useDeviceStore = defineStore('device', {
       if (payload.category !== undefined) target.category = payload.category
       if (payload.metaModel !== undefined) target.metaModel = payload.metaModel
       if (payload.isAccessible !== undefined) target.isAccessible = payload.isAccessible
+      if (payload.pointX !== undefined) target.pointX = payload.pointX
+      if (payload.pointY !== undefined) target.pointY = payload.pointY
 
       target.state = {
         reported: {
@@ -103,7 +105,13 @@ export const useDeviceStore = defineStore('device', {
         if (!message?.topic) return
         if (message.topic === 'device.updated') this.applyShadow(message.data)
         if (message.topic === 'device.discovery') this.handleDiscovery(message.data)
-        if (message.topic === 'device.event') this.recentEvents = [message.data, ...this.recentEvents].slice(0, 50)
+        if (message.topic === 'device.event') {
+          const eventData = {
+            ...(message.data as any),
+            receivedAt: Date.now(),
+          }
+          this.recentEvents = [eventData, ...this.recentEvents].slice(0, 50)
+        }
       }
       wsInstance.onclose = () => {
         wsInstance = null
