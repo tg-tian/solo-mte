@@ -27,6 +27,8 @@ export interface MailConfigItem {
     ownerUserId?: string;
     ownerCode?: string;
     ownerName?: string;
+    /** 是否为改造前创建的共享配置（首次进入租户时从基础数据复制而来） */
+    inherited?: boolean;
     createdAt?: string;
     updatedAt?: string;
     hasPassword?: boolean;
@@ -38,6 +40,9 @@ export interface CurrentUser {
     userId?: string;
     code?: string;
     name?: string;
+    /** 租户ID（平台多租户标识，页面按它做数据隔离） */
+    tenantId?: number | string;
+    tenantName?: string;
 }
 
 /** REST 配置的请求方法 */
@@ -66,6 +71,8 @@ export interface RestConfigItem {
     ownerUserId?: string;
     ownerCode?: string;
     ownerName?: string;
+    /** 是否为改造前创建的共享配置（首次进入租户时从基础数据复制而来） */
+    inherited?: boolean;
     createdAt?: string;
     updatedAt?: string;
     hasApiKeyValue?: boolean;
@@ -77,14 +84,14 @@ export function getCurrentUser(): Promise<CurrentUser> {
     return axios.get('/api/runtime/sys/v1.0/userinfos?infoType=user').then((res) => res.data);
 }
 
-/** 列出当前用户可见的邮件配置：公共 + 本人的个人配置 */
-export function listMailConfigs(userId: string): Promise<{ ok: boolean; configs: MailConfigItem[] }> {
-    return axios.get(`${BASE}/resources/mail`, { params: { userId } }).then((res) => res.data);
+/** 列出当前用户在本租户可见的邮件配置：公共 + 本人的个人配置 */
+export function listMailConfigs(userId: string, tenantId: string): Promise<{ ok: boolean; configs: MailConfigItem[] }> {
+    return axios.get(`${BASE}/resources/mail`, { params: { userId, tenantId } }).then((res) => res.data);
 }
 
 /** 新建/更新邮件配置。password 传明文，这里负责用服务端公钥加密后再发送 */
-export function saveMailConfig(payload: Record<string, any>, publicKey: string): Promise<{ ok: boolean; config: MailConfigItem }> {
-    const body = { ...payload };
+export function saveMailConfig(payload: Record<string, any>, publicKey: string, tenantId: string): Promise<{ ok: boolean; config: MailConfigItem }> {
+    const body: Record<string, any> = { ...payload, tenantId };
     if (body.password) {
         body.password = rsaEncryptWithKey(String(body.password), publicKey);
     } else {
@@ -94,18 +101,18 @@ export function saveMailConfig(payload: Record<string, any>, publicKey: string):
 }
 
 /** 删除邮件配置（仅创建者） */
-export function deleteMailConfig(id: string, userId: string): Promise<{ ok: boolean }> {
-    return axios.post(`${BASE}/resources/mail/delete`, { id, userId }).then((res) => res.data);
+export function deleteMailConfig(id: string, userId: string, tenantId: string): Promise<{ ok: boolean }> {
+    return axios.post(`${BASE}/resources/mail/delete`, { id, userId, tenantId }).then((res) => res.data);
 }
 
-/** 列出当前用户可见的 REST 配置：公共 + 本人的个人配置 */
-export function listRestConfigs(userId: string): Promise<{ ok: boolean; configs: RestConfigItem[] }> {
-    return axios.get(`${BASE}/resources/rest`, { params: { userId } }).then((res) => res.data);
+/** 列出当前用户在本租户可见的 REST 配置：公共 + 本人的个人配置 */
+export function listRestConfigs(userId: string, tenantId: string): Promise<{ ok: boolean; configs: RestConfigItem[] }> {
+    return axios.get(`${BASE}/resources/rest`, { params: { userId, tenantId } }).then((res) => res.data);
 }
 
 /** 新建/更新 REST 配置。apiKeyValue / bearerToken 传明文，这里负责加密后再发送；留空表示不修改 */
-export function saveRestConfig(payload: Record<string, any>, publicKey: string): Promise<{ ok: boolean; config: RestConfigItem }> {
-    const body = { ...payload };
+export function saveRestConfig(payload: Record<string, any>, publicKey: string, tenantId: string): Promise<{ ok: boolean; config: RestConfigItem }> {
+    const body: Record<string, any> = { ...payload, tenantId };
     for (const field of ['apiKeyValue', 'bearerToken']) {
         if (body[field]) {
             body[field] = rsaEncryptWithKey(String(body[field]), publicKey);
@@ -117,8 +124,8 @@ export function saveRestConfig(payload: Record<string, any>, publicKey: string):
 }
 
 /** 删除 REST 配置（仅创建者） */
-export function deleteRestConfig(id: string, userId: string): Promise<{ ok: boolean }> {
-    return axios.post(`${BASE}/resources/rest/delete`, { id, userId }).then((res) => res.data);
+export function deleteRestConfig(id: string, userId: string, tenantId: string): Promise<{ ok: boolean }> {
+    return axios.post(`${BASE}/resources/rest/delete`, { id, userId, tenantId }).then((res) => res.data);
 }
 
 /** 取服务端 RSA 公钥（与部署配置共用同一对密钥） */
