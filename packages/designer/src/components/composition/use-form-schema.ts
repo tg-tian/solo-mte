@@ -44,7 +44,7 @@ export function useFormSchema(): UseFormSchema {
         return formSchema;
     }
 
-    
+
     /**
      * 设置DOM JSON 数据
      * @param newFormSchema DOM JSON结构
@@ -213,7 +213,9 @@ export function useFormSchema(): UseFormSchema {
     }
 
     function getExpressions(): FormExpression[] {
-        return formSchema?.module.expressions || [];
+        const { module } = formSchema;
+        module.expressions = module.expressions || [];
+        return module.expressions;
     }
 
     function setExpressions(value) {
@@ -1367,7 +1369,7 @@ export function useFormSchema(): UseFormSchema {
     /**
      * 检查组件是否在侧边栏中，在侧边栏中的字段可以与非侧边栏中的字段重复。
      */
-     function checkComponentExistInDrawer(componentId: string): boolean {
+    function checkComponentExistInDrawer(componentId: string): boolean {
         if (!componentId) {
             return false;
         }
@@ -1386,7 +1388,7 @@ export function useFormSchema(): UseFormSchema {
     /**
      *  获取页面id
      */
-     function getPageIdByComponentId(comonentId: string): string | undefined {
+    function getPageIdByComponentId(comonentId: string): string | undefined {
         let currentComponent = getComponentById(comonentId);
         while (currentComponent) {
             if (currentComponent.componentType === 'page') {
@@ -1457,7 +1459,7 @@ export function useFormSchema(): UseFormSchema {
         resolveComponentEvents,
         recordIsComposedForm,
         checkIfComposedForm,
-        
+
         getPageIdByComponentId
     };
 }
