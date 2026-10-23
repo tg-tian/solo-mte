@@ -1,3 +1,4 @@
+import { withCurrentUser } from '../../../../../../../src/utils/current-user';
 import axios from 'axios';
 
 const service = axios.create({
@@ -5,7 +6,7 @@ const service = axios.create({
 });
 
 service.interceptors.request.use(
-  (config: any) => config,
+  withCurrentUser,
   (error) => Promise.reject(error)
 );
 
