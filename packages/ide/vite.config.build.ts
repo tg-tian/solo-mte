@@ -131,6 +131,39 @@ function copyVSCodeRuntimeAssets() {
     };
 }
 
+/**
+ * 拷贝「既不是 Vite 入口、也不在 public 下」的运行时文件到产物。
+ *
+ * 目前只有 app-center 的控件属性清单：源文件放在 apps/platform/development-platform/ide/ 下，
+ * 与页面 fetch 的地址（/apps/platform/development-platform/ide/control-property-meta.json）同路径，
+ * 但它既没被 import 也不在 public 里，Vite 不会带上，必须在这里显式拷。
+ *
+ * ⚠️ 只拷明确列出的文件名，**不能整目录拷贝**：同层还有各子应用的 index.html
+ * （源码版引用 ./src/main.ts、由 Vite 构建替换），整目录拷会覆盖构建产物页面。
+ *
+ * 生成方式：npm run scan:property-meta
+ */
+function copyAppRuntimeFiles() {
+    const files = ['apps/platform/development-platform/ide/control-property-meta.json'];
+    return {
+        name: 'copy-app-runtime-files',
+        closeBundle() {
+            const distDir = resolve(__dirname, 'dist');
+            for (const rel of files) {
+                const srcFile = resolve(__dirname, rel);
+                if (!fs.existsSync(srcFile)) {
+                    console.warn(`[copy-app-runtime-files] 源文件不存在，已跳过：${rel}（可执行 npm run scan:property-meta 生成）`);
+                    continue;
+                }
+                const destFile = path.join(distDir, rel);
+                fs.mkdirSync(path.dirname(destFile), { recursive: true });
+                fs.copyFileSync(srcFile, destFile);
+                console.log(`[copy-app-runtime-files] ${rel} → ${path.relative(__dirname, destFile)}`);
+            }
+        },
+    };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
     base: '/',
@@ -154,7 +187,7 @@ export default defineConfig({
             },
         },
     },
-    plugins: [vue(), vueJsx(), copyVSCodeRuntimeAssets()],
+    plugins: [vue(), vueJsx(), copyVSCodeRuntimeAssets(), copyAppRuntimeFiles()],
     resolve: {
         alias: {
             '@': resolve(__dirname, '../'),

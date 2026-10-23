@@ -1,0 +1,3013 @@
+{
+  "generatedAt": "2026-10-09T08:41:51.598Z",
+  "source": {
+    "uiVue": "E:/codes/GSPCloud/rtc-farris-vue/farris-vue/packages/ui-vue/components",
+    "toolbox": "E:\\codes\\GSPCloud\\solo-mte\\packages\\designer\\src\\components\\types\\toolbox\\pc-toolbox.json",
+    "scanner": "app-center/scan-control-property-meta.mjs",
+    "note": "静态扫描产物，是运行时属性面板的「超集」；属性路径与设计器过滤规则一致"
+  },
+  "stats": {
+    "toolboxTypes": 23,
+    "resolvedTypes": 23,
+    "unresolvedTypes": [],
+    "propertyCount": 449,
+    "warnings": []
+  },
+  "controls": [
+    {
+      "type": "input-group",
+      "name": "文本",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "enableClear",
+              "title": "启用清除按钮",
+              "path": "editor.enableClear"
+            },
+            {
+              "id": "maxLength",
+              "title": "最大长度",
+              "path": "editor.maxLength"
+            },
+            {
+              "id": "textAlign",
+              "title": "文本对齐方式",
+              "path": "editor.textAlign"
+            },
+            {
+              "id": "showType",
+              "title": "展示类型",
+              "path": "editor.showType"
+            },
+            {
+              "id": "enableViewPassword",
+              "title": "能否查看密码",
+              "path": "editor.enableViewPassword"
+            },
+            {
+              "id": "groupText",
+              "title": "按钮文本",
+              "path": "editor.groupText"
+            }
+          ]
+        },
+        {
+          "id": "formatValidation",
+          "name": "输入格式校验",
+          "properties": [
+            {
+              "id": "type",
+              "title": "格式类型",
+              "path": "formatValidation.type"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "language-textbox",
+      "name": "多语输入框",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "maxLength",
+              "title": "最大长度",
+              "path": "editor.maxLength"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "textarea",
+      "name": "多行文本",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "resizable",
+              "title": "拖拽调整大小",
+              "path": "editor.resizable"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "date-picker",
+      "name": "日期",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "enableClear",
+              "title": "启用清除按钮",
+              "path": "editor.enableClear"
+            },
+            {
+              "id": "editable",
+              "title": "启用编辑",
+              "path": "editor.editable"
+            },
+            {
+              "id": "selectMode",
+              "title": "显示类型",
+              "path": "editor.selectMode"
+            },
+            {
+              "id": "showWeekNumber",
+              "title": "显示第几周",
+              "path": "editor.showWeekNumber"
+            },
+            {
+              "id": "firstDayOfTheWeek",
+              "title": "每周起始日",
+              "path": "editor.firstDayOfTheWeek"
+            },
+            {
+              "id": "showTime",
+              "title": "启用时间选择",
+              "path": "editor.showTime"
+            },
+            {
+              "id": "hourStep",
+              "title": "时步长",
+              "path": "editor.hourStep"
+            },
+            {
+              "id": "minuteStep",
+              "title": "分步长",
+              "path": "editor.minuteStep"
+            },
+            {
+              "id": "secondStep",
+              "title": "秒步长",
+              "path": "editor.secondStep"
+            },
+            {
+              "id": "displayFormat",
+              "title": "展示格式",
+              "path": "editor.displayFormat"
+            },
+            {
+              "id": "valueFormat",
+              "title": "存储格式",
+              "path": "editor.valueFormat"
+            },
+            {
+              "id": "minDate",
+              "title": "最小日期",
+              "path": "editor.minDate"
+            },
+            {
+              "id": "maxDate",
+              "title": "最大日期",
+              "path": "editor.maxDate"
+            },
+            {
+              "id": "enableQuickSelect",
+              "title": "启用快速选择",
+              "path": "editor.enableQuickSelect"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "combo-list",
+      "name": "下拉列表",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "enableClear",
+              "title": "启用清除按钮",
+              "path": "editor.enableClear"
+            },
+            {
+              "id": "dataSourceType",
+              "title": "数据源类型",
+              "path": "editor.dataSourceType"
+            },
+            {
+              "id": "dataSource",
+              "title": "数据",
+              "path": "editor.dataSource"
+            },
+            {
+              "id": "data",
+              "title": "数据",
+              "path": "editor.data"
+            },
+            {
+              "id": "url",
+              "title": "服务端API",
+              "path": "editor.url"
+            },
+            {
+              "id": "textField",
+              "title": "数据源显示字段",
+              "path": "editor.textField"
+            },
+            {
+              "id": "valueField",
+              "title": "数据源值字段",
+              "path": "editor.valueField"
+            },
+            {
+              "id": "multiSelect",
+              "title": "启用多选",
+              "path": "editor.multiSelect"
+            },
+            {
+              "id": "maxLength",
+              "title": "最大输入长度",
+              "path": "editor.maxLength"
+            },
+            {
+              "id": "showSelectAll",
+              "title": "启用全选",
+              "path": "editor.showSelectAll"
+            },
+            {
+              "id": "viewType",
+              "title": "数据展示类型",
+              "path": "editor.viewType"
+            },
+            {
+              "id": "separator",
+              "title": "分隔符",
+              "path": "editor.separator"
+            },
+            {
+              "id": "editable",
+              "title": "允许编辑",
+              "path": "editor.editable"
+            },
+            {
+              "id": "hideDisabledItems",
+              "title": "隐藏禁用项",
+              "path": "editor.hideDisabledItems"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "number-spinner",
+      "name": "数值",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "precision",
+              "title": "精度",
+              "path": "editor.precision"
+            },
+            {
+              "id": "step",
+              "title": "步长",
+              "path": "editor.step"
+            },
+            {
+              "id": "min",
+              "title": "最小值",
+              "path": "editor.min"
+            },
+            {
+              "id": "max",
+              "title": "最大值",
+              "path": "editor.max"
+            },
+            {
+              "id": "textAlign",
+              "title": "对齐方式",
+              "path": "editor.textAlign"
+            },
+            {
+              "id": "showZero",
+              "title": "显示0值",
+              "path": "editor.showZero"
+            },
+            {
+              "id": "nullable",
+              "title": "允许为空",
+              "path": "editor.nullable"
+            },
+            {
+              "id": "useThousands",
+              "title": "启用千分位",
+              "path": "editor.useThousands"
+            },
+            {
+              "id": "showButton",
+              "title": "显示加减按钮",
+              "path": "editor.showButton"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "check-box",
+      "name": "复选框",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "label",
+              "title": "名称",
+              "path": "editor.label"
+            },
+            {
+              "id": "trueValue",
+              "title": "选中的值",
+              "path": "editor.trueValue"
+            },
+            {
+              "id": "falseValue",
+              "title": "未选中的值",
+              "path": "editor.falseValue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "check-group",
+      "name": "复选框组",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "direction",
+              "title": "排列方向",
+              "path": "editor.direction"
+            },
+            {
+              "id": "data",
+              "title": "数据",
+              "path": "editor.data"
+            },
+            {
+              "id": "bindDataSource",
+              "title": "绑定数据源",
+              "path": "editor.bindDataSource"
+            },
+            {
+              "id": "textField",
+              "title": "文本字段",
+              "path": "editor.textField"
+            },
+            {
+              "id": "valueField",
+              "title": "值字段",
+              "path": "editor.valueField"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "radio-group",
+      "name": "单选组",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "direction",
+              "title": "排列方向",
+              "path": "editor.direction"
+            },
+            {
+              "id": "data",
+              "title": "数据",
+              "path": "editor.data"
+            },
+            {
+              "id": "bindDataSource",
+              "title": "绑定数据源",
+              "path": "editor.bindDataSource"
+            },
+            {
+              "id": "textField",
+              "title": "文本字段",
+              "path": "editor.textField"
+            },
+            {
+              "id": "valueField",
+              "title": "值字段",
+              "path": "editor.valueField"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "switch",
+      "name": "开关",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "onLabel",
+              "title": "打开标签",
+              "path": "editor.onLabel"
+            },
+            {
+              "id": "offLabel",
+              "title": "关闭标签",
+              "path": "editor.offLabel"
+            },
+            {
+              "id": "onBackground",
+              "title": "打开背景色",
+              "path": "editor.onBackground"
+            },
+            {
+              "id": "offBackground",
+              "title": "关闭背景色",
+              "path": "editor.offBackground"
+            },
+            {
+              "id": "size",
+              "title": "尺寸",
+              "path": "editor.size"
+            },
+            {
+              "id": "trueValue",
+              "title": "打开的值",
+              "path": "editor.trueValue"
+            },
+            {
+              "id": "falseValue",
+              "title": "关闭的值",
+              "path": "editor.falseValue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "lookup",
+      "name": "帮助",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "dialog",
+          "name": "帮助窗口",
+          "properties": [
+            {
+              "id": "openType",
+              "title": "打开方式",
+              "path": "dialog.openType"
+            },
+            {
+              "id": "title",
+              "title": "标题",
+              "path": "dialog.title"
+            },
+            {
+              "id": "width",
+              "title": "宽度",
+              "path": "dialog.width"
+            },
+            {
+              "id": "height",
+              "title": "高度",
+              "path": "dialog.height"
+            },
+            {
+              "id": "resizeable",
+              "title": "允许调整窗口尺寸",
+              "path": "dialog.resizeable"
+            },
+            {
+              "id": "rememberSize",
+              "title": "记录窗口尺寸",
+              "path": "dialog.rememberSize"
+            },
+            {
+              "id": "enableEsc",
+              "title": "允许ESC关闭",
+              "path": "dialog.enableEsc"
+            },
+            {
+              "id": "showMaxButton",
+              "title": "显示最大化按钮",
+              "path": "dialog.showMaxButton"
+            },
+            {
+              "id": "showCloseButton",
+              "title": "显示关闭按钮",
+              "path": "dialog.showCloseButton"
+            }
+          ]
+        },
+        {
+          "id": "lookup",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "enableClear",
+              "title": "启用清除按钮",
+              "path": "editor.enableClear"
+            },
+            {
+              "id": "enableTitle",
+              "title": "悬停提示",
+              "path": "editor.enableTitle"
+            },
+            {
+              "id": "editable",
+              "title": "允许编辑",
+              "path": "editor.editable"
+            },
+            {
+              "id": "allowFreeInput",
+              "title": "任意输入",
+              "path": "editor.allowFreeInput"
+            },
+            {
+              "id": "dataSource",
+              "title": "数据源",
+              "path": "editor.dataSource"
+            },
+            {
+              "id": "filterConditions",
+              "title": "过滤条件",
+              "path": "editor.filterConditions"
+            },
+            {
+              "id": "displayType",
+              "title": "展示类型",
+              "path": "editor.displayType"
+            },
+            {
+              "id": "idField",
+              "title": "标识字段",
+              "path": "editor.idField"
+            },
+            {
+              "id": "textField",
+              "title": "文本字段",
+              "path": "editor.textField"
+            },
+            {
+              "id": "mappingFields",
+              "title": "字段映射",
+              "path": "editor.mappingFields"
+            },
+            {
+              "id": "textAlign",
+              "title": "文本对齐方式",
+              "path": "editor.textAlign"
+            },
+            {
+              "id": "customFormatter",
+              "title": "格式化",
+              "path": "editor.customFormatter"
+            },
+            {
+              "id": "enableToSelect",
+              "title": "选中已选值",
+              "path": "editor.enableToSelect"
+            },
+            {
+              "id": "multiSelect",
+              "title": "启用多选",
+              "path": "editor.multiSelect"
+            },
+            {
+              "id": "showSelections",
+              "title": "显示已选记录",
+              "path": "editor.showSelections"
+            },
+            {
+              "id": "separator",
+              "title": "多选分隔符",
+              "path": "editor.separator"
+            },
+            {
+              "id": "enableFavorite",
+              "title": "启用收藏夹",
+              "path": "editor.enableFavorite"
+            },
+            {
+              "id": "enableUserData",
+              "title": "保存界面状态",
+              "path": "editor.enableUserData"
+            }
+          ]
+        },
+        {
+          "id": "navigatiorConfig",
+          "name": "导航栏",
+          "properties": [
+            {
+              "id": "showNavigation",
+              "title": "显示导航栏",
+              "path": "showNavigation"
+            },
+            {
+              "id": "navigatorWidth",
+              "title": "导航栏宽度",
+              "path": "navigatorWidth"
+            },
+            {
+              "id": "selectFirstNavItem",
+              "title": "默认选中首条导航数据",
+              "path": "selectFirstNavItem"
+            },
+            {
+              "id": "customNavFormatter",
+              "title": "左侧导航格式化",
+              "path": "customNavFormatter"
+            }
+          ]
+        },
+        {
+          "id": "pager",
+          "name": "分页",
+          "properties": [
+            {
+              "id": "showLimits",
+              "title": "显示条数选择器",
+              "path": "pagination.showLimits"
+            },
+            {
+              "id": "sizeLimits",
+              "title": "每页显示条数",
+              "path": "pagination.sizeLimits"
+            },
+            {
+              "id": "size",
+              "title": "默认显示条数",
+              "path": "pagination.size"
+            }
+          ]
+        },
+        {
+          "id": "searchConfig",
+          "name": "搜索",
+          "properties": [
+            {
+              "id": "enableMultiFieldSearch",
+              "title": "启用多字段查询",
+              "path": "editor.enableMultiFieldSearch"
+            },
+            {
+              "id": "searchAnyField",
+              "title": "允许查询所有列",
+              "path": "editor.searchAnyField"
+            },
+            {
+              "id": "enableEqualSearch",
+              "title": "启用精确搜索",
+              "path": "editor.enableEqualSearch"
+            }
+          ]
+        },
+        {
+          "id": "treeConfig",
+          "name": "树形数据配置",
+          "properties": [
+            {
+              "id": "treeToList",
+              "title": "以列表形式展示",
+              "path": "editor.treeToList"
+            },
+            {
+              "id": "navTreeToList",
+              "title": "以列表形式展示",
+              "path": "editor.navTreeToList"
+            },
+            {
+              "id": "loadTreeDataType",
+              "title": "数据加载方式",
+              "path": "editor.loadTreeDataType"
+            },
+            {
+              "id": "enableFullTree",
+              "title": "构造完整树",
+              "path": "editor.enableFullTree"
+            },
+            {
+              "id": "onlySelectLeaf",
+              "title": "仅选择叶子节点",
+              "path": "editor.onlySelectLeaf"
+            },
+            {
+              "id": "enableCascade",
+              "title": "启用级联选择",
+              "path": "editor.enableCascade"
+            },
+            {
+              "id": "showCascadeControl",
+              "title": "显示级联状态",
+              "path": "editor.showCascadeControl"
+            },
+            {
+              "id": "cascadeValue",
+              "title": "缺省级联选择模式",
+              "path": "editor.cascadeValue"
+            },
+            {
+              "id": "expandLevel",
+              "title": "默认展开层级",
+              "path": "editor.expandLevel"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "time-picker",
+      "name": "时间选择",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "编辑器类型",
+              "path": "editor.type"
+            },
+            {
+              "id": "titleSourceType",
+              "title": "标签类型",
+              "path": "titleSourceType"
+            },
+            {
+              "id": "label",
+              "title": "标签",
+              "path": "label"
+            },
+            {
+              "id": "titleDataSource",
+              "title": "标签",
+              "path": "titleDataSource"
+            },
+            {
+              "id": "showLabelType",
+              "title": "标签显示",
+              "path": "showLabelType"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            },
+            {
+              "id": "enableClear",
+              "title": "启用清除按钮",
+              "path": "editor.enableClear"
+            },
+            {
+              "id": "editable",
+              "title": "允许编辑",
+              "path": "editor.editable"
+            },
+            {
+              "id": "use12Hours",
+              "title": "是否使用12小时制",
+              "path": "editor.use12Hours"
+            },
+            {
+              "id": "format",
+              "title": "格式",
+              "path": "editor.format"
+            },
+            {
+              "id": "showHeader",
+              "title": "是否显示时分秒标题",
+              "path": "editor.showHeader"
+            },
+            {
+              "id": "hourStep",
+              "title": "时步长",
+              "path": "editor.hourStep"
+            },
+            {
+              "id": "minuteStep",
+              "title": "分步长",
+              "path": "editor.minuteStep"
+            },
+            {
+              "id": "secondStep",
+              "title": "秒步长",
+              "path": "editor.secondStep"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "response-form",
+      "name": "卡片面板",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "data-grid",
+      "name": "表格",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "columns",
+              "title": "列设置",
+              "path": "columns"
+            },
+            {
+              "id": "showStripe",
+              "title": "显示条纹",
+              "path": "showStripe"
+            },
+            {
+              "id": "showBorder",
+              "title": "显示边框",
+              "path": "showBorder"
+            },
+            {
+              "id": "showSetting",
+              "title": "显示设置按钮",
+              "path": "showSetting"
+            },
+            {
+              "id": "enableColumnSettingSolution",
+              "title": "启用列设置方案",
+              "path": "enableColumnSettingSolution"
+            },
+            {
+              "id": "emptyTemplate",
+              "title": "空模板",
+              "path": "emptyTemplate"
+            },
+            {
+              "id": "virtualized",
+              "title": "是否虚拟加载",
+              "path": "virtualized"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            },
+            {
+              "id": "dataSource",
+              "title": "绑定数据源",
+              "path": "dataSource"
+            }
+          ]
+        },
+        {
+          "id": "column",
+          "name": "填充列宽",
+          "properties": [
+            {
+              "id": "fitMode",
+              "title": "填充模式",
+              "path": "fitMode"
+            }
+          ]
+        },
+        {
+          "id": "command",
+          "name": "操作列",
+          "properties": [
+            {
+              "id": "enableType",
+              "title": "操作列",
+              "path": "enableType"
+            },
+            {
+              "id": "count",
+              "title": "平铺按钮数量",
+              "path": "count"
+            },
+            {
+              "id": "commands",
+              "title": "操作项",
+              "path": "commands"
+            },
+            {
+              "id": "formatter",
+              "title": "操作列模板",
+              "path": "formatter"
+            },
+            {
+              "id": "columnWidth",
+              "title": "操作列宽度",
+              "path": "columnWidth"
+            }
+          ]
+        },
+        {
+          "id": "filter",
+          "name": "过滤",
+          "properties": [
+            {
+              "id": "filterStyle",
+              "title": "过滤风格",
+              "path": "filterStyle"
+            },
+            {
+              "id": "mode",
+              "title": "类型",
+              "path": "mode"
+            }
+          ]
+        },
+        {
+          "id": "gridRules",
+          "name": "卡片格式",
+          "properties": [
+            {
+              "id": "displayType",
+              "title": "显示模式",
+              "path": "displayType"
+            },
+            {
+              "id": "showCardHeader",
+              "title": "显示头部",
+              "path": "showCardHeader"
+            },
+            {
+              "id": "cardMainTitle",
+              "title": "卡片主标题",
+              "path": "cardMainTitle"
+            },
+            {
+              "id": "cardTitleTemplate",
+              "title": "头部标题模板",
+              "path": "cardTitleTemplate"
+            },
+            {
+              "id": "cardHeaderTemplate",
+              "title": "头部内容模板",
+              "path": "cardHeaderTemplate"
+            },
+            {
+              "id": "cardToolbar",
+              "title": "头部工具栏按钮组",
+              "path": "cardToolbar"
+            },
+            {
+              "id": "showCardFooter",
+              "title": "显示底部",
+              "path": "showCardFooter"
+            },
+            {
+              "id": "cardFooterTemplate",
+              "title": "底部内容模板",
+              "path": "cardFooterTemplate"
+            },
+            {
+              "id": "rules",
+              "title": "格式配置",
+              "path": "rules"
+            }
+          ]
+        },
+        {
+          "id": "group",
+          "name": "分组",
+          "properties": [
+            {
+              "id": "enable",
+              "title": "启用",
+              "path": "enable"
+            },
+            {
+              "id": "customRender",
+              "title": "自定义分组行模板",
+              "path": "customRender"
+            },
+            {
+              "id": "groupFields",
+              "title": "分组字段",
+              "path": "groupFields"
+            }
+          ]
+        },
+        {
+          "id": "pagination",
+          "name": "分页",
+          "properties": [
+            {
+              "id": "enable",
+              "title": "启用分页",
+              "path": "pagination.enable"
+            },
+            {
+              "id": "showIndex",
+              "title": "显示页码",
+              "path": "pagination.showIndex"
+            },
+            {
+              "id": "showLimits",
+              "title": "显示分页条数",
+              "path": "pagination.showLimits"
+            },
+            {
+              "id": "sizeLimits",
+              "title": "分页条数",
+              "path": "pagination.sizeLimits"
+            },
+            {
+              "id": "size",
+              "title": "默认分页条数",
+              "path": "pagination.size"
+            },
+            {
+              "id": "showGoto",
+              "title": "显示页码输入框",
+              "path": "pagination.showGoto"
+            }
+          ]
+        },
+        {
+          "id": "rowNumber",
+          "name": "行号配置",
+          "properties": [
+            {
+              "id": "enable",
+              "title": "显示行号",
+              "path": "rowNumber.enable"
+            },
+            {
+              "id": "width",
+              "title": "宽度",
+              "path": "rowNumber.width"
+            },
+            {
+              "id": "heading",
+              "title": "标题",
+              "path": "rowNumber.heading"
+            }
+          ]
+        },
+        {
+          "id": "rowOption",
+          "name": "行配置",
+          "properties": [
+            {
+              "id": "customRowStyle",
+              "title": "行样式",
+              "path": "customRowStyle"
+            },
+            {
+              "id": "customCellStyle",
+              "title": "单元格样式",
+              "path": "customCellStyle"
+            }
+          ]
+        },
+        {
+          "id": "selection",
+          "name": "多选配置",
+          "properties": [
+            {
+              "id": "multiSelect",
+              "title": "启用多选",
+              "path": "editor.multiSelect"
+            },
+            {
+              "id": "showCheckbox",
+              "title": "显示复选框",
+              "path": "editor.showCheckbox"
+            },
+            {
+              "id": "showSelectAll",
+              "title": "显示全选",
+              "path": "editor.showSelectAll"
+            }
+          ]
+        },
+        {
+          "id": "sort",
+          "name": "排序",
+          "properties": [
+            {
+              "id": "mode",
+              "title": "类型",
+              "path": "mode"
+            }
+          ]
+        },
+        {
+          "id": "summary",
+          "name": "合计行",
+          "properties": [
+            {
+              "id": "enable",
+              "title": "启用",
+              "path": "enable"
+            },
+            {
+              "id": "customRender",
+              "title": "合计行模板",
+              "path": "customRender"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tabs",
+      "name": "标签页区域",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "showHeader",
+              "title": "是否显示标签的头部",
+              "path": "showHeader"
+            },
+            {
+              "id": "titleWidth",
+              "title": "标题区域宽度（%）",
+              "path": "titleWidth"
+            },
+            {
+              "id": "autoTitleWidth",
+              "title": "标题自适应宽度",
+              "path": "autoTitleWidth"
+            },
+            {
+              "id": "fill",
+              "title": "填充",
+              "path": "fill"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "activeId",
+              "title": "默认选中标签页",
+              "path": "activeId"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "html-template",
+      "name": "模板容器",
+      "categories": [
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "template",
+          "name": "模板",
+          "properties": [
+            {
+              "id": "html",
+              "title": "html",
+              "path": "html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "name": "分组面板",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充内容区域",
+              "path": "fill"
+            },
+            {
+              "id": "showHeader",
+              "title": "显示标题栏区域",
+              "path": "showHeader"
+            },
+            {
+              "id": "mainTitle",
+              "title": "主标题",
+              "path": "mainTitle"
+            },
+            {
+              "id": "subTitle",
+              "title": "副标题",
+              "path": "subTitle"
+            },
+            {
+              "id": "enableMaximize",
+              "title": "启用最大化",
+              "path": "enableMaximize"
+            },
+            {
+              "id": "enableAccordion",
+              "title": "面板收折",
+              "path": "enableAccordion"
+            },
+            {
+              "id": "expandStatus",
+              "title": "默认状态",
+              "path": "expandStatus"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "extend",
+          "name": "扩展",
+          "properties": [
+            {
+              "id": "extendedAreaHtml",
+              "title": "扩展区域模板",
+              "path": "extendedAreaHtml"
+            },
+            {
+              "id": "extendedAreaClass",
+              "title": "扩展区域class",
+              "path": "extendedAreaClass"
+            },
+            {
+              "id": "contentClass",
+              "title": "主内容区域class",
+              "path": "contentClass"
+            }
+          ]
+        },
+        {
+          "id": "headerTemplate",
+          "name": "标题栏模板配置",
+          "properties": [
+            {
+              "id": "headerHtml",
+              "title": "标题栏模板",
+              "path": "headerHtml"
+            },
+            {
+              "id": "headerClass",
+              "title": "标题栏class",
+              "path": "headerClass"
+            },
+            {
+              "id": "headerTitleHtml",
+              "title": "标题模板",
+              "path": "headerTitleHtml"
+            },
+            {
+              "id": "headerContentHtml",
+              "title": "内容模板",
+              "path": "headerContentHtml"
+            },
+            {
+              "id": "headerContentClass",
+              "title": "内容区域class",
+              "path": "headerContentClass"
+            },
+            {
+              "id": "toolbarHtml",
+              "title": "工具栏模板",
+              "path": "toolbarHtml"
+            },
+            {
+              "id": "buttonsClass",
+              "title": "工具栏class",
+              "path": "buttonsClass"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fieldset",
+      "name": "分组",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "content-container",
+      "name": "容器",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "external-container",
+      "name": "外部容器",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "content",
+          "name": "内容",
+          "properties": [
+            {
+              "id": "externalComponent",
+              "title": "引入表单",
+              "path": "externalComponent"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "query-solution",
+      "name": "筛选方案",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            },
+            {
+              "id": "fill",
+              "title": "填充宽度",
+              "path": "appearance.fill"
+            },
+            {
+              "id": "responseLayout",
+              "title": "响应式列宽",
+              "path": "responseLayout"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "isControlInline",
+              "title": "控件标签同行展示",
+              "path": "isControlInline"
+            },
+            {
+              "id": "presetQuerySolutionName",
+              "title": "系统预置筛选方案名称",
+              "path": "presetQuerySolutionName"
+            },
+            {
+              "id": "filterText",
+              "title": "筛选按钮文本",
+              "path": "filterText"
+            },
+            {
+              "id": "itemClass",
+              "title": "筛选项样式",
+              "path": "itemClass"
+            },
+            {
+              "id": "expanded",
+              "title": "展开",
+              "path": "expanded"
+            }
+          ]
+        },
+        {
+          "id": "control",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "fields",
+              "title": "筛选方案字段",
+              "path": "fields"
+            },
+            {
+              "id": "presetFields",
+              "title": "系统预置字段",
+              "path": "presetFields"
+            },
+            {
+              "id": "searchFields",
+              "title": "搜索框查询字段",
+              "path": "searchFields"
+            },
+            {
+              "id": "initQuery",
+              "title": "初始化时查询数据",
+              "path": "initQuery"
+            },
+            {
+              "id": "changeQuery",
+              "title": "值变化时查询数据",
+              "path": "changeQuery"
+            },
+            {
+              "id": "defaultValues",
+              "title": "默认值绑定字段",
+              "path": "defaultValues"
+            }
+          ]
+        },
+        {
+          "id": "editor",
+          "name": "编辑器",
+          "properties": [
+            {
+              "id": "readonly",
+              "title": "只读",
+              "path": "editor.readonly"
+            },
+            {
+              "id": "required",
+              "title": "必填",
+              "path": "editor.required"
+            },
+            {
+              "id": "placeholder",
+              "title": "提示文本",
+              "path": "editor.placeholder"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "response-layout",
+      "name": "1列",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "class",
+              "title": "class样式",
+              "path": "appearance.class"
+            },
+            {
+              "id": "style",
+              "title": "style样式",
+              "path": "appearance.style"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "type",
+              "title": "控件类型",
+              "path": "type"
+            }
+          ]
+        },
+        {
+          "id": "layout",
+          "name": "布局",
+          "properties": [
+            {
+              "id": "layout",
+              "title": "",
+              "path": "layout"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "data-grid-column",
+      "name": "表格列",
+      "categories": [
+        {
+          "id": "appearance",
+          "name": "外观",
+          "properties": [
+            {
+              "id": "resizable",
+              "title": "拖拽改变列宽",
+              "path": "resizable"
+            },
+            {
+              "id": "filterable",
+              "title": "启用过滤",
+              "path": "filterable"
+            },
+            {
+              "id": "sortable",
+              "title": "启用排序",
+              "path": "sortable"
+            },
+            {
+              "id": "width",
+              "title": "列宽",
+              "path": "width"
+            },
+            {
+              "id": "showTips",
+              "title": "鼠标悬浮提示",
+              "path": "showTips"
+            },
+            {
+              "id": "halign",
+              "title": "标题对齐方式",
+              "path": "halign"
+            },
+            {
+              "id": "align",
+              "title": "数据水平对齐方式",
+              "path": "align"
+            },
+            {
+              "id": "valign",
+              "title": "数据垂直对齐方式",
+              "path": "valign"
+            },
+            {
+              "id": "summaryType",
+              "title": "合计类型",
+              "path": "summaryType"
+            },
+            {
+              "id": "fixed",
+              "title": "固定列",
+              "path": "fixed"
+            },
+            {
+              "id": "cellStyle",
+              "title": "单元格样式",
+              "path": "cellStyle"
+            }
+          ]
+        },
+        {
+          "id": "basic",
+          "name": "基本信息",
+          "properties": [
+            {
+              "id": "id",
+              "title": "标识",
+              "path": "id"
+            },
+            {
+              "id": "title",
+              "title": "标题",
+              "path": "title"
+            },
+            {
+              "id": "binding",
+              "title": "绑定",
+              "path": "binding"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "name": "行为",
+          "properties": [
+            {
+              "id": "visible",
+              "title": "是否可见",
+              "path": "visible"
+            }
+          ]
+        },
+        {
+          "id": "formatter",
+          "name": "格式化",
+          "properties": [
+            {
+              "id": "type",
+              "title": "类型",
+              "path": "type"
+            },
+            {
+              "id": "trueText",
+              "title": "布尔为true时文本",
+              "path": "trueText"
+            },
+            {
+              "id": "falseText",
+              "title": "布尔为false时文本",
+              "path": "falseText"
+            },
+            {
+              "id": "prefix",
+              "title": "前缀",
+              "path": "prefix"
+            },
+            {
+              "id": "suffix",
+              "title": "后缀",
+              "path": "suffix"
+            },
+            {
+              "id": "precision",
+              "title": "精度",
+              "path": "precision"
+            },
+            {
+              "id": "decimal",
+              "title": "小数分隔符",
+              "path": "decimal"
+            },
+            {
+              "id": "thousand",
+              "title": "千分位",
+              "path": "thousand"
+            },
+            {
+              "id": "dateFormat",
+              "title": "日期格式",
+              "path": "dateFormat"
+            },
+            {
+              "id": "customFormat",
+              "title": "自定义",
+              "path": "customFormat"
+            }
+          ]
+        },
+        {
+          "id": "templateFormat",
+          "name": "列模板",
+          "properties": [
+            {
+              "id": "columnTemplateType",
+              "title": "列模板类型",
+              "path": "columnTemplateType"
+            },
+            {
+              "id": "columnTemplate",
+              "title": "列模板",
+              "path": "columnTemplate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

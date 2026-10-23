@@ -1,4 +1,4 @@
-import { DesignerMode, UseDesignerContext } from "../../types/designer-context";
+import { DesignerMode, DesignerTerminal, UseDesignerContext } from "../../types/designer-context";
 import ToolboxItems from '../../types/toolbox/pc-rtc-toolbox.json';
 import { usePCControlCreator } from "../control-creator/use-pc-control-creator.service";
 import SupportedControllers from '../../composition/command/supported-controllers/pc-supported-controller.json';
@@ -9,11 +9,15 @@ import axios from "axios";
 import { ElementPropertyConfig } from "@farris/ui-vue/components/property-panel";
 import { FNotifyService } from "@farris/ui-vue";
 import { useRtcCommandBuilderService as useRtcCommandBuilder } from "../command-builder-rtc.service";
+import { Ref, ref } from "vue";
 
 export function usePCRtcDesignerContext(): UseDesignerContext {
 
     /** 设计器模式 */
     const designerMode: DesignerMode = DesignerMode.PC_RTC;
+
+    /** 当前设计终端，运行时定制设计器默认为 PC */
+    const terminalRef: Ref<DesignerTerminal> = ref(DesignerTerminal.PC);
 
     /** 工具箱的数据 */
     const toolboxItems: any[] = ToolboxItems;
@@ -194,6 +198,7 @@ export function usePCRtcDesignerContext(): UseDesignerContext {
     }
     return {
         designerMode,
+        terminalRef,
         toolboxItems,
         componentsToRegister,
         supportedControllers,

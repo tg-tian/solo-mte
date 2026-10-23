@@ -7,6 +7,7 @@ import Env from './components/env/env.vue'
 import Device from './components/device/device.vue'
 import FAppDeployConfig from './components/deploy-config/deploy-config.vue'
 import FMyResources from './components/my-resources/my-resources.vue'
+import FADesignerConfig from './components/designer-config/designer-config.component'
 import { useAppDomain } from "./composition/use-app-domain";
 import { useAppConfig } from "./composition/use-app-config";
 import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
@@ -14,7 +15,7 @@ import { useWorkspace } from "./composition/use-workspace";
 import './style.css';
 
 
-type ViewKey = 'start' | 'my-apps' | 'my-resources' | 'deploy-config' | 'env' | 'device'
+type ViewKey = 'start' | 'my-apps' | 'my-resources' | 'deploy-config' | 'env' | 'device' | 'custom-components'
 
 export default defineComponent({
   name: 'FAAppCenter',
@@ -41,6 +42,7 @@ export default defineComponent({
       { id: 'deploy-config', text: '部署配置' },
       { id: 'env', text: '我的环境' },
       { id: 'device', text: '我的物理设备' },
+      { id: 'custom-components', text: '组件配置' },
     ]
     // 初始化Farris Admin全局配置对象
     const config = useAppConfig();
@@ -76,6 +78,7 @@ export default defineComponent({
     const shouldShowDeployConfig = computed(() => currentView.value === 'deploy-config')
     const shouldShowEnv = computed(() => currentView.value === 'env')
     const shouldShowDevice = computed(() => currentView.value === 'device')
+    const shouldShowDesignerConfig = computed(() => currentView.value === 'custom-components')
 
     function onClickNavigationItem(navItem: Record<string, any>) {
       currentView.value = navItem.id as ViewKey
@@ -154,6 +157,7 @@ export default defineComponent({
             {shouldShowDeployConfig.value && <FAppDeployConfig />}
             {shouldShowEnv.value && sceneId.value && <Env key={sceneId.value} sceneId={sceneId.value} />}
             {shouldShowDevice.value && sceneId.value && <Device key={sceneId.value} sceneId={sceneId.value} />}
+            {shouldShowDesignerConfig.value && <FADesignerConfig />}
           </div>
         </div>
       )

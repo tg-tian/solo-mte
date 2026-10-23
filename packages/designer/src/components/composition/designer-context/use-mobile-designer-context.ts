@@ -1,4 +1,4 @@
-import { DesignerMode, UseDesignerContext } from "../../types/designer-context";
+import { DesignerMode, DesignerTerminal, UseDesignerContext } from "../../types/designer-context";
 import ToolboxItems from '../../types/toolbox/mobile-toolbox.json';
 import SupportedControllers from '../../composition/command/supported-controllers/mobile-supported-controller.json';
 
@@ -13,11 +13,15 @@ import ControllCategories from '../schema-repository/controller/mobile-categorie
 import axios from 'axios';
 import { useFormMetadata } from "../form-metadata.service";
 import { useCommandBuilderService as useCommandBuilder } from "../command-builder.service";
+import { Ref, ref } from "vue";
 
 export function useMobileDesignerContext(): UseDesignerContext {
 
     /** 设计器模式 */
     const designerMode: DesignerMode = DesignerMode.Mobile;
+
+    /** 当前设计终端，移动设计器固定为 Mobile */
+    const terminalRef: Ref<DesignerTerminal> = ref(DesignerTerminal.Mobile);
 
     /** 工具箱的数据 */
     const toolboxItems: any[] = ToolboxItems;
@@ -59,6 +63,7 @@ export function useMobileDesignerContext(): UseDesignerContext {
 
     return {
         designerMode,
+        terminalRef,
         toolboxItems,
         componentsToRegister,
         supportedControllers,
