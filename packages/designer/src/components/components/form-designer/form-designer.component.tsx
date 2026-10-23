@@ -326,7 +326,7 @@ export default defineComponent({
                                         componentId={componentId.value}
                                         onDragEnd={onCanvasDragEnd}
                                         components={componentsToRegister}
-                                        canvasMode={designerMode}
+                                        canvasMode={designerContext.terminalRef.value}
                                     ></FDesignerCanvas>
                                     {renderExternalComponentPanel()}
                                     <FPropertyPanel

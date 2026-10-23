@@ -25,3 +25,5 @@ dist
 packages/ide/vscode/.data/
 .trae
 .claude/settings.local.json
+.codebuddy
+.claude

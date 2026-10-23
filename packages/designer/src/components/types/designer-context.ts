@@ -1,3 +1,4 @@
+import { Ref } from "vue";
 import { ElementPropertyConfig } from "@farris/ui-vue/components/property-panel";
 import { DesignerProps } from "../designer.props";
 import { FormComponent, UseControlCreator, UseFormMetadata, UseFormSchema, UseSchemaService } from "../types";
@@ -15,9 +16,19 @@ export enum DesignerMode {
     PC_RTC = 'PC_RTC'
 }
 
+/**
+ * 终端
+ */
+export enum DesignerTerminal {
+    PC = 'PC',
+    Mobile = 'Mobile'
+}
+
 export interface UseDesignerContext {
     instances: Record<string, any>;
     designerMode: DesignerMode;
+    /** 当前设计终端（PC / Mobile），ui-vue 设计态控件依赖其 value 判断移动端形态 */
+    terminalRef: Ref<DesignerTerminal>;
     toolboxItems: any[];
     componentsToRegister: any[];
     supportedControllers: any;

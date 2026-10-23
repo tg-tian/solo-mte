@@ -10,7 +10,8 @@
         "preview": "vite preview --config ./vite.config.dev.ts",
         "build:system": "farris-cli build -c ./vite.config.build.ts",
         "localfs": "node localfs-server.mjs",
-        "sync-xterm-public": "node ./scripts/sync-xterm-to-public.mjs"
+        "sync-xterm-public": "node ./scripts/sync-xterm-to-public.mjs",
+        "scan:property-meta": "node apps/platform/development-platform/ide/app-center/scan-control-property-meta.mjs"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",

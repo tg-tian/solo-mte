@@ -1,8 +1,22 @@
-import { DesignerMode, UseDesignerContext } from "../../types/designer-context";
+import { DesignerMode, DesignerTerminal, UseDesignerContext } from "../../types/designer-context";
 import { useLocation } from "../use-location";
 import { useMobileDesignerContext } from "./use-mobile-designer-context";
 import { usePCDesignerContext } from "./use-pc-designer-context";
 import { usePCRtcDesignerContext } from "./use-pc-rtc-designer-context";
+
+/**
+ * 获取初始设计终端：移动表单元数据（.mfrm）为移动端，其余为 PC 端
+ * @returns 
+ */
+export function getInitTerminal(): DesignerTerminal {
+    const { getUrlParam } = useLocation();
+    const metadataPath = getUrlParam('id') || '';
+
+    if (metadataPath && metadataPath.includes('.mfrm')) {
+        return DesignerTerminal.Mobile;
+    }
+    return DesignerTerminal.PC;
+}
 
 /**
  * 设计器上下文
@@ -31,7 +45,7 @@ export function useDesignerContext(): UseDesignerContext {
 
     switch (designerMode) {
         case DesignerMode.PC: case DesignerMode.Mobile: {
-            return usePCDesignerContext();
+            return usePCDesignerContext(getInitTerminal());
         }
         //  {
         //     return useMobileDesignerContext();
