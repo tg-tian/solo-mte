@@ -722,9 +722,10 @@ export function useFormCommandService(
                 command: {},
                 controller: {},
                 boundEvents: {},
-                communication: {
+                /** 通讯按数组返回：与新版 ui-vue 交互面板的契约保持一致，面板会按id补齐完整配置 */
+                communication: [{
                     id: communicationId,
-                }
+                }]
             };
             events.forEach(each => {
                 if (each.label === event.label) { boundEventsListItem.boundEvents = cloneDeep(each); }

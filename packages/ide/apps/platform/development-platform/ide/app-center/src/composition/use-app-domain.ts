@@ -2,6 +2,15 @@ import axios from "axios";
 import { AppDomain, AppModule, AppObject, RawAppDataItem, UseAppDomain } from "./type";
 import { Ref, ref } from "vue";
 
+/**
+ * 需要强制隐藏的应用域编号黑名单。
+ * 系统内置应用域正常情况下由 sysInit === '1' 过滤；但部分租户库（如 emc 新建初始化的实例）
+ * 中内置域的 sysInit 为 '0'，仅靠 sysInit 判断会导致内置应用泄漏，因此对已知编号做兜底隐藏。
+ * 隐藏应用域后，其下级模块与应用一并不可见。
+ * PubCmp（公共构件）为用户自建，但视作系统内置公共能力，同样隐藏。
+ */
+const HIDDEN_APP_DOMAIN_CODES = ['SysPub', 'Bcp', 'BPMS', 'HIP', 'Dev', 'ingpt', 'Epp', 'Cms', 'OC', 'emc', 'inIoT', 'PubCmp'];
+
 export function useAppDomain(): UseAppDomain {
     const rawAppDomainDataItemMap = new Map<string, RawAppDataItem>();
     const rawAppDataItemMap = new Map<string, RawAppDataItem>();
@@ -55,7 +64,8 @@ export function useAppDomain(): UseAppDomain {
             rawAppDataItemMap.set(dataItem.id, dataItem);
             const layerNum = Number(dataItem.layer);
             const sysInitFlag = String((dataItem as Record<string, unknown>).sysInit ?? '');
-            if (layerNum === 2 && sysInitFlag !== '1') {
+            const isHiddenByCode = HIDDEN_APP_DOMAIN_CODES.includes(String(dataItem.code ?? ''));
+            if (layerNum === 2 && sysInitFlag !== '1' && !isHiddenByCode) {
                 rawAppDomainDataItemMap.set(dataItem.id, dataItem);
             }
         });

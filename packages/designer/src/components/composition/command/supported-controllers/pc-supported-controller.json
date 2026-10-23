@@ -584,5 +584,17 @@
             "id": "5e915b73-3ef6-d0c8-2800-85b456d130eb",
             "code": "batchAppend"
         }
+    ],
+    "88aee5f5-56d2-4250-9da4-838f74cd2aa2": [
+        {
+            "id": "560e2ab2-cea5-4000-a4ef-7672804e3603",
+            "code": "importData"
+        }
+    ],
+    "1c7b61ba-0ada-4781-b600-ce10974229ea": [
+        {
+            "id": "0d7580fe-7dc1-4fd8-9d72-5333aed54c9c",
+            "code": "sendMailsByRows"
+        }
     ]
 }
