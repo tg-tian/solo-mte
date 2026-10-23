@@ -1,17 +1,19 @@
 <template>
   <div class="my-resources-page">
+    <div v-if="userError" class="error-hint">{{ userError }}</div>
+
     <!-- 邮件服务配置 -->
     <el-card class="resource-card" shadow="never">
       <template #header>
         <div class="card-header">
           <span class="card-title">邮件服务配置</span>
-          <el-button type="primary" :disabled="!currentUser" @click="onCreate">新建配置</el-button>
+          <el-button type="primary" :disabled="!canOperate" @click="onCreate">新建配置</el-button>
         </div>
       </template>
 
-      <div v-if="userError" class="error-hint">{{ userError }}</div>
       <p class="card-desc">
         在这里维护发邮件用的服务器配置：为每个配置起一个「编号」，在表单里调用「按列表发送邮件」时填写该编号即可。
+        配置按租户隔离，仅当前租户可见。
       </p>
 
       <el-table
@@ -20,7 +22,18 @@
         empty-text="还没有邮件配置，点击右上角「新建配置」创建"
         size="default"
       >
-        <el-table-column prop="code" label="编号" min-width="120" />
+        <el-table-column label="编号" min-width="150">
+          <template #default="{ row }">
+            <span>{{ row.code }}</span>
+            <el-tooltip
+              v-if="row.inherited"
+              content="改造前创建的共享配置，首次进入本租户时自动复制；编辑/删除只影响本租户"
+              placement="top"
+            >
+              <el-tag size="small" type="warning" effect="plain" class="inherited-tag">共享数据</el-tag>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="名称" min-width="140" show-overflow-tooltip />
         <el-table-column label="可见性" width="96">
           <template #default="{ row }">
@@ -55,13 +68,14 @@
       <template #header>
         <div class="card-header">
           <span class="card-title">集成 REST 配置</span>
-          <el-button type="primary" :disabled="!currentUser" @click="onCreateRest">新建配置</el-button>
+          <el-button type="primary" :disabled="!canOperate" @click="onCreateRest">新建配置</el-button>
         </div>
       </template>
 
       <p class="card-desc">
         在这里登记第三方开放接口（腾讯、飞书、微信公众号等）：为每个接口起一个「编号」，在代码里传「编号 + 参数」即可
         （后端、前端代码都支持，写法见新建弹框里的示例），接口地址与 ApiKey 由平台按配置自动拼接，代码里不写地址、不写密钥。
+        配置按租户隔离，仅当前租户可见。
       </p>
 
       <el-table
@@ -70,7 +84,18 @@
         empty-text="还没有 REST 配置，点击右上角「新建配置」创建"
         size="default"
       >
-        <el-table-column prop="code" label="编号" min-width="110" />
+        <el-table-column label="编号" min-width="150">
+          <template #default="{ row }">
+            <span>{{ row.code }}</span>
+            <el-tooltip
+              v-if="row.inherited"
+              content="改造前创建的共享配置，首次进入本租户时自动复制；编辑/删除只影响本租户"
+              placement="top"
+            >
+              <el-tag size="small" type="warning" effect="plain" class="inherited-tag">共享数据</el-tag>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="名称" min-width="130" show-overflow-tooltip />
         <el-table-column label="可见性" width="96">
           <template #default="{ row }">
@@ -128,6 +153,10 @@
             <el-radio value="private">个人（仅自己可见）</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <div v-if="editing?.inherited" class="form-note inherited-note">
+          该配置来自改造前的共享数据：编辑/删除只影响当前租户，其他租户仍使用原数据。
+        </div>
 
         <div class="form-row">
           <el-form-item label="邮件服务器" required>
@@ -197,6 +226,10 @@
             <el-radio value="private">个人（仅自己可见）</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <div v-if="restEditing?.inherited" class="form-note inherited-note">
+          该配置来自改造前的共享数据：编辑/删除只影响当前租户，其他租户仍使用原数据。
+        </div>
 
         <div class="form-row">
           <el-form-item label="请求方法" required>
@@ -379,6 +412,14 @@ const currentUser = ref<CurrentUser | null>(null);
 const userError = ref('');
 const publicKey = ref('');
 
+/** 当前用户的租户ID（页面按它做数据隔离；平台多租户下的必填项） */
+const tenantId = computed(() => {
+    const value = currentUser.value?.tenantId;
+    return value === undefined || value === null ? '' : String(value).trim();
+});
+/** 拿到用户和租户信息后才允许新建/编辑/删除 */
+const canOperate = computed(() => !!currentUser.value && !!tenantId.value);
+
 const mailConfigs = ref<MailConfigItem[]>([]);
 const loading = ref(false);
 
@@ -446,6 +487,10 @@ async function initialize() {
         userError.value = '未获取到当前登录用户信息，请先从平台首页登录后再打开本页面。';
         return;
     }
+    if (!tenantId.value) {
+        userError.value = '未获取到当前用户的租户信息（tenantId），请确认平台已启用多租户并重新登录后再打开本页面。';
+        return;
+    }
     try {
         publicKey.value = await getPublicKey();
     } catch (e) {
@@ -457,10 +502,10 @@ async function initialize() {
 }
 
 async function loadConfigs() {
-    if (!currentUser.value) return;
+    if (!currentUser.value || !tenantId.value) return;
     loading.value = true;
     try {
-        const res = await listMailConfigs(currentUser.value.id);
+        const res = await listMailConfigs(currentUser.value.id, tenantId.value);
         mailConfigs.value = res.configs || [];
     } catch (e: any) {
         ElMessage.error(resolveApiError(e, '加载邮件配置失败'));
@@ -470,10 +515,10 @@ async function loadConfigs() {
 }
 
 async function loadRestConfigs() {
-    if (!currentUser.value) return;
+    if (!currentUser.value || !tenantId.value) return;
     restLoading.value = true;
     try {
-        const res = await listRestConfigs(currentUser.value.id);
+        const res = await listRestConfigs(currentUser.value.id, tenantId.value);
         restConfigs.value = res.configs || [];
     } catch (e: any) {
         ElMessage.error(resolveApiError(e, '加载REST配置失败'));
@@ -575,6 +620,10 @@ async function onSave() {
         ElMessage.error(userError.value || '未获取到当前用户信息');
         return;
     }
+    if (!tenantId.value) {
+        ElMessage.error(userError.value || '未获取到当前用户的租户信息');
+        return;
+    }
     if (!publicKey.value) {
         ElMessage.error('服务端公钥缺失，请刷新页面重试');
         return;
@@ -600,7 +649,8 @@ async function onSave() {
                 ownerCode: currentUser.value.code,
                 ownerName: currentUser.value.name,
             },
-            publicKey.value
+            publicKey.value,
+            tenantId.value
         );
         ElMessage.success('已保存');
         dialogVisible.value = false;
@@ -614,14 +664,16 @@ async function onSave() {
 
 function onDelete(row: MailConfigItem) {
     ElMessageBox.confirm(
-        `确定删除配置「${row.code}」吗？删除后，使用该编号的应用将无法发送邮件。`,
+        `确定删除配置「${row.code}」吗？删除后，使用该编号的应用将无法发送邮件。${
+            row.inherited ? '该配置为改造前的共享数据，删除只影响当前租户。' : ''
+        }`,
         '删除确认',
         { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' }
     )
         .then(async () => {
             if (!currentUser.value) return;
             try {
-                await deleteMailConfig(row.id, currentUser.value.id);
+                await deleteMailConfig(row.id, currentUser.value.id, tenantId.value);
                 ElMessage.success('已删除');
                 await loadConfigs();
             } catch (e: any) {
@@ -633,7 +685,7 @@ function onDelete(row: MailConfigItem) {
         });
 }
 
-/* ---------------- REST配置：新建/编辑/删除（预览版，数据在浏览器本地） ---------------- */
+/* ---------------- REST配置：新建/编辑/删除 ---------------- */
 
 function onCreateRest() {
     restEditing.value = null;
@@ -682,7 +734,7 @@ function validateRest(): string | null {
     const duplicated = restConfigs.value.some(
         (item) => item.code.trim().toLowerCase() === lower && item.id !== restEditing.value?.id
     );
-    if (duplicated) return `编号「${restForm.code.trim()}」已被使用，请换一个`;
+    if (duplicated) return `编号「${restForm.code.trim()}」在当前租户内已被使用，请换一个`;
     return null;
 }
 
@@ -694,6 +746,10 @@ async function onSaveRest() {
     }
     if (!currentUser.value) {
         ElMessage.error(userError.value || '未获取到当前用户信息');
+        return;
+    }
+    if (!tenantId.value) {
+        ElMessage.error(userError.value || '未获取到当前用户的租户信息');
         return;
     }
     if (!publicKey.value) {
@@ -725,7 +781,8 @@ async function onSaveRest() {
                 ownerCode: currentUser.value.code,
                 ownerName: currentUser.value.name,
             },
-            publicKey.value
+            publicKey.value,
+            tenantId.value
         );
         ElMessage.success('已保存');
         restDialogVisible.value = false;
@@ -739,14 +796,16 @@ async function onSaveRest() {
 
 function onDeleteRest(row: RestConfigItem) {
     ElMessageBox.confirm(
-        `确定删除配置「${row.code}」吗？删除后，使用该编号的应用将无法调用该接口。`,
+        `确定删除配置「${row.code}」吗？删除后，使用该编号的应用将无法调用该接口。${
+            row.inherited ? '该配置为改造前的共享数据，删除只影响当前租户。' : ''
+        }`,
         '删除确认',
         { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' }
     )
         .then(async () => {
             if (!currentUser.value) return;
             try {
-                await deleteRestConfig(row.id, currentUser.value.id);
+                await deleteRestConfig(row.id, currentUser.value.id, tenantId.value);
                 ElMessage.success('已删除');
                 await loadRestConfigs();
             } catch (e: any) {
@@ -801,6 +860,16 @@ onMounted(() => {
     padding: 8px 12px;
     background: rgba(245, 108, 108, 0.06);
     border-radius: 4px;
+}
+
+/* 播种自改造前共享数据的标签（跟在编号后面） */
+.inherited-tag {
+    margin-left: 6px;
+}
+
+/* 编辑继承配置时的提示（只影响当前租户） */
+.inherited-note {
+    color: #b88230;
 }
 
 .form-row {

@@ -284,18 +284,11 @@ async function confirmPublish() {
     return;
   }
   submitting.value = true;
-  domainStore.publishDomain(domainIdValue.value).then((res) => {
+  domainStore.publishDomain(domainIdValue.value).then(async (res) => {
     // if res has domainData, it's the published DomainTemInfo object
     if (res && res.domainData) {
       domainForm.status = '1';
-      const jsonStr = JSON.stringify(res, null, 2);
-      const blob = new Blob([jsonStr], { type: 'application/json' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${domainForm.code}.json`;
-      link.click();
-      window.URL.revokeObjectURL(url);
+      await handleDownload();
       ElMessage.success('领域发布成功并已下载配置');
     } else {
       // it was unpublished, just domain object
@@ -320,6 +313,7 @@ async function handleDownload() {
   link.href = url;
   link.download = `${domainForm.code}.json`;
   link.click();
+  window.URL.revokeObjectURL(url);
 }
 
 defineExpose({

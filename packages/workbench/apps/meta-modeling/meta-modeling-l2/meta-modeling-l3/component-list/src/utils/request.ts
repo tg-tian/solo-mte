@@ -1,3 +1,4 @@
+import { withCurrentUser } from '../../../../../../../src/utils/current-user';
 import axios from 'axios'
 
 // HTTPS 走 nginx 代理，HTTP 直连 8080（兼容 dev 模式）
@@ -14,9 +15,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use(
-  (config: any) => {
-    return config
-  },
+  withCurrentUser,
   (error) => {
     console.error(error)
     return Promise.reject(error)
