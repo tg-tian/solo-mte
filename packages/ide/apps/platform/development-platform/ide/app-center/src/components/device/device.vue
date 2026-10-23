@@ -909,7 +909,7 @@ onMounted(async () => {
   await deviceStore.fetchDevices()
   await deviceStore.discoverDevices()
   await deviceStore.fetchProviders()
-  deviceStore.connectShadowStream()
+  await deviceStore.connectShadowStream()
 })
 
 onBeforeUnmount(() => {

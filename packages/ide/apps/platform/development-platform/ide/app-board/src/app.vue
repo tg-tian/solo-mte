@@ -1,4 +1,5 @@
 <template>
+  <div v-if="initializationError" role="alert">{{ initializationError }}</div>
   <component :is="currentView" />
 </template>
 
@@ -11,6 +12,7 @@ import { AppConfigOptions, WorkspaceOptions } from "./composition/type";
 import { useWorkspace } from "./composition/use-workspace";
 
 const currentPath = ref(window.location.hash);
+const initializationError = ref('');
 
 const routes: Record<string, any> = {
   '/': WorkbenchComponent,
@@ -38,6 +40,8 @@ configInitialized.then((result: AppConfigOptions) => {
   useAppDomainComposition.setAppDomainSourceUri(result.appDataSourceUri);
   // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
   useAppDomainComposition.generateAppDomain(result.appDataSourceUri);
+}).catch((error) => {
+  initializationError.value = error.message || '场景加载失败，请刷新页面重试';
 });
 const useWorkspaceComposition = useWorkspace();
 const workspaceInitialized = useWorkspaceComposition.initialize();

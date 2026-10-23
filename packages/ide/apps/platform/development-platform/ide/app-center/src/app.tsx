@@ -1,4 +1,5 @@
-import { computed, defineComponent, provide, ref, onBeforeMount } from 'vue'
+import { computed, defineComponent, provide, ref } from 'vue'
+import { getCurrentUser, getCurrentUserId } from '../../../../../../src/utils/current-user'
 import { FNav } from '@farris/ui-vue'
 import FApps from './components/apps/apps.component'
 import FWelcome from './components/welcome/welcome.component'
@@ -22,9 +23,15 @@ export default defineComponent({
     const title = ref(defaultTitle)
     const currentView = ref<ViewKey>('device')
     const sceneId = ref<number | undefined>(undefined)
+    const scenes = ref<Array<{ sceneId: number; name: string }>>([])
+    const initialized = ref(false)
+    const initializationError = ref('')
     const workspace = ref('');
     const workspaceId = ref('');
     const currentUserName = ref('');
+    getCurrentUser().then((user) => {
+      currentUserName.value = user.name || user.userId;
+    });
 
 
     const navData = [
@@ -45,19 +52,23 @@ export default defineComponent({
     configInitialized.then((result: AppConfigOptions) => {
       title.value = result.appTitle || defaultTitle;
       sceneId.value = result.sceneId;
+      scenes.value = result.scenes || [];
       if (typeof document !== 'undefined') {
         document.title = title.value;
       }
       useAppDomainComposition.setAppDomainSourceUri(result.appDataSourceUri);
       // 根据配置选项提供的功能菜单数据源Url地址生成功能菜单数据源
       useAppDomainComposition.generateAppDomain(result.appDataSourceUri);
+    }).catch((error) => {
+      initializationError.value = error.message || '场景加载失败，请刷新页面重试';
+    }).finally(() => {
+      initialized.value = true;
     });
     const useWorkspaceComposition = useWorkspace();
     const workspaceInitialized = useWorkspaceComposition.initialize();
     workspaceInitialized.then((result: WorkspaceOptions) => {
       workspace.value = result.name;
       workspaceId.value = result.id;
-      currentUserName.value = result.creator;
     });
     const shouldShowWelcome = computed(() => currentView.value === 'start')
     const shouldShowAppsView = computed(() => currentView.value === 'my-apps')
@@ -87,20 +98,16 @@ export default defineComponent({
       )
     }
 
-    function getScenarioInfo() {
-      const queryParams = new URLSearchParams(window.location.search);
-      const scenarioTitle = queryParams.get('scenarioTitle') || '';
-      if (scenarioTitle && title.value === defaultTitle) {
-        title.value = scenarioTitle;
-        if (typeof document !== 'undefined') {
-          document.title = title.value;
-        }
-      }
+    async function selectScene(event: Event) {
+      const id = Number((event.target as HTMLSelectElement).value);
+      const selected = scenes.value.find((scene) => scene.sceneId === id);
+      if (!selected) return;
+      const userId = await getCurrentUserId();
+      sessionStorage.setItem(`ide:${encodeURIComponent(userId)}:sceneId`, String(id));
+      sceneId.value = id;
+      title.value = selected.name;
+      document.title = selected.name;
     }
-
-    onBeforeMount(() => {
-      getScenarioInfo();
-    });
 
     // 在依赖注入服务中应用程序域服务
     provide('f-app-center-app-domain', useAppDomainComposition);
@@ -110,6 +117,11 @@ export default defineComponent({
     function renderToolbar() {
       return <div class="f-header-toolbar">
         <ul class="nav d-flex items-center">
+          {scenes.value.length > 1 && <li>
+            <select aria-label="选择场景" value={sceneId.value} onChange={selectScene}>
+              {scenes.value.map((scene) => <option key={scene.sceneId} value={scene.sceneId}>{scene.name}</option>)}
+            </select>
+          </li>}
           <li class="f-app-center-workspace">{workspace.value}<span class="f-icon f-icon-arrow-s"></span></li>
           <li class="f-app-center-toolbar-split" style="height: 20px;border-right: 1px solid #ccc;"></li>
           <li class="f-app-center-user">
@@ -133,12 +145,15 @@ export default defineComponent({
             </nav>
           </div>
           <div class="f-page-main">
+            {initializationError.value && <div role="alert">{initializationError.value}</div>}
+            {initialized.value && !initializationError.value && !sceneId.value && (shouldShowEnv.value || shouldShowDevice.value)
+              && <div role="status">当前用户暂无可用场景，请先导入或关联场景数据。</div>}
             {shouldShowWelcome.value && <FWelcome>Welcome</FWelcome>}
             {shouldShowAppsView.value && <FApps>AppList</FApps>}
             {shouldShowMyResources.value && <FMyResources />}
             {shouldShowDeployConfig.value && <FAppDeployConfig />}
-            {shouldShowEnv.value && sceneId.value && <Env sceneId={sceneId.value} />}
-            {shouldShowDevice.value && sceneId.value && <Device sceneId={sceneId.value} />}
+            {shouldShowEnv.value && sceneId.value && <Env key={sceneId.value} sceneId={sceneId.value} />}
+            {shouldShowDevice.value && sceneId.value && <Device key={sceneId.value} sceneId={sceneId.value} />}
           </div>
         </div>
       )

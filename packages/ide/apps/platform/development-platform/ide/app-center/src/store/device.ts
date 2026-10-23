@@ -3,8 +3,11 @@ import type { Device, ProviderConfig, DeviceCommand, WsMessage } from '../types/
 import { getDevices, createDevice, updateDevice, deleteDevice, discoverDevices, sendCommand } from '../api/device'
 import { getProviders, createProvider, updateProvider, deleteProvider } from '../api/provider'
 import { getMapperLoaderUrl, updateMapperLoaderUrl } from '../api/system'
+import { getCurrentUserId } from '../../../../../../../src/utils/current-user'
 
 let wsInstance: WebSocket | null = null
+let streamVersion = 0
+let connecting = false
 
 function normalizeDevice(device: Device): Device {
   return {
@@ -92,11 +95,22 @@ export const useDeviceStore = defineStore('device', {
       }
     },
 
-    connectShadowStream() {
-      if (wsInstance) return
+    async connectShadowStream() {
+      if (wsInstance || connecting) return
+      const version = ++streamVersion
+      connecting = true
+      let userId: string
+      try {
+        userId = await getCurrentUserId()
+      } finally {
+        if (version === streamVersion) connecting = false
+      }
+      if (version !== streamVersion) return
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-      wsInstance = new WebSocket(`${protocol}//${window.location.host}/ws`)
-      wsInstance.onmessage = (event) => {
+      const socket = new WebSocket(`${protocol}//${window.location.host}/ws?userId=${encodeURIComponent(userId)}`)
+      wsInstance = socket
+      socket.onmessage = (event) => {
+        if (socket !== wsInstance) return
         let raw: any = event.data
         try {
           raw = JSON.parse(raw)
@@ -113,12 +127,14 @@ export const useDeviceStore = defineStore('device', {
           this.recentEvents = [eventData, ...this.recentEvents].slice(0, 50)
         }
       }
-      wsInstance.onclose = () => {
-        wsInstance = null
+      socket.onclose = () => {
+        if (socket === wsInstance) wsInstance = null
       }
     },
 
     disconnectShadowStream() {
+      streamVersion++
+      connecting = false
       try { wsInstance?.close() } catch {}
       wsInstance = null
     },

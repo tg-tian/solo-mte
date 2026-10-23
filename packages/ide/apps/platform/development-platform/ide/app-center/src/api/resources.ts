@@ -1,3 +1,4 @@
+import { getCurrentUser as getRuntimeUser } from '../../../../../../../src/utils/current-user';
 import axios from 'axios';
 import { getPublishServerConfig, rsaEncryptWithKey } from './deploy-config';
 
@@ -34,10 +35,10 @@ export interface MailConfigItem {
     hasPassword?: boolean;
 }
 
-/** 当前登录用户（平台接口 /api/runtime/sys/v1.0/userinfos?infoType=user） */
+/** 当前登录用户（平台接口 /api/runtime/sys/v1.0/userinfos/data） */
 export interface CurrentUser {
     id: string;
-    userId?: string;
+    userId: string;
     code?: string;
     name?: string;
     /** 租户ID（平台多租户标识，页面按它做数据隔离） */
@@ -81,7 +82,7 @@ export interface RestConfigItem {
 
 /** 取当前登录用户信息；页面用它的 id 做「个人配置」的归属判断 */
 export function getCurrentUser(): Promise<CurrentUser> {
-    return axios.get('/api/runtime/sys/v1.0/userinfos?infoType=user').then((res) => res.data);
+    return getRuntimeUser().then((user) => ({ ...user, id: user.userId }));
 }
 
 /** 列出当前用户在本租户可见的邮件配置：公共 + 本人的个人配置 */

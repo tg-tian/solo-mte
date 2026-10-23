@@ -68,6 +68,8 @@ export interface AppConfigOptions {
 
     sceneId?: number;
 
+    scenes?: Array<{ sceneId: number; name: string }>;
+
 }
 
 export interface UseAppConfig {
